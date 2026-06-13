@@ -40,3 +40,19 @@ def sample_score(match: dict, rng: np.random.Generator) -> tuple[int, int]:
         int(rng.poisson(max(0.05, match["home_xg"]))),
         int(rng.poisson(max(0.05, match["away_xg"]))),
     )
+
+
+def simulate_tables(
+    records: list[dict],
+    groups: dict[str, list[str]],
+    strength: dict[str, float],
+    rng: np.random.Generator,
+) -> dict[str, list[dict]]:
+    results = {group: [] for group in groups}
+    for match in records:
+        home, away = sample_score(match, rng)
+        results[match["group"]].append(match_result(match, home, away))
+    return {
+        group: _rank_group(teams, results[group], strength)
+        for group, teams in groups.items()
+    }
