@@ -1,0 +1,4 @@
+match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_utc,model_version
+537327,2026-06-11 19:00:00+00:00,GROUP_STAGE,Mexico,South Africa,2,0,2026-06-13T01:39:22.355904+00:00,phase4_live_state_v1
+537328,2026-06-12 02:00:00+00:00,GROUP_STAGE,South Korea,Czechia,2,1,2026-06-13T01:39:22.355959+00:00,phase4_live_state_v1
+537333,2026-06-12 19:00:00+00:00,GROUP_STAGE,Canada,Bosnia-Herzegovina,1,1,2026-06-13T01:39:22.355987+00:00,phase4_live_state_v1
