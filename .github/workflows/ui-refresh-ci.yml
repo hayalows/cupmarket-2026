@@ -7,6 +7,8 @@ on:
       - assets/**
       - features/product_ui.py
       - pages/**
+      - .streamlit/config.toml
+      - tests/test_navigation_contract.py
       - .github/workflows/ui-refresh-ci.yml
 
 permissions:
@@ -41,8 +43,12 @@ jobs:
           python -m py_compile pages/1_Match_Intelligence.py
           python -m py_compile pages/2_Qualification_Lab.py
           python -m py_compile pages/3_Live_Group_Centre.py
+          python -m unittest tests/test_navigation_contract.py
           grep -q 'PRODUCT_UI_VERSION = "2.0"' app.py
           grep -q "Papa Kojo Mensah" features/product_ui.py
           grep -q "render_project_footer" app.py
           grep -q "Live tools" app.py
+          grep -q 'icon="🧭"' features/product_ui.py
+          grep -q 'icon="📊"' features/product_ui.py
+          grep -q "showSidebarNavigation = false" .streamlit/config.toml
           git diff --check
