@@ -10,6 +10,7 @@ import streamlit as st
 
 API_URL = "https://api.football-data.org/v4/competitions/WC/matches"
 FINISHED_STATUSES = {"FINISHED", "AWARDED"}
+LIVE_STATUSES = {"IN_PLAY", "PAUSED"}
 
 
 def nested_get(dictionary: dict, keys: list[str], default=None):
@@ -34,6 +35,8 @@ def parse_api_matches(payload: dict) -> pd.DataFrame:
                 "stage": match.get("stage"),
                 "group": match.get("group"),
                 "matchday": match.get("matchday"),
+                "minute": match.get("minute"),
+                "injury_time": match.get("injuryTime"),
                 "home_team": nested_get(match, ["homeTeam", "name"]),
                 "away_team": nested_get(match, ["awayTeam", "name"]),
                 "winner": nested_get(match, ["score", "winner"]),
@@ -55,6 +58,9 @@ def parse_api_matches(payload: dict) -> pd.DataFrame:
     frame["match_id"] = pd.to_numeric(frame["match_id"], errors="coerce")
     frame = frame.dropna(subset=["match_id"])
     frame["match_id"] = frame["match_id"].astype(int)
+    for column in ["minute", "injury_time", "matchday"]:
+        if column in frame.columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
     for column in ["utc_date", "last_updated"]:
         frame[column] = pd.to_datetime(frame[column], errors="coerce", utc=True)
     return frame.sort_values(["utc_date", "match_id"]).reset_index(drop=True)
@@ -88,6 +94,9 @@ def read_snapshot(path: Path) -> pd.DataFrame:
         frame["match_id"] = pd.to_numeric(frame["match_id"], errors="coerce")
         frame = frame.dropna(subset=["match_id"])
         frame["match_id"] = frame["match_id"].astype(int)
+    for column in ["minute", "injury_time", "matchday"]:
+        if column in frame.columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
     for column in ["utc_date", "last_updated"]:
         if column in frame.columns:
             frame[column] = pd.to_datetime(frame[column], errors="coerce", utc=True)
@@ -129,18 +138,21 @@ def load_matches(snapshot_path: Path) -> tuple[pd.DataFrame, dict]:
 
 def group_freshness(matches: pd.DataFrame, model_metadata: dict) -> dict:
     live_finished = 0
+    active_group_matches = 0
     if not matches.empty and {"stage", "status"}.issubset(matches.columns):
+        group_mask = matches["stage"] == "GROUP_STAGE"
         live_finished = int(
-            (
-                (matches["stage"] == "GROUP_STAGE")
-                & matches["status"].isin(FINISHED_STATUSES)
-            ).sum()
+            (group_mask & matches["status"].isin(FINISHED_STATUSES)).sum()
+        )
+        active_group_matches = int(
+            (group_mask & matches["status"].isin(LIVE_STATUSES)).sum()
         )
     model_finished = int(model_metadata.get("finished_group_matches", 0) or 0)
     return {
         "live_finished_group_matches": live_finished,
         "model_finished_group_matches": model_finished,
         "pending_model_updates": max(0, live_finished - model_finished),
+        "active_group_matches": active_group_matches,
     }
 
 
