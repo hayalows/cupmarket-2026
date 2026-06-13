@@ -33,6 +33,16 @@ jobs:
       - name: Install backend dependencies
         run: python -m pip install -r backend/requirements.txt
 
+      - name: Validate backend package
+        run: |
+          test -f backend/update_pipeline.py
+          test -f backend/state/models/phase3_home_goal_model.joblib
+          test -f backend/state/models/phase3_away_goal_model.joblib
+          test -f backend/state/live_elo_ratings.csv
+          test -f backend/state/live_team_state.csv
+          test -f backend/state/world_cup_team_name_map.csv
+          python -m py_compile backend/update_pipeline.py
+
       - name: Run CupMarket update pipeline
         env:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
