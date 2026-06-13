@@ -5,6 +5,8 @@ from typing import Any
 
 import pandas as pd
 
+from backend.group_scenarios import _rank_group
+
 FINISHED = {"FINISHED", "AWARDED"}
 LIVE = {"IN_PLAY", "PAUSED"}
 UPCOMING = {"TIMED", "SCHEDULED"}
@@ -77,3 +79,27 @@ def group_records(
         rows.append(item)
     rows.sort(key=lambda item: (item["utc_date"], item["match_id"]))
     return rows, {group: sorted(teams) for group, teams in groups.items()}
+
+
+def match_result(match: dict[str, Any], home: int | None = None, away: int | None = None) -> dict[str, Any]:
+    return {
+        "home_team": match["home_team"],
+        "away_team": match["away_team"],
+        "home_goals": match["home_score"] if home is None else int(home),
+        "away_goals": match["away_score"] if away is None else int(away),
+    }
+
+
+def current_tables(
+    records: list[dict[str, Any]],
+    groups: dict[str, list[str]],
+    strength: dict[str, float],
+) -> dict[str, list[dict[str, Any]]]:
+    results = {group: [] for group in groups}
+    for match in records:
+        if match["status"] in FINISHED or match["status"] in LIVE:
+            results[match["group"]].append(match_result(match))
+    return {
+        group: _rank_group(teams, results[group], strength)
+        for group, teams in groups.items()
+    }
