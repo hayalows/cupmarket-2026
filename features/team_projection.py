@@ -1,0 +1,1 @@
+"""Team qualification projection."""
