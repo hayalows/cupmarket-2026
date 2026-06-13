@@ -1,0 +1,1 @@
+Live projections use current scores and the reported match minute. Remaining goals are sampled from the latest published expected-goal rates scaled by the minutes left. They are estimates and do not retrain Elo, form or the main pricing model during the match.
