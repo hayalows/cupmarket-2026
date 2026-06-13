@@ -1,4 +1,6 @@
 {
-  "eligible_completed_predictions": 0,
-  "message": "No completed match has a prediction stored before kickoff yet."
+  "eligible_completed_predictions": 1,
+  "accuracy": 0.0,
+  "log_loss": 1.6229639786158228,
+  "multiclass_brier": 1.133437478114
 }
