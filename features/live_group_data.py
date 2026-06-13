@@ -1,0 +1,105 @@
+from __future__ import annotations
+
+from collections import defaultdict
+from typing import Any
+
+import pandas as pd
+
+from backend.group_scenarios import _rank_group
+
+FINISHED = {"FINISHED", "AWARDED"}
+LIVE = {"IN_PLAY", "PAUSED"}
+UPCOMING = {"TIMED", "SCHEDULED"}
+DEFAULT_XG = 1.25
+
+
+def prediction_lookup(predictions: pd.DataFrame) -> dict[int, tuple[float, float]]:
+    if predictions.empty or "match_id" not in predictions.columns:
+        return {}
+    frame = predictions.copy()
+    frame["match_id"] = pd.to_numeric(frame["match_id"], errors="coerce")
+    frame = frame.dropna(subset=["match_id"])
+    if "generated_at_utc" in frame.columns:
+        frame["generated_at_utc"] = pd.to_datetime(
+            frame["generated_at_utc"], errors="coerce", utc=True
+        )
+        frame = frame.sort_values("generated_at_utc")
+    frame = frame.drop_duplicates("match_id", keep="last")
+    return {
+        int(row.match_id): (
+            float(getattr(row, "expected_home_goals", DEFAULT_XG)),
+            float(getattr(row, "expected_away_goals", DEFAULT_XG)),
+        )
+        for row in frame.itertuples(index=False)
+    }
+
+
+def row_record(row: Any, lookup: dict[int, tuple[float, float]]) -> dict[str, Any]:
+    match_id = int(row.match_id)
+    home_score = getattr(row, "home_score_full_time", None)
+    away_score = getattr(row, "away_score_full_time", None)
+    home_xg, away_xg = lookup.get(match_id, (DEFAULT_XG, DEFAULT_XG))
+    return {
+        "match_id": match_id,
+        "group": str(row.group).replace("GROUP_", ""),
+        "status": str(row.status),
+        "minute": getattr(row, "minute", None),
+        "utc_date": pd.to_datetime(
+            getattr(row, "utc_date", None), errors="coerce", utc=True
+        ),
+        "home_team": str(row.home_team),
+        "away_team": str(row.away_team),
+        "home_score": int(home_score) if pd.notna(home_score) else 0,
+        "away_score": int(away_score) if pd.notna(away_score) else 0,
+        "home_xg": home_xg if pd.notna(home_xg) else DEFAULT_XG,
+        "away_xg": away_xg if pd.notna(away_xg) else DEFAULT_XG,
+    }
+
+
+def group_records(
+    matches: pd.DataFrame,
+    predictions: pd.DataFrame,
+) -> tuple[list[dict[str, Any]], dict[str, list[str]]]:
+    required = {"match_id", "stage", "group", "home_team", "away_team", "status"}
+    missing = required - set(matches.columns)
+    if missing:
+        raise ValueError(f"Missing match columns: {sorted(missing)}")
+    frame = matches[
+        (matches["stage"] == "GROUP_STAGE")
+        & matches["group"].notna()
+        & matches["home_team"].notna()
+        & matches["away_team"].notna()
+    ]
+    lookup = prediction_lookup(predictions)
+    groups: dict[str, set[str]] = defaultdict(set)
+    rows = []
+    for raw in frame.itertuples(index=False):
+        item = row_record(raw, lookup)
+        groups[item["group"]].update([item["home_team"], item["away_team"]])
+        rows.append(item)
+    rows.sort(key=lambda item: (item["utc_date"], item["match_id"]))
+    return rows, {group: sorted(teams) for group, teams in groups.items()}
+
+
+def match_result(match: dict[str, Any], home: int | None = None, away: int | None = None) -> dict[str, Any]:
+    return {
+        "home_team": match["home_team"],
+        "away_team": match["away_team"],
+        "home_goals": match["home_score"] if home is None else int(home),
+        "away_goals": match["away_score"] if away is None else int(away),
+    }
+
+
+def current_tables(
+    records: list[dict[str, Any]],
+    groups: dict[str, list[str]],
+    strength: dict[str, float],
+) -> dict[str, list[dict[str, Any]]]:
+    results = {group: [] for group in groups}
+    for match in records:
+        if match["status"] in FINISHED or match["status"] in LIVE:
+            results[match["group"]].append(match_result(match))
+    return {
+        group: _rank_group(teams, results[group], strength)
+        for group, teams in groups.items()
+    }

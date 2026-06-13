@@ -1,0 +1,35 @@
+name: Validate Live Group Centre
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compile live group modules
+        run: |
+          python -m py_compile features/live_group_data.py
+          python -m py_compile features/thirds.py
+          python -m py_compile features/live_context.py
+          python -m py_compile features/live_math.py
+          python -m py_compile features/team_projection.py
+          python -m py_compile features/live_group_view.py
+          python -m py_compile features/group_centre.py
+          python -m py_compile features/group_centre_page.py
+          python -m py_compile pages/3_Live_Group_Centre.py
+      - name: Run live group tests
+        run: |
+          python -m unittest tests/test_live_projection_smoke.py
+          python -m unittest tests/test_group_scenarios.py
