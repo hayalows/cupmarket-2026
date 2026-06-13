@@ -1,22 +1,21 @@
 {
-  "model_version": "phase5_tournament_v1",
-  "generated_at_utc": "2026-06-13T01:56:23.292945+00:00",
-  "number_of_simulations": 5000,
+  "model_version": "phase7_automated_group_stage_v1",
+  "number_of_simulations": 20000,
   "random_seed": 20260613,
   "bracket_mode": "provisional_constraint_assignment",
-  "finished_group_matches": 3,
-  "remaining_group_matches": 69,
-  "simulation_seconds": 18.753422498703003,
-  "pair_xg_cache_size": 2000,
-  "elo_fallback_uses": 1511,
-  "average_valid_third_place_assignments": 28.5166,
+  "finished_group_matches": 4,
+  "remaining_group_matches": 68,
+  "simulation_seconds": 19.01951289176941,
+  "pair_xg_cache_size": 2143,
+  "elo_fallback_uses": 5351,
+  "average_valid_third_place_assignments": 28.34405,
   "stage_probability_totals": {
     "round_32_total": 32.0,
     "round_16_total": 16.0,
     "quarter_final_total": 8.0,
-    "semi_final_total": 4.0,
+    "semi_final_total": 3.9999999999999996,
     "final_total": 2.0,
-    "champion_total": 1.0
+    "champion_total": 0.9999999999999998
   },
   "settlement_values": {
     "group_exit": 5.0,
@@ -28,8 +27,17 @@
     "champion": 100.0
   },
   "limitations": [
+    "Automation v1 processes completed group-stage matches. Exact knockout-result ingestion is a later phase.",
     "Team conduct data is unavailable; live Elo is used only after football tiebreak criteria remain equal.",
-    "Before the Round of 32 is populated, third-place teams are sampled across all valid official slot constraints.",
-    "Extra-time goals and penalty outcomes use transparent approximation rules."
-  ]
+    "Before the Round of 32 is populated, third-place teams are sampled across valid official slot constraints.",
+    "Extra-time and penalties use transparent approximation rules."
+  ],
+  "generated_at_utc": "2026-06-13T04:39:19.946117+00:00",
+  "new_finished_matches_processed": 1,
+  "api": {
+    "http_status": 200,
+    "matches_returned": 104,
+    "requests_remaining": "9",
+    "request_counter_reset": "60"
+  }
 }
