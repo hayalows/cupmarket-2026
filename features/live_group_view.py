@@ -1,0 +1,1 @@
+"""Live group centre widgets."""
