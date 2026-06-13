@@ -79,3 +79,23 @@ def render_header(source: dict, metadata: dict) -> None:
         st.rerun()
     if source.get("warning"):
         st.warning(source["warning"] + " Showing the latest saved snapshot instead.")
+
+
+def render_matches(context: dict) -> None:
+    st.subheader(f'Group {context["group"]} live picture')
+    live_matches = context["live_matches"]
+    if not live_matches:
+        st.caption("No match in this group is currently in play.")
+        return
+    columns = st.columns(len(live_matches))
+    for column, match in zip(columns, live_matches):
+        minute = pd.to_numeric(match.get("minute"), errors="coerce")
+        clock = f"{int(minute)} min" if pd.notna(minute) else "LIVE"
+        column.metric(
+            f'{match["home_team"]} vs {match["away_team"]}',
+            f'{match["home_score"]}-{match["away_score"]}',
+            clock,
+        )
+    st.info(
+        "Current live scores are treated as final only for this provisional view."
+    )
