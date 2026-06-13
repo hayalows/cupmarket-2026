@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections import Counter
+
 import numpy as np
 import pandas as pd
 
@@ -56,3 +58,19 @@ def simulate_tables(
         group: _rank_group(teams, results[group], strength)
         for group, teams in groups.items()
     }
+
+
+def team_setup(records: list[dict], team: str) -> tuple[str, dict | None]:
+    selected = next(
+        item for item in records
+        if team in {item["home_team"], item["away_team"]}
+    )
+    live_match = next(
+        (
+            item for item in records
+            if team in {item["home_team"], item["away_team"]}
+            and item["status"] in LIVE
+        ),
+        None,
+    )
+    return selected["group"], live_match
