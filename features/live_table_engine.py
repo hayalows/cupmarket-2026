@@ -1,0 +1,1 @@
+"""Live qualification table helpers."""
