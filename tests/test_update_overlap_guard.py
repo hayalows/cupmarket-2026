@@ -1,24 +1,21 @@
 from __future__ import annotations
 
 import json
+import os
 import unittest
+from unittest.mock import patch
 
 import pandas as pd
 
-from backend import update_pipeline as pipeline
+os.environ.setdefault("FOOTBALL_DATA_TOKEN", "test-token")
 
-
-class ConstantGoalModel:
-    def __init__(self, value: float) -> None:
-        self.value = value
-
-    def predict(self, frame: pd.DataFrame) -> list[float]:
-        return [self.value for _ in range(len(frame))]
+from backend import run_update_pipeline as runner
 
 
 class OverlappingMatchSafetyTests(unittest.TestCase):
-    def test_only_active_group_matches_block_official_publication(self) -> None:
-        matches = pd.DataFrame(
+    @staticmethod
+    def overlapping_snapshot() -> pd.DataFrame:
+        return pd.DataFrame(
             [
                 {
                     "match_id": 1,
@@ -63,97 +60,81 @@ class OverlappingMatchSafetyTests(unittest.TestCase):
             ]
         )
 
-        active = pipeline.active_group_matches(matches)
+    def test_only_active_group_matches_block_publication(self) -> None:
+        active = runner.active_group_matches(self.overlapping_snapshot())
 
         self.assertEqual(active["match_id"].tolist(), [2])
         self.assertEqual(active.iloc[0]["status"], "IN_PLAY")
 
-    def test_active_match_summary_is_json_safe(self) -> None:
-        matches = pd.DataFrame(
-            [
-                {
-                    "match_id": 9,
-                    "utc_date": pd.Timestamp("2026-06-27T17:00:00Z"),
-                    "last_updated": pd.Timestamp("2026-06-27T18:45:00Z"),
-                    "stage": "GROUP_STAGE",
-                    "group": "GROUP_L",
-                    "status": "PAUSED",
-                    "home_team": "Panama",
-                    "away_team": "England",
-                }
-            ]
-        )
+    def test_deferred_summary_is_clear_and_json_safe(self) -> None:
+        active = runner.active_group_matches(self.overlapping_snapshot())
+        summary = runner.deferred_run_summary(active, {"http_status": 200})
 
-        summary = pipeline.active_group_match_summary(
-            pipeline.active_group_matches(matches)
-        )
-
-        self.assertEqual(summary[0]["match_id"], 9)
-        self.assertEqual(summary[0]["status"], "PAUSED")
+        self.assertEqual(summary["status"], "deferred_active_group_matches")
+        self.assertEqual(summary["active_group_match_count"], 1)
+        self.assertEqual(summary["active_group_matches"][0]["match_id"], 2)
+        self.assertIn("not changed", summary["message"])
         json.dumps(summary)
 
-    def test_predictions_cover_in_play_and_paused_matches(self) -> None:
-        world_cup = pd.DataFrame(
-            [
-                {
-                    "match_id": 1,
-                    "utc_date": pd.Timestamp("2026-06-27T17:00:00Z"),
-                    "status": "IN_PLAY",
-                    "stage": "GROUP_STAGE",
-                    "group": "GROUP_L",
-                    "home_team": "Croatia",
-                    "away_team": "Ghana",
-                },
-                {
-                    "match_id": 2,
-                    "utc_date": pd.Timestamp("2026-06-27T17:00:00Z"),
-                    "status": "PAUSED",
-                    "stage": "GROUP_STAGE",
-                    "group": "GROUP_L",
-                    "home_team": "Panama",
-                    "away_team": "England",
-                },
-            ]
-        )
-        teams = ["Croatia", "Ghana", "Panama", "England"]
-        team_map = pd.DataFrame(
-            {
-                "live_team_name": teams,
-                "historical_team_name": teams,
-            }
-        )
-        live_elo = pd.DataFrame(
-            {
-                "team": teams,
-                "elo_rating": [1950.0, 1800.0, 1650.0, 2070.0],
-            }
-        )
-        live_team_state = pd.DataFrame(
-            {
-                "team": teams,
-                "matches": [2, 2, 2, 2],
-                "ema_goals_for": [1.4, 1.2, 0.9, 1.8],
-                "ema_goals_against": [1.0, 1.3, 1.6, 0.8],
-                "ema_points": [1.8, 1.2, 0.7, 2.2],
-                "last_date": [pd.NaT, pd.NaT, pd.NaT, pd.NaT],
-            }
-        )
+    def test_active_match_defers_before_model_or_state_changes(self) -> None:
+        matches = self.overlapping_snapshot()
+        metadata = {"http_status": 200, "matches_returned": len(matches)}
 
-        predictions, _ = pipeline.generate_live_predictions(
-            world_cup,
-            ConstantGoalModel(1.4),
-            ConstantGoalModel(1.1),
-            team_map,
-            live_elo,
-            live_team_state,
-            pd.DataFrame(),
-            pd.DataFrame(),
-        )
+        with (
+            patch.object(
+                runner.update_pipeline,
+                "fetch_world_cup_matches",
+                return_value=(matches, metadata),
+            ) as fetch_mock,
+            patch.object(runner.update_pipeline, "atomic_to_json") as write_mock,
+            patch.object(runner.update_pipeline, "main") as main_mock,
+        ):
+            did_run = runner.run_guarded_pipeline()
 
-        self.assertEqual(set(predictions["match_id"]), {1, 2})
-        self.assertTrue(
-            predictions["status"].isin(["IN_PLAY", "PAUSED"]).all()
+        self.assertFalse(did_run)
+        fetch_mock.assert_called_once_with()
+        main_mock.assert_not_called()
+        write_mock.assert_called_once()
+        summary = write_mock.call_args.args[0]
+        self.assertEqual(summary["status"], "deferred_active_group_matches")
+
+    def test_safe_snapshot_runs_pipeline_and_reuses_one_api_fetch(self) -> None:
+        matches = self.overlapping_snapshot().copy()
+        matches.loc[matches["match_id"] == 2, "status"] = "FINISHED"
+        metadata = {"http_status": 200, "matches_returned": len(matches)}
+        snapshot_seen_inside_main = []
+
+        def fake_main() -> None:
+            inner_matches, inner_metadata = (
+                runner.update_pipeline.fetch_world_cup_matches()
+            )
+            snapshot_seen_inside_main.append((inner_matches, inner_metadata))
+
+        with (
+            patch.object(
+                runner.update_pipeline,
+                "fetch_world_cup_matches",
+                return_value=(matches, metadata),
+            ) as fetch_mock,
+            patch.object(
+                runner.update_pipeline,
+                "main",
+                side_effect=fake_main,
+            ) as main_mock,
+            patch.object(runner.update_pipeline, "atomic_to_json") as write_mock,
+        ):
+            did_run = runner.run_guarded_pipeline()
+
+        self.assertTrue(did_run)
+        fetch_mock.assert_called_once_with()
+        main_mock.assert_called_once_with()
+        write_mock.assert_not_called()
+        self.assertEqual(len(snapshot_seen_inside_main), 1)
+        self.assertEqual(
+            snapshot_seen_inside_main[0][0]["match_id"].tolist(),
+            matches["match_id"].tolist(),
         )
+        self.assertEqual(snapshot_seen_inside_main[0][1], metadata)
 
 
 if __name__ == "__main__":
