@@ -29,3 +29,27 @@ def read_json(path: Path) -> dict:
         return {}
     with open(path, "r", encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def load_page_data(root: Path) -> dict:
+    data = root / "data"
+    matches, source = load_matches(data / "world_cup_2026_matches_latest.csv")
+    latest = read_csv(data / "world_cup_live_predictions_latest.csv")
+    ledger = read_csv(
+        root / "backend" / "state" / "world_cup_prediction_ledger.csv"
+    )
+    predictions = combine_prediction_sources(latest, ledger)
+    prices = read_csv(data / "cupmarket_prices_latest.csv")
+    metadata = read_json(data / "phase5_simulation_metadata.json")
+    strength = (
+        dict(zip(prices["team"], prices["cupmarket_price"]))
+        if not prices.empty else {}
+    )
+    return {
+        "matches": matches,
+        "source": source,
+        "predictions": predictions,
+        "prices": prices,
+        "metadata": metadata,
+        "strength": strength,
+    }
