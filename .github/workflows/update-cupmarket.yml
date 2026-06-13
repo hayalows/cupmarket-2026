@@ -41,6 +41,7 @@ jobs:
           test -f data/tournament_probabilities_latest.csv
           test -f data/current_group_tables.csv
           test -f backend/update_pipeline.py
+          test -f backend/run_update_pipeline.py
           test -f backend/state/models/phase3_home_goal_model.joblib
           test -f backend/state/models/phase3_away_goal_model.joblib
           test -f backend/state/live_elo_ratings.csv
@@ -48,13 +49,14 @@ jobs:
           test -f backend/state/world_cup_team_name_map.csv
           python -m py_compile app.py
           python -m py_compile backend/update_pipeline.py
+          python -m py_compile backend/run_update_pipeline.py
 
       - name: Run CupMarket update pipeline
         env:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
           N_SIMULATIONS: "20000"
           FORCE_RUN: ${{ github.event_name == 'workflow_dispatch' }}
-        run: python backend/update_pipeline.py
+        run: python backend/run_update_pipeline.py
 
       - name: Commit updated model outputs
         run: |
