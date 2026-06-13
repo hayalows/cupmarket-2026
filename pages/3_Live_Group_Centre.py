@@ -3,6 +3,11 @@ from pathlib import Path
 import streamlit as st
 
 from features.group_centre_page import render_page
+from features.product_ui import (
+    inject_styles,
+    render_project_footer,
+    render_specialist_sidebar,
+)
 
 st.set_page_config(
     page_title="CupMarket Live Group Centre",
@@ -11,14 +16,8 @@ st.set_page_config(
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-for stylesheet in [
-    ROOT / "assets" / "product.css",
-    ROOT / "assets" / "group_tools.css",
-]:
-    if stylesheet.exists():
-        st.markdown(
-            f"<style>{stylesheet.read_text(encoding='utf-8')}</style>",
-            unsafe_allow_html=True,
-        )
+inject_styles(ROOT)
+render_specialist_sidebar("group")
 
 render_page(ROOT)
+render_project_footer()

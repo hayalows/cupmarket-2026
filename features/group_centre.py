@@ -74,7 +74,7 @@ def render_header(source: dict, metadata: dict) -> None:
     columns[2].metric(
         "Published model", format_source_time(metadata.get("generated_at_utc"))
     )
-    if st.button("Refresh live scores"):
+    if st.button("Refresh live scores", use_container_width=True):
         st.cache_data.clear()
         st.rerun()
     if source.get("warning"):

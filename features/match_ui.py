@@ -102,7 +102,7 @@ def render_match_centre(
     )
 
     if st.button(
-        "Refresh score cache",
+        "Refresh live scores",
         help=(
             "Clears the 60-second cache. Avoid repeated refreshes because "
             "the football API is rate-limited."
@@ -117,7 +117,7 @@ def render_match_centre(
 
     status_options = sorted(matches["status"].dropna().unique())
     selected_statuses = st.multiselect(
-        "Match status",
+        "Show matches",
         status_options,
         default=status_options,
     )
@@ -200,10 +200,11 @@ def render_match_centre(
             "most_likely_score": "Likely score",
         }
     )
-    st.dataframe(match_display, use_container_width=True, hide_index=True)
+    with st.expander("Browse all fixtures", expanded=False):
+        st.dataframe(match_display, use_container_width=True, hide_index=True)
 
-    st.markdown("### Open a matchup")
-    st.caption("Choose a match to view its own intelligence page.")
+    st.markdown("### Choose a match")
+    st.caption("The detailed view below keeps the most useful information in one place.")
     selectable = filtered[
         filtered["home_team"].notna() & filtered["away_team"].notna()
     ].sort_values("utc_date")

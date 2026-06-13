@@ -11,6 +11,13 @@ import plotly.express as px
 import requests
 import streamlit as st
 
+from features.product_ui import (
+    render_live_vs_official_note,
+    render_project_credit,
+    render_project_footer,
+    render_start_here,
+)
+
 st.set_page_config(
     page_title="CupMarket 2026",
     page_icon="⚽",
@@ -39,8 +46,11 @@ GITHUB_WORKFLOW_RUNS_URL = (
 )
 WORKFLOW_STALE_MINUTES = 45
 
-PRODUCT_UI_VERSION = "1.0"
-PRODUCT_CSS_PATH = APP_ROOT / "assets" / "product.css"
+PRODUCT_UI_VERSION = "2.0"
+PRODUCT_CSS_PATHS = [
+    APP_ROOT / "assets" / "product.css",
+    APP_ROOT / "assets" / "group_tools.css",
+]
 
 px.defaults.template = "plotly_white"
 px.defaults.color_discrete_sequence = [
@@ -54,9 +64,10 @@ px.defaults.color_discrete_sequence = [
 
 
 def inject_product_styles() -> None:
-    if PRODUCT_CSS_PATH.exists():
-        css = PRODUCT_CSS_PATH.read_text(encoding="utf-8")
-        st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
+    for stylesheet in PRODUCT_CSS_PATHS:
+        if stylesheet.exists():
+            css = stylesheet.read_text(encoding="utf-8")
+            st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
 
 
 def render_page_header(page: str, health: dict, metadata: dict) -> None:
@@ -658,7 +669,7 @@ with st.sidebar:
             <div class="cm-mark">CM</div>
             <div>
                 <strong>CupMarket</strong>
-                <span>World Cup intelligence</span>
+                <span>World Cup intelligence project</span>
             </div>
         </div>
         ''',
@@ -671,6 +682,14 @@ with st.sidebar:
         format_func=lambda item: NAV_LABELS[item],
         label_visibility="collapsed",
     )
+
+    st.markdown(
+        '<div class="cm-side-label">Live tools</div>',
+        unsafe_allow_html=True,
+    )
+    st.page_link("pages/1_Match_Intelligence.py", label="Match Intelligence", icon="⚽")
+    st.page_link("pages/2_Qualification_Lab.py", label="Qualification Lab", icon="◇")
+    st.page_link("pages/3_Live_Group_Centre.py", label="Live Group Centre", icon="◉")
 
     st.markdown(
         '<div class="cm-side-label">System status</div>',
@@ -706,7 +725,8 @@ with st.sidebar:
     if match_metadata.get("warning"):
         st.caption(match_metadata["warning"])
 
-    st.caption("Data provided by football-data.org")
+    st.caption("Match data provided by football-data.org")
+    render_project_credit(compact=True)
 
 render_page_header(page, production_health, phase5_meta)
 
@@ -786,6 +806,8 @@ if page == "Overview":
             else None
         ),
     )
+
+    render_start_here()
 
     render_section_heading(
         "Market leaders",
@@ -929,8 +951,10 @@ elif page == "Match Centre":
         "Match centre",
     )
 
+    render_live_vs_official_note()
+
     if st.button(
-        "Refresh score cache",
+        "Refresh live scores",
         help=(
             "Clears the 60-second cache. "
             "Avoid repeated refreshes because "
@@ -1456,11 +1480,11 @@ elif page == "Model Health":
         production_health.get("status", "Unknown"),
     )
     health_columns[1].metric(
-        "Last successful automatic update",
+        "Last successful run",
         production_health.get("last_success_text", "Never"),
     )
     health_columns[2].metric(
-        "Last failed update",
+        "Last failed run",
         production_health.get("last_failure_text", "Never"),
     )
     health_columns[3].metric(
@@ -1692,12 +1716,16 @@ Completed results are treated as facts. Remaining matches are simulated thousand
 
 A country receives different settlement values depending on where it exits the tournament. Its current price is the probability-weighted value of all those possible outcomes.
 
-### Current meaning of “live”
+### During a live match
 
-- Scores can refresh from the API every 60 seconds.
-- Saved model probabilities update after the post-match pipeline runs.
-- Tournament prices update after the simulator runs.
-- In-play probabilities based on score and minute are not part of this version yet.
+- Refreshing a live page requests the latest score state from the API.
+- Match Intelligence compares the current-score projection with the original pre-match forecast.
+- Qualification Lab switches to provisional standings and in-play qualification estimates.
+- Live Group Centre follows simultaneous matches and shows what the next goal could change.
+
+### After the final whistle
+
+The official Elo ratings, tournament probabilities and country prices update after the automated model pipeline processes the completed match. Live estimates are clearly separated from the official market.
         """
     )
 
@@ -1705,3 +1733,5 @@ A country receives different settlement values depending on where it exits the t
         "CupMarket is a virtual analytics game. "
         "It does not accept real-money wagers."
     )
+
+render_project_footer()
