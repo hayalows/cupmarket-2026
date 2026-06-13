@@ -1,0 +1,51 @@
+name: Apply production health UI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/apply_health_patch.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Apply production health UI
+        run: python scripts/apply_health_patch.py
+
+      - name: Validate Streamlit app
+        run: |
+          python -m py_compile app.py
+          grep -q "Production pipeline" app.py
+          grep -q "Last successful automatic update" app.py
+          grep -q "Data-staleness warning" app.py
+
+      - name: Commit patched app
+        run: |
+          git config user.name "cupmarket-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add app.py
+
+          if git diff --cached --quiet; then
+            echo "Production health UI was already present."
+          else
+            git commit -m "Add production health monitoring to Streamlit"
+            git pull --rebase origin main
+            git push origin main
+          fi
