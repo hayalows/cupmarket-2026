@@ -60,19 +60,16 @@ def render_specialist_sidebar(active_page: str) -> None:
             "pages/1_Match_Intelligence.py",
             label="Match Intelligence",
             icon="⚽",
-            disabled=active_page == "match",
         )
         st.page_link(
             "pages/2_Qualification_Lab.py",
             label="Qualification Lab",
-            icon="◇",
-            disabled=active_page == "qualification",
+            icon="🧭",
         )
         st.page_link(
             "pages/3_Live_Group_Centre.py",
             label="Live Group Centre",
-            icon="◉",
-            disabled=active_page == "group",
+            icon="📊",
         )
         st.markdown(
             '<div class="cm-side-label">About this build</div>',
@@ -150,7 +147,7 @@ def render_start_here() -> None:
         st.page_link(
             "pages/2_Qualification_Lab.py",
             label="Open Qualification Lab",
-            icon="◇",
+            icon="🧭",
             use_container_width=True,
         )
     with columns[2]:
@@ -159,7 +156,7 @@ def render_start_here() -> None:
         st.page_link(
             "pages/3_Live_Group_Centre.py",
             label="Open Live Group Centre",
-            icon="◉",
+            icon="📊",
             use_container_width=True,
         )
 
