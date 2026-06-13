@@ -34,6 +34,8 @@ def parse_api_matches(payload: dict) -> pd.DataFrame:
                 "stage": match.get("stage"),
                 "group": match.get("group"),
                 "matchday": match.get("matchday"),
+                "minute": match.get("minute"),
+                "injury_time": match.get("injuryTime"),
                 "home_team": nested_get(match, ["homeTeam", "name"]),
                 "away_team": nested_get(match, ["awayTeam", "name"]),
                 "winner": nested_get(match, ["score", "winner"]),
