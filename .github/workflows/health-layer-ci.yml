@@ -1,0 +1,27 @@
+name: Validate production health layer
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Apply health UI patch in test workspace
+        run: python scripts/apply_health_patch.py
+      - name: Validate patched Streamlit app
+        run: |
+          python -m py_compile app.py
+          grep -q "Production pipeline" app.py
+          grep -q "Last successful automatic update" app.py
+          grep -q "Data-staleness warning" app.py
+          git diff --check

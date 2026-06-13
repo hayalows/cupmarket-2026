@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: cupmarket-auto-update
@@ -71,4 +72,49 @@ jobs:
             git commit -m "Auto-update CupMarket data"
             git pull --rebase origin main
             git push origin main
+          fi
+
+      - name: Notify owner when automation fails
+        if: failure()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          issue_number=$(gh issue list \
+            --state open \
+            --search "CupMarket automation failure in:title" \
+            --json number \
+            --jq '.[0].number // empty')
+
+          body="The CupMarket automatic update failed.\n\nRun: ${RUN_URL}\nEvent: ${{ github.event_name }}\nBranch: ${{ github.ref_name }}\nTime: $(date -u +'%Y-%m-%d %H:%M UTC')\n\nOpen the run above and inspect the first failed step."
+
+          if [ -z "$issue_number" ]; then
+            gh issue create \
+              --title "CupMarket automation failure" \
+              --body "$body" \
+              --assignee "hayalows"
+          else
+            gh issue comment "$issue_number" --body "$body"
+          fi
+
+      - name: Close failure alert after recovery
+        if: success()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          issue_number=$(gh issue list \
+            --state open \
+            --search "CupMarket automation failure in:title" \
+            --json number \
+            --jq '.[0].number // empty')
+
+          if [ -n "$issue_number" ]; then
+            gh issue comment "$issue_number" \
+              --body "Automation recovered successfully. Run: ${RUN_URL}"
+            gh issue close "$issue_number" --reason completed
           fi

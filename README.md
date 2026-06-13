@@ -15,6 +15,12 @@ The Streamlit app uses `app.py` as its main file.
 - A manual workflow run forces a full 20,000-simulation refresh.
 - Updated files are committed into `data/`, and Streamlit reads the new commit automatically.
 
+## Production health monitoring
+
+The Model Health page reports the latest workflow status, the last successful and failed updates, the number of newly processed matches, and whether the model is behind the live API.
+
+The app caches GitHub Actions status for five minutes. When automation fails, the workflow opens or updates a GitHub issue. A later successful run closes the alert.
+
 ## Required secrets
 
 Create `FOOTBALL_DATA_TOKEN` in both places:
