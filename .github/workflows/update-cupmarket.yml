@@ -48,6 +48,7 @@ jobs:
           test -f backend/state/world_cup_team_name_map.csv
           python -m py_compile app.py
           python -m py_compile backend/update_pipeline.py
+          python -m unittest discover -s tests -v
 
       - name: Run CupMarket update pipeline
         env:

@@ -491,7 +491,7 @@ if page == "Overview":
 
         st.dataframe(
             leader_table,
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
         )
 
@@ -541,7 +541,7 @@ if page == "Overview":
                         "stage",
                     ]
                 ],
-                use_container_width=True,
+                width="stretch",
                 hide_index=True,
             )
 
@@ -657,7 +657,7 @@ elif page == "Match Centre":
 
         st.dataframe(
             filtered[display_columns],
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
         )
 
@@ -709,7 +709,7 @@ elif page == "Country Market":
                     in market_table.columns
                 ]
             ],
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
         )
 
@@ -732,7 +732,7 @@ elif page == "Country Market":
 
         st.plotly_chart(
             figure,
-            use_container_width=True,
+            width="stretch",
         )
 
         if not price_history.empty:
@@ -772,7 +772,7 @@ elif page == "Country Market":
 
                 st.plotly_chart(
                     history_chart,
-                    use_container_width=True,
+                    width="stretch",
                 )
         else:
             st.info(
@@ -889,7 +889,7 @@ elif page == "Team Explorer":
 
         st.plotly_chart(
             stage_chart,
-            use_container_width=True,
+            width="stretch",
         )
 
         st.subheader("Group-position probabilities")
@@ -929,7 +929,7 @@ elif page == "Team Explorer":
                     "Probability"
                 ].map(format_percent)
             ),
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
         )
 
@@ -974,7 +974,7 @@ elif page == "Group Tables":
                         "points",
                     ]
                 ],
-                use_container_width=True,
+                width="stretch",
                 hide_index=True,
             )
 

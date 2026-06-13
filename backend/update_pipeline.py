@@ -33,17 +33,13 @@ N_SIMULATIONS = int(os.environ.get("N_SIMULATIONS", "20000"))
 FORCE_RUN = os.environ.get("FORCE_RUN", "false").lower() in {
     "1", "true", "yes", "on"
 }
+PREDICTABLE_MATCH_STATUSES = {"TIMED", "SCHEDULED", "IN_PLAY", "PAUSED"}
 RANDOM_SEED = int(
     os.environ.get(
         "RANDOM_SEED",
         datetime.now(timezone.utc).strftime("%Y%m%d"),
     )
 )
-
-if not TOKEN:
-    raise RuntimeError(
-        "FOOTBALL_DATA_TOKEN is missing from GitHub Actions secrets."
-    )
 
 MODEL_VERSION = "phase7_automated_group_stage_v1"
 BRACKET_MODE = "provisional_constraint_assignment"
@@ -191,6 +187,11 @@ def nested_get(dictionary: dict, keys: list[str], default=None):
 
 
 def fetch_world_cup_matches() -> tuple[pd.DataFrame, dict]:
+    if not TOKEN:
+        raise RuntimeError(
+            "FOOTBALL_DATA_TOKEN is missing from GitHub Actions secrets."
+        )
+
     response = requests.get(
         API_URL,
         headers={"X-Auth-Token": TOKEN},
@@ -938,7 +939,7 @@ def generate_live_predictions(
     upcoming = (
         world_cup[
             (world_cup["stage"] == "GROUP_STAGE")
-            & world_cup["status"].isin(["TIMED", "SCHEDULED"])
+            & world_cup["status"].isin(PREDICTABLE_MATCH_STATUSES)
             & world_cup["home_team"].notna()
             & world_cup["away_team"].notna()
         ]
@@ -1754,7 +1755,7 @@ def run_tournament_simulation(
         "remaining_group_matches": int(
             (
                 (world_cup["stage"] == "GROUP_STAGE")
-                & world_cup["status"].isin(["TIMED", "SCHEDULED"])
+                & world_cup["status"].isin(PREDICTABLE_MATCH_STATUSES)
             ).sum()
         ),
         "simulation_seconds": float(simulation_seconds),

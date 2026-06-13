@@ -1,0 +1,1 @@
+"""CupMarket test package."""
