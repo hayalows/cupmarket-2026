@@ -17,3 +17,26 @@ def match_minute(match: dict) -> int:
         elapsed = (pd.Timestamp.now(tz="UTC") - kickoff).total_seconds() / 60
         return int(np.clip(elapsed, 0, 90))
     return 45
+
+
+def sample_score(match: dict, rng: np.random.Generator) -> tuple[int, int]:
+    if match["status"] in FINISHED:
+        return match["home_score"], match["away_score"]
+    if match["status"] in LIVE:
+        fraction = max(0.0, (90 - match_minute(match)) / 90)
+        home_rate = max(0.0, match["home_xg"] * fraction)
+        away_rate = max(0.0, match["away_xg"] * fraction)
+        if match["home_score"] > match["away_score"]:
+            home_rate *= 0.90
+            away_rate *= 1.15
+        elif match["away_score"] > match["home_score"]:
+            away_rate *= 0.90
+            home_rate *= 1.15
+        return (
+            match["home_score"] + int(rng.poisson(home_rate)),
+            match["away_score"] + int(rng.poisson(away_rate)),
+        )
+    return (
+        int(rng.poisson(max(0.05, match["home_xg"]))),
+        int(rng.poisson(max(0.05, match["away_xg"]))),
+    )
