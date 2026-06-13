@@ -53,3 +53,29 @@ def load_page_data(root: Path) -> dict:
         "metadata": metadata,
         "strength": strength,
     }
+
+
+def render_header(source: dict, metadata: dict) -> None:
+    st.markdown(
+        '''
+        <div class="cm-hero">
+            <div class="cm-eyebrow">CupMarket 2026 · Live group intelligence</div>
+            <h1>If the matches ended now.</h1>
+            <p>Follow simultaneous group matches, provisional standings and a current-score qualification projection.</p>
+        </div>
+        ''',
+        unsafe_allow_html=True,
+    )
+    columns = st.columns(3)
+    columns[0].metric("Score source", source.get("source", "Unknown"))
+    columns[1].metric(
+        "Score feed refreshed", format_source_time(source.get("fetched_at_utc"))
+    )
+    columns[2].metric(
+        "Published model", format_source_time(metadata.get("generated_at_utc"))
+    )
+    if st.button("Refresh live scores"):
+        st.cache_data.clear()
+        st.rerun()
+    if source.get("warning"):
+        st.warning(source["warning"] + " Showing the latest saved snapshot instead.")
