@@ -1,0 +1,1 @@
+The live score layer and the model layer are intentionally separate. A score can update within the 60-second page cache while model probabilities remain frozen until GitHub Actions publishes a new model run.

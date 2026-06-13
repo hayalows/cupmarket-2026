@@ -16,11 +16,23 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
       - name: Apply health UI patch in test workspace
         run: python scripts/apply_health_patch.py
-      - name: Validate patched Streamlit app
+      - name: Validate Streamlit app and live-score tools
         run: |
           python -m py_compile app.py
+          python -m py_compile features/live_match_data.py
+          python -m py_compile features/live_group_table.py
+          python -m py_compile features/match_ui.py
+          python -m py_compile features/qualification_ui.py
+          python -m py_compile pages/1_Match_Intelligence.py
+          python -m py_compile pages/2_Qualification_Lab.py
+          python -m unittest tests/test_live_match_data.py
+          python -m unittest tests/test_group_scenarios.py
           grep -q "Production pipeline" app.py
           grep -q "Last successful automatic update" app.py
           grep -q "Data-staleness warning" app.py

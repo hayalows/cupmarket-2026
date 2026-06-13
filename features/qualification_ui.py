@@ -8,6 +8,7 @@ from backend.group_scenarios import (
     current_team_summary,
     run_qualification_scenarios,
 )
+from features.live_group_table import build_live_group_table
 
 
 def format_percent(value, digits: int = 1) -> str:
@@ -100,6 +101,38 @@ def render_qualification_result(result: dict, compact: bool = False) -> None:
         st.plotly_chart(polish_figure(chart), use_container_width=True)
 
 
+def _display_group_table(table: pd.DataFrame) -> None:
+    if table.empty:
+        return
+    required = [
+        "position",
+        "team",
+        "played",
+        "wins",
+        "draws",
+        "losses",
+        "goal_difference",
+        "points",
+    ]
+    available = [column for column in required if column in table.columns]
+    st.dataframe(
+        table[available].rename(
+            columns={
+                "position": "Pos",
+                "team": "Country",
+                "played": "P",
+                "wins": "W",
+                "draws": "D",
+                "losses": "L",
+                "goal_difference": "GD",
+                "points": "Pts",
+            }
+        ),
+        use_container_width=True,
+        hide_index=True,
+    )
+
+
 def render_qualification_lab(
     matches: pd.DataFrame,
     predictions: pd.DataFrame,
@@ -165,44 +198,29 @@ def render_qualification_lab(
     else:
         st.info("This country has completed its group-stage matches.")
 
-    if not group_tables.empty:
-        table = group_tables[
+    live_table = build_live_group_table(
+        matches,
+        current["group"],
+        strength,
+    )
+    if not live_table.empty:
+        _display_group_table(live_table)
+        st.caption("Group table calculated from the score source shown above.")
+    elif not group_tables.empty:
+        fallback_table = group_tables[
             group_tables["group"].astype(str) == current["group"]
         ].sort_values("position")
-        if not table.empty:
-            st.dataframe(
-                table[
-                    [
-                        "position",
-                        "team",
-                        "played",
-                        "wins",
-                        "draws",
-                        "losses",
-                        "goal_difference",
-                        "points",
-                    ]
-                ].rename(
-                    columns={
-                        "position": "Pos",
-                        "team": "Country",
-                        "played": "P",
-                        "wins": "W",
-                        "draws": "D",
-                        "losses": "L",
-                        "goal_difference": "GD",
-                        "points": "Pts",
-                    }
-                ),
-                use_container_width=True,
-                hide_index=True,
-            )
+        _display_group_table(fallback_table)
+        st.caption("Showing the latest saved group table.")
 
     if production_health.get("pending_finished_matches", 0):
+        pending = int(production_health["pending_finished_matches"])
         st.warning(
-            "A completed match is waiting to enter the published model. "
-            "The live score is included, but remaining-match probabilities "
-            "may refresh after the next workflow run."
+            f"{pending} completed group match"
+            + ("es are" if pending != 1 else " is")
+            + " visible in the live score feed but not yet included in the "
+            "published model probabilities. Current scores and standings are live; "
+            "remaining-match forecasts refresh after the next successful workflow."
         )
 
     if not current["matches_remaining"]:
@@ -235,6 +253,6 @@ def render_qualification_lab(
         st.caption(
             f'Each outcome uses '
             f'{saved_result.get("n_simulations_per_scenario", 0):,} simulations. '
-            "Finished matches are fixed; remaining matches use the latest "
-            "expected-goal forecasts."
+            "Finished matches come from the current score source; remaining matches "
+            "use the latest published expected-goal forecasts."
         )
