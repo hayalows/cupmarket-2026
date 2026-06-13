@@ -1,0 +1,36 @@
+name: Validate product UI refresh
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate patch script
+        run: python -m py_compile scripts/apply_product_ui_patch.py
+
+      - name: Apply UI patch in test workspace
+        run: python scripts/apply_product_ui_patch.py
+
+      - name: Validate patched app and design assets
+        run: |
+          test -f assets/product.css
+          test -f .streamlit/config.toml
+          python -m py_compile app.py
+          grep -q 'PRODUCT_UI_VERSION = "1.0"' app.py
+          grep -q "Tournament intelligence" app.py
+          grep -q "CupMarket product UI refresh applied" scripts/apply_product_ui_patch.py
+          git diff --check
