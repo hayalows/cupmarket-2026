@@ -59,3 +59,76 @@ def render_provisional(context: dict) -> None:
         use_container_width=True,
         hide_index=True,
     )
+
+
+def render_projection(
+    matches,
+    predictions,
+    team: str,
+    strength: dict[str, float],
+) -> None:
+    if st.button(
+        "Run live qualification projection",
+        type="primary",
+        use_container_width=True,
+    ):
+        with st.spinner("Simulating the remaining group stage from the current scores..."):
+            result = project_team(
+                matches, predictions, team, strength, simulations=2500
+            )
+        st.session_state["live_group_projection"] = result
+        st.session_state["live_group_team"] = team
+
+    result = st.session_state.get("live_group_projection")
+    if not result or st.session_state.get("live_group_team") != team:
+        return
+
+    metrics = st.columns(5)
+    metrics[0].metric(
+        "Live qualification probability",
+        percent(result["qualification_probability"]),
+    )
+    metrics[1].metric(
+        "Direct top-two probability",
+        percent(result["direct_probability"]),
+    )
+    metrics[2].metric(
+        "Best-third probability",
+        percent(result["best_third_probability"]),
+    )
+    metrics[3].metric(
+        "Expected final points",
+        f'{result["expected_final_points"]:.1f}',
+    )
+    metrics[4].metric(
+        "Most likely final score",
+        result.get("most_likely_final_score") or "—",
+    )
+
+    position_frame = pd.DataFrame(
+        {
+            "Position": ["1st", "2nd", "3rd", "4th"],
+            "Probability": [
+                result["position_probabilities"].get(position, 0.0)
+                for position in range(1, 5)
+            ],
+        }
+    )
+    chart = px.bar(
+        position_frame,
+        x="Position",
+        y="Probability",
+        title=f'{team}: projected group finish from the current score state',
+    )
+    chart.update_yaxes(tickformat=".0%", range=[0, 1])
+    chart.update_layout(
+        template="plotly_white",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="#ffffff",
+    )
+    st.plotly_chart(chart, use_container_width=True)
+    st.caption(result["method"])
+    st.warning(
+        "This is an approximate live projection, not the official CupMarket model. "
+        "Official ratings and country prices remain unchanged until the match is final."
+    )
