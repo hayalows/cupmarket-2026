@@ -52,3 +52,28 @@ def row_record(row: Any, lookup: dict[int, tuple[float, float]]) -> dict[str, An
         "home_xg": home_xg if pd.notna(home_xg) else DEFAULT_XG,
         "away_xg": away_xg if pd.notna(away_xg) else DEFAULT_XG,
     }
+
+
+def group_records(
+    matches: pd.DataFrame,
+    predictions: pd.DataFrame,
+) -> tuple[list[dict[str, Any]], dict[str, list[str]]]:
+    required = {"match_id", "stage", "group", "home_team", "away_team", "status"}
+    missing = required - set(matches.columns)
+    if missing:
+        raise ValueError(f"Missing match columns: {sorted(missing)}")
+    frame = matches[
+        (matches["stage"] == "GROUP_STAGE")
+        & matches["group"].notna()
+        & matches["home_team"].notna()
+        & matches["away_team"].notna()
+    ]
+    lookup = prediction_lookup(predictions)
+    groups: dict[str, set[str]] = defaultdict(set)
+    rows = []
+    for raw in frame.itertuples(index=False):
+        item = row_record(raw, lookup)
+        groups[item["group"]].update([item["home_team"], item["away_team"]])
+        rows.append(item)
+    rows.sort(key=lambda item: (item["utc_date"], item["match_id"]))
+    return rows, {group: sorted(teams) for group, teams in groups.items()}
