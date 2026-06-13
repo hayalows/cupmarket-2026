@@ -3,6 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
+from features.live_qualification_ui import render_live_match
 from features.qualification_ui import (
     cached_qualification_scenarios,
     format_percent,
@@ -253,6 +254,15 @@ def render_match_centre(
         ''',
         unsafe_allow_html=True,
     )
+
+    live_projection_shown = render_live_match(
+        matches,
+        prediction_outputs,
+        prices,
+        int(selected_match_id),
+    )
+    if live_projection_shown:
+        st.markdown("#### Original pre-match forecast")
 
     if prediction_row.empty or pd.isna(prediction_row.get("prob_home_win")):
         st.info("A saved probability forecast is not available for this match yet.")

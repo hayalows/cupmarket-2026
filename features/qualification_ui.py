@@ -9,6 +9,7 @@ from backend.group_scenarios import (
     run_qualification_scenarios,
 )
 from features.live_group_table import build_live_group_table
+from features.live_qualification_ui import render_live_group
 
 
 def format_percent(value, digits: int = 1) -> str:
@@ -142,8 +143,8 @@ def render_qualification_lab(
 ) -> None:
     st.markdown("### Win, draw or lose")
     st.caption(
-        "Condition the next group match and simulate what each result means "
-        "for qualification."
+        "Before kickoff, compare a win, draw or loss. During a live group "
+        "match, the page switches to provisional standings and live projections."
     )
 
     group_matches = (
@@ -168,6 +169,9 @@ def render_qualification_lab(
         if not prices.empty
         else {}
     )
+
+    if render_live_group(matches, predictions, prices, selected_team):
+        return
 
     try:
         current = current_team_summary(matches, selected_team, strength)
