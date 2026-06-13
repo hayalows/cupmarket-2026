@@ -1,0 +1,1 @@
+"""CupMarket live group centre."""
