@@ -688,8 +688,8 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
     st.page_link("pages/1_Match_Intelligence.py", label="Match Intelligence", icon="⚽")
-    st.page_link("pages/2_Qualification_Lab.py", label="Qualification Lab", icon="◇")
-    st.page_link("pages/3_Live_Group_Centre.py", label="Live Group Centre", icon="◉")
+    st.page_link("pages/2_Qualification_Lab.py", label="Qualification Lab", icon="🧭")
+    st.page_link("pages/3_Live_Group_Centre.py", label="Live Group Centre", icon="📊")
 
     st.markdown(
         '<div class="cm-side-label">System status</div>',

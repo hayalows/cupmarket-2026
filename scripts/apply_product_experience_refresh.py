@@ -87,8 +87,8 @@ def patch_app() -> None:
         "        unsafe_allow_html=True,\n"
         "    )\n"
         "    st.page_link(\"pages/1_Match_Intelligence.py\", label=\"Match Intelligence\", icon=\"⚽\")\n"
-        "    st.page_link(\"pages/2_Qualification_Lab.py\", label=\"Qualification Lab\", icon=\"◇\")\n"
-        "    st.page_link(\"pages/3_Live_Group_Centre.py\", label=\"Live Group Centre\", icon=\"◉\")\n\n"
+        "    st.page_link(\"pages/2_Qualification_Lab.py\", label=\"Qualification Lab\", icon=\"🧭\")\n"
+        "    st.page_link(\"pages/3_Live_Group_Centre.py\", label=\"Live Group Centre\", icon=\"📊\")\n\n"
         "    st.markdown(\n"
         "        '<div class=\"cm-side-label\">System status</div>',",
     )
