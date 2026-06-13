@@ -55,8 +55,9 @@ def main() -> None:
         "page configuration",
     )
 
-    product_layer = r'''
+    product_helpers = r"""
 PRODUCT_UI_VERSION = "1.0"
+PRODUCT_CSS_PATH = APP_ROOT / "assets" / "product.css"
 
 px.defaults.template = "plotly_white"
 px.defaults.color_discrete_sequence = [
@@ -68,353 +69,11 @@ px.defaults.color_discrete_sequence = [
     "#8B5CF6",
 ]
 
-PRODUCT_CSS = """
-<style>
-:root {
-    --cm-bg: #f5f7fb;
-    --cm-surface: rgba(255,255,255,.92);
-    --cm-surface-solid: #ffffff;
-    --cm-border: #e6e9f0;
-    --cm-text: #10131a;
-    --cm-muted: #687083;
-    --cm-primary: #5b5ff0;
-    --cm-primary-soft: #eef0ff;
-    --cm-green: #0f9f6e;
-    --cm-amber: #d97706;
-    --cm-red: #dc4c64;
-    --cm-shadow: 0 18px 55px rgba(23, 29, 52, .08);
-}
-
-html, body, [class*="css"] {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Inter, Arial, sans-serif;
-}
-
-.stApp {
-    background:
-        radial-gradient(circle at 72% -10%, rgba(91,95,240,.12), transparent 34%),
-        radial-gradient(circle at 2% 15%, rgba(14,165,233,.08), transparent 28%),
-        var(--cm-bg);
-    color: var(--cm-text);
-}
-
-.block-container {
-    max-width: 1320px;
-    padding-top: 2.2rem;
-    padding-bottom: 4rem;
-}
-
-header[data-testid="stHeader"] {
-    background: rgba(245,247,251,.78);
-    backdrop-filter: blur(18px);
-}
-
-#MainMenu, footer {
-    visibility: hidden;
-}
-
-h1, h2, h3 {
-    color: var(--cm-text);
-    letter-spacing: -.035em;
-}
-
-p, label, .stCaption {
-    color: var(--cm-muted);
-}
-
-.cm-hero {
-    position: relative;
-    overflow: hidden;
-    margin: .2rem 0 1.8rem;
-    padding: 2rem 2.1rem;
-    border: 1px solid rgba(255,255,255,.75);
-    border-radius: 28px;
-    background:
-        linear-gradient(120deg, rgba(255,255,255,.98), rgba(248,249,255,.94)),
-        var(--cm-surface-solid);
-    box-shadow: var(--cm-shadow);
-}
-
-.cm-hero::after {
-    content: "";
-    position: absolute;
-    width: 250px;
-    height: 250px;
-    right: -80px;
-    top: -110px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(91,95,240,.22), rgba(91,95,240,0));
-}
-
-.cm-hero-top {
-    display: flex;
-    gap: .75rem;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    position: relative;
-    z-index: 1;
-}
-
-.cm-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: .45rem;
-    font-size: .76rem;
-    font-weight: 750;
-    letter-spacing: .09em;
-    text-transform: uppercase;
-    color: var(--cm-primary);
-}
-
-.cm-hero h1 {
-    margin: .55rem 0 .35rem;
-    font-size: clamp(2.25rem, 5vw, 4rem);
-    line-height: 1.02;
-    font-weight: 780;
-    max-width: 900px;
-}
-
-.cm-hero p {
-    margin: 0;
-    max-width: 780px;
-    font-size: 1.02rem;
-    line-height: 1.65;
-}
-
-.cm-status {
-    display: inline-flex;
-    align-items: center;
-    gap: .45rem;
-    border-radius: 999px;
-    padding: .48rem .72rem;
-    font-size: .78rem;
-    font-weight: 720;
-    border: 1px solid var(--cm-border);
-    background: rgba(255,255,255,.82);
-    color: var(--cm-text);
-}
-
-.cm-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--cm-green);
-    box-shadow: 0 0 0 5px rgba(15,159,110,.12);
-}
-
-.cm-status.failed .cm-dot { background: var(--cm-red); box-shadow: 0 0 0 5px rgba(220,76,100,.12); }
-.cm-status.attention .cm-dot { background: var(--cm-amber); box-shadow: 0 0 0 5px rgba(217,119,6,.12); }
-.cm-status.updating .cm-dot { background: #0ea5e9; box-shadow: 0 0 0 5px rgba(14,165,233,.12); }
-
-.cm-hero-meta {
-    display: flex;
-    gap: .65rem;
-    flex-wrap: wrap;
-    margin-top: 1.3rem;
-    position: relative;
-    z-index: 1;
-}
-
-.cm-chip {
-    display: inline-flex;
-    gap: .38rem;
-    align-items: center;
-    padding: .5rem .7rem;
-    border-radius: 12px;
-    background: #f2f4f9;
-    color: #4b5568;
-    font-size: .8rem;
-    font-weight: 650;
-}
-
-.cm-section-heading {
-    margin: 2rem 0 .85rem;
-}
-
-.cm-section-heading .kicker {
-    color: var(--cm-primary);
-    font-size: .73rem;
-    font-weight: 800;
-    letter-spacing: .09em;
-    text-transform: uppercase;
-}
-
-.cm-section-heading h2 {
-    font-size: 1.55rem;
-    margin: .2rem 0 .2rem;
-}
-
-.cm-section-heading p {
-    margin: 0;
-    font-size: .93rem;
-}
-
-[data-testid="stMetric"] {
-    background: var(--cm-surface);
-    border: 1px solid var(--cm-border);
-    border-radius: 20px;
-    padding: 1.1rem 1.15rem;
-    box-shadow: 0 10px 30px rgba(23,29,52,.055);
-    min-height: 118px;
-}
-
-[data-testid="stMetricLabel"] {
-    font-size: .78rem;
-    color: var(--cm-muted);
-    font-weight: 680;
-}
-
-[data-testid="stMetricValue"] {
-    color: var(--cm-text);
-    font-size: 2rem;
-    font-weight: 760;
-    letter-spacing: -.04em;
-}
-
-[data-testid="stMetricDelta"] {
-    font-weight: 700;
-}
-
-[data-testid="stDataFrame"] {
-    border: 1px solid var(--cm-border);
-    border-radius: 18px;
-    overflow: hidden;
-    background: var(--cm-surface-solid);
-    box-shadow: 0 10px 28px rgba(23,29,52,.045);
-}
-
-[data-testid="stPlotlyChart"] {
-    background: var(--cm-surface-solid);
-    border: 1px solid var(--cm-border);
-    border-radius: 20px;
-    padding: .55rem;
-    box-shadow: 0 10px 28px rgba(23,29,52,.045);
-}
-
-.stButton > button, .stLinkButton > a {
-    border-radius: 13px !important;
-    border: 1px solid #dfe3ec !important;
-    background: #ffffff !important;
-    color: var(--cm-text) !important;
-    font-weight: 680 !important;
-    min-height: 2.8rem;
-    box-shadow: 0 7px 20px rgba(23,29,52,.055);
-    transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
-}
-
-.stButton > button:hover, .stLinkButton > a:hover {
-    border-color: #bfc5f7 !important;
-    box-shadow: 0 10px 26px rgba(91,95,240,.12);
-    transform: translateY(-1px);
-}
-
-[data-baseweb="select"] > div, [data-testid="stTextInput"] input {
-    border-radius: 13px !important;
-    border-color: var(--cm-border) !important;
-    background: #ffffff !important;
-}
-
-[data-testid="stAlert"] {
-    border-radius: 16px;
-    border: 1px solid var(--cm-border);
-}
-
-section[data-testid="stSidebar"] {
-    background:
-        radial-gradient(circle at 0 0, rgba(91,95,240,.26), transparent 35%),
-        linear-gradient(180deg, #12172a 0%, #0d1120 100%);
-    border-right: 1px solid rgba(255,255,255,.06);
-}
-
-section[data-testid="stSidebar"] * {
-    color: #eef1fa;
-}
-
-section[data-testid="stSidebar"] .stCaption,
-section[data-testid="stSidebar"] p {
-    color: #aeb6ca;
-}
-
-section[data-testid="stSidebar"] [data-testid="stAlert"] {
-    background: rgba(255,255,255,.07);
-    border-color: rgba(255,255,255,.1);
-}
-
-section[data-testid="stSidebar"] [role="radiogroup"] label {
-    padding: .72rem .78rem;
-    border-radius: 12px;
-    margin-bottom: .2rem;
-    transition: background .15s ease;
-}
-
-section[data-testid="stSidebar"] [role="radiogroup"] label:hover {
-    background: rgba(255,255,255,.07);
-}
-
-.cm-side-brand {
-    display: flex;
-    align-items: center;
-    gap: .78rem;
-    padding: .3rem 0 1.15rem;
-}
-
-.cm-mark {
-    width: 42px;
-    height: 42px;
-    border-radius: 14px;
-    display: grid;
-    place-items: center;
-    background: linear-gradient(145deg, #7377ff, #4548c9);
-    box-shadow: 0 10px 30px rgba(91,95,240,.35);
-    font-weight: 850;
-    color: white;
-    letter-spacing: -.04em;
-}
-
-.cm-side-brand strong {
-    display: block;
-    font-size: 1rem;
-    color: white;
-}
-
-.cm-side-brand span {
-    color: #98a3ba;
-    font-size: .74rem;
-}
-
-.cm-side-label {
-    margin-top: .55rem;
-    color: #7f8aa3 !important;
-    font-size: .67rem;
-    font-weight: 800;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-}
-
-.cm-side-row {
-    margin-top: .5rem;
-    padding: .72rem .78rem;
-    border-radius: 13px;
-    background: rgba(255,255,255,.055);
-    border: 1px solid rgba(255,255,255,.07);
-    font-size: .79rem;
-    line-height: 1.45;
-}
-
-.cm-side-row b { color: #ffffff; }
-
-@media (max-width: 800px) {
-    .block-container { padding: 1rem .85rem 3rem; }
-    .cm-hero { padding: 1.45rem 1.3rem; border-radius: 22px; }
-    .cm-hero h1 { font-size: 2.25rem; }
-    [data-testid="stMetric"] { min-height: 102px; }
-}
-</style>
-"""
-
 
 def inject_product_styles() -> None:
-    st.markdown(PRODUCT_CSS, unsafe_allow_html=True)
+    if PRODUCT_CSS_PATH.exists():
+        css = PRODUCT_CSS_PATH.read_text(encoding="utf-8")
+        st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
 
 
 def render_page_header(page: str, health: dict, metadata: dict) -> None:
@@ -518,16 +177,16 @@ def polish_figure(figure, height: int | None = None):
     figure.update_xaxes(gridcolor="#edf0f5", zeroline=False)
     figure.update_yaxes(gridcolor="#edf0f5", zeroline=False)
     return figure
-'''
+"""
 
     text = replace_once(
         text,
         "WORKFLOW_STALE_MINUTES = 45\n",
-        "WORKFLOW_STALE_MINUTES = 45\n" + product_layer,
-        "product UI insertion",
+        "WORKFLOW_STALE_MINUTES = 45\n" + product_helpers,
+        "product helper insertion",
     )
 
-    new_shell = r'''inject_product_styles()
+    app_shell = r"""inject_product_styles()
 
 NAV_LABELS = {
     "Overview": "◫  Overview",
@@ -597,38 +256,76 @@ with st.sidebar:
     st.caption("Data provided by football-data.org")
 
 render_page_header(page, production_health, phase5_meta)
-'''
+"""
 
     text = replace_between(
         text,
         'st.title("CupMarket 2026")',
         '\n\nif page == "Overview":',
-        new_shell,
+        app_shell,
         "application shell",
     )
 
     heading_replacements = {
-        '    st.subheader("Market leaders")': '    render_section_heading(\n        "Market leaders",\n        "The highest probability-weighted country values right now.",\n        "Market pulse",\n    )',
-        '    st.subheader("Next matches")': '    render_section_heading(\n        "Next matches",\n        "Upcoming fixtures and live tournament status.",\n        "Match calendar",\n    )',
-        '    st.subheader("What the leader\'s probability means")': '    render_section_heading(\n        "How to read the leader",\n        "Price combines the value of every possible tournament finish.",\n        "Interpretation",\n    )',
-        '    st.header("Match Centre")': '    render_section_heading(\n        "Fixtures and forecasts",\n        "Filter the tournament and compare scores with saved model probabilities.",\n        "Match centre",\n    )',
-        '    st.header("Country Market")': '    render_section_heading(\n        "Country prices",\n        "Prices update after completed matches and a fresh tournament simulation.",\n        "Market",\n    )',
-        '    st.header("Team Explorer")': '    render_section_heading(\n        "Explore a country",\n        "See price, stage probabilities and the shape of a country\'s path.",\n        "Country profile",\n    )',
-        '    st.header("Current Group Tables")': '    render_section_heading(\n        "Current standings",\n        "Official completed results translated into live group tables.",\n        "Groups",\n    )',
-        '    st.header("Model Health")\n\n    st.subheader("Production pipeline")': '    render_section_heading(\n        "Production pipeline",\n        "Workflow health, freshness and historical evaluation in one place.",\n        "Operations",\n    )',
-        '    st.header("How the system works")': '    render_section_heading(\n        "From data to price",\n        "The complete path from a final whistle to a new CupMarket value.",\n        "Method",\n    )',
+        '    st.subheader("Market leaders")': '''    render_section_heading(
+        "Market leaders",
+        "The highest probability-weighted country values right now.",
+        "Market pulse",
+    )''',
+        '    st.subheader("Next matches")': '''    render_section_heading(
+        "Next matches",
+        "Upcoming fixtures and live tournament status.",
+        "Match calendar",
+    )''',
+        '    st.subheader("What the leader\'s probability means")': '''    render_section_heading(
+        "How to read the leader",
+        "Price combines the value of every possible tournament finish.",
+        "Interpretation",
+    )''',
+        '    st.header("Match Centre")': '''    render_section_heading(
+        "Fixtures and forecasts",
+        "Filter the tournament and compare scores with saved model probabilities.",
+        "Match centre",
+    )''',
+        '    st.header("Country Market")': '''    render_section_heading(
+        "Country prices",
+        "Prices update after completed matches and a fresh tournament simulation.",
+        "Market",
+    )''',
+        '    st.header("Team Explorer")': '''    render_section_heading(
+        "Explore a country",
+        "See price, stage probabilities and the shape of a country's path.",
+        "Country profile",
+    )''',
+        '    st.header("Current Group Tables")': '''    render_section_heading(
+        "Current standings",
+        "Official completed results translated into live group tables.",
+        "Groups",
+    )''',
+        '    st.header("Model Health")\n\n    st.subheader("Production pipeline")': '''    render_section_heading(
+        "Production pipeline",
+        "Workflow health, freshness and historical evaluation in one place.",
+        "Operations",
+    )''',
+        '    st.header("How the system works")': '''    render_section_heading(
+        "From data to price",
+        "The complete path from a final whistle to a new CupMarket value.",
+        "Method",
+    )''',
     }
 
     for old, new in heading_replacements.items():
         text = replace_once(text, old, new, old)
 
-    leader_anchor = '''        st.dataframe(
+    text = replace_once(
+        text,
+        '''        st.dataframe(
             leader_table,
             use_container_width=True,
             hide_index=True,
         )
-'''
-    leader_replacement = '''        leader_table = leader_table.rename(
+''',
+        '''        leader_table = leader_table.rename(
             columns={
                 "market_rank": "Rank",
                 "team": "Country",
@@ -646,15 +343,13 @@ render_page_header(page, production_health, phase5_meta)
             use_container_width=True,
             hide_index=True,
         )
-'''
-    text = replace_once(
-        text,
-        leader_anchor,
-        leader_replacement,
+''',
         "leader table",
     )
 
-    next_matches_anchor = '''            st.dataframe(
+    text = replace_once(
+        text,
+        '''            st.dataframe(
                 next_matches[
                     [
                         "kickoff_utc",
@@ -668,8 +363,8 @@ render_page_header(page, production_health, phase5_meta)
                 use_container_width=True,
                 hide_index=True,
             )
-'''
-    next_matches_replacement = '''            next_display = next_matches[
+''',
+        '''            next_display = next_matches[
                 [
                     "kickoff_utc",
                     "status",
@@ -694,21 +389,19 @@ render_page_header(page, production_health, phase5_meta)
                 use_container_width=True,
                 hide_index=True,
             )
-'''
-    text = replace_once(
-        text,
-        next_matches_anchor,
-        next_matches_replacement,
+''',
         "next matches table",
     )
 
-    match_table_anchor = '''        st.dataframe(
+    text = replace_once(
+        text,
+        '''        st.dataframe(
             filtered[display_columns],
             use_container_width=True,
             hide_index=True,
         )
-'''
-    match_table_replacement = '''        match_display = filtered[display_columns].copy()
+''',
+        '''        match_display = filtered[display_columns].copy()
 
         for probability_column in [
             "prob_home_win",
@@ -753,15 +446,11 @@ render_page_header(page, production_health, phase5_meta)
             use_container_width=True,
             hide_index=True,
         )
-'''
-    text = replace_once(
-        text,
-        match_table_anchor,
-        match_table_replacement,
+''',
         "match centre table",
     )
 
-    market_table_start = '''        st.dataframe(
+    old_market = '''        st.dataframe(
             market_table[
                 [
                     column
@@ -786,7 +475,7 @@ render_page_header(page, production_health, phase5_meta)
             hide_index=True,
         )
 '''
-    market_table_replacement = '''        market_columns = [
+    new_market = '''        market_columns = [
             column
             for column in [
                 "market_rank",
@@ -838,14 +527,9 @@ render_page_header(page, production_health, phase5_meta)
             hide_index=True,
         )
 '''
-    text = replace_once(
-        text,
-        market_table_start,
-        market_table_replacement,
-        "country market table",
-    )
+    text = replace_once(text, old_market, new_market, "country market table")
 
-    group_table_anchor = '''            st.dataframe(
+    old_group = '''            st.dataframe(
                 table[
                     [
                         "position",
@@ -864,7 +548,7 @@ render_page_header(page, production_health, phase5_meta)
                 hide_index=True,
             )
 '''
-    group_table_replacement = '''            group_display = table[
+    new_group = '''            group_display = table[
                 [
                     "position",
                     "team",
@@ -898,12 +582,7 @@ render_page_header(page, production_health, phase5_meta)
                 hide_index=True,
             )
 '''
-    text = replace_once(
-        text,
-        group_table_anchor,
-        group_table_replacement,
-        "group table",
-    )
+    text = replace_once(text, old_group, new_group, "group table")
 
     for figure_name in ["figure", "history_chart", "stage_chart"]:
         anchor = f'''        st.plotly_chart(
@@ -911,14 +590,17 @@ render_page_header(page, production_health, phase5_meta)
             use_container_width=True,
         )
 '''
-        replacement = f'''        polish_figure({figure_name})
+        if anchor in text:
+            text = text.replace(
+                anchor,
+                f'''        polish_figure({figure_name})
         st.plotly_chart(
             {figure_name},
             use_container_width=True,
         )
-'''
-        if anchor in text:
-            text = text.replace(anchor, replacement, 1)
+''',
+                1,
+            )
 
     APP_PATH.write_text(text, encoding="utf-8")
     print("CupMarket product UI refresh applied.")
