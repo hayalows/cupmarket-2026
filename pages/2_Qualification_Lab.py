@@ -11,6 +11,13 @@ from features.live_match_data import (
 )
 from features.match_ui import combine_prediction_sources
 from features.qualification_ui import render_qualification_lab
+from features.product_ui import (
+    inject_styles,
+    render_live_vs_official_note,
+    render_page_guide,
+    render_project_footer,
+    render_specialist_sidebar,
+)
 
 st.set_page_config(
     page_title="CupMarket Qualification Lab",
@@ -21,15 +28,8 @@ st.set_page_config(
 root = Path(__file__).resolve().parents[1]
 data_dir = root / "data"
 
-for stylesheet in [
-    root / "assets" / "product.css",
-    root / "assets" / "group_tools.css",
-]:
-    if stylesheet.exists():
-        st.markdown(
-            f"<style>{stylesheet.read_text(encoding='utf-8')}</style>",
-            unsafe_allow_html=True,
-        )
+inject_styles(root)
+render_specialist_sidebar("qualification")
 
 
 def read_csv(path: Path) -> pd.DataFrame:
@@ -80,6 +80,17 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+render_page_guide(
+    "See what the next result changes",
+    "Before kickoff, compare a win, draw or loss. During play, the page automatically changes to the provisional live view.",
+    [
+        ("Select", "Choose the country you care about."),
+        ("Run", "Calculate its qualification paths."),
+        ("Read", "Compare top-two and best-third routes."),
+    ],
+)
+render_live_vs_official_note()
+
 source_columns = st.columns(4)
 source_columns[0].metric("Score source", score_metadata.get("source", "Unknown"))
 source_columns[1].metric(
@@ -115,3 +126,4 @@ render_qualification_lab(
     group_tables,
     {"pending_finished_matches": freshness["pending_model_updates"]},
 )
+render_project_footer()

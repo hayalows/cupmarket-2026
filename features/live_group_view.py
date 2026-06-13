@@ -68,7 +68,7 @@ def render_projection(
     strength: dict[str, float],
 ) -> None:
     if st.button(
-        "Run live qualification projection",
+        "Update live projection",
         type="primary",
         use_container_width=True,
     ):

@@ -141,7 +141,7 @@ def render_qualification_lab(
     group_tables: pd.DataFrame,
     production_health: dict,
 ) -> None:
-    st.markdown("### Win, draw or lose")
+    st.markdown("### Your country’s route")
     st.caption(
         "Before kickoff, compare a win, draw or loss. During a live group "
         "match, the page switches to provisional standings and live projections."
@@ -231,7 +231,7 @@ def render_qualification_lab(
         return
 
     if st.button(
-        "Run qualification scenarios",
+        "Compare win, draw and loss",
         type="primary",
         use_container_width=True,
     ):

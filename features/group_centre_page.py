@@ -7,6 +7,7 @@ import streamlit as st
 from features.group_centre import load_page_data, render_header, render_matches
 from features.live_context import team_context
 from features.live_group_view import render_projection, render_provisional
+from features.product_ui import render_live_vs_official_note, render_page_guide
 
 
 def render_page(root: Path) -> None:
@@ -15,6 +16,16 @@ def render_page(root: Path) -> None:
     predictions = data["predictions"]
     strength = data["strength"]
     render_header(data["source"], data["metadata"])
+    render_page_guide(
+        "Follow the group as one connected system",
+        "Use this page when two matches can change the same table at the same time.",
+        [
+            ("Pick a country", "The page finds its group and related match."),
+            ("Refresh", "Bring in the latest scores before reading the table."),
+            ("Project", "Estimate the final group outcome from the current score."),
+        ],
+    )
+    render_live_vs_official_note()
 
     if matches.empty:
         st.warning("No group-stage match data is available.")

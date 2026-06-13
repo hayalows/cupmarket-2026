@@ -55,7 +55,7 @@ def render_live_group(matches, predictions, prices, selected_team: str) -> bool:
     if not current:
         return False
 
-    st.warning("Live qualification mode is active. Current scores are treated as provisional results; the trained model itself is not being retrained.")
+    st.info("Live mode is active. Current scores shape this provisional view; the official model and country prices remain unchanged until the match is final.")
     st.markdown("#### Group matches live now")
     cols = st.columns(max(1, len(active)))
     for col, row in zip(cols, active.itertuples(index=False)):
@@ -72,7 +72,7 @@ def render_live_group(matches, predictions, prices, selected_team: str) -> bool:
     metrics[3].metric("If matches ended now", "Qualifies" if current["qualifies_if_ended_now"] else "Outside")
     st.info(current["status_if_ended_now"])
 
-    st.markdown("#### If all live matches ended now")
+    st.markdown("#### Table if the live scores held")
     _table(snapshot["tables"].get(group, []))
     st.caption("This is provisional. A goal in either simultaneous match can change it.")
 
@@ -87,7 +87,7 @@ def render_live_group(matches, predictions, prices, selected_team: str) -> bool:
         result = cached_projection(matches, predictions, tuple(sorted(strength.items())), selected_team, 1400)
     if result.get("available"):
         team_result = result["teams"].get(selected_team, {})
-        st.markdown("#### Live qualification projection")
+        st.markdown("#### Projection from the current score")
         cols = st.columns(4)
         cols[0].metric("Qualify", pct(team_result.get("qualification_probability")))
         cols[1].metric("Top two", pct(team_result.get("direct_top_two_probability")))

@@ -10,6 +10,13 @@ from features.live_match_data import (
     load_matches,
 )
 from features.match_ui import combine_prediction_sources, render_match_centre
+from features.product_ui import (
+    inject_styles,
+    render_live_vs_official_note,
+    render_page_guide,
+    render_project_footer,
+    render_specialist_sidebar,
+)
 
 st.set_page_config(
     page_title="CupMarket Match Intelligence",
@@ -20,15 +27,8 @@ st.set_page_config(
 root = Path(__file__).resolve().parents[1]
 data_dir = root / "data"
 
-for stylesheet in [
-    root / "assets" / "product.css",
-    root / "assets" / "group_tools.css",
-]:
-    if stylesheet.exists():
-        st.markdown(
-            f"<style>{stylesheet.read_text(encoding='utf-8')}</style>",
-            unsafe_allow_html=True,
-        )
+inject_styles(root)
+render_specialist_sidebar("match")
 
 
 def read_csv(path: Path) -> pd.DataFrame:
@@ -78,6 +78,17 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+render_page_guide(
+    "Open one match and read it in layers",
+    "Start with the score and timing, then compare the current live state with the saved pre-match forecast.",
+    [
+        ("Refresh", "Request the latest score state."),
+        ("Choose", "Select the fixture you want to inspect."),
+        ("Compare", "Read live probabilities against the original forecast."),
+    ],
+)
+render_live_vs_official_note()
+
 source_columns = st.columns(4)
 source_columns[0].metric("Score source", score_metadata.get("source", "Unknown"))
 source_columns[1].metric(
@@ -114,3 +125,4 @@ else:
     )
 
 render_match_centre(matches, predictions, prices)
+render_project_footer()
