@@ -105,3 +105,33 @@ if st.button("Refresh live scores"):
 
 if source.get("warning"):
     st.warning(source["warning"] + " Showing the latest saved snapshot instead.")
+
+if matches.empty:
+    st.warning("No group-stage match data is available.")
+    st.stop()
+
+team_rows = matches[
+    (matches["stage"] == "GROUP_STAGE")
+    & matches["home_team"].notna()
+    & matches["away_team"].notna()
+]
+teams = sorted(set(team_rows["home_team"]).union(set(team_rows["away_team"])))
+selected_team = st.selectbox("Select a country", teams)
+context = team_context(matches, predictions, selected_team, strength)
+
+st.subheader(f'Group {context["group"]} live picture')
+if context["live_matches"]:
+    match_columns = st.columns(len(context["live_matches"]))
+    for column, match in zip(match_columns, context["live_matches"]):
+        minute = pd.to_numeric(match.get("minute"), errors="coerce")
+        clock = f"{int(minute)} min" if pd.notna(minute) else "LIVE"
+        column.metric(
+            f'{match["home_team"]} vs {match["away_team"]}',
+            f'{match["home_score"]}-{match["away_score"]}',
+            clock,
+        )
+    st.info(
+        "Current live scores are treated as final only for this provisional view."
+    )
+else:
+    st.caption("No match in this group is currently in play.")
