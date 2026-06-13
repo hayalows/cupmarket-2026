@@ -1,8 +1,15 @@
 name: Apply and validate product experience v2
 
 on:
+  pull_request:
+    paths:
+      - features/product_ui.py
+      - assets/group_tools.css
+      - scripts/apply_product_experience_refresh.py
+      - .github/workflows/product-experience-v2.yml
   push:
     branches:
+      - main
       - product-experience-v2
     paths:
       - features/product_ui.py
@@ -19,10 +26,9 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: Check out product branch
+      - name: Check out repository
         uses: actions/checkout@v4
         with:
-          ref: product-experience-v2
           fetch-depth: 0
 
       - name: Set up Python
@@ -61,6 +67,7 @@ jobs:
         run: git diff --check
 
       - name: Commit applied interface changes
+        if: github.event_name == 'push'
         run: |
           git config user.name "cupmarket-bot"
           git config user.email "actions@users.noreply.github.com"
@@ -70,5 +77,5 @@ jobs:
             echo "No product changes to commit."
           else
             git commit -m "Refine CupMarket product experience"
-            git push origin product-experience-v2
+            git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
