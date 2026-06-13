@@ -1,0 +1,29 @@
+name: Validate live qualification engine
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - run: python -m pip install -r requirements.txt
+      - name: Apply interface integration in test workspace
+        run: python scripts/apply_live_qualification_patch.py
+      - name: Compile live qualification components
+        run: |
+          python -m py_compile backend/live_qualification.py
+          python -m py_compile features/live_match_data.py
+          python -m py_compile features/live_qualification_ui.py
+          python -m py_compile features/qualification_ui.py
+          python -m py_compile features/match_ui.py
+          git diff --check
