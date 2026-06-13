@@ -12,13 +12,17 @@ def replace(path, old, new):
 def main():
     replace(ROOT / "app.py", 'icon="◇"', 'icon="🧭"')
     replace(ROOT / "app.py", 'icon="◉"', 'icon="📊"')
-    replace(ROOT / "features" / "product_ui.py", 'icon="◇"', 'icon="🧭"')
-    replace(ROOT / "features" / "product_ui.py", 'icon="◉"', 'icon="📊"')
-    replace(ROOT / "features" / "product_ui.py", ',\n            disabled=active_page == "match"', '')
-    replace(ROOT / "features" / "product_ui.py", ',\n            disabled=active_page == "qualification"', '')
-    replace(ROOT / "features" / "product_ui.py", ',\n            disabled=active_page == "group"', '')
-    replace(ROOT / "scripts" / "apply_product_experience_refresh.py", 'icon="◇"', 'icon="🧭"')
-    replace(ROOT / "scripts" / "apply_product_experience_refresh.py", 'icon="◉"', 'icon="📊"')
+
+    product_ui = ROOT / "features" / "product_ui.py"
+    replace(product_ui, 'icon="◇"', 'icon="🧭"')
+    replace(product_ui, 'icon="◉"', 'icon="📊"')
+    replace(product_ui, ',\n            disabled=active_page == "match"', '')
+    replace(product_ui, ',\n            disabled=active_page == "qualification"', '')
+    replace(product_ui, ',\n            disabled=active_page == "group"', '')
+
+    product_patch = ROOT / "scripts" / "apply_product_experience_refresh.py"
+    replace(product_patch, 'icon=\\"◇\\"', 'icon=\\"🧭\\"')
+    replace(product_patch, 'icon=\\"◉\\"', 'icon=\\"📊\\"')
 
     config = ROOT / ".streamlit" / "config.toml"
     text = config.read_text(encoding="utf-8")
