@@ -15,3 +15,11 @@ def current_tables(matches,strength=None):
             values[match["group"]].append(_result(match))
     tables={group:_rank_group(teams,values[group],strength) for group,teams in groups.items()}
     return rows,groups,tables
+
+
+def third_rows(tables,strength=None):
+    strength=strength or {}; rows=[]
+    for group,table in tables.items():
+        if len(table)>=3:
+            row=dict(table[2]); row["group"]=group; rows.append(row)
+    return sorted(rows,key=lambda r:(r["points"],r["goal_difference"],r["goals_for"],strength.get(r["team"],0),r["team"]),reverse=True)
