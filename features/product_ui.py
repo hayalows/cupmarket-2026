@@ -119,20 +119,22 @@ def render_data_diagnostics(
 
 
 def render_start_here() -> None:
-    st.markdown("### Start here")
-    columns = st.columns(3)
-    with columns[0]:
-        st.markdown("**Open the Match Hub**")
-        st.caption("Move between live matches, completed-result review and upcoming forecasts.")
-        st.page_link("pages/4_Match_Hub.py", label="Open Match Hub", icon="⚽", use_container_width=True)
-    with columns[1]:
-        st.markdown("**Test qualification paths**")
-        st.caption("See what a win, draw or loss means before kickoff.")
-        st.page_link("pages/2_Qualification_Lab.py", label="Open Qualification Lab", icon="🧭", use_container_width=True)
-    with columns[2]:
-        st.markdown("**Understand a price move**")
-        st.caption("Compare the current value with the previous model update.")
-        st.page_link("pages/5_Market_Story.py", label="Open Market Story", icon="↗", use_container_width=True)
+    from features.live_match_data import load_matches
+    from features.overview_v3 import render_overview_v3
+    from features.tournament_data import DATA_DIR, load_static_data
+
+    st.markdown(
+        '''
+        <div class="cm-v3-banner">
+            <div><strong>New Tournament Pulse</strong> · The summary cards below now open their full explanation.</div>
+            <div class="cm-v3-badge">Experience v3</div>
+        </div>
+        ''',
+        unsafe_allow_html=True,
+    )
+    matches, _ = load_matches(DATA_DIR / "world_cup_2026_matches_latest.csv")
+    prices = load_static_data()["prices"]
+    render_overview_v3(matches=matches, prices=prices, metadata={})
 
 
 def render_project_footer() -> None:
