@@ -112,11 +112,6 @@ def _health(metadata: dict) -> None:
 
 
 def render_full_analytics() -> None:
-    prices = load_csv(DATA_DIR / "cupmarket_prices_latest.csv")
-    groups = load_csv(DATA_DIR / "current_group_tables.csv")
-    history = load_market_history()
-    metadata = _metadata()
-
     st.markdown(
         '''
         <div class="cm-hero">
@@ -143,12 +138,15 @@ def render_full_analytics() -> None:
     ) or "Market"
 
     if view == "Market":
-        _market(prices)
+        _market(load_csv(DATA_DIR / "cupmarket_prices_latest.csv"))
     elif view == "Team":
-        _team(prices, history)
+        _team(
+            load_csv(DATA_DIR / "cupmarket_prices_latest.csv"),
+            load_market_history(),
+        )
     elif view == "Groups":
-        _groups(groups)
+        _groups(load_csv(DATA_DIR / "current_group_tables.csv"))
     elif view == "Performance":
         render_model_performance()
     else:
-        _health(metadata)
+        _health(_metadata())
