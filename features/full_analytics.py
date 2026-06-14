@@ -7,7 +7,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from features.model_performance import render_model_performance
+from features.model_performance_v2 import render_model_performance
 from features.tournament_data import DATA_DIR, load_csv, load_market_history
 
 ROOT = Path(__file__).resolve().parents[1]
