@@ -109,40 +109,65 @@ def render_page_guide(
     description: str,
     steps: list[tuple[str, str]],
 ) -> None:
-    cards = "".join(
-        f'''
-        <div class="cm-guide-step">
-            <span>{index}</span>
-            <div><strong>{step_title}</strong><p>{step_body}</p></div>
-        </div>
-        '''
-        for index, (step_title, step_body) in enumerate(steps, start=1)
-    )
-    st.markdown(
-        f'''
-        <div class="cm-guide">
-            <div class="cm-guide-copy">
-                <div class="cm-project-label">How to use this page</div>
-                <h2>{title}</h2>
-                <p>{description}</p>
-            </div>
-            <div class="cm-guide-grid">{cards}</div>
-        </div>
-        ''',
-        unsafe_allow_html=True,
-    )
+    """Keep onboarding available without placing it before the primary task."""
+    with st.expander(f"How to use this page · {title}", expanded=False):
+        st.caption(description)
+        columns = st.columns(len(steps))
+        for index, (column, step) in enumerate(zip(columns, steps), start=1):
+            step_title, step_body = step
+            with column:
+                st.markdown(f"**{index}. {step_title}**")
+                st.caption(step_body)
 
 
 def render_live_vs_official_note() -> None:
-    st.markdown(
-        '''
-        <div class="cm-state-note">
-            <div><strong>Live interpretation</strong><span>Scores, provisional tables and in-play projections can change whenever the feed refreshes.</span></div>
-            <div><strong>Published market</strong><span>Ratings, tournament probabilities and country prices change only after the final whistle and the next successful model run.</span></div>
-        </div>
-        ''',
-        unsafe_allow_html=True,
+    """Explain the two update clocks without consuming the main screen."""
+    with st.expander("Live interpretation vs published market", expanded=False):
+        st.markdown(
+            "**Live interpretation:** scores, provisional tables and in-play projections "
+            "can change whenever the score feed refreshes.\n\n"
+            "**Published market:** ratings, tournament probabilities and country prices "
+            "change only after full time and the next successful model run."
+        )
+
+
+def render_data_diagnostics(
+    *,
+    score_source: str,
+    score_refreshed: str,
+    model_generated: str,
+    pending_updates: int | None = None,
+    warning: str | None = None,
+    load_time_ms: float | None = None,
+    refresh_key: str | None = None,
+) -> None:
+    """Place operational telemetry behind a compact disclosure."""
+    pending_text = (
+        f" · {pending_updates} result{'s' if pending_updates != 1 else ''} awaiting model"
+        if pending_updates is not None
+        else ""
     )
+    st.caption(
+        f"Scores refreshed {score_refreshed} · Published model {model_generated}{pending_text}"
+    )
+    with st.expander("Data freshness and system details", expanded=False):
+        columns = st.columns(4 if pending_updates is not None else 3)
+        columns[0].metric("Score source", score_source)
+        columns[1].metric("Score feed refreshed", score_refreshed)
+        columns[2].metric("Model generated", model_generated)
+        if pending_updates is not None:
+            columns[3].metric("Results awaiting model", pending_updates)
+        if load_time_ms is not None:
+            st.caption(f"Page data prepared in {load_time_ms:.0f} ms on this rerun.")
+        if refresh_key and st.button(
+            "Refresh live scores",
+            key=refresh_key,
+            help="Clears the 60-second score cache and requests the latest match states.",
+        ):
+            st.cache_data.clear()
+            st.rerun()
+        if warning:
+            st.warning(warning)
 
 
 def render_start_here() -> None:
