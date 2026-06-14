@@ -4,6 +4,7 @@ import json
 import pandas as pd
 import streamlit as st
 
+from backend.live_qualification import LIVE_STATUSES
 from features.live_match_data import (
     format_source_time,
     group_freshness,
@@ -19,7 +20,7 @@ from features.product_ui import (
 )
 
 st.set_page_config(
-    page_title="CupMarket Match Intelligence",
+    page_title="CupMarket Live Match Room",
     page_icon="⚽",
     layout="wide",
 )
@@ -66,25 +67,35 @@ predictions = combine_prediction_sources(
     prediction_ledger,
 )
 freshness = group_freshness(matches, model_metadata)
+live_count = (
+    int(matches["status"].isin(LIVE_STATUSES).sum())
+    if not matches.empty and "status" in matches.columns
+    else 0
+)
 
 st.markdown(
-    '''
+    f'''
     <div class="cm-hero">
-        <div class="cm-eyebrow">CupMarket 2026 · Match intelligence</div>
-        <h1>Every matchup, opened up.</h1>
-        <p>Live score states are combined with the latest published CupMarket model probabilities.</p>
+        <div class="cm-hero-top">
+            <div class="cm-eyebrow">CupMarket 2026 · Live match intelligence</div>
+            <div class="cm-status {'updating' if live_count else ''}">
+                <span class="cm-dot"></span>{live_count} live match{'es' if live_count != 1 else ''}
+            </div>
+        </div>
+        <h1>Open the match. Understand the consequences.</h1>
+        <p>Start with the live score, then move into match outlook, qualification, group effects and market context without mixing live estimates with official published prices.</p>
     </div>
     ''',
     unsafe_allow_html=True,
 )
 
 render_page_guide(
-    "Open one match and read it in layers",
-    "Start with the score and timing, then compare the current live state with the saved pre-match forecast.",
+    "One match, five useful questions",
+    "Live fixtures appear first. Open one and choose the question you need answered instead of searching across separate dashboards.",
     [
-        ("Refresh", "Request the latest score state."),
-        ("Choose", "Select the fixture you want to inspect."),
-        ("Compare", "Read live probabilities against the original forecast."),
+        ("Open", "Choose a live, upcoming or completed fixture."),
+        ("Understand", "Read the score, likely result and qualification effect."),
+        ("Interpret", "Compare the live state with the published market and pre-match model."),
     ],
 )
 render_live_vs_official_note()
@@ -116,8 +127,8 @@ if freshness["pending_model_updates"]:
         f"{pending} completed group match"
         + ("es are" if pending != 1 else " is")
         + " already visible in the score feed but not yet reflected in the "
-        "published model probabilities. Scores are current; forecasts will catch "
-        "up after the next successful model workflow."
+        "published model probabilities. The final scores and provisional tables are "
+        "current; the official market will catch up after the next successful model run."
     )
 else:
     st.success(
