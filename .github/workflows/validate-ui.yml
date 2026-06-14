@@ -31,7 +31,7 @@ jobs:
       - name: Compile all Python modules
         run: python -m compileall -q app.py pages features backend
 
-      - name: Validate shared UI imports
+      - name: Validate shared UI imports and page paths
         run: |
           python - <<'PY'
           import ast
@@ -62,7 +62,21 @@ jobs:
                           )
                       checked.append(str(path))
 
+          page_paths = [
+              Path("pages/Tournament_Pulse.py"),
+              Path("pages/1_Match_Intelligence.py"),
+              Path("pages/2_Qualification_Lab.py"),
+              Path("pages/3_Live_Group_Centre.py"),
+              Path("pages/4_Match_Hub.py"),
+              Path("pages/5_Market_Story.py"),
+              Path("pages/6_Analytics_Dashboard.py"),
+          ]
+          missing_pages = [str(path) for path in page_paths if not path.exists()]
+          if missing_pages:
+              raise SystemExit("Missing page files: " + ", ".join(missing_pages))
+
           print(f"Validated product_ui imports in {len(set(checked))} files.")
+          print(f"Validated {len(page_paths)} page paths.")
           PY
 
       - name: Smoke test every user-facing page
@@ -70,6 +84,7 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           import traceback
+          import streamlit as st
           from streamlit.testing.v1 import AppTest
 
           pages = [
@@ -81,6 +96,12 @@ jobs:
               Path("pages/5_Market_Story.py"),
               Path("pages/6_Analytics_Dashboard.py"),
           ]
+
+          # AppTest.from_file does not construct Streamlit's multipage URL registry.
+          # Navigation paths are validated separately above, so page navigation is
+          # stubbed only inside this isolated runtime test.
+          st.page_link = lambda *args, **kwargs: None
+          st.switch_page = lambda *args, **kwargs: None
 
           failures = []
           for page in pages:
@@ -131,7 +152,7 @@ jobs:
           Time: $(date -u +'%Y-%m-%d %H:%M UTC')
 
           Failure details:
-          
+
           \`\`\`
           ${details}
           \`\`\`
