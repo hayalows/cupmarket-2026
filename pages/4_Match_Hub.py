@@ -12,5 +12,13 @@ st.set_page_config(
 
 inject_styles()
 render_specialist_sidebar("match_hub")
-render_match_hub()
+
+
+@st.fragment(run_every="45s")
+def render_live_match_hub() -> None:
+    render_match_hub()
+    st.caption("Automatic score refresh runs every 45 seconds while this page is open.")
+
+
+render_live_match_hub()
 render_project_footer()
