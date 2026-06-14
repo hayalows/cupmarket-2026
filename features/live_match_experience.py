@@ -119,12 +119,22 @@ def _render_live_state(matches: pd.DataFrame) -> None:
     live = matches[matches["status"].isin(LIVE_STATUSES)].copy()
     if live.empty:
         return
+    live = live.sort_values(["utc_date", "match_id"])
+    first_live = live.iloc[0]
+    live_token = ",".join(str(int(value)) for value in live["match_id"].tolist())
+    if st.session_state.get("cupmarket_live_session_token") != live_token:
+        st.session_state["cupmarket_live_session_token"] = live_token
+        _set_selected_match(
+            int(first_live["match_id"]),
+            f"Live now: {first_live.get('home_team')} vs {first_live.get('away_team')}",
+        )
+
     count = len(live)
     groups = sorted({_group_text(value) for value in live["group"].dropna()})
     group_text = ", ".join(groups) if groups else "the tournament"
     st.success(
         f"{count} match{'es are' if count != 1 else ' is'} live in {group_text}. "
-        "Live fixtures are prioritised below."
+        "The first live fixture has been brought into focus."
     )
 
 
@@ -141,6 +151,7 @@ def render_match_experience(
     if live_count:
         _render_live_state(matches)
     else:
+        st.session_state.pop("cupmarket_live_session_token", None)
         _render_no_live_state(matches)
 
     notice = st.session_state.pop("cupmarket_match_notice", None)
