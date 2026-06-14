@@ -69,6 +69,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          import traceback
           from streamlit.testing.v1 import AppTest
 
           pages = [
@@ -84,13 +85,22 @@ jobs:
           failures = []
           for page in pages:
               print(f"Testing {page}...")
-              app = AppTest.from_file(str(page), default_timeout=60)
-              app.run()
-              if app.exception:
-                  failures.append(f"{page}: {app.exception}")
+              try:
+                  app = AppTest.from_file(str(page), default_timeout=60)
+                  app.run()
+                  if len(app.exception):
+                      failures.append(
+                          f"{page}:\n" + "\n".join(str(item) for item in app.exception)
+                      )
+              except Exception:
+                  failures.append(f"{page}:\n{traceback.format_exc()}")
 
+          report = "\n\n".join(failures)
+          Path("ui-validation-failures.txt").write_text(
+              report or "No failures.", encoding="utf-8"
+          )
           if failures:
-              raise SystemExit("\n".join(failures))
+              raise SystemExit(report)
           print(f"Rendered {len(pages)} pages without Streamlit exceptions.")
           PY
 
@@ -108,7 +118,25 @@ jobs:
             --json number \
             --jq '.[0].number // empty')
 
-          body="CupMarket UI validation failed.\n\nRun: ${RUN_URL}\nCommit: ${{ github.sha }}\nTime: $(date -u +'%Y-%m-%d %H:%M UTC')\n\nInspect the failed compile, import, or Streamlit page smoke-test step."
+          details="No detailed page report was produced. Inspect the failed compile or import step."
+          if [ -f ui-validation-failures.txt ]; then
+            details=$(cat ui-validation-failures.txt)
+          fi
+
+          body=$(cat <<EOF
+          CupMarket UI validation failed.
+
+          Run: ${RUN_URL}
+          Commit: ${{ github.sha }}
+          Time: $(date -u +'%Y-%m-%d %H:%M UTC')
+
+          Failure details:
+          
+          \`\`\`
+          ${details}
+          \`\`\`
+          EOF
+          )
 
           if [ -z "$issue_number" ]; then
             gh issue create \
