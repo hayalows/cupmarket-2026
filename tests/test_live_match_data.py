@@ -5,7 +5,11 @@ import unittest
 import pandas as pd
 
 from features.live_group_table import build_live_group_table
-from features.live_match_data import group_freshness, parse_api_matches
+from features.live_match_data import (
+    expected_live_matches,
+    group_freshness,
+    parse_api_matches,
+)
 
 
 class LiveMatchDataTests(unittest.TestCase):
@@ -36,6 +40,52 @@ class LiveMatchDataTests(unittest.TestCase):
         self.assertEqual(frame.iloc[0]["away_team"], "Panama")
         self.assertEqual(frame.iloc[0]["home_score_full_time"], 2)
         self.assertTrue(pd.api.types.is_datetime64_any_dtype(frame["utc_date"]))
+
+    def test_parse_live_match_keeps_clock_and_current_score(self):
+        payload = {
+            "matches": [
+                {
+                    "id": 12,
+                    "utcDate": "2026-06-20T18:00:00Z",
+                    "status": "IN_PLAY",
+                    "stage": "GROUP_STAGE",
+                    "group": "GROUP_A",
+                    "matchday": 2,
+                    "minute": 37,
+                    "injuryTime": 0,
+                    "homeTeam": {"name": "Ghana"},
+                    "awayTeam": {"name": "Panama"},
+                    "score": {
+                        "winner": "HOME_TEAM",
+                        "duration": "REGULAR",
+                        "fullTime": {"home": 1, "away": 0},
+                    },
+                    "lastUpdated": "2026-06-20T18:37:00Z",
+                }
+            ]
+        }
+        frame = parse_api_matches(payload)
+        self.assertEqual(frame.iloc[0]["status"], "IN_PLAY")
+        self.assertEqual(int(frame.iloc[0]["minute"]), 37)
+        self.assertEqual(int(frame.iloc[0]["home_score_full_time"]), 1)
+        self.assertEqual(int(frame.iloc[0]["away_score_full_time"]), 0)
+
+    def test_expected_live_match_detects_stale_scheduled_status(self):
+        now = pd.Timestamp("2026-06-20T18:30:00Z")
+        matches = pd.DataFrame(
+            [
+                {
+                    "utc_date": pd.Timestamp("2026-06-20T18:00:00Z"),
+                    "status": "TIMED",
+                },
+                {
+                    "utc_date": pd.Timestamp("2026-06-21T18:00:00Z"),
+                    "status": "TIMED",
+                },
+            ]
+        )
+        expected = expected_live_matches(matches, now=now)
+        self.assertEqual(len(expected), 1)
 
     def test_group_freshness_detects_pending_result(self):
         matches = pd.DataFrame(
