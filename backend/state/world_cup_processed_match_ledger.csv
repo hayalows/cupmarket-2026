@@ -4,3 +4,6 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537333,2026-06-12 19:00:00+00:00,GROUP_STAGE,Canada,Bosnia-Herzegovina,1,1,2026-06-13 01:39:22.355987+00:00,phase4_live_state_v1
 537345,2026-06-13 01:00:00+00:00,GROUP_STAGE,United States,Paraguay,4,1,2026-06-13 04:39:00.539386+00:00,phase7_automated_group_stage_v1
 537334,2026-06-13 19:00:00+00:00,GROUP_STAGE,Qatar,Switzerland,1,1,2026-06-13 21:25:44.849405+00:00,phase7_automated_group_stage_v1
+537339,2026-06-13 22:00:00+00:00,GROUP_STAGE,Brazil,Morocco,1,1,2026-06-14 06:52:12.384683+00:00,phase7_automated_group_stage_v1
+537340,2026-06-14 01:00:00+00:00,GROUP_STAGE,Haiti,Scotland,0,1,2026-06-14 06:52:12.384712+00:00,phase7_automated_group_stage_v1
+537346,2026-06-14 04:00:00+00:00,GROUP_STAGE,Australia,Turkey,2,0,2026-06-14 06:52:12.384726+00:00,phase7_automated_group_stage_v1
