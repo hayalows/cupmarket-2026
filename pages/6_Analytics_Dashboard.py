@@ -5,7 +5,7 @@ from features.product_ui import render_project_footer, render_specialist_sidebar
 
 st.set_page_config(
     page_title="CupMarket Full Analytics",
-    page_icon="▤",
+    page_icon="📊",
     layout="wide",
     initial_sidebar_state="auto",
 )
