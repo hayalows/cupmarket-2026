@@ -54,11 +54,11 @@ def render_specialist_sidebar(active_page: str) -> None:
         st.markdown('<div class="cm-side-label">Explore</div>', unsafe_allow_html=True)
         st.page_link("app.py", label="Tournament Pulse", icon="🏠")
         st.page_link("pages/4_Match_Hub.py", label="Match Hub", icon="⚽")
-        st.page_link("pages/1_Match_Intelligence.py", label="Live Match Room", icon="◉")
+        st.page_link("pages/1_Match_Intelligence.py", label="Live Match Room", icon="🎯")
         st.page_link("pages/2_Qualification_Lab.py", label="Qualification Lab", icon="🧭")
-        st.page_link("pages/3_Live_Group_Centre.py", label="Live Group Centre", icon="📊")
-        st.page_link("pages/5_Market_Story.py", label="Market Story", icon="↗")
-        st.page_link("pages/6_Analytics_Dashboard.py", label="Full Analytics", icon="▤")
+        st.page_link("pages/3_Live_Group_Centre.py", label="Live Group Centre", icon="📋")
+        st.page_link("pages/5_Market_Story.py", label="Market Story", icon="📈")
+        st.page_link("pages/6_Analytics_Dashboard.py", label="Full Analytics", icon="📊")
         st.markdown('<div class="cm-side-label">About this build</div>', unsafe_allow_html=True)
         render_project_credit(compact=True)
         st.link_button("View the project on GitHub", PROJECT_REPOSITORY)
@@ -123,15 +123,6 @@ def render_start_here() -> None:
     from features.overview_v3 import render_overview_v3
     from features.tournament_data import DATA_DIR, load_static_data
 
-    st.markdown(
-        '''
-        <div class="cm-v3-banner">
-            <div><strong>New Tournament Pulse</strong> · The summary cards below now open their full explanation.</div>
-            <div class="cm-v3-badge">Experience v3</div>
-        </div>
-        ''',
-        unsafe_allow_html=True,
-    )
     matches, _ = load_matches(DATA_DIR / "world_cup_2026_matches_latest.csv")
     prices = load_static_data()["prices"]
     render_overview_v3(matches=matches, prices=prices, metadata={})
