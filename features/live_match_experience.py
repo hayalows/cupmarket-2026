@@ -78,6 +78,9 @@ def _render_no_live_state(matches: pd.DataFrame) -> None:
         return
 
     default = options[0]
+    if st.session_state.get("cupmarket_quick_view") not in options:
+        st.session_state["cupmarket_quick_view"] = default
+
     choice = st.segmented_control(
         "Quick view",
         options,
@@ -90,9 +93,9 @@ def _render_no_live_state(matches: pd.DataFrame) -> None:
         choice = default
 
     row = rows[choice]
-    applied = st.session_state.get("cupmarket_quick_view_applied")
-    if applied != choice:
-        st.session_state["cupmarket_quick_view_applied"] = choice
+    applied_token = f"{choice}:{int(row['match_id'])}"
+    if st.session_state.get("cupmarket_quick_view_applied") != applied_token:
+        st.session_state["cupmarket_quick_view_applied"] = applied_token
         _set_selected_match(
             int(row["match_id"]),
             f"Opened {row.get('home_team')} vs {row.get('away_team')}",
