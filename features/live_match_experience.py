@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 
 from backend.live_qualification import LIVE_STATUSES
-from features.live_match_room import render_live_match_centre
+from features.compact_match_room import render_compact_match_room
 from features.match_ui import score_text
 
 UPCOMING_STATUSES = {"TIMED", "SCHEDULED"}
@@ -79,7 +79,7 @@ def _render_no_live_state(matches: pd.DataFrame) -> None:
 
     default = options[0]
     if st.session_state.get("cupmarket_quick_view") not in options:
-        st.session_state["cupmarket_quick_view"] = default
+        st.session_state.pop("cupmarket_quick_view", None)
 
     choice = st.segmented_control(
         "Quick view",
@@ -134,7 +134,7 @@ def render_match_experience(
     prices: pd.DataFrame,
 ) -> None:
     if matches.empty or "status" not in matches.columns:
-        render_live_match_centre(matches, predictions, prices)
+        render_compact_match_room(matches, predictions, prices)
         return
 
     live_count = int(matches["status"].isin(LIVE_STATUSES).sum())
@@ -147,4 +147,4 @@ def render_match_experience(
     if notice:
         st.toast(notice, icon="⚽")
 
-    render_live_match_centre(matches, predictions, prices)
+    render_compact_match_room(matches, predictions, prices)
