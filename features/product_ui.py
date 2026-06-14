@@ -93,6 +93,9 @@ def render_data_diagnostics(
     warning: str | None = None,
     load_time_ms: float | None = None,
     refresh_key: str | None = None,
+    token_configured: bool | None = None,
+    feed_state: str | None = None,
+    requests_remaining: str | None = None,
 ) -> None:
     pending_text = (
         f" · {pending_updates} result{'s' if pending_updates != 1 else ''} awaiting model"
@@ -109,10 +112,28 @@ def render_data_diagnostics(
         columns[2].metric("Model generated", model_generated)
         if pending_updates is not None:
             columns[3].metric("Results awaiting model", pending_updates)
+
+        detail_parts = []
+        if token_configured is not None:
+            detail_parts.append(
+                "Streamlit token configured" if token_configured else "Streamlit token missing"
+            )
+        if feed_state:
+            detail_parts.append(f"Feed state: {feed_state.replace('_', ' ')}")
+        if requests_remaining is not None:
+            detail_parts.append(f"Provider requests remaining: {requests_remaining}")
+        if detail_parts:
+            st.caption(" · ".join(detail_parts))
         if load_time_ms is not None:
             st.caption(f"Page data prepared in {load_time_ms:.0f} ms on this rerun.")
-        if refresh_key and st.button("Refresh live scores", key=refresh_key):
-            st.cache_data.clear()
+        if refresh_key and st.button(
+            "Refresh live scores",
+            key=refresh_key,
+            help="Clears only the football-feed cache and requests the latest match states.",
+        ):
+            from features.live_match_data import clear_live_match_cache
+
+            clear_live_match_cache()
             st.rerun()
         if warning:
             st.warning(warning)
