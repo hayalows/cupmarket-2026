@@ -52,7 +52,7 @@ def render_specialist_sidebar(active_page: str) -> None:
             unsafe_allow_html=True,
         )
         st.markdown('<div class="cm-side-label">Explore</div>', unsafe_allow_html=True)
-        st.page_link("app.py", label="Tournament Pulse", icon="🏠")
+        st.page_link("pages/Tournament_Pulse.py", label="Tournament Pulse", icon="🏠")
         st.page_link("pages/4_Match_Hub.py", label="Match Hub", icon="⚽")
         st.page_link("pages/1_Match_Intelligence.py", label="Live Match Room", icon="🎯")
         st.page_link("pages/2_Qualification_Lab.py", label="Qualification Lab", icon="🧭")
@@ -119,13 +119,7 @@ def render_data_diagnostics(
 
 
 def render_start_here() -> None:
-    from features.live_match_data import load_matches
-    from features.overview_v3 import render_overview_v3
-    from features.tournament_data import DATA_DIR, load_static_data
-
-    matches, _ = load_matches(DATA_DIR / "world_cup_2026_matches_latest.csv")
-    prices = load_static_data()["prices"]
-    render_overview_v3(matches=matches, prices=prices, metadata={})
+    st.switch_page("pages/Tournament_Pulse.py")
 
 
 def render_project_footer() -> None:
