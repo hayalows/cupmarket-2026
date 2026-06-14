@@ -1,0 +1,59 @@
+name: Validate CupMarket UI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-ui:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile all Python modules
+        run: python -m compileall -q app.py pages features backend
+
+      - name: Validate shared UI imports
+        run: |
+          python - <<'PY'
+          import ast
+          from pathlib import Path
+
+          product_ui_path = Path("features/product_ui.py")
+          product_tree = ast.parse(product_ui_path.read_text(encoding="utf-8"))
+          exports = {
+              node.name
+              for node in product_tree.body
+              if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+          }
+
+          checked = []
+          targets = [
+              Path("app.py"),
+              *Path("pages").glob("*.py"),
+              *Path("features").glob("*.py"),
+          ]
+          for path in targets:
+              tree = ast.parse(path.read_text(encoding="utf-8"))
+              for node in ast.walk(tree):
+                  if isinstance(node, ast.ImportFrom) and node.module == "features.product_ui":
+                      missing = [alias.name for alias in node.names if alias.name not in exports]
+                      if missing:
+                          raise SystemExit(
+                              f"{path} imports missing product_ui symbols: {', '.join(missing)}"
+                          )
+                      checked.append(str(path))
+
+          print(f"Validated product_ui imports in {len(set(checked))} files.")
+          PY
