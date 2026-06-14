@@ -7,6 +7,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
+from features.model_performance import render_model_performance
 from features.tournament_data import DATA_DIR, load_csv, load_market_history
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -121,17 +122,21 @@ def render_full_analytics() -> None:
         <div class="cm-hero">
             <div class="cm-eyebrow">CupMarket 2026 · Full analytics</div>
             <h1>Go deeper when the headline is not enough.</h1>
-            <p>Country rankings, team paths, group tables and model health remain available in one analytical workspace.</p>
+            <p>Country rankings, team paths, group tables, model performance and system health in one analytical workspace.</p>
         </div>
         ''',
         unsafe_allow_html=True,
     )
-    market_tab, team_tab, groups_tab, health_tab = st.tabs(["Country Market", "Team Explorer", "Group Tables", "Model Health"])
+    market_tab, team_tab, groups_tab, performance_tab, health_tab = st.tabs(
+        ["Country Market", "Team Explorer", "Group Tables", "Performance", "Model Health"]
+    )
     with market_tab:
         _market(prices)
     with team_tab:
         _team(prices, history)
     with groups_tab:
         _groups(groups)
+    with performance_tab:
+        render_model_performance()
     with health_tab:
         _health(metadata)
