@@ -1,6 +1,6 @@
 import streamlit as st
 
-from features.match_hub import inject_styles, render_match_hub
+from features.match_hub_v2 import inject_styles, render_match_hub
 from features.product_ui import render_project_footer, render_specialist_sidebar
 
 st.set_page_config(
