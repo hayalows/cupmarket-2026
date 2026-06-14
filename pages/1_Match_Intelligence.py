@@ -10,7 +10,7 @@ from features.live_match_data import (
     group_freshness,
     load_matches,
 )
-from features.live_match_room import render_live_match_centre
+from features.live_match_experience import render_match_experience
 from features.match_ui import combine_prediction_sources
 from features.product_ui import (
     inject_styles,
@@ -73,30 +73,43 @@ live_count = (
     if not matches.empty and "status" in matches.columns
     else 0
 )
+live_status_text = (
+    f"{live_count} live match{'es' if live_count != 1 else ''}"
+    if live_count
+    else "No match live"
+)
+live_status_class = "updating" if live_count else "attention"
+hero_description = (
+    "Live matches are active. Open one to follow the changing match outlook, "
+    "qualification picture, connected group effects and published-market context."
+    if live_count
+    else "No match is live right now. Open the next fixture for its pre-match forecast "
+    "or review the latest result while waiting for official market repricing."
+)
 
 st.markdown(
     f'''
     <div class="cm-hero">
         <div class="cm-hero-top">
-            <div class="cm-eyebrow">CupMarket 2026 · Live match intelligence</div>
-            <div class="cm-status {'updating' if live_count else ''}">
-                <span class="cm-dot"></span>{live_count} live match{'es' if live_count != 1 else ''}
+            <div class="cm-eyebrow">CupMarket 2026 · Match intelligence</div>
+            <div class="cm-status {live_status_class}">
+                <span class="cm-dot"></span>{live_status_text}
             </div>
         </div>
         <h1>Open the match. Understand the consequences.</h1>
-        <p>Start with the live score, then move into match outlook, qualification, group effects and market context without mixing live estimates with official published prices.</p>
+        <p>{hero_description}</p>
     </div>
     ''',
     unsafe_allow_html=True,
 )
 
 render_page_guide(
-    "One match, five useful questions",
-    "Live fixtures appear first. Open one and choose the question you need answered instead of searching across separate dashboards.",
+    "Useful before, during and after the match",
+    "The Match Room changes with the match state instead of becoming an empty live-only page.",
     [
-        ("Open", "Choose a live, upcoming or completed fixture."),
-        ("Understand", "Read the score, likely result and qualification effect."),
-        ("Interpret", "Compare the live state with the published market and pre-match model."),
+        ("Before kickoff", "Read the forecast and test qualification outcomes."),
+        ("During play", "Follow live outlook, group effects and market pressure."),
+        ("After full time", "Review the result and see when official repricing catches up."),
     ],
 )
 render_live_vs_official_note()
@@ -128,13 +141,13 @@ if freshness["pending_model_updates"]:
         f"{pending} completed group match"
         + ("es are" if pending != 1 else " is")
         + " already visible in the score feed but not yet reflected in the "
-        "published model probabilities. The final scores and provisional tables are "
-        "current; the official market will catch up after the next successful model run."
+        "published model probabilities. Final scores and provisional tables are current; "
+        "official probabilities and prices will catch up after the next successful model run."
     )
 else:
     st.success(
-        "The live score feed and published group-stage model are currently aligned."
+        "The score feed and published group-stage model are currently aligned."
     )
 
-render_live_match_centre(matches, predictions, prices)
+render_match_experience(matches, predictions, prices)
 render_project_footer()
