@@ -62,6 +62,13 @@ def _match_card(row: pd.Series, label: str, detail: str) -> None:
     )
 
 
+def _render_mode_card(column, title: str, mode: str, explanation: str) -> None:
+    with column:
+        st.markdown(f"**{title}**")
+        st.markdown(f"### {mode}")
+        st.caption(explanation)
+
+
 def _render_no_live_state(matches: pd.DataFrame) -> None:
     upcoming = matches[matches["status"].isin(UPCOMING_STATUSES)].copy()
     upcoming = upcoming.sort_values(["utc_date", "match_id"])
@@ -76,20 +83,23 @@ def _render_no_live_state(matches: pd.DataFrame) -> None:
     )
 
     state_columns = st.columns(3)
-    state_columns[0].metric(
+    _render_mode_card(
+        state_columns[0],
         "Before kickoff",
         "Forecast mode",
-        delta="Probabilities and qualification scenarios",
+        "Read probabilities, expected goals and qualification scenarios.",
     )
-    state_columns[1].metric(
+    _render_mode_card(
+        state_columns[1],
         "During play",
         "Live mode",
-        delta="Outlook, group effects and market pressure",
+        "Follow outlook, group effects and provisional market pressure.",
     )
-    state_columns[2].metric(
+    _render_mode_card(
+        state_columns[2],
         "After full time",
         "Review mode",
-        delta="Final score first, official repricing later",
+        "See the final score immediately; official repricing follows the model run.",
     )
 
     card_columns = st.columns(2)
