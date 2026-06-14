@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+import time
 
 import pandas as pd
 import streamlit as st
@@ -13,6 +14,7 @@ from features.match_ui import combine_prediction_sources
 from features.qualification_ui import render_qualification_lab
 from features.product_ui import (
     inject_styles,
+    render_data_diagnostics,
     render_live_vs_official_note,
     render_page_guide,
     render_project_footer,
@@ -32,7 +34,13 @@ inject_styles(root)
 render_specialist_sidebar("qualification")
 
 
-def read_csv(path: Path) -> pd.DataFrame:
+def file_version(path: Path) -> int:
+    return path.stat().st_mtime_ns if path.exists() else 0
+
+
+@st.cache_data(show_spinner=False)
+def read_csv(path_text: str, version: int) -> pd.DataFrame:
+    path = Path(path_text)
     if not path.exists():
         return pd.DataFrame()
     frame = pd.read_csv(path)
@@ -44,86 +52,92 @@ def read_csv(path: Path) -> pd.DataFrame:
     return frame
 
 
-def read_json(path: Path) -> dict:
+@st.cache_data(show_spinner=False)
+def read_json(path_text: str, version: int) -> dict:
+    path = Path(path_text)
     if not path.exists():
         return {}
     with open(path, "r", encoding="utf-8") as file:
         return json.load(file)
 
 
+def cached_csv(path: Path) -> pd.DataFrame:
+    return read_csv(str(path), file_version(path))
+
+
+def cached_json(path: Path) -> dict:
+    return read_json(str(path), file_version(path))
+
+
+load_started = time.perf_counter()
 matches, score_metadata = load_matches(
     data_dir / "world_cup_2026_matches_latest.csv"
 )
-latest_predictions = read_csv(
+latest_predictions = cached_csv(
     data_dir / "world_cup_live_predictions_latest.csv"
 )
-prediction_ledger = read_csv(
+prediction_ledger = cached_csv(
     root / "backend" / "state" / "world_cup_prediction_ledger.csv"
 )
-prices = read_csv(data_dir / "cupmarket_prices_latest.csv")
-group_tables = read_csv(data_dir / "current_group_tables.csv")
-model_metadata = read_json(data_dir / "phase5_simulation_metadata.json")
+prices = cached_csv(data_dir / "cupmarket_prices_latest.csv")
+group_tables = cached_csv(data_dir / "current_group_tables.csv")
+model_metadata = cached_json(data_dir / "phase5_simulation_metadata.json")
 predictions = combine_prediction_sources(
     latest_predictions,
     prediction_ledger,
 )
 freshness = group_freshness(matches, model_metadata)
+load_time_ms = (time.perf_counter() - load_started) * 1000
 
 st.markdown(
     '''
     <div class="cm-hero">
         <div class="cm-eyebrow">CupMarket 2026 · Qualification scenarios</div>
         <h1>What does the next result change?</h1>
-        <p>Live results set the current table. The latest published model forecasts the matches still to come.</p>
+        <p>Select a country first. CupMarket then shows the routes created by a win, draw or loss, and switches to a provisional live view when its group is playing.</p>
     </div>
     ''',
     unsafe_allow_html=True,
 )
 
-render_page_guide(
-    "See what the next result changes",
-    "Before kickoff, compare a win, draw or loss. During play, the page automatically changes to the provisional live view.",
-    [
-        ("Select", "Choose the country you care about."),
-        ("Run", "Calculate its qualification paths."),
-        ("Read", "Compare top-two and best-third routes."),
-    ],
-)
-render_live_vs_official_note()
-
-source_columns = st.columns(4)
-source_columns[0].metric("Score source", score_metadata.get("source", "Unknown"))
-source_columns[1].metric(
-    "Score feed refreshed",
-    format_source_time(score_metadata.get("fetched_at_utc")),
-)
-source_columns[2].metric(
-    "Model generated",
-    format_source_time(model_metadata.get("generated_at_utc")),
-)
-source_columns[3].metric(
-    "Results awaiting model",
-    freshness["pending_model_updates"],
-)
-
-if st.button(
-    "Refresh live score feed",
-    help="Clears the 60-second score cache and requests the latest match states.",
-):
-    st.cache_data.clear()
-    st.rerun()
-
 if score_metadata.get("warning"):
     st.warning(
         score_metadata["warning"]
-        + " The page has safely fallen back to the latest GitHub snapshot."
+        + " The latest saved GitHub snapshot is being used instead."
     )
 
+if freshness["pending_model_updates"]:
+    st.warning(
+        "A completed result is visible in the score feed but is still awaiting the "
+        "published model update. Live tables are current; scenario probabilities still "
+        "use the latest published forecast."
+    )
+
+# Primary task appears immediately after the page promise.
 render_qualification_lab(
     matches,
     predictions,
     prices,
     group_tables,
     {"pending_finished_matches": freshness["pending_model_updates"]},
+)
+
+render_page_guide(
+    "See what the next result changes",
+    "Use the lab when you want to understand one country's qualification routes.",
+    [
+        ("Select", "Choose the country you care about."),
+        ("Run", "Calculate its win, draw and loss paths."),
+        ("Read", "Compare top-two and best-third routes."),
+    ],
+)
+render_live_vs_official_note()
+render_data_diagnostics(
+    score_source=score_metadata.get("source", "Unknown"),
+    score_refreshed=format_source_time(score_metadata.get("fetched_at_utc")),
+    model_generated=format_source_time(model_metadata.get("generated_at_utc")),
+    pending_updates=freshness["pending_model_updates"],
+    load_time_ms=load_time_ms,
+    refresh_key="qualification_refresh_scores",
 )
 render_project_footer()
