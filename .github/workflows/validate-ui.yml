@@ -113,6 +113,17 @@ jobs:
                       failures.append(
                           f"{page}:\n" + "\n".join(str(item) for item in app.exception)
                       )
+                      continue
+
+                  if page.name == "6_Analytics_Dashboard.py":
+                      print("Testing Full Analytics Performance view...")
+                      app.session_state["cupmarket_analytics_view"] = "Performance"
+                      app.run()
+                      if len(app.exception):
+                          failures.append(
+                              f"{page} Performance view:\n"
+                              + "\n".join(str(item) for item in app.exception)
+                          )
               except Exception:
                   failures.append(f"{page}:\n{traceback.format_exc()}")
 
@@ -122,7 +133,7 @@ jobs:
           )
           if failures:
               raise SystemExit(report)
-          print(f"Rendered {len(pages)} pages without Streamlit exceptions.")
+          print(f"Rendered {len(pages)} pages and the Performance view without Streamlit exceptions.")
           PY
 
       - name: Notify owner when UI validation fails
