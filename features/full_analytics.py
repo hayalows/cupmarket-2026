@@ -122,21 +122,33 @@ def render_full_analytics() -> None:
         <div class="cm-hero">
             <div class="cm-eyebrow">CupMarket 2026 · Full analytics</div>
             <h1>Go deeper when the headline is not enough.</h1>
-            <p>Country rankings, team paths, group tables, model performance and system health in one analytical workspace.</p>
+            <p>Choose one analytical view at a time: market, team, group, model performance or system health.</p>
         </div>
         ''',
         unsafe_allow_html=True,
     )
-    market_tab, team_tab, groups_tab, performance_tab, health_tab = st.tabs(
-        ["Country Market", "Team Explorer", "Group Tables", "Performance", "Model Health"]
-    )
-    with market_tab:
+
+    options = ["Market", "Team", "Groups", "Performance", "Health"]
+    requested = st.session_state.pop("cupmarket_analytics_view", None)
+    if requested in options:
+        st.session_state["full_analytics_view"] = requested
+    elif st.session_state.get("full_analytics_view") not in options:
+        st.session_state["full_analytics_view"] = "Market"
+
+    view = st.segmented_control(
+        "Analytics view",
+        options,
+        key="full_analytics_view",
+        selection_mode="single",
+    ) or "Market"
+
+    if view == "Market":
         _market(prices)
-    with team_tab:
+    elif view == "Team":
         _team(prices, history)
-    with groups_tab:
+    elif view == "Groups":
         _groups(groups)
-    with performance_tab:
+    elif view == "Performance":
         render_model_performance()
-    with health_tab:
+    else:
         _health(metadata)
