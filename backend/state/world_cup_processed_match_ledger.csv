@@ -7,3 +7,4 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537339,2026-06-13 22:00:00+00:00,GROUP_STAGE,Brazil,Morocco,1,1,2026-06-14 06:52:12.384683+00:00,phase7_automated_group_stage_v1
 537340,2026-06-14 01:00:00+00:00,GROUP_STAGE,Haiti,Scotland,0,1,2026-06-14 06:52:12.384712+00:00,phase7_automated_group_stage_v1
 537346,2026-06-14 04:00:00+00:00,GROUP_STAGE,Australia,Turkey,2,0,2026-06-14 06:52:12.384726+00:00,phase7_automated_group_stage_v1
+537351,2026-06-14 17:00:00+00:00,GROUP_STAGE,Germany,Curaçao,7,1,2026-06-14 19:22:57.658356+00:00,phase7_automated_group_stage_v1
