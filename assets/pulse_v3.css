@@ -1,1 +1,86 @@
-/* CupMarket Pulse v3 */
+.cm-v3-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .75rem;
+  margin: -.7rem 0 1rem;
+  padding: .72rem .9rem;
+  border: 1px solid rgba(91,95,240,.18);
+  border-radius: 16px;
+  background: rgba(255,255,255,.78);
+  color: #687083;
+  font-size: .82rem;
+}
+.cm-v3-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: .32rem .55rem;
+  border-radius: 999px;
+  background: rgba(91,95,240,.10);
+  color: #4b4fd1;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.cm-pulse-card {
+  min-height: 162px;
+  padding: 1rem 1.05rem .85rem;
+  border: 1px solid #e5e9f1;
+  border-radius: 21px;
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 12px 34px rgba(23,29,52,.06);
+}
+.cm-pulse-card.featured {
+  background: linear-gradient(135deg, #171d36, #282f58);
+  border-color: rgba(255,255,255,.08);
+  color: white;
+}
+.cm-pulse-card .eyebrow {
+  color: #687083;
+  font-size: .68rem;
+  font-weight: 820;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+.cm-pulse-card.featured .eyebrow,
+.cm-pulse-card.featured .sub,
+.cm-pulse-card.featured .meta { color: #b8c0d8; }
+.cm-pulse-card .value {
+  margin: .28rem 0 .25rem;
+  color: #10131a;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -.045em;
+  line-height: 1.05;
+}
+.cm-pulse-card.featured .value { color: white; }
+.cm-pulse-card .sub {
+  color: #4b5568;
+  font-size: .86rem;
+  font-weight: 680;
+  line-height: 1.4;
+}
+.cm-pulse-card .meta {
+  margin-top: .48rem;
+  color: #7a8397;
+  font-size: .74rem;
+  line-height: 1.45;
+}
+.cm-move-up { color: #0f9f6e; font-weight: 800; }
+.cm-move-down { color: #dc4c64; font-weight: 800; }
+.cm-move-flat { color: #687083; font-weight: 800; }
+.cm-mini-result {
+  padding: .75rem .85rem;
+  border: 1px solid #e5e9f1;
+  border-radius: 15px;
+  background: white;
+  margin-bottom: .55rem;
+}
+.cm-mini-result strong { color: #10131a; }
+.cm-mini-result span { color: #687083; font-size: .76rem; }
+@media (max-width: 800px) {
+  .cm-v3-banner { align-items: flex-start; }
+  .cm-pulse-card { min-height: 0; padding: .9rem; border-radius: 18px; }
+  .cm-pulse-card .value { font-size: 1.75rem; }
+}
