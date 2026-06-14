@@ -9,6 +9,30 @@ PROJECT_ALIAS = "Iconka"
 PROJECT_REPOSITORY = "https://github.com/hayalows/cupmarket-2026"
 
 
+def _inject_navigation_consistency() -> None:
+    """Keep the legacy main-app link aligned with the current product language."""
+    st.markdown(
+        '''
+        <style>
+        section[data-testid="stSidebar"] a[href*="1_Match_Intelligence"] {
+            font-size: 0 !important;
+        }
+        section[data-testid="stSidebar"] a[href*="1_Match_Intelligence"]::after {
+            content: "Live Match Room";
+            font-size: 1rem;
+            line-height: 1.35;
+            color: inherit;
+        }
+        section[data-testid="stSidebar"] a[href*="1_Match_Intelligence"] [data-testid*="Icon"],
+        section[data-testid="stSidebar"] a[href*="1_Match_Intelligence"] span:first-child {
+            font-size: 1rem !important;
+        }
+        </style>
+        ''',
+        unsafe_allow_html=True,
+    )
+
+
 def inject_styles(root: Path) -> None:
     """Load the shared visual system in a predictable order."""
     for stylesheet in [
@@ -23,6 +47,7 @@ def inject_styles(root: Path) -> None:
 
 
 def render_project_credit(compact: bool = False) -> None:
+    _inject_navigation_consistency()
     class_name = "cm-project-card compact" if compact else "cm-project-card"
     st.markdown(
         f'''
