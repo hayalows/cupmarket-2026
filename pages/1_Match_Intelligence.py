@@ -13,9 +13,9 @@ from features.live_match_data import (
 )
 from features.live_match_experience import render_match_experience
 from features.match_ui import combine_prediction_sources
+import features.product_ui as product_ui
 from features.product_ui import (
     inject_styles,
-    render_data_diagnostics,
     render_live_vs_official_note,
     render_page_guide,
     render_project_footer,
@@ -33,6 +33,55 @@ data_dir = root / "data"
 
 inject_styles(root)
 render_specialist_sidebar("match")
+
+
+def render_data_diagnostics_compat(
+    *,
+    score_source: str,
+    score_refreshed: str,
+    model_generated: str,
+    pending_updates: int | None = None,
+    load_time_ms: float | None = None,
+    refresh_key: str | None = None,
+) -> None:
+    """Work with both the current and any still-cached older product_ui module."""
+    helper = getattr(product_ui, "render_data_diagnostics", None)
+    if callable(helper):
+        helper(
+            score_source=score_source,
+            score_refreshed=score_refreshed,
+            model_generated=model_generated,
+            pending_updates=pending_updates,
+            load_time_ms=load_time_ms,
+            refresh_key=refresh_key,
+        )
+        return
+
+    pending_text = (
+        f" · {pending_updates} result{'s' if pending_updates != 1 else ''} awaiting model"
+        if pending_updates is not None
+        else ""
+    )
+    st.caption(
+        f"Scores refreshed {score_refreshed} · Published model {model_generated}"
+        f"{pending_text}"
+    )
+    with st.expander("Data freshness and system details", expanded=False):
+        columns = st.columns(4 if pending_updates is not None else 3)
+        columns[0].metric("Score source", score_source)
+        columns[1].metric("Score feed refreshed", score_refreshed)
+        columns[2].metric("Model generated", model_generated)
+        if pending_updates is not None:
+            columns[3].metric("Results awaiting model", pending_updates)
+        if load_time_ms is not None:
+            st.caption(f"Page data prepared in {load_time_ms:.0f} ms on this rerun.")
+        if refresh_key and st.button(
+            "Refresh live scores",
+            key=refresh_key,
+            help="Clears the score cache and requests the latest match states.",
+        ):
+            st.cache_data.clear()
+            st.rerun()
 
 
 def file_version(path: Path) -> int:
@@ -139,7 +188,6 @@ if freshness["pending_model_updates"]:
         "next successful model run."
     )
 
-# Primary user task appears before onboarding and operational telemetry.
 render_match_experience(matches, predictions, prices)
 
 render_page_guide(
@@ -152,7 +200,7 @@ render_page_guide(
     ],
 )
 render_live_vs_official_note()
-render_data_diagnostics(
+render_data_diagnostics_compat(
     score_source=score_metadata.get("source", "Unknown"),
     score_refreshed=format_source_time(score_metadata.get("fetched_at_utc")),
     model_generated=format_source_time(model_metadata.get("generated_at_utc")),
