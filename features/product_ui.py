@@ -58,7 +58,7 @@ def render_specialist_sidebar(active_page: str) -> None:
         st.page_link("app.py", label="Overview", icon="🏠")
         st.page_link(
             "pages/1_Match_Intelligence.py",
-            label="Match Intelligence",
+            label="Live Match Room",
             icon="⚽",
         )
         st.page_link(
@@ -112,8 +112,8 @@ def render_live_vs_official_note() -> None:
     st.markdown(
         '''
         <div class="cm-state-note">
-            <div><strong>Live view</strong><span>Scores, provisional tables and in-play projections can change when you refresh.</span></div>
-            <div><strong>Official market</strong><span>Ratings, tournament probabilities and country prices change after the final whistle and the next successful model run.</span></div>
+            <div><strong>Live interpretation</strong><span>Scores, provisional tables and in-play projections can change whenever the feed refreshes.</span></div>
+            <div><strong>Published market</strong><span>Ratings, tournament probabilities and country prices change only after the final whistle and the next successful model run.</span></div>
         </div>
         ''',
         unsafe_allow_html=True,
@@ -125,19 +125,21 @@ def render_start_here() -> None:
         '''
         <div class="cm-start-here">
             <div class="cm-project-label">Start here</div>
-            <h2>Choose the question you want CupMarket to answer.</h2>
-            <p>The main dashboard gives the broad picture. The three tools below help you inspect a match, test qualification scenarios, or follow a group while matches are live.</p>
+            <h2>Choose the football question you want CupMarket to answer.</h2>
+            <p>The main dashboard gives the broad picture. Open a match when you care about what is happening now, use the qualification lab to test outcomes before kickoff, or follow a whole group when simultaneous matches interact.</p>
         </div>
         ''',
         unsafe_allow_html=True,
     )
     columns = st.columns(3)
     with columns[0]:
-        st.markdown("**Understand one match**")
-        st.caption("Compare the pre-match forecast with the current live state.")
+        st.markdown("**Open a match**")
+        st.caption(
+            "Live fixtures appear first. Move from the score into outlook, qualification, group effects and market context."
+        )
         st.page_link(
             "pages/1_Match_Intelligence.py",
-            label="Open Match Intelligence",
+            label="Open Live Match Room",
             icon="⚽",
             use_container_width=True,
         )
@@ -152,7 +154,9 @@ def render_start_here() -> None:
         )
     with columns[2]:
         st.markdown("**Follow a live group**")
-        st.caption("Track simultaneous matches, provisional tables and next-goal impact.")
+        st.caption(
+            "Track simultaneous matches, provisional tables and next-goal impact."
+        )
         st.page_link(
             "pages/3_Live_Group_Centre.py",
             label="Open Live Group Centre",
