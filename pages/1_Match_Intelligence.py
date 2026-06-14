@@ -10,7 +10,8 @@ from features.live_match_data import (
     group_freshness,
     load_matches,
 )
-from features.match_ui import combine_prediction_sources, render_match_centre
+from features.live_match_room import render_live_match_centre
+from features.match_ui import combine_prediction_sources
 from features.product_ui import (
     inject_styles,
     render_live_vs_official_note,
@@ -135,5 +136,5 @@ else:
         "The live score feed and published group-stage model are currently aligned."
     )
 
-render_match_centre(matches, predictions, prices)
+render_live_match_centre(matches, predictions, prices)
 render_project_footer()
