@@ -54,6 +54,114 @@ def _render_live_safe(matches: pd.DataFrame) -> None:
                 base._open_match_room(int(match["match_id"]))
 
 
+def _render_results_safe(
+    matches: pd.DataFrame,
+    static: dict[str, pd.DataFrame],
+) -> None:
+    finished = (
+        matches[matches["status"].isin(base.FINISHED_STATUSES)]
+        .copy()
+        .sort_values("utc_date", ascending=False)
+    )
+    prediction_ledger = static["prediction_ledger"]
+    processed = static["processed_ledger"]
+    history = static["history"]
+
+    verified = 0
+    correct = 0
+    for row in finished.itertuples(index=False):
+        match = pd.Series(row._asdict())
+        prediction, source = base.reference_prediction(prediction_ledger, match)
+        if source == "Saved pre-match forecast" and not prediction.empty:
+            verified += 1
+            correct += int(
+                base._prediction_outcome(prediction) == base.actual_outcome(match)
+            )
+
+    summary = st.columns(3)
+    summary[0].metric("Completed matches", len(finished))
+    summary[1].metric("Verified pre-match records", verified)
+    summary[2].metric(
+        "Leading-outcome accuracy",
+        f"{100 * correct / verified:.1f}%" if verified else "—",
+    )
+    if verified < 10:
+        st.caption(
+            "Early sample: performance measures can change materially as more verified matches are completed."
+        )
+
+    if finished.empty:
+        st.info("No completed matches yet.")
+        return
+
+    countries = sorted(set(finished["home_team"]).union(set(finished["away_team"])))
+    groups = sorted(finished["group"].dropna().astype(str).unique())
+    with st.popover("Filter results", use_container_width=True):
+        country = st.selectbox(
+            "Country",
+            ["All countries", *countries],
+            key="match_hub_results_country",
+        )
+        group = st.selectbox(
+            "Group",
+            ["All groups", *groups],
+            key="match_hub_results_group",
+        )
+
+    filtered = finished.copy()
+    if country != "All countries":
+        filtered = filtered[
+            (filtered["home_team"] == country)
+            | (filtered["away_team"] == country)
+        ]
+    if group != "All groups":
+        filtered = filtered[filtered["group"].astype(str) == group]
+
+    if filtered.empty:
+        st.info(
+            "No completed match meets both selected filters. Change the country or group filter."
+        )
+        return
+
+    review_table, match_ids = base._finished_review_rows(
+        filtered,
+        prediction_ledger,
+    )
+    event = st.dataframe(
+        review_table,
+        hide_index=True,
+        use_container_width=True,
+        on_select="rerun",
+        selection_mode="single-row",
+        key="match_hub_results_table_v2",
+    )
+    selected_rows = getattr(getattr(event, "selection", None), "rows", [])
+    requested = st.session_state.pop("cupmarket_match_hub_match_id", None)
+    selected_id = (
+        requested
+        if requested in match_ids
+        else st.session_state.get("match_hub_selected_result")
+    )
+    if selected_rows:
+        row_index = int(selected_rows[0])
+        if 0 <= row_index < len(match_ids):
+            selected_id = match_ids[row_index]
+    if selected_id not in match_ids:
+        selected_id = match_ids[0]
+
+    st.session_state["match_hub_selected_result"] = int(selected_id)
+    selected_rows_frame = filtered[filtered["match_id"] == int(selected_id)]
+    if selected_rows_frame.empty:
+        st.info("The selected result is no longer available under the current filters.")
+        return
+    base._render_result_detail(
+        selected_rows_frame.iloc[0],
+        prediction_ledger,
+        processed,
+        history,
+    )
+
+
 def render_match_hub() -> None:
     matches, source = load_matches(DATA_DIR / "world_cup_2026_matches_latest.csv")
     static = load_static_data()
@@ -98,6 +206,6 @@ def render_match_hub() -> None:
     if view == "Live":
         _render_live_safe(matches)
     elif view == "Results":
-        base._render_results(matches, static)
+        _render_results_safe(matches, static)
     else:
         base._render_upcoming(matches, static)
