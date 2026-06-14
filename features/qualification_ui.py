@@ -68,6 +68,7 @@ def render_qualification_result(result: dict, compact: bool = False) -> None:
             labels[outcome],
             format_percent(scenario["qualification_probability"]),
             delta=f'{scenario["points_after_next_match"]} points after match',
+            delta_color="off",
         )
         column.caption(
             f'Most likely group finish: {scenario["most_likely_group_position"]} · '
@@ -91,15 +92,16 @@ def render_qualification_result(result: dict, compact: bool = False) -> None:
         )
 
     if not compact:
-        chart = px.bar(
-            pd.DataFrame(chart_rows),
-            x="Outcome",
-            y=["Top two", "Best third"],
-            title=f'{result["team"]}: routes to the Round of 32',
-            barmode="stack",
-        )
-        chart.update_yaxes(tickformat=".0%", range=[0, 1])
-        st.plotly_chart(polish_figure(chart), use_container_width=True)
+        with st.expander("Compare direct and best-third routes", expanded=False):
+            chart = px.bar(
+                pd.DataFrame(chart_rows),
+                x="Outcome",
+                y=["Top two", "Best third"],
+                title=f'{result["team"]}: routes to the Round of 32',
+                barmode="stack",
+            )
+            chart.update_yaxes(tickformat=".0%", range=[0, 1])
+            st.plotly_chart(polish_figure(chart), use_container_width=True)
 
 
 def _display_group_table(table: pd.DataFrame) -> None:
@@ -134,6 +136,33 @@ def _display_group_table(table: pd.DataFrame) -> None:
     )
 
 
+def _render_current_detail(
+    matches: pd.DataFrame,
+    group_tables: pd.DataFrame,
+    current: dict,
+    strength: dict,
+) -> None:
+    with st.expander("Current table and team detail", expanded=False):
+        details = st.columns(2)
+        details[0].metric("Played", current["played"])
+        details[1].metric("Goal difference", current["goal_difference"])
+
+        live_table = build_live_group_table(
+            matches,
+            current["group"],
+            strength,
+        )
+        if not live_table.empty:
+            _display_group_table(live_table)
+            st.caption("Group table calculated from the current score source.")
+        elif not group_tables.empty:
+            fallback_table = group_tables[
+                group_tables["group"].astype(str) == current["group"]
+            ].sort_values("position")
+            _display_group_table(fallback_table)
+            st.caption("Showing the latest saved group table.")
+
+
 def render_qualification_lab(
     matches: pd.DataFrame,
     predictions: pd.DataFrame,
@@ -142,10 +171,6 @@ def render_qualification_lab(
     production_health: dict,
 ) -> None:
     st.markdown("### Your country’s route")
-    st.caption(
-        "Before kickoff, compare a win, draw or loss. During a live group "
-        "match, the page switches to provisional standings and live projections."
-    )
 
     group_matches = (
         matches[
@@ -179,12 +204,10 @@ def render_qualification_lab(
         st.error(str(error))
         return
 
-    current_columns = st.columns(5)
-    current_columns[0].metric("Current position", current["current_position"])
-    current_columns[1].metric("Points", current["current_points"])
-    current_columns[2].metric("Played", current["played"])
-    current_columns[3].metric("Goal difference", current["goal_difference"])
-    current_columns[4].metric("Matches left", current["matches_remaining"])
+    summary = st.columns(3)
+    summary[0].metric("Current position", current["current_position"])
+    summary[1].metric("Points", current["current_points"])
+    summary[2].metric("Matches left", current["matches_remaining"])
 
     if current.get("next_opponent"):
         kickoff = pd.to_datetime(
@@ -202,61 +225,46 @@ def render_qualification_lab(
     else:
         st.info("This country has completed its group-stage matches.")
 
-    live_table = build_live_group_table(
-        matches,
-        current["group"],
-        strength,
-    )
-    if not live_table.empty:
-        _display_group_table(live_table)
-        st.caption("Group table calculated from the score source shown above.")
-    elif not group_tables.empty:
-        fallback_table = group_tables[
-            group_tables["group"].astype(str) == current["group"]
-        ].sort_values("position")
-        _display_group_table(fallback_table)
-        st.caption("Showing the latest saved group table.")
-
     if production_health.get("pending_finished_matches", 0):
         pending = int(production_health["pending_finished_matches"])
         st.warning(
             f"{pending} completed group match"
             + ("es are" if pending != 1 else " is")
-            + " visible in the live score feed but not yet included in the "
-            "published model probabilities. Current scores and standings are live; "
-            "remaining-match forecasts refresh after the next successful workflow."
+            + " awaiting the published model update. Current scores and standings are "
+            "live; remaining-match forecasts still use the last published model."
         )
 
-    if not current["matches_remaining"]:
-        return
-
-    if st.button(
-        "Compare win, draw and loss",
-        type="primary",
-        use_container_width=True,
-    ):
-        with st.spinner(
-            "Running win, draw and loss simulations across all groups..."
+    if current["matches_remaining"]:
+        if st.button(
+            "Compare win, draw and loss",
+            type="primary",
+            use_container_width=True,
+            key=f"qualification_compare_{selected_team}",
         ):
-            result = cached_qualification_scenarios(
-                matches,
-                predictions,
-                selected_team,
-                tuple(sorted(strength.items())),
-                2500,
-            )
-        st.session_state["qualification_lab_result"] = result
-        st.session_state["qualification_lab_team"] = selected_team
+            with st.spinner(
+                "Running win, draw and loss simulations across all groups..."
+            ):
+                result = cached_qualification_scenarios(
+                    matches,
+                    predictions,
+                    selected_team,
+                    tuple(sorted(strength.items())),
+                    2500,
+                )
+            st.session_state["qualification_lab_result"] = result
+            st.session_state["qualification_lab_team"] = selected_team
 
-    saved_result = st.session_state.get("qualification_lab_result")
-    if (
-        saved_result
-        and st.session_state.get("qualification_lab_team") == selected_team
-    ):
-        render_qualification_result(saved_result)
-        st.caption(
-            f'Each outcome uses '
-            f'{saved_result.get("n_simulations_per_scenario", 0):,} simulations. '
-            "Finished matches come from the current score source; remaining matches "
-            "use the latest published expected-goal forecasts."
-        )
+        saved_result = st.session_state.get("qualification_lab_result")
+        if (
+            saved_result
+            and st.session_state.get("qualification_lab_team") == selected_team
+        ):
+            render_qualification_result(saved_result)
+            st.caption(
+                f'Each outcome uses '
+                f'{saved_result.get("n_simulations_per_scenario", 0):,} simulations. '
+                "Finished matches come from the current score source; remaining matches "
+                "use the latest published expected-goal forecasts."
+            )
+
+    _render_current_detail(matches, group_tables, current, strength)
