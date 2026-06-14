@@ -13,9 +13,9 @@ from features.live_match_data import (
 )
 from features.live_match_experience import render_match_experience
 from features.match_ui import combine_prediction_sources
-import features.product_ui as product_ui
 from features.product_ui import (
     inject_styles,
+    render_data_diagnostics,
     render_live_vs_official_note,
     render_page_guide,
     render_project_footer,
@@ -33,55 +33,6 @@ data_dir = root / "data"
 
 inject_styles(root)
 render_specialist_sidebar("match")
-
-
-def render_data_diagnostics_compat(
-    *,
-    score_source: str,
-    score_refreshed: str,
-    model_generated: str,
-    pending_updates: int | None = None,
-    load_time_ms: float | None = None,
-    refresh_key: str | None = None,
-) -> None:
-    """Work with both the current and any still-cached older product_ui module."""
-    helper = getattr(product_ui, "render_data_diagnostics", None)
-    if callable(helper):
-        helper(
-            score_source=score_source,
-            score_refreshed=score_refreshed,
-            model_generated=model_generated,
-            pending_updates=pending_updates,
-            load_time_ms=load_time_ms,
-            refresh_key=refresh_key,
-        )
-        return
-
-    pending_text = (
-        f" · {pending_updates} result{'s' if pending_updates != 1 else ''} awaiting model"
-        if pending_updates is not None
-        else ""
-    )
-    st.caption(
-        f"Scores refreshed {score_refreshed} · Published model {model_generated}"
-        f"{pending_text}"
-    )
-    with st.expander("Data freshness and system details", expanded=False):
-        columns = st.columns(4 if pending_updates is not None else 3)
-        columns[0].metric("Score source", score_source)
-        columns[1].metric("Score feed refreshed", score_refreshed)
-        columns[2].metric("Model generated", model_generated)
-        if pending_updates is not None:
-            columns[3].metric("Results awaiting model", pending_updates)
-        if load_time_ms is not None:
-            st.caption(f"Page data prepared in {load_time_ms:.0f} ms on this rerun.")
-        if refresh_key and st.button(
-            "Refresh live scores",
-            key=refresh_key,
-            help="Clears the score cache and requests the latest match states.",
-        ):
-            st.cache_data.clear()
-            st.rerun()
 
 
 def file_version(path: Path) -> int:
@@ -119,93 +70,140 @@ def cached_json(path: Path) -> dict:
     return read_json(str(path), file_version(path))
 
 
-load_started = time.perf_counter()
-matches, score_metadata = load_matches(
-    data_dir / "world_cup_2026_matches_latest.csv"
-)
-latest_predictions = cached_csv(
-    data_dir / "world_cup_live_predictions_latest.csv"
-)
-prediction_ledger = cached_csv(
-    root / "backend" / "state" / "world_cup_prediction_ledger.csv"
-)
-prices = cached_csv(data_dir / "cupmarket_prices_latest.csv")
-model_metadata = cached_json(data_dir / "phase5_simulation_metadata.json")
-predictions = combine_prediction_sources(
-    latest_predictions,
-    prediction_ledger,
-)
-freshness = group_freshness(matches, model_metadata)
-load_time_ms = (time.perf_counter() - load_started) * 1000
-live_count = (
-    int(matches["status"].isin(LIVE_STATUSES).sum())
-    if not matches.empty and "status" in matches.columns
-    else 0
-)
-live_status_text = (
-    f"{live_count} live match{'es' if live_count != 1 else ''}"
-    if live_count
-    else "Forecast mode"
-)
-live_status_class = "updating" if live_count else "attention"
-hero_description = (
-    "Live matches are active. Open one to follow the changing match outlook, "
-    "qualification picture, connected group effects and published-market context."
-    if live_count
-    else "No match is live right now. The next fixture is selected below for immediate "
-    "forecast access, and the latest completed result is one tap away."
-)
+def render_feed_notice(metadata: dict) -> None:
+    kind = metadata.get("failure_kind")
+    state = metadata.get("feed_state")
+    warning = metadata.get("warning")
 
-st.markdown(
-    f'''
-    <div class="cm-hero">
-        <div class="cm-hero-top">
-            <div class="cm-eyebrow">CupMarket 2026 · Match intelligence</div>
-            <div class="cm-status {live_status_class}">
-                <span class="cm-dot"></span>{live_status_text}
+    if kind == "missing_token":
+        st.error(
+            "Live scores are not connected in this Streamlit deployment. "
+            "The app is showing the last saved GitHub snapshot. Add "
+            "FOOTBALL_DATA_TOKEN in Streamlit App settings → Secrets, save it, "
+            "then reboot the app."
+        )
+    elif kind == "invalid_token":
+        st.error(
+            "The live-score provider rejected the Streamlit token. Replace "
+            "FOOTBALL_DATA_TOKEN in Streamlit Secrets with the valid token, "
+            "save it, then reboot the app."
+        )
+    elif kind == "rate_limit":
+        st.warning(
+            "The live-score request limit was reached. CupMarket is temporarily "
+            "showing the saved snapshot and will retry automatically."
+        )
+    elif metadata.get("is_fallback"):
+        st.warning(
+            (warning or "The live-score provider is temporarily unavailable.")
+            + " The latest saved GitHub snapshot is being used."
+        )
+    elif state == "provider_delayed":
+        st.warning(
+            "Kickoff has passed, but football-data.org still marks the fixture as "
+            "scheduled. Automatic refresh is active; CupMarket will show it as live "
+            "as soon as the provider updates the match state."
+        )
+    elif warning:
+        st.warning(warning)
+
+
+@st.fragment(run_every="45s")
+def render_live_match_room() -> None:
+    load_started = time.perf_counter()
+    matches, score_metadata = load_matches(
+        data_dir / "world_cup_2026_matches_latest.csv"
+    )
+    latest_predictions = cached_csv(
+        data_dir / "world_cup_live_predictions_latest.csv"
+    )
+    prediction_ledger = cached_csv(
+        root / "backend" / "state" / "world_cup_prediction_ledger.csv"
+    )
+    prices = cached_csv(data_dir / "cupmarket_prices_latest.csv")
+    model_metadata = cached_json(data_dir / "phase5_simulation_metadata.json")
+    predictions = combine_prediction_sources(
+        latest_predictions,
+        prediction_ledger,
+    )
+    freshness = group_freshness(matches, model_metadata)
+    load_time_ms = (time.perf_counter() - load_started) * 1000
+    live_count = (
+        int(matches["status"].isin(LIVE_STATUSES).sum())
+        if not matches.empty and "status" in matches.columns
+        else 0
+    )
+    live_status_text = (
+        f"{live_count} live match{'es' if live_count != 1 else ''}"
+        if live_count
+        else "Forecast mode"
+    )
+    live_status_class = "updating" if live_count else "attention"
+    hero_description = (
+        "Live matches are active. Open one to follow the changing match outlook, "
+        "qualification picture, connected group effects and published-market context."
+        if live_count
+        else "No match is marked live by the current score source. The page checks the "
+        "provider automatically every 45 seconds while it remains open."
+    )
+
+    st.markdown(
+        f'''
+        <div class="cm-hero">
+            <div class="cm-hero-top">
+                <div class="cm-eyebrow">CupMarket 2026 · Match intelligence</div>
+                <div class="cm-status {live_status_class}">
+                    <span class="cm-dot"></span>{live_status_text}
+                </div>
             </div>
+            <h1>Open the match. Understand the consequences.</h1>
+            <p>{hero_description}</p>
         </div>
-        <h1>Open the match. Understand the consequences.</h1>
-        <p>{hero_description}</p>
-    </div>
-    ''',
-    unsafe_allow_html=True,
-)
-
-if score_metadata.get("warning"):
-    st.warning(
-        score_metadata["warning"]
-        + " The latest saved GitHub snapshot is being used instead."
+        ''',
+        unsafe_allow_html=True,
     )
 
-if freshness["pending_model_updates"]:
-    pending = freshness["pending_model_updates"]
-    st.warning(
-        f"{pending} completed group match"
-        + ("es are" if pending != 1 else " is")
-        + " visible in the score feed but not yet reflected in official probabilities "
-        "and prices. Final scores are current; published market values update after the "
-        "next successful model run."
+    render_feed_notice(score_metadata)
+
+    if freshness["pending_model_updates"]:
+        pending = freshness["pending_model_updates"]
+        st.warning(
+            f"{pending} completed group match"
+            + ("es are" if pending != 1 else " is")
+            + " visible in the score feed but not yet reflected in official probabilities "
+            "and prices. Final scores are current; published market values update after the "
+            "next successful model run."
+        )
+
+    render_match_experience(matches, predictions, prices)
+
+    render_page_guide(
+        "Useful before, during and after the match",
+        "The Match Room adapts to the real match state.",
+        [
+            ("Before kickoff", "Read the forecast and test qualification outcomes."),
+            ("During play", "Follow live outlook, group effects and market pressure."),
+            ("After full time", "Review the result and wait for official repricing."),
+        ],
+    )
+    render_live_vs_official_note()
+    render_data_diagnostics(
+        score_source=score_metadata.get("source", "Unknown"),
+        score_refreshed=format_source_time(score_metadata.get("fetched_at_utc")),
+        model_generated=format_source_time(model_metadata.get("generated_at_utc")),
+        pending_updates=freshness["pending_model_updates"],
+        warning=None,
+        load_time_ms=load_time_ms,
+        refresh_key="match_room_refresh_scores",
+        token_configured=score_metadata.get("token_configured"),
+        feed_state=score_metadata.get("feed_state"),
+        requests_remaining=score_metadata.get("requests_remaining"),
+    )
+    st.caption(
+        "Automatic score refresh runs every 45 seconds while this page is open. "
+        "The provider itself may still be several minutes behind the broadcast."
     )
 
-render_match_experience(matches, predictions, prices)
 
-render_page_guide(
-    "Useful before, during and after the match",
-    "The Match Room adapts to the real match state.",
-    [
-        ("Before kickoff", "Read the forecast and test qualification outcomes."),
-        ("During play", "Follow live outlook, group effects and market pressure."),
-        ("After full time", "Review the result and wait for official repricing."),
-    ],
-)
-render_live_vs_official_note()
-render_data_diagnostics_compat(
-    score_source=score_metadata.get("source", "Unknown"),
-    score_refreshed=format_source_time(score_metadata.get("fetched_at_utc")),
-    model_generated=format_source_time(model_metadata.get("generated_at_utc")),
-    pending_updates=freshness["pending_model_updates"],
-    load_time_ms=load_time_ms,
-    refresh_key="match_room_refresh_scores",
-)
+render_live_match_room()
 render_project_footer()
