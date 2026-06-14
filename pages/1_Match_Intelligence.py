@@ -157,12 +157,6 @@ render_data_diagnostics(
     score_refreshed=format_source_time(score_metadata.get("fetched_at_utc")),
     model_generated=format_source_time(model_metadata.get("generated_at_utc")),
     pending_updates=freshness["pending_model_updates"],
-    warning=(
-        score_metadata.get("warning")
-        + " Showing the latest saved GitHub snapshot."
-        if score_metadata.get("warning")
-        else None
-    ),
     load_time_ms=load_time_ms,
     refresh_key="match_room_refresh_scores",
 )
