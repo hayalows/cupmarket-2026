@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from pathlib import Path
+import json
 
+import numpy as np
 import pandas as pd
 
 try:
@@ -13,6 +16,11 @@ except ImportError:
 
 
 ACTIVE_GROUP_MATCH_STATUSES = {"IN_PLAY", "PAUSED"}
+PRICE_CHANGE_COLUMNS = [
+    "previous_price",
+    "price_change",
+    "price_change_percent",
+]
 
 _original_concat = update_pipeline.pd.concat
 
@@ -80,6 +88,78 @@ def deferred_run_summary(active_matches: pd.DataFrame, api_metadata: dict) -> di
     }
 
 
+def _has_meaningful_change(frame: pd.DataFrame) -> bool:
+    if frame.empty or "price_change" not in frame.columns:
+        return False
+    changes = pd.to_numeric(frame["price_change"], errors="coerce").fillna(0.0)
+    return bool((changes.abs() > 1e-9).any())
+
+
+def _load_price_anchor() -> pd.DataFrame:
+    """Find the latest checkpoint that still describes a real market move."""
+    current_path = update_pipeline.PRICES_OUTPUT_PATH
+    if current_path.exists():
+        current = pd.read_csv(current_path)
+        if _has_meaningful_change(current):
+            return current[["team", "previous_price"]].copy()
+
+    history_dir = update_pipeline.HISTORY_DIR
+    for path in sorted(
+        history_dir.glob("cupmarket_prices_*.csv"), reverse=True
+    ):
+        try:
+            checkpoint = pd.read_csv(path)
+        except (OSError, pd.errors.ParserError):
+            continue
+        if _has_meaningful_change(checkpoint):
+            return checkpoint[["team", "previous_price"]].copy()
+
+    return pd.DataFrame(columns=["team", "previous_price"])
+
+
+def _restore_meaningful_market_move(anchor: pd.DataFrame) -> None:
+    """Keep the last real event movement after a no-new-result forced rerun."""
+    if anchor.empty or not update_pipeline.PRICES_OUTPUT_PATH.exists():
+        return
+
+    summary_path = update_pipeline.RUN_SUMMARY_PATH
+    if not summary_path.exists():
+        return
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    if summary.get("status") != "updated":
+        return
+    if int(summary.get("new_finished_matches", 0) or 0) != 0:
+        return
+
+    prices = pd.read_csv(update_pipeline.PRICES_OUTPUT_PATH)
+    prices = prices.drop(columns=PRICE_CHANGE_COLUMNS, errors="ignore")
+    prices = prices.merge(anchor, on="team", how="left")
+    prices["price_change"] = (
+        pd.to_numeric(prices["cupmarket_price"], errors="coerce")
+        - pd.to_numeric(prices["previous_price"], errors="coerce")
+    )
+    denominator = pd.to_numeric(prices["previous_price"], errors="coerce")
+    prices["price_change_percent"] = np.where(
+        denominator.abs() > 1e-12,
+        100.0 * prices["price_change"] / denominator,
+        np.nan,
+    )
+    update_pipeline.atomic_to_csv(prices, update_pipeline.PRICES_OUTPUT_PATH)
+
+    completed_at = pd.to_datetime(
+        summary.get("completed_at_utc"), errors="coerce", utc=True
+    )
+    if pd.notna(completed_at):
+        history_path = (
+            update_pipeline.HISTORY_DIR
+            / f"cupmarket_prices_{completed_at.strftime('%Y%m%dT%H%M%SZ')}.csv"
+        )
+        if history_path.exists():
+            update_pipeline.atomic_to_csv(prices, history_path)
+
+    print("Preserved the latest meaningful market-price movement.")
+
+
 def run_guarded_pipeline() -> bool:
     """Delay official publication while a group-stage match is active."""
     world_cup, api_metadata = update_pipeline.fetch_world_cup_matches()
@@ -95,7 +175,9 @@ def run_guarded_pipeline() -> bool:
         )
         return False
 
+    price_anchor = _load_price_anchor()
     update_pipeline.main()
+    _restore_meaningful_market_move(price_anchor)
     return True
 
 
