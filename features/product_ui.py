@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pandas as pd
 import streamlit as st
 
 PROJECT_OWNER = "Papa Kojo Mensah"
-PROJECT_ALIAS = "Iconka"
 PROJECT_REPOSITORY = "https://github.com/hayalows/cupmarket-2026"
 
 
@@ -29,7 +29,7 @@ def render_project_credit(compact: bool = False) -> None:
         <div class="{class_name}">
             <div class="cm-project-label">Independent project</div>
             <strong>CupMarket 2026</strong>
-            <p>Designed and built by {PROJECT_OWNER} ({PROJECT_ALIAS}).</p>
+            <p>Designed and built by {PROJECT_OWNER}.</p>
             <span>Working prototype · Testing and feedback are welcome</span>
         </div>
         ''',
@@ -97,6 +97,29 @@ def render_live_feed_notice(metadata: dict) -> None:
         st.warning(message)
     else:
         st.info(message)
+
+
+def render_official_data_caption(
+    frame: pd.DataFrame,
+    *,
+    label: str = "Official market",
+) -> None:
+    """Expose the publication source without overwhelming the main interface."""
+    source = frame.attrs.get("cupmarket_source")
+    commit_sha = frame.attrs.get("cupmarket_commit")
+    fallback_reason = frame.attrs.get("cupmarket_fallback_reason")
+    if not source:
+        return
+
+    commit_text = f" · snapshot {str(commit_sha)[:7]}" if commit_sha else ""
+    st.caption(f"{label} source: {source}{commit_text}")
+    if source == "Deployed fallback" and fallback_reason:
+        with st.expander("Why saved official data is being shown", expanded=False):
+            st.write(
+                "CupMarket could not read the newest GitHub publication, so it kept the "
+                "deployed copy instead of mixing or partially loading files."
+            )
+            st.caption(str(fallback_reason))
 
 
 def render_data_diagnostics(
@@ -167,7 +190,7 @@ def render_project_footer() -> None:
         <div class="cm-project-footer">
             <div>
                 <strong>CupMarket 2026</strong>
-                <span>An independent World Cup analytics project by {PROJECT_OWNER} ({PROJECT_ALIAS}).</span>
+                <span>An independent World Cup analytics project by {PROJECT_OWNER}.</span>
             </div>
             <div class="cm-footer-meta">Working prototype · Virtual market · No real-money wagering</div>
         </div>
