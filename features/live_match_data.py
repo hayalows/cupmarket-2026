@@ -11,7 +11,9 @@ import streamlit as st
 API_URL = "https://api.football-data.org/v4/competitions/WC/matches"
 FINISHED_STATUSES = {"FINISHED", "AWARDED"}
 LIVE_STATUSES = {"IN_PLAY", "PAUSED", "SUSPENDED"}
+ACTIVE_PLAY_STATUSES = {"IN_PLAY", "PAUSED"}
 UPCOMING_STATUSES = {"TIMED", "SCHEDULED"}
+STALE_PROVIDER_STATUS = "AWAITING_CONFIRMATION"
 
 
 class LiveFeedRequestError(RuntimeError):
@@ -144,6 +146,62 @@ def expected_live_matches(
     ].copy()
 
 
+def reconcile_stale_provider_states(
+    matches: pd.DataFrame,
+    now: pd.Timestamp | None = None,
+    *,
+    maximum_match_hours: int = 4,
+) -> tuple[pd.DataFrame, list[dict]]:
+    """Stop impossible provider timelines from being presented as genuinely live.
+
+    This does not invent an official final result. It changes an obviously stale
+    IN_PLAY/PAUSED state to AWAITING_CONFIRMATION until the provider confirms the
+    final status.
+    """
+    required = {"status", "utc_date"}
+    if matches.empty or not required.issubset(matches.columns):
+        return matches.copy(), []
+
+    frame = matches.copy()
+    current = now or pd.Timestamp.now(tz="UTC")
+    kickoff = pd.to_datetime(frame["utc_date"], errors="coerce", utc=True)
+    active_mask = frame["status"].isin(ACTIVE_PLAY_STATUSES)
+    too_old_mask = kickoff <= current - pd.Timedelta(hours=maximum_match_hours)
+
+    finished_kickoffs = kickoff[frame["status"].isin(FINISHED_STATUSES)].dropna()
+    latest_finished_kickoff = (
+        finished_kickoffs.max() if not finished_kickoffs.empty else pd.NaT
+    )
+    if pd.isna(latest_finished_kickoff):
+        later_match_finished_mask = pd.Series(False, index=frame.index)
+    else:
+        later_match_finished_mask = kickoff < latest_finished_kickoff
+
+    stale_mask = active_mask & (too_old_mask | later_match_finished_mask)
+    stale_records: list[dict] = []
+    for index in frame.index[stale_mask]:
+        stale_records.append(
+            {
+                "match_id": int(frame.at[index, "match_id"])
+                if "match_id" in frame.columns and pd.notna(frame.at[index, "match_id"])
+                else None,
+                "home_team": frame.at[index, "home_team"]
+                if "home_team" in frame.columns
+                else None,
+                "away_team": frame.at[index, "away_team"]
+                if "away_team" in frame.columns
+                else None,
+                "reported_status": frame.at[index, "status"],
+                "kickoff_utc": kickoff.at[index].isoformat()
+                if pd.notna(kickoff.at[index])
+                else None,
+            }
+        )
+        frame.at[index, "status"] = STALE_PROVIDER_STATUS
+
+    return frame, stale_records
+
+
 def should_auto_refresh(matches: pd.DataFrame) -> bool:
     if matches.empty or "status" not in matches.columns:
         return False
@@ -196,6 +254,7 @@ def fetch_live_matches(token: str) -> tuple[pd.DataFrame, dict]:
         )
 
     matches = parse_api_matches(payload)
+    matches, stale_live_records = reconcile_stale_provider_states(matches)
     latest_provider_update = None
     if not matches.empty and "last_updated" in matches.columns:
         latest = matches["last_updated"].max()
@@ -217,6 +276,8 @@ def fetch_live_matches(token: str) -> tuple[pd.DataFrame, dict]:
         "failure_kind": None,
         "warning": None,
         "status_counts": _status_counts(matches),
+        "stale_live_count": len(stale_live_records),
+        "stale_live_matches": stale_live_records,
     }
     return matches, metadata
 
@@ -272,7 +333,19 @@ def load_matches(snapshot_path: Path) -> tuple[pd.DataFrame, dict]:
                 active = matches[matches["status"].isin(LIVE_STATUSES)]
                 metadata["expected_live_count"] = int(len(expected))
                 metadata["active_match_count"] = int(len(active))
-                if not expected.empty and active.empty:
+                stale_records = metadata.get("stale_live_matches", [])
+                if stale_records:
+                    names = ", ".join(
+                        f"{item.get('home_team')}–{item.get('away_team')}"
+                        for item in stale_records
+                    )
+                    metadata["feed_state"] = "stale_provider_status"
+                    metadata["warning"] = (
+                        "The provider returned an impossible live timeline for "
+                        f"{names}. CupMarket has removed the live label and is awaiting "
+                        "official final-status confirmation."
+                    )
+                elif not expected.empty and active.empty:
                     metadata["feed_state"] = "provider_delayed"
                     metadata["warning"] = (
                         "A kickoff window is active, but the provider still marks the match "
@@ -317,6 +390,8 @@ def load_matches(snapshot_path: Path) -> tuple[pd.DataFrame, dict]:
             if not snapshot.empty and "status" in snapshot.columns
             else 0
         ),
+        "stale_live_count": 0,
+        "stale_live_matches": [],
         "feed_state": "fallback_stale" if not expected.empty else "fallback",
     }
 
