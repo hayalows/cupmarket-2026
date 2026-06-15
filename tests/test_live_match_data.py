@@ -6,10 +6,16 @@ import pandas as pd
 
 from features.live_group_table import build_live_group_table
 from features.live_match_data import (
+    ACTIVE_REFRESH_SECONDS,
+    IDLE_REFRESH_SECONDS,
     expected_live_matches,
     group_freshness,
     parse_api_matches,
-    reconcile_stale_provider_states,
+    recommended_refresh_seconds,
+)
+from features.live_match_reconciliation import (
+    mark_impossible_live_states,
+    merge_terminal_states,
 )
 
 
@@ -71,7 +77,7 @@ class LiveMatchDataTests(unittest.TestCase):
         self.assertEqual(int(frame.iloc[0]["home_score_full_time"]), 1)
         self.assertEqual(int(frame.iloc[0]["away_score_full_time"]), 0)
 
-    def test_expected_live_match_detects_stale_scheduled_status(self):
+    def test_expected_live_match_detects_scheduled_fixture_after_kickoff(self):
         now = pd.Timestamp("2026-06-20T18:30:00Z")
         matches = pd.DataFrame(
             [
@@ -88,7 +94,7 @@ class LiveMatchDataTests(unittest.TestCase):
         expected = expected_live_matches(matches, now=now)
         self.assertEqual(len(expected), 1)
 
-    def test_reconcile_stale_live_status_when_later_match_finished(self):
+    def test_impossible_live_status_is_quarantined(self):
         matches = pd.DataFrame(
             [
                 {
@@ -107,7 +113,7 @@ class LiveMatchDataTests(unittest.TestCase):
                 },
             ]
         )
-        reconciled, stale = reconcile_stale_provider_states(
+        reconciled, stale = mark_impossible_live_states(
             matches,
             now=pd.Timestamp("2026-06-15T06:00:00Z"),
         )
@@ -115,7 +121,7 @@ class LiveMatchDataTests(unittest.TestCase):
         self.assertEqual(len(stale), 1)
         self.assertEqual(stale[0]["match_id"], 1)
 
-    def test_reconcile_keeps_genuinely_live_match(self):
+    def test_genuine_live_match_is_not_quarantined(self):
         matches = pd.DataFrame(
             [
                 {
@@ -127,12 +133,110 @@ class LiveMatchDataTests(unittest.TestCase):
                 }
             ]
         )
-        reconciled, stale = reconcile_stale_provider_states(
+        reconciled, stale = mark_impossible_live_states(
             matches,
             now=pd.Timestamp("2026-06-20T18:45:00Z"),
         )
         self.assertEqual(reconciled.iloc[0]["status"], "IN_PLAY")
         self.assertEqual(stale, [])
+
+    def test_finished_snapshot_overrides_regressed_provider_status(self):
+        provider = pd.DataFrame(
+            [
+                {
+                    "match_id": 537352,
+                    "status": "IN_PLAY",
+                    "home_score_full_time": 1,
+                    "away_score_full_time": 0,
+                    "last_updated": pd.Timestamp("2026-06-15T01:00:00Z"),
+                }
+            ]
+        )
+        snapshot = pd.DataFrame(
+            [
+                {
+                    "match_id": 537352,
+                    "status": "FINISHED",
+                    "winner": "HOME_TEAM",
+                    "duration": "REGULAR",
+                    "home_score_full_time": 1,
+                    "away_score_full_time": 0,
+                    "last_updated": pd.Timestamp("2026-06-15T01:09:24Z"),
+                }
+            ]
+        )
+        merged, report = merge_terminal_states(provider, snapshot)
+        self.assertEqual(merged.iloc[0]["status"], "FINISHED")
+        self.assertEqual(report.restored_match_ids, (537352,))
+
+    def test_newer_official_terminal_correction_is_applied(self):
+        current = pd.DataFrame(
+            [
+                {
+                    "match_id": 1,
+                    "status": "FINISHED",
+                    "winner": "HOME_TEAM",
+                    "duration": "REGULAR",
+                    "home_score_full_time": 1,
+                    "away_score_full_time": 0,
+                    "last_updated": pd.Timestamp("2026-06-20T20:00:00Z"),
+                }
+            ]
+        )
+        corrected = pd.DataFrame(
+            [
+                {
+                    "match_id": 1,
+                    "status": "FINISHED",
+                    "winner": "DRAW",
+                    "duration": "REGULAR",
+                    "home_score_full_time": 1,
+                    "away_score_full_time": 1,
+                    "last_updated": pd.Timestamp("2026-06-20T20:05:00Z"),
+                }
+            ]
+        )
+        merged, report = merge_terminal_states(current, corrected)
+        self.assertEqual(int(merged.iloc[0]["away_score_full_time"]), 1)
+        self.assertEqual(merged.iloc[0]["winner"], "DRAW")
+        self.assertEqual(report.corrected_match_ids, (1,))
+
+    def test_older_terminal_record_does_not_overwrite_newer_result(self):
+        current = pd.DataFrame(
+            [
+                {
+                    "match_id": 1,
+                    "status": "FINISHED",
+                    "winner": "DRAW",
+                    "duration": "REGULAR",
+                    "home_score_full_time": 1,
+                    "away_score_full_time": 1,
+                    "last_updated": pd.Timestamp("2026-06-20T20:10:00Z"),
+                }
+            ]
+        )
+        older = pd.DataFrame(
+            [
+                {
+                    "match_id": 1,
+                    "status": "FINISHED",
+                    "winner": "HOME_TEAM",
+                    "duration": "REGULAR",
+                    "home_score_full_time": 1,
+                    "away_score_full_time": 0,
+                    "last_updated": pd.Timestamp("2026-06-20T20:05:00Z"),
+                }
+            ]
+        )
+        merged, report = merge_terminal_states(current, older)
+        self.assertEqual(int(merged.iloc[0]["away_score_full_time"]), 1)
+        self.assertEqual(report.corrected_match_ids, ())
+
+    def test_refresh_rate_is_fast_only_during_match_activity(self):
+        live = pd.DataFrame([{"status": "IN_PLAY", "utc_date": pd.Timestamp.now(tz="UTC")}])
+        finished = pd.DataFrame([{"status": "FINISHED", "utc_date": pd.Timestamp.now(tz="UTC")}])
+        self.assertEqual(recommended_refresh_seconds(live), ACTIVE_REFRESH_SECONDS)
+        self.assertEqual(recommended_refresh_seconds(finished), IDLE_REFRESH_SECONDS)
 
     def test_group_freshness_detects_pending_result(self):
         matches = pd.DataFrame(
@@ -142,10 +246,7 @@ class LiveMatchDataTests(unittest.TestCase):
                 {"stage": "GROUP_STAGE", "status": "TIMED"},
             ]
         )
-        freshness = group_freshness(
-            matches,
-            {"finished_group_matches": 1},
-        )
+        freshness = group_freshness(matches, {"finished_group_matches": 1})
         self.assertEqual(freshness["live_finished_group_matches"], 2)
         self.assertEqual(freshness["model_finished_group_matches"], 1)
         self.assertEqual(freshness["pending_model_updates"], 1)
