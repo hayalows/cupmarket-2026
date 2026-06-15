@@ -5,11 +5,21 @@ import streamlit as st
 
 import features.match_hub as base
 from features.live_match_data import format_source_time, load_matches
+from features.product_ui import render_live_feed_notice
 from features.tournament_data import DATA_DIR, load_static_data
 
 
 def inject_styles() -> None:
     base.inject_styles()
+
+
+def load_match_hub_data() -> dict:
+    matches, source = load_matches(DATA_DIR / "world_cup_2026_matches_latest.csv")
+    return {
+        "matches": matches,
+        "source": source,
+        "static": load_static_data(),
+    }
 
 
 def _open_upcoming(match_id: int) -> None:
@@ -47,7 +57,7 @@ def _render_live_safe(matches: pd.DataFrame) -> None:
             )
             st.caption(f"{clock} · {base._group(match.get('group'))}")
             if st.button(
-                "Open live intelligence",
+                "Open match intelligence",
                 key=f"hub_v2_live_{int(match['match_id'])}",
                 use_container_width=True,
             ):
@@ -162,15 +172,17 @@ def _render_results_safe(
     )
 
 
-def render_match_hub() -> None:
-    matches, source = load_matches(DATA_DIR / "world_cup_2026_matches_latest.csv")
-    static = load_static_data()
+def render_match_hub(data: dict | None = None) -> None:
+    page_data = data or load_match_hub_data()
+    matches = page_data["matches"]
+    source = page_data["source"]
+    static = page_data["static"]
 
     st.markdown(
         '''
         <div class="cm-hero">
-            <div class="cm-eyebrow">CupMarket 2026 · Match Hub</div>
-            <h1>Every match, one consistent path.</h1>
+            <div class="cm-eyebrow">CupMarket 2026 · Fixtures & results</div>
+            <h1>Every match, one clear path.</h1>
             <p>Move from live action to completed-result review or the next fixture without learning a different navigation system.</p>
         </div>
         ''',
@@ -200,8 +212,7 @@ def render_match_hub() -> None:
         f"Score source: {source.get('source', 'Unknown')} · refreshed "
         f"{format_source_time(source.get('fetched_at_utc'))}"
     )
-    if source.get("warning"):
-        st.warning(source["warning"] + " Showing the latest saved snapshot.")
+    render_live_feed_notice(source)
 
     if view == "Live":
         _render_live_safe(matches)
