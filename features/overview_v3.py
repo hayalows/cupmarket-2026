@@ -5,6 +5,8 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from features.market_movement import add_rank_movement, rank_movement_text
+from features.product_ui import render_official_data_caption
 from features.tournament_data import load_static_data
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,6 +43,7 @@ def _go_to_market(team: str) -> None:
 
 def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: dict) -> None:
     _inject_styles()
+    prices = add_rank_movement(prices)
     processed = load_static_data()["processed_ledger"]
 
     st.markdown(
@@ -119,7 +122,15 @@ def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: di
                 previous = pd.to_numeric(leader.get("previous_price"), errors="coerce")
                 delta = None if pd.isna(change) else f"{float(change):+.2f} CM" + (f" · {float(percent):+.2f}%" if pd.notna(percent) else "")
                 st.metric(str(leader["team"]), f"{price:.2f} CM", delta=delta)
-                st.write(f"Previous: **{float(previous):.2f} CM**" if pd.notna(previous) else "Previous value unavailable")
+                rank = pd.to_numeric(leader.get("market_rank"), errors="coerce")
+                rank_text = rank_movement_text(
+                    rank,
+                    leader.get("previous_market_rank"),
+                    include_previous=True,
+                )
+                if pd.notna(rank):
+                    st.write(f"Market rank: **#{int(rank)}** · {rank_text}")
+                st.write(f"Previous price: **{float(previous):.2f} CM**" if pd.notna(previous) else "Previous price unavailable")
                 generated = pd.to_datetime(leader.get("generated_at_utc"), errors="coerce", utc=True)
                 st.caption("Since last model update · " + (generated.strftime("%d %b · %H:%M UTC") if pd.notna(generated) else "time unavailable"))
                 if st.button("Understand the move", key="pulse_market", use_container_width=True):
@@ -144,12 +155,31 @@ def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: di
             movers = prices.assign(
                 abs_move=pd.to_numeric(prices["price_change_percent"], errors="coerce").abs()
             ).dropna(subset=["abs_move"]).sort_values("abs_move", ascending=False).head(5)
-            display = movers[["team", "cupmarket_price", "price_change_percent"]].copy()
-            display.columns = ["Country", "Price", "Change %"]
+            display = movers[
+                [
+                    "market_rank",
+                    "team",
+                    "cupmarket_price",
+                    "price_change_percent",
+                    "previous_market_rank",
+                ]
+            ].copy()
+            display["Rank move"] = display.apply(
+                lambda row: rank_movement_text(
+                    row["market_rank"], row["previous_market_rank"]
+                ),
+                axis=1,
+            )
+            display = display.drop(columns=["previous_market_rank"])
+            display.columns = ["Rank", "Country", "Price", "Change %", "Rank move"]
+            display["Rank"] = display["Rank"].map(
+                lambda value: f"#{int(value)}" if pd.notna(value) else "—"
+            )
             display["Price"] = display["Price"].map(lambda value: f"{float(value):.2f} CM")
             display["Change %"] = display["Change %"].map(lambda value: f"{float(value):+.2f}%")
             st.dataframe(display, hide_index=True, use_container_width=True)
 
+    render_official_data_caption(prices)
     st.caption(
         f"Tournament feed: {len(finished)} finished · {len(live)} live · {len(upcoming)} upcoming. "
         f"Model ledger records {len(processed)} processed results."
