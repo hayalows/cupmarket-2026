@@ -9,7 +9,7 @@ from features.live_match_data import (
 )
 from features.overview_v3 import render_overview_v3
 from features.product_ui import render_live_feed_notice
-from features.tournament_data import DATA_DIR, load_static_data
+from features.tournament_data_v2 import DATA_DIR, load_static_data
 
 
 def load_pulse_data() -> dict:
