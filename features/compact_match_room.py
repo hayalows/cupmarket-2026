@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from hashlib import sha256
+
 import pandas as pd
 import streamlit as st
 
@@ -51,6 +53,59 @@ def _render_selected_match_card(match: pd.Series) -> None:
         ''',
         unsafe_allow_html=True,
     )
+
+
+def _scenario_context_token(
+    matches: pd.DataFrame,
+    predictions: pd.DataFrame,
+    prices: pd.DataFrame,
+    selected_match_id: int,
+    team: str,
+) -> str:
+    """Fingerprint the inputs that can change a qualification calculation."""
+    selected_rows = matches[
+        pd.to_numeric(matches.get("match_id"), errors="coerce")
+        == int(selected_match_id)
+    ]
+    group = selected_rows.iloc[0].get("group") if not selected_rows.empty else None
+    group_rows = matches[matches.get("group").astype(str) == str(group)].copy()
+    if "match_id" in group_rows.columns:
+        group_rows = group_rows.sort_values("match_id")
+
+    snapshot_columns = [
+        "match_id",
+        "status",
+        "home_score_full_time",
+        "away_score_full_time",
+        "home_score",
+        "away_score",
+        "last_updated",
+    ]
+    available_columns = [
+        column for column in snapshot_columns if column in group_rows.columns
+    ]
+    group_snapshot = tuple(
+        tuple(str(value) for value in row)
+        for row in group_rows[available_columns].itertuples(index=False, name=None)
+    )
+
+    def latest_generation(frame: pd.DataFrame) -> str:
+        if frame.empty or "generated_at_utc" not in frame.columns:
+            return ""
+        timestamps = pd.to_datetime(
+            frame["generated_at_utc"], errors="coerce", utc=True
+        ).dropna()
+        return "" if timestamps.empty else timestamps.max().isoformat()
+
+    payload = (
+        int(selected_match_id),
+        str(team),
+        str(group),
+        group_snapshot,
+        latest_generation(predictions),
+        latest_generation(prices),
+    )
+    return sha256(repr(payload).encode("utf-8")).hexdigest()[:20]
 
 
 def _render_saved_forecast(
@@ -114,14 +169,38 @@ def _render_saved_forecast(
         and match.get("status") in {"TIMED", "SCHEDULED"}
     )
     if is_future_group_match:
-        with st.expander("Qualification impact of a win, draw or loss"):
+        result_key = f"compact_match_impact_result_{selected_match_id}"
+        stored_before_open = st.session_state.get(result_key)
+        with st.expander(
+            "Qualification impact of a win, draw or loss",
+            expanded=bool(stored_before_open),
+        ):
             team = st.selectbox(
                 "Analyse qualification impact for",
                 [match.get("home_team"), match.get("away_team")],
                 key=f"compact_match_impact_{selected_match_id}",
             )
+            context_token = _scenario_context_token(
+                matches,
+                predictions,
+                prices,
+                selected_match_id,
+                str(team),
+            )
+            stored = st.session_state.get(result_key)
+            has_current_result = bool(
+                stored
+                and stored.get("team") == team
+                and stored.get("context_token") == context_token
+            )
+
+            button_label = (
+                "Recalculate qualification paths"
+                if has_current_result
+                else "Calculate qualification paths"
+            )
             if st.button(
-                "Calculate qualification paths",
+                button_label,
                 key=f"compact_calculate_match_impact_{selected_match_id}",
                 use_container_width=True,
             ):
@@ -138,7 +217,26 @@ def _render_saved_forecast(
                         tuple(sorted(strength.items())),
                         1500,
                     )
-                render_qualification_result(result, compact=True)
+                st.session_state[result_key] = {
+                    "team": team,
+                    "context_token": context_token,
+                    "result": result,
+                }
+                stored = st.session_state[result_key]
+                has_current_result = True
+
+            if has_current_result and stored:
+                render_qualification_result(stored["result"], compact=True)
+                st.caption(
+                    "This result stays on screen during automatic score refreshes. "
+                    "CupMarket asks for a new calculation only when the selected team, "
+                    "group results or published model inputs change."
+                )
+            elif stored and stored.get("team") == team:
+                st.info(
+                    "The score feed or published model changed after this calculation. "
+                    "Calculate again to use the newest inputs."
+                )
 
     st.caption(
         "This is the saved pre-match view. Official country prices and tournament "
