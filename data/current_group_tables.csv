@@ -27,10 +27,10 @@ G,1,Belgium,0,0,0,0,0,0,0,0
 G,2,Iran,0,0,0,0,0,0,0,0
 G,3,Egypt,0,0,0,0,0,0,0,0
 G,4,New Zealand,0,0,0,0,0,0,0,0
-H,1,Spain,0,0,0,0,0,0,0,0
-H,2,Uruguay,0,0,0,0,0,0,0,0
-H,3,Saudi Arabia,0,0,0,0,0,0,0,0
-H,4,Cape Verde Islands,0,0,0,0,0,0,0,0
+H,1,Spain,1,0,1,0,0,0,0,1
+H,2,Cape Verde Islands,1,0,1,0,0,0,0,1
+H,3,Uruguay,0,0,0,0,0,0,0,0
+H,4,Saudi Arabia,0,0,0,0,0,0,0,0
 I,1,France,0,0,0,0,0,0,0,0
 I,2,Norway,0,0,0,0,0,0,0,0
 I,3,Senegal,0,0,0,0,0,0,0,0

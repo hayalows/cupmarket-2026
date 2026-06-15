@@ -11,3 +11,4 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537357,2026-06-14 20:00:00+00:00,GROUP_STAGE,Netherlands,Japan,2,2,2026-06-14 22:05:05.820605+00:00,phase7_automated_group_stage_v1
 537352,2026-06-14 23:00:00+00:00,GROUP_STAGE,Ivory Coast,Ecuador,1,0,2026-06-15 06:31:30.365355+00:00,phase7_automated_group_stage_v1
 537358,2026-06-15 02:00:00+00:00,GROUP_STAGE,Sweden,Tunisia,5,1,2026-06-15 06:31:30.365381+00:00,phase7_automated_group_stage_v1
+537369,2026-06-15 16:00:00+00:00,GROUP_STAGE,Spain,Cape Verde Islands,0,0,2026-06-15 18:09:56.427757+00:00,phase7_automated_group_stage_v1
