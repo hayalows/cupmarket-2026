@@ -1,10 +1,11 @@
 import streamlit as st
 
-from features.reliable_match_hub import inject_styles, render_match_hub
+from features.live_match_data import should_auto_refresh
+from features.match_hub_v2 import inject_styles, load_match_hub_data, render_match_hub
 from features.product_ui import render_project_footer, render_specialist_sidebar
 
 st.set_page_config(
-    page_title="CupMarket Match Hub",
+    page_title="CupMarket Fixtures & Results",
     page_icon="⚽",
     layout="wide",
     initial_sidebar_state="auto",
@@ -14,11 +15,31 @@ inject_styles()
 render_specialist_sidebar("match_hub")
 
 
+def _render(data: dict, refresh_label: str) -> None:
+    render_match_hub(data)
+    st.caption(refresh_label)
+
+
 @st.fragment(run_every="45s")
-def render_live_match_hub() -> None:
-    render_match_hub()
-    st.caption("Automatic score refresh runs every 45 seconds while this page is open.")
+def render_active_match_hub() -> None:
+    data = load_match_hub_data()
+    if not should_auto_refresh(data["matches"]):
+        st.rerun()
+    _render(data, "Live checks run every 45 seconds while match activity is possible.")
 
 
-render_live_match_hub()
+@st.fragment(run_every="5m")
+def render_idle_match_hub() -> None:
+    data = load_match_hub_data()
+    if should_auto_refresh(data["matches"]):
+        st.rerun()
+    _render(data, "No match is active. CupMarket checks again every five minutes.")
+
+
+initial_data = load_match_hub_data()
+if should_auto_refresh(initial_data["matches"]):
+    render_active_match_hub()
+else:
+    render_idle_match_hub()
+
 render_project_footer()

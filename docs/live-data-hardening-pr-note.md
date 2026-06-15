@@ -1,0 +1,1 @@
+Pull request validation note: no model, Elo, simulation, settlement, or price-formula changes are included.
