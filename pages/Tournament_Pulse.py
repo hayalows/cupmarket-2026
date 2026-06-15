@@ -1,6 +1,6 @@
 import streamlit as st
 
-from features.live_match_data import format_source_time, load_matches
+from features.reliable_live_match_data import format_source_time, load_matches
 from features.overview_v3 import render_overview_v3
 from features.product_ui import inject_styles, render_project_footer, render_specialist_sidebar
 from features.tournament_data import DATA_DIR, load_static_data
@@ -65,6 +65,8 @@ def render_live_tournament_pulse() -> None:
         f"{format_source_time(score_metadata.get('fetched_at_utc'))} · "
         "automatic refresh every 45 seconds while this page is open"
     )
+    if score_metadata.get("reconciliation_note"):
+        st.caption(score_metadata["reconciliation_note"])
 
 
 render_live_tournament_pulse()
