@@ -118,7 +118,7 @@ def _load_price_anchor() -> pd.DataFrame:
 
 
 def _restore_meaningful_market_move(anchor: pd.DataFrame) -> None:
-    """Keep the last real event movement after a no-new-result forced rerun."""
+    """Keep the last real event movement after any no-new-result run."""
     if anchor.empty or not update_pipeline.PRICES_OUTPUT_PATH.exists():
         return
 
@@ -126,7 +126,7 @@ def _restore_meaningful_market_move(anchor: pd.DataFrame) -> None:
     if not summary_path.exists():
         return
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
-    if summary.get("status") != "updated":
+    if summary.get("status") not in {"updated", "no_new_finished_match"}:
         return
     if int(summary.get("new_finished_matches", 0) or 0) != 0:
         return
