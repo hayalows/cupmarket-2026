@@ -9,6 +9,7 @@ from features.live_match_data import (
     expected_live_matches,
     group_freshness,
     parse_api_matches,
+    reconcile_stale_provider_states,
 )
 
 
@@ -86,6 +87,52 @@ class LiveMatchDataTests(unittest.TestCase):
         )
         expected = expected_live_matches(matches, now=now)
         self.assertEqual(len(expected), 1)
+
+    def test_reconcile_stale_live_status_when_later_match_finished(self):
+        matches = pd.DataFrame(
+            [
+                {
+                    "match_id": 1,
+                    "utc_date": pd.Timestamp("2026-06-14T23:00:00Z"),
+                    "status": "IN_PLAY",
+                    "home_team": "Ivory Coast",
+                    "away_team": "Ecuador",
+                },
+                {
+                    "match_id": 2,
+                    "utc_date": pd.Timestamp("2026-06-15T02:00:00Z"),
+                    "status": "FINISHED",
+                    "home_team": "Sweden",
+                    "away_team": "Tunisia",
+                },
+            ]
+        )
+        reconciled, stale = reconcile_stale_provider_states(
+            matches,
+            now=pd.Timestamp("2026-06-15T06:00:00Z"),
+        )
+        self.assertEqual(reconciled.iloc[0]["status"], "AWAITING_CONFIRMATION")
+        self.assertEqual(len(stale), 1)
+        self.assertEqual(stale[0]["match_id"], 1)
+
+    def test_reconcile_keeps_genuinely_live_match(self):
+        matches = pd.DataFrame(
+            [
+                {
+                    "match_id": 1,
+                    "utc_date": pd.Timestamp("2026-06-20T18:00:00Z"),
+                    "status": "IN_PLAY",
+                    "home_team": "Ghana",
+                    "away_team": "Panama",
+                }
+            ]
+        )
+        reconciled, stale = reconcile_stale_provider_states(
+            matches,
+            now=pd.Timestamp("2026-06-20T18:45:00Z"),
+        )
+        self.assertEqual(reconciled.iloc[0]["status"], "IN_PLAY")
+        self.assertEqual(stale, [])
 
     def test_group_freshness_detects_pending_result(self):
         matches = pd.DataFrame(
