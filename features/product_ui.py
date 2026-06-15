@@ -53,8 +53,8 @@ def render_specialist_sidebar(active_page: str) -> None:
         )
         st.markdown('<div class="cm-side-label">Explore</div>', unsafe_allow_html=True)
         st.page_link("pages/Tournament_Pulse.py", label="Tournament Pulse", icon="🏠")
-        st.page_link("pages/4_Match_Hub.py", label="Match Hub", icon="⚽")
-        st.page_link("pages/1_Match_Intelligence.py", label="Live Match Room", icon="🎯")
+        st.page_link("pages/4_Match_Hub.py", label="Fixtures & Results", icon="⚽")
+        st.page_link("pages/1_Match_Intelligence.py", label="Match Intelligence", icon="🎯")
         st.page_link("pages/2_Qualification_Lab.py", label="Qualification Lab", icon="🧭")
         st.page_link("pages/3_Live_Group_Centre.py", label="Live Group Centre", icon="📋")
         st.page_link("pages/5_Market_Story.py", label="Market Story", icon="📈")
@@ -84,6 +84,21 @@ def render_live_vs_official_note() -> None:
         )
 
 
+def render_live_feed_notice(metadata: dict) -> None:
+    """Show a concise recovery-focused message to ordinary users."""
+    message = metadata.get("public_notice")
+    if not message:
+        return
+
+    level = metadata.get("notice_level")
+    if level == "error":
+        st.error(message)
+    elif level == "warning":
+        st.warning(message)
+    else:
+        st.info(message)
+
+
 def render_data_diagnostics(
     *,
     score_source: str,
@@ -91,6 +106,7 @@ def render_data_diagnostics(
     model_generated: str,
     pending_updates: int | None = None,
     warning: str | None = None,
+    technical_details: str | None = None,
     load_time_ms: float | None = None,
     refresh_key: str | None = None,
     token_configured: bool | None = None,
@@ -124,6 +140,8 @@ def render_data_diagnostics(
             detail_parts.append(f"Provider requests remaining: {requests_remaining}")
         if detail_parts:
             st.caption(" · ".join(detail_parts))
+        if technical_details:
+            st.caption(f"Technical detail: {technical_details}")
         if load_time_ms is not None:
             st.caption(f"Page data prepared in {load_time_ms:.0f} ms on this rerun.")
         if refresh_key and st.button(
