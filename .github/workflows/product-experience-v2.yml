@@ -1,35 +1,41 @@
-name: Apply and validate product experience v2
+name: Validate product experience v2
 
 on:
   pull_request:
     paths:
       - features/product_ui.py
+      - features/group_centre_page.py
+      - pages/1_Match_Intelligence.py
+      - pages/2_Qualification_Lab.py
+      - pages/3_Live_Group_Centre.py
+      - pages/4_Match_Hub.py
+      - pages/Tournament_Pulse.py
       - assets/group_tools.css
-      - scripts/apply_product_experience_refresh.py
       - .github/workflows/product-experience-v2.yml
   push:
-    branches:
-      - main
-      - product-experience-v2
+    branches: [main]
     paths:
       - features/product_ui.py
+      - features/group_centre_page.py
+      - pages/1_Match_Intelligence.py
+      - pages/2_Qualification_Lab.py
+      - pages/3_Live_Group_Centre.py
+      - pages/4_Match_Hub.py
+      - pages/Tournament_Pulse.py
       - assets/group_tools.css
-      - scripts/apply_product_experience_refresh.py
       - .github/workflows/product-experience-v2.yml
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  apply-and-validate:
+  validate-product-experience:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -41,41 +47,24 @@ jobs:
       - name: Install dependencies
         run: python -m pip install -r requirements.txt
 
-      - name: Apply product experience refresh
-        run: python scripts/apply_product_experience_refresh.py
-
-      - name: Compile changed application modules
+      - name: Compile product experience modules
         run: |
           python -m py_compile app.py
           python -m py_compile features/product_ui.py
-          python -m py_compile features/match_ui.py
-          python -m py_compile features/qualification_ui.py
-          python -m py_compile features/live_qualification_ui.py
-          python -m py_compile features/group_centre.py
+          python -m py_compile features/match_hub_v2.py
           python -m py_compile features/group_centre_page.py
-          python -m py_compile features/live_group_view.py
+          python -m py_compile features/tournament_pulse_page.py
           python -m py_compile pages/1_Match_Intelligence.py
           python -m py_compile pages/2_Qualification_Lab.py
           python -m py_compile pages/3_Live_Group_Centre.py
+          python -m py_compile pages/4_Match_Hub.py
+          python -m py_compile pages/Tournament_Pulse.py
 
-      - name: Run scenario and live projection tests
+      - name: Run product and live projection tests
         run: |
           python -m unittest tests/test_group_scenarios.py
           python -m unittest tests/test_live_projection_smoke.py
+          python -m unittest tests/test_live_match_data.py
 
       - name: Check patch quality
         run: git diff --check
-
-      - name: Commit applied interface changes
-        if: github.event_name == 'push'
-        run: |
-          git config user.name "cupmarket-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add app.py assets features pages scripts
-
-          if git diff --cached --quiet; then
-            echo "No product changes to commit."
-          else
-            git commit -m "Refine CupMarket product experience"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
-          fi
