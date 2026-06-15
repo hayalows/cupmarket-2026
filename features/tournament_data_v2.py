@@ -1,15 +1,13 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 
 import pandas as pd
+import streamlit as st
 
 from features.official_data import load_latest_csv
-from features.tournament_data import (
-    DATA_DIR,
-    HISTORY_DIR,
-    ROOT,
-    STATE_DIR,
+from features.tournament_helpers import (
     actual_outcome,
     batch_context_for_match,
     leading_outcome_label,
@@ -18,18 +16,76 @@ from features.tournament_data import (
     reference_prediction,
 )
 
+ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = ROOT / "data"
+STATE_DIR = ROOT / "backend" / "state"
+HISTORY_DIR = DATA_DIR / "market_history"
+
 
 def load_csv(path: Path) -> pd.DataFrame:
     return load_latest_csv(path)
 
 
-def load_market_history() -> pd.DataFrame:
-    from features.tournament_data import load_market_history as load_local_history
+@st.cache_data(show_spinner=False)
+def _load_local_history(
+    directory_text: str,
+    manifest: tuple[tuple[str, int], ...],
+) -> pd.DataFrame:
+    directory = Path(directory_text)
+    rows: list[pd.DataFrame] = []
+    for filename, _ in manifest:
+        path = directory / filename
+        try:
+            frame = pd.read_csv(path)
+        except (OSError, pd.errors.ParserError):
+            continue
+        timestamp_match = re.search(r"(\d{8}T\d{6}Z)", filename)
+        fallback_time = (
+            pd.to_datetime(
+                timestamp_match.group(1),
+                format="%Y%m%dT%H%M%SZ",
+                utc=True,
+                errors="coerce",
+            )
+            if timestamp_match
+            else pd.NaT
+        )
+        if "generated_at_utc" not in frame.columns:
+            frame["generated_at_utc"] = fallback_time
+        frame["generated_at_utc"] = pd.to_datetime(
+            frame["generated_at_utc"], errors="coerce", utc=True
+        )
+        rows.append(frame)
 
-    history = load_local_history()
+    if not rows:
+        return pd.DataFrame()
+    history = pd.concat(rows, ignore_index=True, sort=False)
+    required = ["team", "cupmarket_price", "generated_at_utc"]
+    if not set(required).issubset(history.columns):
+        return pd.DataFrame()
+    return (
+        history.dropna(subset=required)
+        .drop_duplicates(["team", "generated_at_utc"], keep="last")
+        .sort_values(["generated_at_utc", "team"])
+        .reset_index(drop=True)
+    )
+
+
+def load_market_history() -> pd.DataFrame:
+    manifest = (
+        tuple(
+            (path.name, path.stat().st_mtime_ns)
+            for path in sorted(HISTORY_DIR.glob("cupmarket_prices_*.csv"))
+        )
+        if HISTORY_DIR.exists()
+        else tuple()
+    )
+    history = _load_local_history(str(HISTORY_DIR), manifest)
     current = load_csv(DATA_DIR / "cupmarket_prices_latest.csv")
     if current.empty:
         return history
+    if history.empty:
+        return current
     combined = pd.concat([history, current], ignore_index=True, sort=False)
     required = ["team", "cupmarket_price", "generated_at_utc"]
     if not set(required).issubset(combined.columns):
@@ -56,3 +112,20 @@ def load_static_data() -> dict[str, pd.DataFrame]:
         ),
         "history": load_market_history(),
     }
+
+
+__all__ = [
+    "DATA_DIR",
+    "HISTORY_DIR",
+    "ROOT",
+    "STATE_DIR",
+    "actual_outcome",
+    "batch_context_for_match",
+    "leading_outcome_label",
+    "latest_update_matches",
+    "load_csv",
+    "load_market_history",
+    "load_static_data",
+    "outcome_probability",
+    "reference_prediction",
+]
