@@ -23,6 +23,9 @@ REMOTE_DATA_FILES = {
         "data/tournament_probabilities_latest.csv"
     ),
     "current_group_tables.csv": "data/current_group_tables.csv",
+    "world_cup_2026_matches_latest.csv": (
+        "data/world_cup_2026_matches_latest.csv"
+    ),
     "world_cup_live_predictions_latest.csv": (
         "data/world_cup_live_predictions_latest.csv"
     ),
