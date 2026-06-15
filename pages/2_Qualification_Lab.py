@@ -9,12 +9,14 @@ from features.live_match_data import (
     format_source_time,
     group_freshness,
     load_matches,
+    should_auto_refresh,
 )
 from features.match_ui import combine_prediction_sources
 from features.qualification_ui import render_qualification_lab
 from features.product_ui import (
     inject_styles,
     render_data_diagnostics,
+    render_live_feed_notice,
     render_live_vs_official_note,
     render_page_guide,
     render_project_footer,
@@ -69,35 +71,7 @@ def cached_json(path: Path) -> dict:
     return read_json(str(path), file_version(path))
 
 
-def render_feed_notice(metadata: dict) -> None:
-    kind = metadata.get("failure_kind")
-    if kind == "missing_token":
-        st.error(
-            "Live scores are not connected in this Streamlit deployment. Add "
-            "FOOTBALL_DATA_TOKEN in Streamlit App settings → Secrets, save it, "
-            "then reboot the app. The saved snapshot is being shown for now."
-        )
-    elif kind == "invalid_token":
-        st.error(
-            "The Streamlit live-score token was rejected. Replace it in App settings → "
-            "Secrets, save it, then reboot the app."
-        )
-    elif metadata.get("is_fallback"):
-        st.warning(
-            (metadata.get("warning") or "The live score source is unavailable.")
-            + " The latest saved GitHub snapshot is being used."
-        )
-    elif metadata.get("feed_state") == "provider_delayed":
-        st.warning(
-            "Kickoff has passed, but the provider still marks the fixture as scheduled. "
-            "This page is checking automatically every 45 seconds."
-        )
-    elif metadata.get("warning"):
-        st.warning(metadata["warning"])
-
-
-@st.fragment(run_every="45s")
-def render_live_qualification_lab() -> None:
+def load_qualification_data() -> dict:
     load_started = time.perf_counter()
     matches, score_metadata = load_matches(
         data_dir / "world_cup_2026_matches_latest.csv"
@@ -108,15 +82,25 @@ def render_live_qualification_lab() -> None:
     prediction_ledger = cached_csv(
         root / "backend" / "state" / "world_cup_prediction_ledger.csv"
     )
-    prices = cached_csv(data_dir / "cupmarket_prices_latest.csv")
-    group_tables = cached_csv(data_dir / "current_group_tables.csv")
-    model_metadata = cached_json(data_dir / "phase5_simulation_metadata.json")
-    predictions = combine_prediction_sources(
-        latest_predictions,
-        prediction_ledger,
-    )
+    return {
+        "matches": matches,
+        "score_metadata": score_metadata,
+        "prices": cached_csv(data_dir / "cupmarket_prices_latest.csv"),
+        "group_tables": cached_csv(data_dir / "current_group_tables.csv"),
+        "model_metadata": cached_json(data_dir / "phase5_simulation_metadata.json"),
+        "predictions": combine_prediction_sources(
+            latest_predictions,
+            prediction_ledger,
+        ),
+        "load_time_ms": (time.perf_counter() - load_started) * 1000,
+    }
+
+
+def render_qualification_page(data: dict, refresh_label: str) -> None:
+    matches = data["matches"]
+    score_metadata = data["score_metadata"]
+    model_metadata = data["model_metadata"]
     freshness = group_freshness(matches, model_metadata)
-    load_time_ms = (time.perf_counter() - load_started) * 1000
 
     st.markdown(
         '''
@@ -129,7 +113,7 @@ def render_live_qualification_lab() -> None:
         unsafe_allow_html=True,
     )
 
-    render_feed_notice(score_metadata)
+    render_live_feed_notice(score_metadata)
 
     if freshness["pending_model_updates"]:
         st.warning(
@@ -140,9 +124,9 @@ def render_live_qualification_lab() -> None:
 
     render_qualification_lab(
         matches,
-        predictions,
-        prices,
-        group_tables,
+        data["predictions"],
+        data["prices"],
+        data["group_tables"],
         {"pending_finished_matches": freshness["pending_model_updates"]},
     )
 
@@ -161,16 +145,39 @@ def render_live_qualification_lab() -> None:
         score_refreshed=format_source_time(score_metadata.get("fetched_at_utc")),
         model_generated=format_source_time(model_metadata.get("generated_at_utc")),
         pending_updates=freshness["pending_model_updates"],
-        load_time_ms=load_time_ms,
+        technical_details=score_metadata.get("technical_warning"),
+        load_time_ms=data["load_time_ms"],
         refresh_key="qualification_refresh_scores",
         token_configured=score_metadata.get("token_configured"),
         feed_state=score_metadata.get("feed_state"),
         requests_remaining=score_metadata.get("requests_remaining"),
     )
-    st.caption(
-        "Automatic score refresh runs every 45 seconds while this page is open."
+    st.caption(refresh_label)
+
+
+@st.fragment(run_every="45s")
+def render_active_qualification_lab() -> None:
+    data = load_qualification_data()
+    if not should_auto_refresh(data["matches"]):
+        st.rerun()
+    render_qualification_page(data, "Live checks run every 45 seconds.")
+
+
+@st.fragment(run_every="5m")
+def render_idle_qualification_lab() -> None:
+    data = load_qualification_data()
+    if should_auto_refresh(data["matches"]):
+        st.rerun()
+    render_qualification_page(
+        data,
+        "No match is active; CupMarket checks again every five minutes.",
     )
 
 
-render_live_qualification_lab()
+initial_data = load_qualification_data()
+if should_auto_refresh(initial_data["matches"]):
+    render_active_qualification_lab()
+else:
+    render_idle_qualification_lab()
+
 render_project_footer()
