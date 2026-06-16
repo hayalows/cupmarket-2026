@@ -25,6 +25,38 @@ class MarketMovementTests(unittest.TestCase):
         self.assertEqual(int(result.loc["Bravo", "rank_change"]), -1)
         self.assertEqual(int(result.loc["Charlie", "rank_change"]), 0)
 
+    def test_equal_prices_receive_stable_sequential_ranks(self):
+        prices = pd.DataFrame(
+            [
+                {"team": "Bravo", "market_rank": 1, "previous_price": 40.0},
+                {"team": "Alpha", "market_rank": 2, "previous_price": 40.0},
+                {"team": "Charlie", "market_rank": 3, "previous_price": 30.0},
+            ]
+        )
+
+        result = add_rank_movement(prices).set_index("team")
+
+        self.assertEqual(int(result.loc["Alpha", "previous_market_rank"]), 1)
+        self.assertEqual(int(result.loc["Bravo", "previous_market_rank"]), 2)
+        self.assertEqual(int(result.loc["Charlie", "previous_market_rank"]), 3)
+
+    def test_explicit_previous_rank_takes_priority(self):
+        prices = pd.DataFrame(
+            [
+                {
+                    "team": "Alpha",
+                    "market_rank": 2,
+                    "previous_market_rank": 5,
+                    "previous_price": 99.0,
+                }
+            ]
+        )
+
+        result = add_rank_movement(prices).iloc[0]
+
+        self.assertEqual(int(result["previous_market_rank"]), 5)
+        self.assertEqual(int(result["rank_change"]), 3)
+
     def test_rank_movement_text_explains_direction_and_origin(self):
         self.assertEqual(
             rank_movement_text(3, 5, include_previous=True),
