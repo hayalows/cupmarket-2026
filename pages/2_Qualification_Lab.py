@@ -10,7 +10,7 @@ from features.live_match_data import (
     should_auto_refresh,
 )
 from features.match_ui import combine_prediction_sources
-from features.official_data import load_latest_json
+from features.official_bundle import load_consistent_official_bundle
 from features.product_ui import (
     inject_styles,
     render_data_diagnostics,
@@ -22,7 +22,6 @@ from features.product_ui import (
     render_specialist_sidebar,
 )
 from features.qualification_ui import render_qualification_lab
-from features.tournament_data import load_csv
 
 st.set_page_config(
     page_title="CupMarket Qualification Lab",
@@ -32,6 +31,7 @@ st.set_page_config(
 
 root = Path(__file__).resolve().parents[1]
 data_dir = root / "data"
+state_dir = root / "backend" / "state"
 
 inject_styles(root)
 render_specialist_sidebar("qualification")
@@ -40,15 +40,27 @@ render_specialist_sidebar("qualification")
 def load_qualification_data() -> dict:
     load_started = time.perf_counter()
     matches, score_metadata = load_matches(data_dir / "world_cup_2026_matches_latest.csv")
-    latest_predictions = load_csv(data_dir / "world_cup_live_predictions_latest.csv")
-    prediction_ledger = load_csv(root / "backend" / "state" / "world_cup_prediction_ledger.csv")
+    official = load_consistent_official_bundle(
+        csv_paths={
+            "latest_predictions": data_dir / "world_cup_live_predictions_latest.csv",
+            "prediction_ledger": state_dir / "world_cup_prediction_ledger.csv",
+            "prices": data_dir / "cupmarket_prices_latest.csv",
+            "group_tables": data_dir / "current_group_tables.csv",
+        },
+        json_paths={
+            "model_metadata": data_dir / "phase5_simulation_metadata.json",
+        },
+    )
     return {
         "matches": matches,
         "score_metadata": score_metadata,
-        "prices": load_csv(data_dir / "cupmarket_prices_latest.csv"),
-        "group_tables": load_csv(data_dir / "current_group_tables.csv"),
-        "model_metadata": load_latest_json(data_dir / "phase5_simulation_metadata.json"),
-        "predictions": combine_prediction_sources(latest_predictions, prediction_ledger),
+        "prices": official["prices"],
+        "group_tables": official["group_tables"],
+        "model_metadata": official["model_metadata"],
+        "predictions": combine_prediction_sources(
+            official["latest_predictions"],
+            official["prediction_ledger"],
+        ),
         "load_time_ms": (time.perf_counter() - load_started) * 1000,
     }
 
