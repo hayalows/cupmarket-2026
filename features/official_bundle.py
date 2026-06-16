@@ -92,10 +92,11 @@ def load_consistent_official_bundle(
     loaded.update(
         {key: load_latest_json(path) for key, path in json_paths.items()}
     )
+    if not loaded:
+        return loaded
 
-    signatures = {_signature(value) for value in loaded.values()}
-    signatures.discard((None, None))
-    if len(signatures) <= 1:
+    signatures = [_signature(value) for value in loaded.values()]
+    if (None, None) not in signatures and len(set(signatures)) == 1:
         return loaded
 
     fallback: dict[str, Any] = {
