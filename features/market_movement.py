@@ -3,12 +3,37 @@ from __future__ import annotations
 import pandas as pd
 
 
+def _rank_previous_prices(frame: pd.DataFrame) -> pd.Series:
+    """Rebuild a stable sequential ranking from the prior official prices."""
+    ranked = pd.DataFrame(
+        {
+            "row_index": frame.index,
+            "team": frame.get("team", pd.Series("", index=frame.index)).astype(str),
+            "previous_price": pd.to_numeric(
+                frame.get("previous_price"), errors="coerce"
+            ),
+        }
+    ).dropna(subset=["previous_price"])
+    ranked = ranked.sort_values(
+        ["previous_price", "team"],
+        ascending=[False, True],
+        kind="mergesort",
+    )
+    ranked["previous_market_rank"] = range(1, len(ranked) + 1)
+    result = pd.Series(pd.NA, index=frame.index, dtype="Int64")
+    if not ranked.empty:
+        result.loc[ranked["row_index"]] = ranked[
+            "previous_market_rank"
+        ].astype("Int64").to_numpy()
+    return result
+
+
 def add_rank_movement(prices: pd.DataFrame) -> pd.DataFrame:
     """Add previous rank and rank movement without mutating the source frame.
 
-    Positive ``rank_change`` means a country moved up the market table.
-    Previous rank is reconstructed from the previous official prices so the UI
-    can explain movement even before the backend stores an explicit rank field.
+    Positive ``rank_change`` means a country moved up the market table. An
+    explicit previous rank is used when the backend provides one. Older files
+    are handled by rebuilding a stable sequential table from previous prices.
     """
     frame = prices.copy()
     if frame.empty:
@@ -22,15 +47,13 @@ def add_rank_movement(prices: pd.DataFrame) -> pd.DataFrame:
     if "previous_market_rank" in frame.columns:
         previous_rank = pd.to_numeric(
             frame["previous_market_rank"], errors="coerce"
-        )
+        ).astype("Int64")
     elif "previous_price" in frame.columns:
-        previous_price = pd.to_numeric(frame["previous_price"], errors="coerce")
-        previous_rank = previous_price.rank(method="min", ascending=False)
-        previous_rank = previous_rank.where(previous_price.notna())
+        previous_rank = _rank_previous_prices(frame)
     else:
         previous_rank = pd.Series(pd.NA, index=frame.index, dtype="Int64")
 
-    frame["previous_market_rank"] = previous_rank.astype("Int64")
+    frame["previous_market_rank"] = previous_rank
     frame["rank_change"] = (
         frame["previous_market_rank"] - frame["market_rank"]
     ).astype("Int64")
