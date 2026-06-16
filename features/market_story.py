@@ -6,6 +6,8 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
+from features.market_movement import add_rank_movement, rank_movement_text
+from features.product_ui import render_official_data_caption
 from features.tournament_data import latest_update_matches, load_static_data
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -49,7 +51,7 @@ def _movement_sentence(change, percent) -> str:
 
 def render_market_story() -> None:
     static = load_static_data()
-    prices = static["prices"]
+    prices = add_rank_movement(static["prices"])
     history = static["history"]
     processed = static["processed_ledger"]
 
@@ -102,8 +104,21 @@ def render_market_story() -> None:
         if pd.notna(percent):
             delta_text += f" · {float(percent):+.2f}%"
     summary[2].metric("Since last model update", _movement_sentence(change, percent), delta=delta_text, delta_color="off")
-    summary[3].metric("Market rank", f"#{int(current['market_rank'])}" if pd.notna(current.get("market_rank")) else "—")
+
+    current_rank = pd.to_numeric(current.get("market_rank"), errors="coerce")
+    previous_rank = pd.to_numeric(current.get("previous_market_rank"), errors="coerce")
+    summary[3].metric(
+        "Market rank",
+        f"#{int(current_rank)}" if pd.notna(current_rank) else "—",
+        delta=rank_movement_text(
+            current_rank,
+            previous_rank,
+            include_previous=True,
+        ),
+        delta_color="off",
+    )
     st.caption(f"Published {time_text}. This comparison is against the previous model run, not necessarily yesterday.")
+    render_official_data_caption(prices)
 
     st.markdown("#### Probability drivers")
     probability_fields = [

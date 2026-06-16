@@ -12,6 +12,7 @@ from features.product_ui import (
     render_data_diagnostics,
     render_live_feed_notice,
     render_live_vs_official_note,
+    render_official_data_caption,
     render_page_guide,
 )
 
@@ -75,6 +76,7 @@ def render_page(root: Path, data: dict | None = None) -> None:
         feed_state=source.get("feed_state"),
         requests_remaining=source.get("requests_remaining"),
     )
+    render_official_data_caption(page_data["prices"])
 
     st.caption(
         "This page is a live interpretation layer. Official Elo ratings, tournament "

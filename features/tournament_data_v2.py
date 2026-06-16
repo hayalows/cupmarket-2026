@@ -6,6 +6,7 @@ import re
 import pandas as pd
 import streamlit as st
 
+from features.official_bundle import load_consistent_official_bundle
 from features.official_data import load_latest_csv
 from features.tournament_helpers import (
     actual_outcome,
@@ -71,7 +72,7 @@ def _load_local_history(
     )
 
 
-def load_market_history() -> pd.DataFrame:
+def load_market_history(current: pd.DataFrame | None = None) -> pd.DataFrame:
     manifest = (
         tuple(
             (path.name, path.stat().st_mtime_ns)
@@ -81,12 +82,16 @@ def load_market_history() -> pd.DataFrame:
         else tuple()
     )
     history = _load_local_history(str(HISTORY_DIR), manifest)
-    current = load_csv(DATA_DIR / "cupmarket_prices_latest.csv")
-    if current.empty:
+    current_frame = (
+        load_csv(DATA_DIR / "cupmarket_prices_latest.csv")
+        if current is None
+        else current.copy()
+    )
+    if current_frame.empty:
         return history
     if history.empty:
-        return current
-    combined = pd.concat([history, current], ignore_index=True, sort=False)
+        return current_frame
+    combined = pd.concat([history, current_frame], ignore_index=True, sort=False)
     required = ["team", "cupmarket_price", "generated_at_utc"]
     if not set(required).issubset(combined.columns):
         return history
@@ -99,19 +104,16 @@ def load_market_history() -> pd.DataFrame:
 
 
 def load_static_data() -> dict[str, pd.DataFrame]:
-    return {
-        "prices": load_csv(DATA_DIR / "cupmarket_prices_latest.csv"),
-        "latest_predictions": load_csv(
-            DATA_DIR / "world_cup_live_predictions_latest.csv"
-        ),
-        "prediction_ledger": load_csv(
-            STATE_DIR / "world_cup_prediction_ledger.csv"
-        ),
-        "processed_ledger": load_csv(
-            STATE_DIR / "world_cup_processed_match_ledger.csv"
-        ),
-        "history": load_market_history(),
-    }
+    bundle = load_consistent_official_bundle(
+        csv_paths={
+            "prices": DATA_DIR / "cupmarket_prices_latest.csv",
+            "latest_predictions": DATA_DIR / "world_cup_live_predictions_latest.csv",
+            "prediction_ledger": STATE_DIR / "world_cup_prediction_ledger.csv",
+            "processed_ledger": STATE_DIR / "world_cup_processed_match_ledger.csv",
+        }
+    )
+    bundle["history"] = load_market_history(bundle["prices"])
+    return bundle
 
 
 __all__ = [

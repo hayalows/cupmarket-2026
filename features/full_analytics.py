@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 from pathlib import Path
-import json
 
 import pandas as pd
 import plotly.express as px
 import streamlit as st
 
+from features.market_movement import add_rank_movement, rank_movement_text
 from features.model_performance_v2 import render_model_performance
+from features.official_data import load_latest_json
+from features.product_ui import render_official_data_caption
 from features.tournament_data import DATA_DIR, load_csv, load_market_history
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,10 +27,7 @@ def _pct(value) -> str:
 
 
 def _metadata() -> dict:
-    path = DATA_DIR / "phase5_simulation_metadata.json"
-    if not path.exists():
-        return {}
-    return json.loads(path.read_text(encoding="utf-8"))
+    return load_latest_json(DATA_DIR / "phase5_simulation_metadata.json")
 
 
 def _market(prices: pd.DataFrame) -> None:
@@ -36,18 +35,33 @@ def _market(prices: pd.DataFrame) -> None:
     if prices.empty:
         st.info("No market data is available.")
         return
+    prices = add_rank_movement(prices)
     columns = [
-        "market_rank", "team", "group", "cupmarket_price", "previous_price",
-        "price_change", "price_change_percent", "prob_reach_round_32",
-        "prob_reach_quarter_final", "prob_reach_final", "prob_champion",
+        "market_rank", "previous_market_rank", "rank_change", "team", "group",
+        "cupmarket_price", "previous_price", "price_change", "price_change_percent",
+        "prob_reach_round_32", "prob_reach_quarter_final", "prob_reach_final",
+        "prob_champion",
     ]
     display = prices[[column for column in columns if column in prices.columns]].copy()
+    if {"market_rank", "previous_market_rank"}.issubset(display.columns):
+        display["rank_change"] = display.apply(
+            lambda row: rank_movement_text(
+                row["market_rank"], row["previous_market_rank"]
+            ),
+            axis=1,
+        )
     for column in ["prob_reach_round_32", "prob_reach_quarter_final", "prob_reach_final", "prob_champion"]:
         if column in display.columns:
             display[column] = display[column].map(_pct)
+    for column in ["market_rank", "previous_market_rank"]:
+        if column in display.columns:
+            display[column] = display[column].map(
+                lambda value: f"#{int(value)}" if pd.notna(value) else "—"
+            )
     display = display.rename(columns={
-        "market_rank": "Rank", "team": "Country", "group": "Group",
-        "cupmarket_price": "Price", "previous_price": "Previous",
+        "market_rank": "Rank", "previous_market_rank": "Previous rank",
+        "rank_change": "Rank move", "team": "Country", "group": "Group",
+        "cupmarket_price": "Price", "previous_price": "Previous price",
         "price_change": "Change", "price_change_percent": "Change %",
         "prob_reach_round_32": "Reach R32", "prob_reach_quarter_final": "Reach QF",
         "prob_reach_final": "Reach final", "prob_champion": "Champion",
@@ -57,6 +71,7 @@ def _market(prices: pd.DataFrame) -> None:
     figure = px.bar(chart, x="cupmarket_price", y="team", orientation="h", title="Top 20 country values")
     figure.update_layout(template="plotly_white", height=520, margin=dict(l=16, r=16, t=52, b=16))
     st.plotly_chart(figure, use_container_width=True)
+    render_official_data_caption(prices)
 
 
 def _team(prices: pd.DataFrame, history: pd.DataFrame) -> None:
@@ -64,12 +79,22 @@ def _team(prices: pd.DataFrame, history: pd.DataFrame) -> None:
     if prices.empty:
         st.info("No team data is available.")
         return
+    prices = add_rank_movement(prices)
     teams = prices.sort_values("market_rank")["team"].astype(str).tolist()
     team = st.selectbox("Country", teams, key="analytics_team")
     row = prices[prices["team"] == team].iloc[0]
     metrics = st.columns(4)
     metrics[0].metric("Price", f"{float(row['cupmarket_price']):.2f} CM")
-    metrics[1].metric("Market rank", f"#{int(row['market_rank'])}")
+    metrics[1].metric(
+        "Market rank",
+        f"#{int(row['market_rank'])}",
+        delta=rank_movement_text(
+            row.get("market_rank"),
+            row.get("previous_market_rank"),
+            include_previous=True,
+        ),
+        delta_color="off",
+    )
     metrics[2].metric("Reach quarter-final", _pct(row.get("prob_reach_quarter_final")))
     metrics[3].metric("Champion", _pct(row.get("prob_champion")))
     path = st.columns(4)
@@ -82,6 +107,7 @@ def _team(prices: pd.DataFrame, history: pd.DataFrame) -> None:
         figure = px.line(team_history, x="generated_at_utc", y="cupmarket_price", markers=True, title=f"{team} price history")
         figure.update_layout(template="plotly_white", height=360, margin=dict(l=16, r=16, t=52, b=16))
         st.plotly_chart(figure, use_container_width=True)
+    render_official_data_caption(prices)
 
 
 def _groups(groups: pd.DataFrame) -> None:
@@ -94,6 +120,7 @@ def _groups(groups: pd.DataFrame) -> None:
     table = groups[groups["group"].astype(str) == selected].sort_values("position")
     columns = ["position", "team", "played", "wins", "draws", "losses", "goals_for", "goals_against", "goal_difference", "points"]
     st.dataframe(table[[column for column in columns if column in table.columns]], hide_index=True, use_container_width=True)
+    render_official_data_caption(groups, label="Official group table")
 
 
 def _health(metadata: dict) -> None:
@@ -104,6 +131,11 @@ def _health(metadata: dict) -> None:
     metrics[1].metric("Simulations", f"{int(metadata.get('number_of_simulations', 0)):,}")
     metrics[2].metric("Finished matches processed", int(metadata.get("finished_group_matches", 0)))
     metrics[3].metric("Generated", generated.strftime("%d %b · %H:%M UTC") if pd.notna(generated) else "—")
+    source = metadata.get("_cupmarket_source")
+    commit_sha = metadata.get("_cupmarket_commit")
+    if source:
+        commit_text = f" · snapshot {str(commit_sha)[:7]}" if commit_sha else ""
+        st.caption(f"Official model metadata source: {source}{commit_text}")
     limitations = metadata.get("limitations", [])
     if limitations:
         with st.expander("Known limitations", expanded=False):

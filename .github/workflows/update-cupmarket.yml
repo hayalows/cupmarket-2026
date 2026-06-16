@@ -2,6 +2,15 @@ name: Update CupMarket data
 
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: Choose the safe result check or an advanced full recomputation
+        required: true
+        default: check
+        type: choice
+        options:
+          - check
+          - force
   schedule:
     - cron: "*/15 * * * *"
 
@@ -23,6 +32,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Record source commit
+        run: echo "SOURCE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -51,13 +63,62 @@ jobs:
           python -m py_compile app.py
           python -m py_compile backend/update_pipeline.py
           python -m py_compile backend/run_update_pipeline.py
+          python -m py_compile features/market_movement.py
+          python -m unittest tests/test_market_movement.py
 
       - name: Run CupMarket update pipeline
         env:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
           N_SIMULATIONS: "20000"
-          FORCE_RUN: ${{ github.event_name == 'workflow_dispatch' }}
+          FORCE_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'force' }}
         run: python backend/run_update_pipeline.py
+
+      - name: Summarize update outcome
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          path = Path("backend/state/last_automation_run.json")
+          event_name = os.environ.get("GITHUB_EVENT_NAME", "unknown")
+          mode = os.environ.get("MANUAL_MODE", "scheduled")
+
+          if not path.exists():
+              heading = "FAILED"
+              detail = "The pipeline did not write a run summary. Inspect the first failed step."
+              payload = {}
+          else:
+              payload = json.loads(path.read_text(encoding="utf-8"))
+              status = str(payload.get("status", "unknown"))
+              new_results = int(payload.get("new_finished_matches", 0) or 0)
+              if status == "deferred_active_group_matches":
+                  heading = "DEFERRED"
+                  detail = payload.get("message", "An active group match blocked publication.")
+              elif new_results > 0:
+                  heading = "PUBLISHED"
+                  detail = f"{new_results} new completed match result(s) entered the official market."
+              elif status in {"no_new_finished_match", "updated"}:
+                  heading = "NO CHANGE"
+                  detail = "No new completed match required a new official market publication."
+              else:
+                  heading = status.replace("_", " ").upper()
+                  detail = payload.get("message", "Review the run summary for details.")
+
+          summary_path = Path(os.environ["GITHUB_STEP_SUMMARY"])
+          with summary_path.open("a", encoding="utf-8") as summary:
+              summary.write(f"## CupMarket update: {heading}\n\n")
+              summary.write(f"{detail}\n\n")
+              summary.write(f"- Trigger: {event_name}\n")
+              summary.write(f"- Manual mode: {mode}\n")
+              if payload.get("checked_at_utc"):
+                  summary.write(f"- Checked: {payload['checked_at_utc']}\n")
+              if payload.get("completed_at_utc"):
+                  summary.write(f"- Completed: {payload['completed_at_utc']}\n")
+          PY
+        env:
+          MANUAL_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode || 'scheduled' }}
 
       - name: Commit updated model outputs
         run: |
@@ -68,11 +129,20 @@ jobs:
 
           if git diff --cached --quiet; then
             echo "No model or market changes to commit."
-          else
-            git commit -m "Auto-update CupMarket data"
-            git pull --rebase origin main
-            git push origin main
+            exit 0
           fi
+
+          git fetch origin main
+          remote_head=$(git rev-parse origin/main)
+          if [ "$remote_head" != "$SOURCE_COMMIT" ]; then
+            echo "Main changed while this run was calculating. Outputs were not published; the next scheduled run will recalculate from the newer code."
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "> Publication deferred because main changed during the run." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          git commit -m "Auto-update CupMarket data"
+          git push origin HEAD:main
 
       - name: Notify owner when automation fails
         if: failure()
