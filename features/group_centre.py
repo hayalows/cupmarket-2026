@@ -8,21 +8,29 @@ import streamlit as st
 
 from features.live_match_data import load_matches
 from features.match_ui import combine_prediction_sources
-from features.official_data import load_latest_json
-from features.tournament_data import load_csv
+from features.official_bundle import load_consistent_official_bundle
 
 
 def load_page_data(root: Path) -> dict:
     started = time.perf_counter()
     data = root / "data"
+    state = root / "backend" / "state"
     matches, source = load_matches(data / "world_cup_2026_matches_latest.csv")
-    latest = load_csv(data / "world_cup_live_predictions_latest.csv")
-    ledger = load_csv(
-        root / "backend" / "state" / "world_cup_prediction_ledger.csv"
+    official = load_consistent_official_bundle(
+        csv_paths={
+            "latest_predictions": data / "world_cup_live_predictions_latest.csv",
+            "prediction_ledger": state / "world_cup_prediction_ledger.csv",
+            "prices": data / "cupmarket_prices_latest.csv",
+        },
+        json_paths={
+            "metadata": data / "phase5_simulation_metadata.json",
+        },
     )
-    predictions = combine_prediction_sources(latest, ledger)
-    prices = load_csv(data / "cupmarket_prices_latest.csv")
-    metadata = load_latest_json(data / "phase5_simulation_metadata.json")
+    predictions = combine_prediction_sources(
+        official["latest_predictions"],
+        official["prediction_ledger"],
+    )
+    prices = official["prices"]
     strength = (
         dict(zip(prices["team"], prices["cupmarket_price"]))
         if not prices.empty else {}
@@ -32,7 +40,7 @@ def load_page_data(root: Path) -> dict:
         "source": source,
         "predictions": predictions,
         "prices": prices,
-        "metadata": metadata,
+        "metadata": official["metadata"],
         "strength": strength,
         "load_time_ms": (time.perf_counter() - started) * 1000,
     }
