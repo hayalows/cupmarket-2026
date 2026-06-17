@@ -16,3 +16,4 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537370,2026-06-15 22:00:00+00:00,GROUP_STAGE,Saudi Arabia,Uruguay,1,1,2026-06-16 00:18:17.368527+00:00,phase7_automated_group_stage_v1
 537364,2026-06-16 01:00:00+00:00,GROUP_STAGE,Iran,New Zealand,2,2,2026-06-16 06:09:59.766846+00:00,phase7_automated_group_stage_v1
 537391,2026-06-16 19:00:00+00:00,GROUP_STAGE,France,Senegal,3,1,2026-06-16 21:37:45.262079+00:00,phase7_automated_group_stage_v1
+537392,2026-06-16 22:00:00+00:00,GROUP_STAGE,Iraq,Norway,1,4,2026-06-17 00:11:12.915202+00:00,phase7_automated_group_stage_v1
