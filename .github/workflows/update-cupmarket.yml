@@ -58,6 +58,10 @@ jobs:
           test -f backend/bracket_lock_store.py
           test -f backend/bracket_lock_execution.py
           test -f backend/run_bracket_lock.py
+          test -f backend/knockout_stage.py
+          test -f backend/knockout_stage_data.py
+          test -f backend/knockout_stage_simulation.py
+          test -f backend/run_post_group_pipeline.py
           test -f backend/state/models/phase3_home_goal_model.joblib
           test -f backend/state/models/phase3_away_goal_model.joblib
           test -f backend/state/live_elo_ratings.csv
@@ -69,6 +73,10 @@ jobs:
           python -m py_compile backend/bracket_lock_store.py
           python -m py_compile backend/bracket_lock_execution.py
           python -m py_compile backend/run_bracket_lock.py
+          python -m py_compile backend/knockout_stage.py
+          python -m py_compile backend/knockout_stage_data.py
+          python -m py_compile backend/knockout_stage_simulation.py
+          python -m py_compile backend/run_post_group_pipeline.py
           python -m py_compile features/market_movement.py
           python -m unittest tests/test_market_movement.py
 
@@ -79,11 +87,13 @@ jobs:
           FORCE_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'force' }}
         run: python backend/run_update_pipeline.py
 
-      - name: Retry exact Round-of-32 bracket lock
+      - name: Run post-group bracket and knockout processor
         env:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
           ENABLE_EXACT_BRACKET_LOCK: "true"
-        run: python backend/run_bracket_lock.py
+          KNOCKOUT_SIMULATIONS: "20000"
+          FORCE_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'force' }}
+        run: python backend/run_post_group_pipeline.py
 
       - name: Summarize update outcome
         if: always()
@@ -105,9 +115,12 @@ jobs:
               payload = json.loads(path.read_text(encoding="utf-8"))
               status = str(payload.get("status", "unknown"))
               new_results = int(payload.get("new_finished_matches", 0) or 0)
-              if status == "deferred_active_group_matches":
+              if status in {
+                  "deferred_active_group_matches",
+                  "deferred_active_knockout_matches",
+              }:
                   heading = "DEFERRED"
-                  detail = payload.get("message", "An active group match blocked publication.")
+                  detail = payload.get("message", "An active match blocked publication.")
               elif new_results > 0:
                   heading = "PUBLISHED"
                   detail = f"{new_results} new completed match result(s) entered the official market."
@@ -124,6 +137,8 @@ jobs:
               summary.write(f"{detail}\n\n")
               summary.write(f"- Trigger: {event_name}\n")
               summary.write(f"- Manual mode: {mode}\n")
+              if payload.get("pipeline_phase"):
+                  summary.write(f"- Pipeline phase: {payload['pipeline_phase']}\n")
               if payload.get("checked_at_utc"):
                   summary.write(f"- Checked: {payload['checked_at_utc']}\n")
               if payload.get("completed_at_utc"):
