@@ -55,6 +55,9 @@ jobs:
           test -f data/current_group_tables.csv
           test -f backend/update_pipeline.py
           test -f backend/run_update_pipeline.py
+          test -f backend/bracket_lock_store.py
+          test -f backend/bracket_lock_execution.py
+          test -f backend/run_bracket_lock.py
           test -f backend/state/models/phase3_home_goal_model.joblib
           test -f backend/state/models/phase3_away_goal_model.joblib
           test -f backend/state/live_elo_ratings.csv
@@ -63,6 +66,9 @@ jobs:
           python -m py_compile app.py
           python -m py_compile backend/update_pipeline.py
           python -m py_compile backend/run_update_pipeline.py
+          python -m py_compile backend/bracket_lock_store.py
+          python -m py_compile backend/bracket_lock_execution.py
+          python -m py_compile backend/run_bracket_lock.py
           python -m py_compile features/market_movement.py
           python -m unittest tests/test_market_movement.py
 
@@ -72,6 +78,12 @@ jobs:
           N_SIMULATIONS: "20000"
           FORCE_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'force' }}
         run: python backend/run_update_pipeline.py
+
+      - name: Retry exact Round-of-32 bracket lock
+        env:
+          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+          ENABLE_EXACT_BRACKET_LOCK: "true"
+        run: python backend/run_bracket_lock.py
 
       - name: Summarize update outcome
         if: always()
