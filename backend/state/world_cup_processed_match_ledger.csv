@@ -21,3 +21,4 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537398,2026-06-17 04:00:00+00:00,GROUP_STAGE,Austria,Jordan,3,1,2026-06-17 06:17:16.750600+00:00,phase7_automated_group_stage_v1
 537403,2026-06-17 17:00:00+00:00,GROUP_STAGE,Portugal,Congo DR,1,1,2026-06-17 19:38:32.671737+00:00,phase7_automated_group_stage_v1
 537409,2026-06-17 20:00:00+00:00,GROUP_STAGE,England,Croatia,4,2,2026-06-17 22:29:07.424882+00:00,phase7_automated_group_stage_v1
+537410,2026-06-17 23:00:00+00:00,GROUP_STAGE,Ghana,Panama,1,0,2026-06-18 01:17:34.850886+00:00,phase7_automated_group_stage_v1
