@@ -57,26 +57,26 @@ def run() -> dict:
     )
     print("Exact bracket lock:", json.dumps(lock_result, sort_keys=True))
     if lock_result.get("status") not in {"locked", "already_locked"}:
-        result = {
+        return {
             "status": "waiting_for_exact_bracket",
             "bracket_lock": lock_result,
             "checked_at_utc": started_at.isoformat(),
         }
-        knockout_stage.atomic_json(result, STATE_PATH)
-        return result
 
     active = knockout_stage.active_knockout_matches(matches)
     if not active.empty:
         result = {
             "status": "deferred_active_knockout_matches",
+            "pipeline_phase": "knockout_stage",
             "checked_at_utc": started_at.isoformat(),
+            "new_finished_matches": 0,
             "active_match_ids": active["match_id"].astype(int).tolist(),
             "message": (
                 "Official knockout prices were not changed while a knockout match "
                 "was active. The next scheduled run will retry after full time."
             ),
         }
-        knockout_stage.atomic_json(result, STATE_PATH)
+        knockout_stage.atomic_json(result, update_pipeline.RUN_SUMMARY_PATH)
         print(result["message"])
         return result
 
@@ -133,15 +133,13 @@ def run() -> dict:
         and previous_state.get("input_fingerprint") == fingerprint
         and required_outputs_exist
     ):
-        result = {
+        print("No knockout result or fixture change required recomputation.")
+        return {
             "status": "no_knockout_change",
             "checked_at_utc": started_at.isoformat(),
             "input_fingerprint": fingerprint,
             "bracket_lock": lock_result,
         }
-        knockout_stage.atomic_json(result, STATE_PATH)
-        print("No knockout result or fixture change required recomputation.")
-        return result
 
     live_predictions, prediction_ledger_updated = (
         knockout_stage.generate_knockout_predictions(
