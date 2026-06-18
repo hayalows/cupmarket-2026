@@ -41,6 +41,12 @@ def _go_to_market(team: str) -> None:
     st.switch_page("pages/5_Market_Story.py")
 
 
+def _go_to_path(team: str | None = None) -> None:
+    if team:
+        st.session_state["cupmarket_path_requested_team"] = team
+    st.switch_page("pages/7_Tournament_Path.py")
+
+
 def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: dict) -> None:
     _inject_styles()
     prices = add_rank_movement(prices)
@@ -135,6 +141,17 @@ def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: di
                 st.caption("Since last model update · " + (generated.strftime("%d %b · %H:%M UTC") if pd.notna(generated) else "time unavailable"))
                 if st.button("Understand the move", key="pulse_market", use_container_width=True):
                     _go_to_market(str(leader["team"]))
+
+    with st.container(border=True):
+        path_team = str(leader.get("team")) if not leader.empty else None
+        st.caption("TOURNAMENT PATH")
+        st.markdown("#### From current value to the next opponent")
+        st.write(
+            "Open projected or confirmed opponent paths, the official knockout bracket, "
+            "completed knockout results and the market reaction to each event."
+        )
+        if st.button("Open Tournament Path", key="pulse_path", use_container_width=True):
+            _go_to_path(path_team)
 
     st.markdown("### What changed recently")
     recent, movers_column = st.columns(2)
