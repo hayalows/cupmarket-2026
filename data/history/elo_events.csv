@@ -1,0 +1,3 @@
+match_id,team,opponent,result,goals_for,goals_against,elo_before,elo_after,elo_change,processed_at_utc,model_version
+537329,Czechia,South Africa,draw,1,1,1756.7372282818046,1748.0321792128898,-8.705049068914779,2026-06-18T18:17:55.224279+00:00,phase7_automated_group_stage_v1
+537329,South Africa,Czechia,draw,1,1,1652.9408368061584,1661.6458858750732,8.705049068914779,2026-06-18T18:17:55.224279+00:00,phase7_automated_group_stage_v1

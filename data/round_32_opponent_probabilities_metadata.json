@@ -1,0 +1,13 @@
+{
+  "status": "generated",
+  "generated_at_utc": "2026-06-18T18:17:55.224279+00:00",
+  "number_of_simulations": 20000,
+  "random_seed": 20261022,
+  "teams": 48,
+  "opponent_rows": 1198,
+  "fixture_status_counts": {
+    "projected": 48
+  },
+  "bracket_mode": "provisional_constraint_assignment",
+  "note": "Third-place opponent assignments remain provisional while the main bracket mode is provisional_constraint_assignment."
+}
