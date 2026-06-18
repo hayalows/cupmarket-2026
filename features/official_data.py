@@ -29,6 +29,18 @@ REMOTE_DATA_FILES = {
     "world_cup_live_predictions_latest.csv": (
         "data/world_cup_live_predictions_latest.csv"
     ),
+    "round_32_opponent_probabilities_latest.csv": (
+        "data/round_32_opponent_probabilities_latest.csv"
+    ),
+    "round_32_path_status_latest.csv": (
+        "data/round_32_path_status_latest.csv"
+    ),
+    "official_round_32_bracket_locked.csv": (
+        "data/official_round_32_bracket_locked.csv"
+    ),
+    "knockout_progress_latest.csv": "data/knockout_progress_latest.csv",
+    "market_movements_latest.csv": "data/market_movements_latest.csv",
+    "team_snapshots.csv": "data/history/team_snapshots.csv",
     "world_cup_prediction_ledger.csv": (
         "backend/state/world_cup_prediction_ledger.csv"
     ),
@@ -42,6 +54,12 @@ REMOTE_DATA_FILES = {
     "phase5_simulation_metadata.json": (
         "data/phase5_simulation_metadata.json"
     ),
+    "round_32_opponent_probabilities_metadata.json": (
+        "data/round_32_opponent_probabilities_metadata.json"
+    ),
+    "official_round_32_bracket_lock.json": (
+        "data/official_round_32_bracket_lock.json"
+    ),
 }
 DATE_COLUMNS = (
     "utc_date",
@@ -49,6 +67,8 @@ DATE_COLUMNS = (
     "processed_at_utc",
     "last_updated",
     "prediction_created_at",
+    "snapshot_id",
+    "locked_at_utc",
 )
 
 

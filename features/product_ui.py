@@ -57,6 +57,7 @@ def render_specialist_sidebar(active_page: str) -> None:
         st.page_link("pages/1_Match_Intelligence.py", label="Match Intelligence", icon="🎯")
         st.page_link("pages/2_Qualification_Lab.py", label="Qualification Lab", icon="🧭")
         st.page_link("pages/3_Live_Group_Centre.py", label="Live Group Centre", icon="📋")
+        st.page_link("pages/7_Tournament_Path.py", label="Tournament Path", icon="🏆")
         st.page_link("pages/5_Market_Story.py", label="Market Story", icon="📈")
         st.page_link("pages/6_Analytics_Dashboard.py", label="Full Analytics", icon="📊")
         st.markdown('<div class="cm-side-label">About this build</div>', unsafe_allow_html=True)
