@@ -10,9 +10,10 @@ import numpy as np
 import pandas as pd
 
 try:
-    from . import history_store, update_pipeline
+    from . import history_store, market_impact_store, update_pipeline
 except ImportError:
     import history_store
+    import market_impact_store
     import update_pipeline
 
 
@@ -171,6 +172,18 @@ def _archive_history_safely() -> None:
     print("History archive:", json.dumps(result, sort_keys=True))
 
 
+def _archive_market_impact_safely() -> None:
+    """Archive event movement separately from the live price columns."""
+    try:
+        result = market_impact_store.archive_market_movements(
+            update_pipeline.REPO_ROOT
+        )
+    except Exception as error:  # The live market must remain available.
+        print(f"Market impact warning: {type(error).__name__}: {error}")
+        return
+    print("Market impact archive:", json.dumps(result, sort_keys=True))
+
+
 def run_guarded_pipeline() -> bool:
     """Delay official publication while a group-stage match is active."""
     world_cup, api_metadata = update_pipeline.fetch_world_cup_matches()
@@ -190,6 +203,7 @@ def run_guarded_pipeline() -> bool:
     update_pipeline.main()
     _restore_meaningful_market_move(price_anchor)
     _archive_history_safely()
+    _archive_market_impact_safely()
     return True
 
 
