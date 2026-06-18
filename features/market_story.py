@@ -120,6 +120,14 @@ def render_market_story() -> None:
     st.caption(f"Published {time_text}. This comparison is against the previous model run, not necessarily yesterday.")
     render_official_data_caption(prices)
 
+    if st.button(
+        f"Open {team} tournament path",
+        key="market_story_open_path",
+        use_container_width=True,
+    ):
+        st.session_state["cupmarket_path_requested_team"] = team
+        st.switch_page("pages/7_Tournament_Path.py")
+
     st.markdown("#### Probability drivers")
     probability_fields = [
         ("Reach Round of 32", "prob_reach_round_32"),
