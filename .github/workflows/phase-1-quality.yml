@@ -42,4 +42,10 @@ jobs:
           python -m py_compile features/market_movement.py
 
       - name: Run unit and output contract tests
-        run: python -m unittest discover -s tests -p "test_*.py" -v
+        shell: bash
+        run: |
+          set +e
+          python -m unittest discover -s tests -p "test_*.py" -v > test-output.log 2>&1
+          status=$?
+          tail -n 120 test-output.log
+          exit $status
