@@ -1,0 +1,60 @@
+name: CupMarket quality checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - phase-1-safety-tests
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cupmarket-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install test dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Compile application and backend
+        run: |
+          python -m py_compile app.py
+          python -m py_compile backend/output_contracts.py
+          python -m py_compile backend/update_pipeline.py
+          python -m py_compile backend/run_update_pipeline.py
+          python -m py_compile features/market_movement.py
+
+      - name: Run unit and output contract tests
+        id: contract_tests
+        shell: bash
+        run: |
+          set +e
+          python -m unittest discover -s tests -p "test_*.py" -v > test-output.log 2>&1
+          status=$?
+          cat test-output.log
+          exit $status
+
+      - name: Upload test output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-1-test-output
+          path: test-output.log
+          if-no-files-found: error
