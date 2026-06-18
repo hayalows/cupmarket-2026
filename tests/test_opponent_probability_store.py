@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from types import SimpleNamespace
+from pathlib import Path
 import unittest
 
 import pandas as pd
@@ -13,6 +13,7 @@ from backend.opponent_probability_store import (
 
 class FakePipeline:
     INITIAL_RATING = 1500.0
+    CURRENT_TABLES_OUTPUT_PATH = Path("/tmp/cupmarket-nonexistent-current-tables.csv")
     FIXED_R32 = {
         73: ("2A", "2B"),
         75: ("1F", "2C"),
