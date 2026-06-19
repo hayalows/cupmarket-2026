@@ -27,3 +27,4 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537335,2026-06-18 19:00:00+00:00,GROUP_STAGE,Switzerland,Bosnia-Herzegovina,4,1,2026-06-18 21:27:31.750234+00:00,phase7_automated_group_stage_v1
 537336,2026-06-18 22:00:00+00:00,GROUP_STAGE,Canada,Qatar,6,0,2026-06-19 00:15:30.523438+00:00,phase7_automated_group_stage_v1
 537330,2026-06-19 01:00:00+00:00,GROUP_STAGE,Mexico,South Korea,1,0,2026-06-19 05:29:59.662719+00:00,phase7_automated_group_stage_v1
+537348,2026-06-19 19:00:00+00:00,GROUP_STAGE,United States,Australia,2,0,2026-06-19 21:17:28.252415+00:00,phase7_automated_group_stage_v1
