@@ -1,10 +1,10 @@
 {
   "status": "generated",
-  "generated_at_utc": "2026-06-19T00:15:47.653857+00:00",
+  "generated_at_utc": "2026-06-19T05:30:17.719743+00:00",
   "number_of_simulations": 20000,
   "random_seed": 20261023,
   "teams": 48,
-  "opponent_rows": 1098,
+  "opponent_rows": 1040,
   "fixture_status_counts": {
     "projected": 48
   },
