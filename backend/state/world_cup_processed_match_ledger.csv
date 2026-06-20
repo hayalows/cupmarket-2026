@@ -31,3 +31,4 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537342,2026-06-19 22:00:00+00:00,GROUP_STAGE,Scotland,Morocco,0,1,2026-06-20 06:04:32.348958+00:00,phase7_automated_group_stage_v1
 537341,2026-06-20 00:30:00+00:00,GROUP_STAGE,Brazil,Haiti,3,0,2026-06-20 06:04:32.348987+00:00,phase7_automated_group_stage_v1
 537347,2026-06-20 03:00:00+00:00,GROUP_STAGE,Turkey,Paraguay,0,1,2026-06-20 06:04:32.349001+00:00,phase7_automated_group_stage_v1
+537359,2026-06-20 17:00:00+00:00,GROUP_STAGE,Netherlands,Sweden,5,1,2026-06-20 19:46:38.826717+00:00,phase7_automated_group_stage_v1
