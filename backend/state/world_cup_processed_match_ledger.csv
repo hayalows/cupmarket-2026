@@ -36,3 +36,4 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537354,2026-06-21 00:00:00+00:00,GROUP_STAGE,Ecuador,Curaçao,0,0,2026-06-21 07:28:11.223366+00:00,phase7_automated_group_stage_v1
 537360,2026-06-21 04:00:00+00:00,GROUP_STAGE,Tunisia,Japan,0,4,2026-06-21 07:28:11.223392+00:00,phase7_automated_group_stage_v1
 537371,2026-06-21 16:00:00+00:00,GROUP_STAGE,Spain,Saudi Arabia,5,0,2026-06-21 18:07:48.099567+00:00,phase7_automated_group_stage_v1
+537365,2026-06-21 19:00:00+00:00,GROUP_STAGE,Belgium,Iran,0,0,2026-06-21 21:43:25.962057+00:00,phase7_automated_group_stage_v1
