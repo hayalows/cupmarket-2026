@@ -1,14 +1,14 @@
 {
   "model_version": "phase7_automated_group_stage_v1",
   "number_of_simulations": 20000,
-  "random_seed": 20260623,
+  "random_seed": 20260624,
   "bracket_mode": "provisional_constraint_assignment",
-  "finished_group_matches": 46,
-  "remaining_group_matches": 26,
-  "simulation_seconds": 13.530119895935059,
-  "pair_xg_cache_size": 1477,
-  "elo_fallback_uses": 3858,
-  "average_valid_third_place_assignments": 22.0376,
+  "finished_group_matches": 47,
+  "remaining_group_matches": 25,
+  "simulation_seconds": 13.097763538360596,
+  "pair_xg_cache_size": 1399,
+  "elo_fallback_uses": 3796,
+  "average_valid_third_place_assignments": 18.8417,
   "stage_probability_totals": {
     "round_32_total": 32.0,
     "round_16_total": 16.0,
@@ -32,12 +32,12 @@
     "Before the Round of 32 is populated, third-place teams are sampled across valid official slot constraints.",
     "Extra-time and penalties use transparent approximation rules."
   ],
-  "generated_at_utc": "2026-06-23T22:18:38.213071+00:00",
-  "new_finished_matches_processed": 2,
+  "generated_at_utc": "2026-06-24T01:27:09.148840+00:00",
+  "new_finished_matches_processed": 1,
   "api": {
     "http_status": 200,
     "matches_returned": 104,
-    "requests_remaining": "8",
-    "request_counter_reset": "29"
+    "requests_remaining": "9",
+    "request_counter_reset": "60"
   }
 }
