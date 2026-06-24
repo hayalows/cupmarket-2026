@@ -47,3 +47,5 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537411,2026-06-23 20:00:00+00:00,GROUP_STAGE,England,Ghana,0,0,2026-06-23 22:18:24.485421+00:00,phase7_automated_group_stage_v1
 537412,2026-06-23 23:00:00+00:00,GROUP_STAGE,Panama,Croatia,0,1,2026-06-24 01:26:55.857688+00:00,phase7_automated_group_stage_v1
 537406,2026-06-24 02:00:00+00:00,GROUP_STAGE,Colombia,Congo DR,1,0,2026-06-24 05:46:07.004463+00:00,phase7_automated_group_stage_v1
+537337,2026-06-24 19:00:00+00:00,GROUP_STAGE,Switzerland,Canada,2,1,2026-06-24 21:55:21.112438+00:00,phase7_automated_group_stage_v1
+537338,2026-06-24 19:00:00+00:00,GROUP_STAGE,Bosnia-Herzegovina,Qatar,3,1,2026-06-24 21:55:21.112464+00:00,phase7_automated_group_stage_v1
