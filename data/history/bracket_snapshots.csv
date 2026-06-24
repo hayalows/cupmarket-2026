@@ -815,3 +815,51 @@ snapshot_id,team,group,position,points,goal_difference,prob_finish_1st_group,pro
 2026-06-24T01:27:09.148840+00:00,Panama,L,4,0,-2,0.0,0.0,0.0,0.0,0.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537412
 2026-06-24T01:27:09.148840+00:00,Tunisia,F,4,0,-8,0.0,0.0,0.0,0.0,0.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537412
 2026-06-24T01:27:09.148840+00:00,Turkey,D,4,0,-3,0.0,0.0,0.0,0.0,0.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537412
+2026-06-24T05:46:21.647809+00:00,Argentina,J,1,6,5,1.0,0.0,0.0,0.0,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Spain,H,1,4,4,0.85905,0.0965,0.04445,0.04445,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,France,I,1,6,5,0.7828,0.2172,0.0,0.0,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,England,L,1,4,2,0.7134,0.28535,0.00125,0.00125,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Colombia,K,1,6,3,0.68155,0.31845,0.0,0.0,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Portugal,K,2,4,5,0.31845,0.67905,0.0025,0.0025,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Brazil,C,1,4,3,0.5615,0.25895,0.17955,0.17955,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Mexico,A,1,6,3,1.0,0.0,0.0,0.0,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,United States,D,1,6,5,1.0,0.0,0.0,0.0,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Netherlands,F,1,4,4,0.63735,0.3592,0.00345,0.00345,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Norway,I,2,6,4,0.2172,0.7828,0.0,0.0,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Japan,F,2,4,4,0.3172,0.4991,0.1837,0.1837,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Morocco,C,2,4,1,0.384,0.59765,0.01835,0.01835,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Germany,E,1,6,7,1.0,0.0,0.0,0.0,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Belgium,G,3,2,0,0.15845,0.51725,0.1668,0.14105,0.81675,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Switzerland,B,2,4,3,0.31835,0.68165,0.0,0.0,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Canada,B,1,4,6,0.68165,0.31825,0.0001,0.0001,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Croatia,L,3,3,-1,0.20985,0.41855,0.3716,0.34925,0.97765,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Australia,D,2,3,0,0.0,0.672,0.328,0.28335,0.95535,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Uruguay,H,2,2,0,0.1234,0.0749,0.6843,0.2165,0.4148,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Austria,J,2,3,0,0.0,0.67255,0.32745,0.2877,0.96025,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,South Korea,A,2,3,0,0.0,0.822,0.15745,0.1291,0.9511,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Iran,G,2,2,0,0.2774,0.15765,0.50855,0.2698,0.70485,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Scotland,C,3,3,0,0.0545,0.1434,0.8021,0.7025,0.9004,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Paraguay,D,3,3,-2,0.0,0.328,0.672,0.5273,0.8553,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Egypt,G,1,4,2,0.56415,0.2109,0.22495,0.22495,1.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Algeria,J,3,3,-2,0.0,0.32745,0.67255,0.50895,0.8364,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Ecuador,E,3,1,-1,0.0,0.0437,0.70695,0.1936,0.2373,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Ivory Coast,E,2,3,0,0.0,0.81475,0.1415,0.1186,0.93335,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Senegal,I,3,0,-3,0.0,0.0,0.8101,0.5412,0.5412,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Sweden,F,3,3,0,0.04545,0.1417,0.81285,0.73915,0.9263,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Congo DR,K,3,1,-1,0.0,0.0025,0.64875,0.3826,0.3851,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Ghana,L,2,4,1,0.07675,0.2961,0.62715,0.62695,0.9998,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,South Africa,A,4,1,-2,0.0,0.1595,0.2527,0.01965,0.17915,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Czechia,A,3,1,-1,0.0,0.0185,0.58985,0.11055,0.12905,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Cape Verde Islands,H,3,2,0,0.01755,0.49025,0.2103,0.1049,0.6127,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Saudi Arabia,H,4,1,-4,0.0,0.33835,0.06095,0.0545,0.39285,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Bosnia-Herzegovina,B,3,1,-3,0.0,0.0001,0.748,0.46715,0.46725,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Uzbekistan,K,4,0,-7,0.0,0.0,0.34875,0.11305,0.11305,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,New Zealand,G,4,1,-2,0.0,0.1142,0.0997,0.07105,0.18525,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Iraq,I,4,0,-6,0.0,0.0,0.1899,0.08805,0.08805,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Qatar,B,4,1,-6,0.0,0.0,0.2519,0.25155,0.25155,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Curaçao,E,4,1,-6,0.0,0.14155,0.15155,0.04365,0.1852,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Haiti,C,4,0,-4,0.0,0.0,0.0,0.0,0.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Jordan,J,4,0,-3,0.0,0.0,0.0,0.0,0.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Panama,L,4,0,-2,0.0,0.0,0.0,0.0,0.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Tunisia,F,4,0,-8,0.0,0.0,0.0,0.0,0.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
+2026-06-24T05:46:21.647809+00:00,Turkey,D,4,0,-3,0.0,0.0,0.0,0.0,0.0,provisional_constraint_assignment,phase7_automated_group_stage_v1,537406
