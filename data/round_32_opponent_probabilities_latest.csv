@@ -1,447 +1,405 @@
 team,team_group,opponent,opponent_group,pairing_count,probability_unconditional,probability_given_qualification,qualification_count,number_of_simulations,generated_at_utc,model_version,bracket_mode
-Algeria,J,Spain,H,5676,0.2838,0.35011102886750556,16212,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Algeria,J,Egypt,G,2413,0.12065,0.14884036516160867,16212,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Algeria,J,England,L,1847,0.09235,0.11392795460152973,16212,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Algeria,J,Switzerland,B,1816,0.0908,0.11201579077226746,16212,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Algeria,J,Iran,G,1181,0.05905,0.0728472736244757,16212,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Algeria,J,Uruguay,H,823,0.04115,0.05076486553170491,16212,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Algeria,J,United States,D,789,0.03945,0.048667653589933385,16212,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Algeria,J,Belgium,G,702,0.0351,0.04330125832716506,16212,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Algeria,J,Croatia,L,559,0.02795,0.0344806316308907,16212,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Algeria,J,Ghana,L,219,0.01095,0.013508512213175426,16212,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Algeria,J,Cape Verde Islands,H,101,0.00505,0.006229953121144831,16212,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Algeria,J,Colombia,K,53,0.00265,0.0032691833209967927,16212,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Algeria,J,Portugal,K,33,0.00165,0.0020355292376017763,16212,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Argentina,J,Cape Verde Islands,H,9931,0.49655,0.49655,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Argentina,J,Saudi Arabia,H,6690,0.3345,0.3345,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Argentina,J,Spain,H,1958,0.0979,0.0979,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Argentina,J,Uruguay,H,1421,0.07105,0.07105,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Australia,D,Belgium,G,6929,0.34645,0.3661294583883752,18925,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Australia,D,Egypt,G,2882,0.1441,0.15228533685601056,18925,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Australia,D,Germany,E,2419,0.12095,0.12782034346103038,18925,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Australia,D,France,I,2303,0.11515,0.12169088507265521,18925,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Australia,D,Iran,G,2125,0.10625,0.11228533685601057,18925,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Australia,D,New Zealand,G,1501,0.07505,0.07931307793923381,18925,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Australia,D,Norway,I,659,0.03295,0.03482166446499339,18925,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Australia,D,Colombia,K,79,0.00395,0.004174372523117569,18925,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Australia,D,Portugal,K,28,0.0014,0.0014795244385733158,18925,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Austria,J,Spain,H,11480,0.574,0.6041787274353981,19001,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Austria,J,Uruguay,H,1703,0.08515,0.08962686174411873,19001,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Austria,J,Egypt,G,1364,0.0682,0.07178569548971107,19001,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Austria,J,England,L,1119,0.05595,0.058891637282248305,19001,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Austria,J,Switzerland,B,1045,0.05225,0.05499710541550445,19001,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Austria,J,Iran,G,720,0.036,0.037892742487237514,19001,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Austria,J,United States,D,466,0.0233,0.02452502499868428,19001,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Austria,J,Belgium,G,393,0.01965,0.020683121940950476,19001,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Austria,J,Croatia,L,305,0.01525,0.016051786748065892,19001,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Austria,J,Cape Verde Islands,H,217,0.01085,0.011420451555181307,19001,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Austria,J,Ghana,L,127,0.00635,0.006683858744276617,19001,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Austria,J,Colombia,K,40,0.002,0.002105152360402084,19001,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Austria,J,Portugal,K,22,0.0011,0.0011578337982211463,19001,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Australia,D,6929,0.34645,0.4226030739204684,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Paraguay,D,3471,0.17355,0.21169797511588193,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Switzerland,B,1968,0.0984,0.12002927543303245,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Algeria,J,702,0.0351,0.04281532080995365,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,France,I,621,0.03105,0.03787509148572823,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Senegal,I,621,0.03105,0.03787509148572823,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Austria,J,393,0.01965,0.02396926079531593,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,South Korea,A,309,0.01545,0.018846060014637716,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Czechia,A,253,0.01265,0.015430592827518907,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Uruguay,H,232,0.0116,0.014149792632349353,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Ecuador,E,203,0.01015,0.012381068553305685,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Norway,I,196,0.0098,0.011954135154915833,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Cape Verde Islands,H,133,0.00665,0.008111734569407173,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Ivory Coast,E,103,0.00515,0.006282020004879239,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Saudi Arabia,H,70,0.0035,0.004269333983898511,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Iraq,I,58,0.0029,0.0035374481580873383,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Spain,H,55,0.00275,0.003354476701634545,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,South Africa,A,43,0.00215,0.0026225908758233715,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,Curaçao,E,36,0.0018,0.0021956574774335204,16396,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Bosnia-Herzegovina,B,United States,D,14354,0.7177,0.7177,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Bosnia-Herzegovina,B,Germany,E,5646,0.2823,0.2823,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Brazil,C,Netherlands,F,7296,0.3648,0.3648,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Brazil,C,Japan,F,7274,0.3637,0.3637,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Brazil,C,Mexico,A,2087,0.10435,0.10435,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Brazil,C,Sweden,F,1780,0.089,0.089,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Brazil,C,Germany,E,769,0.03845,0.03845,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Brazil,C,France,I,620,0.031,0.031,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Brazil,C,Norway,I,174,0.0087,0.0087,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Canada,B,South Korea,A,16429,0.82145,0.82145,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Canada,B,South Africa,A,3211,0.16055,0.16055,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Canada,B,Czechia,A,360,0.018,0.018,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Cape Verde Islands,H,Argentina,J,9931,0.49655,0.8122852936365124,12226,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Cape Verde Islands,H,Mexico,A,420,0.021,0.034353018158023885,12226,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Cape Verde Islands,H,Egypt,G,402,0.0201,0.032880745951251435,12226,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Cape Verde Islands,H,England,L,394,0.0197,0.03222640274824145,12226,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Cape Verde Islands,H,Iran,G,223,0.01115,0.018239816783903157,12226,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Cape Verde Islands,H,Austria,J,217,0.01085,0.017749059381645674,12226,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Cape Verde Islands,H,France,I,188,0.0094,0.0153770652707345,12226,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Cape Verde Islands,H,Belgium,G,133,0.00665,0.010878455750040896,12226,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Cape Verde Islands,H,Croatia,L,109,0.00545,0.00891542614101096,12226,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Cape Verde Islands,H,Algeria,J,101,0.00505,0.008261082938000982,12226,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Cape Verde Islands,H,Norway,I,64,0.0032,0.00523474562407983,12226,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Cape Verde Islands,H,Ghana,L,44,0.0022,0.003598887616554883,12226,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Colombia,K,Ghana,L,10425,0.52125,0.52125,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Colombia,K,Croatia,L,7379,0.36895,0.36895,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Colombia,K,England,L,1802,0.0901,0.0901,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Colombia,K,Paraguay,D,95,0.00475,0.00475,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Colombia,K,Australia,D,79,0.00395,0.00395,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Colombia,K,Senegal,I,72,0.0036,0.0036,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Colombia,K,Algeria,J,53,0.00265,0.00265,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Colombia,K,Austria,J,40,0.002,0.002,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Colombia,K,Ecuador,E,39,0.00195,0.00195,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Colombia,K,Ivory Coast,E,10,0.0005,0.0005,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Colombia,K,Curaçao,E,6,0.0003,0.0003,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Congo DR,K,England,L,5308,0.2654,0.7101953438587102,7474,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Congo DR,K,Croatia,L,1581,0.07905,0.21153331549371154,7474,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Congo DR,K,Ghana,L,585,0.02925,0.07827134064757828,7474,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Portugal,K,7903,0.39515,0.40678402305950173,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Colombia,K,7379,0.36895,0.3798126415482808,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Congo DR,K,1581,0.07905,0.08137739345274861,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Algeria,J,559,0.02795,0.028772905085443688,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Senegal,I,512,0.0256,0.02635371628577311,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Uzbekistan,K,334,0.0167,0.0171916821082973,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Austria,J,305,0.01525,0.015698991146798437,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Uruguay,H,221,0.01105,0.011375334568663784,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Ecuador,E,170,0.0085,0.008750257360510603,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Ivory Coast,E,111,0.00555,0.005713403335392217,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Cape Verde Islands,H,109,0.00545,0.0056104591311509164,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Iraq,I,88,0.0044,0.004529544986617253,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Saudi Arabia,H,58,0.0029,0.002985381922997735,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Spain,H,50,0.0025,0.0025736051060325305,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,Curaçao,E,48,0.0024,0.0024706609017912293,19428,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Curaçao,E,Norway,I,2111,0.10555,0.5839557399723375,3615,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Curaçao,E,France,I,641,0.03205,0.1773167358229599,3615,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Curaçao,E,Mexico,A,171,0.00855,0.04730290456431535,3615,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Curaçao,E,Switzerland,B,158,0.0079,0.04370677731673582,3615,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Curaçao,E,Egypt,G,144,0.0072,0.03983402489626556,3615,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Curaçao,E,England,L,133,0.00665,0.0367911479944675,3615,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Curaçao,E,Iran,G,80,0.004,0.022130013831258646,3615,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Curaçao,E,United States,D,69,0.00345,0.019087136929460582,3615,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Curaçao,E,Croatia,L,48,0.0024,0.013278008298755186,3615,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Curaçao,E,Belgium,G,36,0.0018,0.00995850622406639,3615,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Curaçao,E,Ghana,L,15,0.00075,0.004149377593360996,3615,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Curaçao,E,Colombia,K,6,0.0003,0.0016597510373443983,3615,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Curaçao,E,Portugal,K,3,0.00015,0.0008298755186721991,3615,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Czechia,A,Egypt,G,913,0.04565,0.38458298230834037,2374,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Czechia,A,Germany,E,428,0.0214,0.18028643639427128,2374,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Czechia,A,Iran,G,420,0.021,0.17691659646166807,2374,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Czechia,A,Canada,B,360,0.018,0.15164279696714406,2374,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Czechia,A,Belgium,G,253,0.01265,0.10657118786857624,2374,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ecuador,E,Egypt,G,702,0.0351,0.15064377682403435,4660,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ecuador,E,Mexico,A,688,0.0344,0.14763948497854076,4660,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ecuador,E,Norway,I,680,0.034,0.1459227467811159,4660,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ecuador,E,Switzerland,B,643,0.03215,0.13798283261802574,4660,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ecuador,E,England,L,572,0.0286,0.12274678111587983,4660,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ecuador,E,United States,D,357,0.01785,0.07660944206008584,4660,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ecuador,E,Iran,G,356,0.0178,0.07639484978540773,4660,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ecuador,E,Belgium,G,203,0.01015,0.04356223175965665,4660,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ecuador,E,France,I,188,0.0094,0.04034334763948498,4660,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ecuador,E,Croatia,L,170,0.0085,0.03648068669527897,4660,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ecuador,E,Ghana,L,48,0.0024,0.010300429184549357,4660,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ecuador,E,Colombia,K,39,0.00195,0.008369098712446352,4660,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ecuador,E,Portugal,K,14,0.0007,0.0030042918454935624,4660,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Switzerland,B,3136,0.1568,0.1568,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Australia,D,2882,0.1441,0.1441,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Algeria,J,2413,0.12065,0.12065,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Senegal,I,2007,0.10035,0.10035,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Paraguay,D,1389,0.06945,0.06945,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Austria,J,1364,0.0682,0.0682,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,South Korea,A,1150,0.0575,0.0575,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,France,I,984,0.0492,0.0492,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Uruguay,H,945,0.04725,0.04725,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Czechia,A,913,0.04565,0.04565,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Ecuador,E,702,0.0351,0.0351,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Cape Verde Islands,H,402,0.0201,0.0201,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Ivory Coast,E,383,0.01915,0.01915,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Iraq,I,333,0.01665,0.01665,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Norway,I,293,0.01465,0.01465,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Saudi Arabia,H,212,0.0106,0.0106,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Spain,H,194,0.0097,0.0097,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,South Africa,A,154,0.0077,0.0077,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,Curaçao,E,144,0.0072,0.0072,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Congo DR,K,5308,0.2654,0.2654,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Portugal,K,3910,0.1955,0.1955,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Senegal,I,1864,0.0932,0.0932,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Algeria,J,1847,0.09235,0.09235,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Colombia,K,1802,0.0901,0.0901,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Uzbekistan,K,1191,0.05955,0.05955,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Austria,J,1119,0.05595,0.05595,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Uruguay,H,779,0.03895,0.03895,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Ecuador,E,572,0.0286,0.0286,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Ivory Coast,E,408,0.0204,0.0204,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Cape Verde Islands,H,394,0.0197,0.0197,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Iraq,I,285,0.01425,0.01425,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Spain,H,198,0.0099,0.0099,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Saudi Arabia,H,190,0.0095,0.0095,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,Curaçao,E,133,0.00665,0.00665,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Paraguay,D,4086,0.2043,0.2043,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Ivory Coast,E,3636,0.1818,0.1818,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Scotland,C,2391,0.11955,0.11955,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Australia,D,2303,0.11515,0.11515,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Sweden,F,1881,0.09405,0.09405,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Iran,G,1087,0.05435,0.05435,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Egypt,G,984,0.0492,0.0492,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Curaçao,E,641,0.03205,0.03205,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Belgium,G,621,0.03105,0.03105,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Brazil,C,620,0.031,0.031,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Japan,F,438,0.0219,0.0219,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Uruguay,H,343,0.01715,0.01715,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,New Zealand,G,305,0.01525,0.01525,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Cape Verde Islands,H,188,0.0094,0.0094,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Ecuador,E,188,0.0094,0.0094,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Saudi Arabia,H,116,0.0058,0.0058,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Spain,H,90,0.0045,0.0045,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Morocco,C,71,0.00355,0.00355,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,Netherlands,F,11,0.00055,0.00055,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Germany,E,Bosnia-Herzegovina,B,5646,0.2823,0.2823,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Germany,E,Paraguay,D,4485,0.22425,0.22425,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Germany,E,Scotland,C,2749,0.13745,0.13745,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Germany,E,Australia,D,2419,0.12095,0.12095,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Germany,E,Sweden,F,2222,0.1111,0.1111,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Germany,E,Brazil,C,769,0.03845,0.03845,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Germany,E,Japan,F,573,0.02865,0.02865,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Germany,E,South Korea,A,541,0.02705,0.02705,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Germany,E,Czechia,A,428,0.0214,0.0214,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Germany,E,South Africa,A,94,0.0047,0.0047,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Germany,E,Morocco,C,54,0.0027,0.0027,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Germany,E,Netherlands,F,20,0.001,0.001,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Colombia,K,10425,0.52125,0.5213803450862715,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Portugal,K,8004,0.4002,0.4003000750187547,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Congo DR,K,585,0.02925,0.029257314328582147,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Algeria,J,219,0.01095,0.010952738184546137,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Senegal,I,198,0.0099,0.009902475618904727,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Uzbekistan,K,136,0.0068,0.0068017004251062765,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Austria,J,127,0.00635,0.006351587896974244,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Uruguay,H,64,0.0032,0.0032008002000500123,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Ecuador,E,48,0.0024,0.0024006001500375095,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Cape Verde Islands,H,44,0.0022,0.0022005501375343835,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Ivory Coast,E,43,0.00215,0.002150537634408602,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Iraq,I,35,0.00175,0.0017504376094023505,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Saudi Arabia,H,29,0.00145,0.0014503625906476618,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Spain,H,23,0.00115,0.0011502875718929731,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,Curaçao,E,15,0.00075,0.0007501875468867217,19995,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Switzerland,B,3713,0.18565,0.27009529351858585,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Australia,D,2125,0.10625,0.15457918091219902,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Algeria,J,1181,0.05905,0.08590965301520331,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,France,I,1087,0.05435,0.07907179748308722,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Paraguay,D,1029,0.05145,0.07485269513348367,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Senegal,I,1018,0.0509,0.07405252054993818,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Austria,J,720,0.036,0.052375063650250964,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,South Korea,A,521,0.02605,0.03789917800247327,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Czechia,A,420,0.021,0.030552120462646395,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Uruguay,H,371,0.01855,0.026987706408670983,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Ecuador,E,356,0.0178,0.025896559249290754,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Norway,I,320,0.016,0.023277806066778206,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Cape Verde Islands,H,223,0.01115,0.016221721102786062,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Ivory Coast,E,201,0.01005,0.01462137193569506,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Saudi Arabia,H,120,0.006,0.008729177275041827,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Iraq,I,117,0.00585,0.008510947843165782,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Curaçao,E,80,0.004,0.0058194515166945515,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,Spain,H,75,0.00375,0.005455735796901142,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,South Africa,A,70,0.0035,0.005092020077107733,13747,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iraq,I,Egypt,G,333,0.01665,0.24575645756457565,1355,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iraq,I,England,L,285,0.01425,0.21033210332103322,1355,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iraq,I,Switzerland,B,210,0.0105,0.15498154981549817,1355,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iraq,I,Mexico,A,156,0.0078,0.11512915129151291,1355,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iraq,I,Iran,G,117,0.00585,0.08634686346863468,1355,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iraq,I,Croatia,L,88,0.0044,0.06494464944649446,1355,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iraq,I,United States,D,73,0.00365,0.05387453874538745,1355,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iraq,I,Belgium,G,58,0.0029,0.042804428044280446,1355,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iraq,I,Ghana,L,35,0.00175,0.025830258302583026,1355,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ivory Coast,E,Norway,I,12744,0.6372,0.6868599762854372,18554,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ivory Coast,E,France,I,3636,0.1818,0.19596852430742698,18554,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ivory Coast,E,England,L,408,0.0204,0.02198986741403471,18554,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ivory Coast,E,Egypt,G,383,0.01915,0.020642449067586503,18554,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ivory Coast,E,Switzerland,B,357,0.01785,0.01924113398728037,18554,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ivory Coast,E,Mexico,A,348,0.0174,0.018756063382559016,18554,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ivory Coast,E,United States,D,202,0.0101,0.010887140239301499,18554,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ivory Coast,E,Iran,G,201,0.01005,0.01083324350544357,18554,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ivory Coast,E,Croatia,L,111,0.00555,0.005982537458230032,18554,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ivory Coast,E,Belgium,G,103,0.00515,0.005551363587366606,18554,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ivory Coast,E,Ghana,L,43,0.00215,0.002317559555890913,18554,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ivory Coast,E,Colombia,K,10,0.0005,0.0005389673385792821,18554,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ivory Coast,E,Portugal,K,8,0.0004,0.00043117387086342567,18554,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Japan,F,Morocco,C,7671,0.38355,0.38355,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Japan,F,Brazil,C,7274,0.3637,0.3637,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Japan,F,Scotland,C,1471,0.07355,0.07355,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Japan,F,Mexico,A,1064,0.0532,0.0532,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Japan,F,Switzerland,B,846,0.0423,0.0423,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Japan,F,Germany,E,573,0.02865,0.02865,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Japan,F,United States,D,552,0.0276,0.0276,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Japan,F,France,I,438,0.0219,0.0219,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Japan,F,Norway,I,111,0.00555,0.00555,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Scotland,C,7731,0.38655,0.38655,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Sweden,F,4279,0.21395,0.21395,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Brazil,C,2087,0.10435,0.10435,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Senegal,I,1630,0.0815,0.0815,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Japan,F,1064,0.0532,0.0532,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Uruguay,H,753,0.03765,0.03765,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Ecuador,E,688,0.0344,0.0344,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Cape Verde Islands,H,420,0.021,0.021,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Ivory Coast,E,348,0.0174,0.0174,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Saudi Arabia,H,270,0.0135,0.0135,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Morocco,C,201,0.01005,0.01005,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Spain,H,184,0.0092,0.0092,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Curaçao,E,171,0.00855,0.00855,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Iraq,I,156,0.0078,0.0078,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,Netherlands,F,18,0.0009,0.0009,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Morocco,C,Netherlands,F,10383,0.51915,0.51915,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Morocco,C,Japan,F,7671,0.38355,0.38355,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Morocco,C,Sweden,F,1602,0.0801,0.0801,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Morocco,C,Mexico,A,201,0.01005,0.01005,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Morocco,C,France,I,71,0.00355,0.00355,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Morocco,C,Germany,E,54,0.0027,0.0027,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Morocco,C,Norway,I,18,0.0009,0.0009,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Netherlands,F,Morocco,C,10383,0.51915,0.51915,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Netherlands,F,Brazil,C,7296,0.3648,0.3648,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Netherlands,F,Scotland,C,2239,0.11195,0.11195,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Netherlands,F,Germany,E,20,0.001,0.001,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Netherlands,F,Mexico,A,18,0.0009,0.0009,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Netherlands,F,Switzerland,B,17,0.00085,0.00085,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Netherlands,F,United States,D,12,0.0006,0.0006,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Netherlands,F,France,I,11,0.00055,0.00055,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Netherlands,F,Norway,I,4,0.0002,0.0002,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-New Zealand,G,Australia,D,1501,0.07505,0.4164816870144284,3604,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-New Zealand,G,Switzerland,B,1022,0.0511,0.28357380688124306,3604,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-New Zealand,G,Paraguay,D,674,0.0337,0.18701442841287458,3604,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-New Zealand,G,France,I,305,0.01525,0.08462819089900112,3604,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-New Zealand,G,Norway,I,102,0.0051,0.02830188679245283,3604,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Ivory Coast,E,12744,0.6372,0.6372,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Curaçao,E,2111,0.10555,0.10555,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Paraguay,D,1196,0.0598,0.0598,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Scotland,C,691,0.03455,0.03455,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Ecuador,E,680,0.034,0.034,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Australia,D,659,0.03295,0.03295,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Sweden,F,505,0.02525,0.02525,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Iran,G,320,0.016,0.016,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Egypt,G,293,0.01465,0.01465,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Belgium,G,196,0.0098,0.0098,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Brazil,C,174,0.0087,0.0087,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Japan,F,111,0.00555,0.00555,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,New Zealand,G,102,0.0051,0.0051,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Uruguay,H,81,0.00405,0.00405,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Cape Verde Islands,H,64,0.0032,0.0032,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Saudi Arabia,H,34,0.0017,0.0017,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Morocco,C,18,0.0009,0.0009,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Spain,H,17,0.00085,0.00085,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,Netherlands,F,4,0.0002,0.0002,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Paraguay,D,Germany,E,4485,0.22425,0.27229676400947117,16471,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Paraguay,D,France,I,4086,0.2043,0.24807236961933093,16471,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Paraguay,D,Belgium,G,3471,0.17355,0.2107340173638516,16471,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Paraguay,D,Egypt,G,1389,0.06945,0.0843300346062777,16471,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Paraguay,D,Norway,I,1196,0.0598,0.07261247040252565,16471,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Paraguay,D,Iran,G,1029,0.05145,0.0624734381640459,16471,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Paraguay,D,New Zealand,G,674,0.0337,0.04092040556128954,16471,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Paraguay,D,Colombia,K,95,0.00475,0.005767712950033392,16471,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Paraguay,D,Portugal,K,46,0.0023,0.0027927873231740636,16471,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Portugal,K,Ghana,L,8004,0.4002,0.4002,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Portugal,K,Croatia,L,7903,0.39515,0.39515,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Portugal,K,England,L,3910,0.1955,0.1955,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Portugal,K,Paraguay,D,46,0.0023,0.0023,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Portugal,K,Algeria,J,33,0.00165,0.00165,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Portugal,K,Senegal,I,29,0.00145,0.00145,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Portugal,K,Australia,D,28,0.0014,0.0014,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Portugal,K,Austria,J,22,0.0011,0.0011,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Portugal,K,Ecuador,E,14,0.0007,0.0007,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Portugal,K,Ivory Coast,E,8,0.0004,0.0004,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Portugal,K,Curaçao,E,3,0.00015,0.00015,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Saudi Arabia,H,Argentina,J,6690,0.3345,0.8589035819745795,7789,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Saudi Arabia,H,Mexico,A,270,0.0135,0.0346642701245346,7789,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Saudi Arabia,H,Egypt,G,212,0.0106,0.027217871357041984,7789,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Saudi Arabia,H,England,L,190,0.0095,0.024393375272820643,7789,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Saudi Arabia,H,Iran,G,120,0.006,0.015406342277570933,7789,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Saudi Arabia,H,France,I,116,0.0058,0.014892797534985236,7789,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Saudi Arabia,H,Belgium,G,70,0.0035,0.008987032995249711,7789,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Saudi Arabia,H,Croatia,L,58,0.0029,0.007446398767492618,7789,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Saudi Arabia,H,Norway,I,34,0.0017,0.004365130311978431,7789,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Saudi Arabia,H,Ghana,L,29,0.00145,0.003723199383746309,7789,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Scotland,C,Mexico,A,7731,0.38655,0.44036226930963773,17556,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Scotland,C,Germany,E,2749,0.13745,0.1565846434267487,17556,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Scotland,C,France,I,2391,0.11955,0.13619275461380725,17556,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Scotland,C,Netherlands,F,2239,0.11195,0.12753474595579858,17556,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Scotland,C,Japan,F,1471,0.07355,0.08378901799954432,17556,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Scotland,C,Norway,I,691,0.03455,0.03935976304397357,17556,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Scotland,C,Sweden,F,284,0.0142,0.016176805650489862,17556,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Senegal,I,Egypt,G,2007,0.10035,0.19148936170212766,10481,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Senegal,I,England,L,1864,0.0932,0.177845625417422,10481,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Senegal,I,Switzerland,B,1669,0.08345,0.15924053048373246,10481,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Senegal,I,Mexico,A,1630,0.0815,0.15551951149699456,10481,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Senegal,I,Iran,G,1018,0.0509,0.09712813662818433,10481,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Senegal,I,United States,D,861,0.04305,0.08214864993798301,10481,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Senegal,I,Belgium,G,621,0.03105,0.059250071558057435,10481,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Senegal,I,Croatia,L,512,0.0256,0.048850300543841235,10481,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Senegal,I,Ghana,L,198,0.0099,0.018891327163438602,10481,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Senegal,I,Colombia,K,72,0.0036,0.006869573513977674,10481,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Senegal,I,Portugal,K,29,0.00145,0.0027669115542410076,10481,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-South Africa,A,Canada,B,3211,0.16055,0.898936170212766,3572,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-South Africa,A,Egypt,G,154,0.0077,0.04311310190369541,3572,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-South Africa,A,Germany,E,94,0.0047,0.02631578947368421,3572,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-South Africa,A,Iran,G,70,0.0035,0.01959686450167973,3572,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-South Africa,A,Belgium,G,43,0.00215,0.012038073908174692,3572,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-South Korea,A,Canada,B,16429,0.82145,0.8669656992084432,18950,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-South Korea,A,Egypt,G,1150,0.0575,0.06068601583113457,18950,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-South Korea,A,Germany,E,541,0.02705,0.028548812664907653,18950,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-South Korea,A,Iran,G,521,0.02605,0.027493403693931398,18950,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-South Korea,A,Belgium,G,309,0.01545,0.016306068601583113,18950,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Spain,H,Austria,J,11480,0.574,0.574,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Spain,H,Algeria,J,5676,0.2838,0.2838,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Spain,H,Argentina,J,1958,0.0979,0.0979,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Spain,H,England,L,198,0.0099,0.0099,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Spain,H,Egypt,G,194,0.0097,0.0097,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Spain,H,Mexico,A,184,0.0092,0.0092,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Spain,H,France,I,90,0.0045,0.0045,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Spain,H,Iran,G,75,0.00375,0.00375,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Spain,H,Belgium,G,55,0.00275,0.00275,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Spain,H,Croatia,L,50,0.0025,0.0025,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Spain,H,Ghana,L,23,0.00115,0.00115,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Spain,H,Norway,I,17,0.00085,0.00085,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Sweden,F,Mexico,A,4279,0.21395,0.23487759358875837,18218,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Sweden,F,Switzerland,B,3400,0.17,0.18662860906795478,18218,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Sweden,F,United States,D,2265,0.11325,0.12432758809968163,18218,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Sweden,F,Germany,E,2222,0.1111,0.12196728510264573,18218,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Sweden,F,France,I,1881,0.09405,0.10324953342847733,18218,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Sweden,F,Brazil,C,1780,0.089,0.09770556592381162,18218,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Sweden,F,Morocco,C,1602,0.0801,0.08793500933143045,18218,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Sweden,F,Norway,I,505,0.02525,0.027719837523328576,18218,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Sweden,F,Scotland,C,284,0.0142,0.015588977933911516,18218,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,Iran,G,3713,0.18565,0.18565,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,Sweden,F,3400,0.17,0.17,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,Egypt,G,3136,0.1568,0.1568,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,Belgium,G,1968,0.0984,0.0984,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,Algeria,J,1816,0.0908,0.0908,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,Senegal,I,1669,0.08345,0.08345,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,Austria,J,1045,0.05225,0.05225,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,New Zealand,G,1022,0.0511,0.0511,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,Japan,F,846,0.0423,0.0423,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,Ecuador,E,643,0.03215,0.03215,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,Ivory Coast,E,357,0.01785,0.01785,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,Iraq,I,210,0.0105,0.0105,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,Curaçao,E,158,0.0079,0.0079,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,Netherlands,F,17,0.00085,0.00085,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-United States,D,Bosnia-Herzegovina,B,14354,0.7177,0.7177,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-United States,D,Sweden,F,2265,0.11325,0.11325,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-United States,D,Senegal,I,861,0.04305,0.04305,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-United States,D,Algeria,J,789,0.03945,0.03945,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-United States,D,Japan,F,552,0.0276,0.0276,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-United States,D,Austria,J,466,0.0233,0.0233,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-United States,D,Ecuador,E,357,0.01785,0.01785,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-United States,D,Ivory Coast,E,202,0.0101,0.0101,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-United States,D,Iraq,I,73,0.00365,0.00365,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-United States,D,Curaçao,E,69,0.00345,0.00345,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-United States,D,Netherlands,F,12,0.0006,0.0006,20000,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uruguay,H,Austria,J,1703,0.08515,0.2201396070320579,7736,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uruguay,H,Argentina,J,1421,0.07105,0.18368665977249224,7736,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uruguay,H,Egypt,G,945,0.04725,0.12215615305067218,7736,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uruguay,H,Algeria,J,823,0.04115,0.1063857290589452,7736,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uruguay,H,England,L,779,0.03895,0.10069803516028955,7736,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uruguay,H,Mexico,A,753,0.03765,0.09733712512926578,7736,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uruguay,H,Iran,G,371,0.01855,0.04795760082730093,7736,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uruguay,H,France,I,343,0.01715,0.04433815925542916,7736,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uruguay,H,Belgium,G,232,0.0116,0.02998965873836608,7736,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uruguay,H,Croatia,L,221,0.01105,0.02856773526370217,7736,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uruguay,H,Norway,I,81,0.00405,0.01047052740434333,7736,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uruguay,H,Ghana,L,64,0.0032,0.008273009307135471,7736,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uzbekistan,K,England,L,1191,0.05955,0.7170379289584587,1661,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uzbekistan,K,Croatia,L,334,0.0167,0.20108368452739314,1661,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uzbekistan,K,Ghana,L,136,0.0068,0.08187838651414811,1661,20000,2026-06-24T21:55:34.858047+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Algeria,J,Spain,H,5558,0.2779,0.35761163299446663,15542,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Algeria,J,England,L,2539,0.12695,0.16336378844421567,15542,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Algeria,J,Switzerland,B,2515,0.12575,0.1618195856389139,15542,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Algeria,J,United States,D,1333,0.06665,0.08576759747780209,15542,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Algeria,J,Egypt,G,846,0.0423,0.05443314888688715,15542,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Algeria,J,Uruguay,H,827,0.04135,0.05321065499935658,15542,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Algeria,J,Croatia,L,755,0.03775,0.048578046583451294,15542,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Algeria,J,Iran,G,426,0.0213,0.02740959979410629,15542,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Algeria,J,Ghana,L,290,0.0145,0.018659117230729636,15542,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Algeria,J,Belgium,G,255,0.01275,0.01640715480633123,15542,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Algeria,J,Cape Verde Islands,H,119,0.00595,0.007656672242954575,15542,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Algeria,J,Colombia,K,51,0.00255,0.0032814309612662464,15542,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Algeria,J,Portugal,K,28,0.0014,0.0018015699395187235,15542,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Argentina,J,Cape Verde Islands,H,9769,0.48845,0.48845,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Argentina,J,Saudi Arabia,H,6758,0.3379,0.3379,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Argentina,J,Spain,H,1970,0.0985,0.0985,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Argentina,J,Uruguay,H,1503,0.07515,0.07515,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Australia,D,Belgium,G,7028,0.3514,0.3675539982218503,19121,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Australia,D,France,I,2817,0.14085,0.14732493070446107,19121,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Australia,D,Egypt,G,2706,0.1353,0.1415197949898018,19121,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Australia,D,Iran,G,2136,0.1068,0.11170963861722713,19121,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Australia,D,Germany,E,2098,0.1049,0.10972229485905549,19121,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Australia,D,New Zealand,G,1484,0.0742,0.07761100360859788,19121,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Australia,D,Norway,I,753,0.03765,0.039380785523769675,19121,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Australia,D,Colombia,K,62,0.0031,0.0032425082370168925,19121,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Australia,D,Portugal,K,37,0.00185,0.0019350452382197584,19121,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Austria,J,Spain,H,11591,0.57955,0.6030383434784871,19221,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Austria,J,Uruguay,H,1708,0.0854,0.08886114145986161,19221,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Austria,J,Switzerland,B,1609,0.08045,0.08371052494667292,19221,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Austria,J,England,L,1578,0.0789,0.08209770563446231,19221,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Austria,J,United States,D,852,0.0426,0.04432651787107851,19221,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Austria,J,Egypt,G,535,0.02675,0.027834139742989438,19221,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Austria,J,Croatia,L,478,0.0239,0.024868633265698974,19221,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Austria,J,Iran,G,306,0.0153,0.015920087404401435,19221,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Austria,J,Cape Verde Islands,H,197,0.00985,0.010249206596951251,19221,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Austria,J,Belgium,G,158,0.0079,0.00822017584933146,19221,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Austria,J,Ghana,L,149,0.00745,0.007751937984496124,19221,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Austria,J,Colombia,K,37,0.00185,0.0019249778887674939,19221,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Austria,J,Portugal,K,23,0.00115,0.001196607876801415,19221,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Australia,D,7028,0.3514,0.42843208973421115,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Paraguay,D,3440,0.172,0.20970495001219214,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,South Korea,A,2273,0.11365,0.1385637649353816,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Switzerland,B,1695,0.08475,0.10332845647403073,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,France,I,806,0.0403,0.04913435747378688,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Algeria,J,255,0.01275,0.01554498902706657,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Senegal,I,207,0.01035,0.012618873445501097,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Norway,I,192,0.0096,0.011704462326261888,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Austria,J,158,0.0079,0.009631797122653012,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Uruguay,H,86,0.0043,0.005242623750304804,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Ecuador,E,84,0.0042,0.005120702267739576,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Cape Verde Islands,H,52,0.0026,0.0031699585466959277,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Ivory Coast,E,48,0.0024,0.002926115581565472,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Saudi Arabia,H,33,0.00165,0.002011704462326262,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Spain,H,23,0.00115,0.0014020970495001218,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Curaçao,E,20,0.001,0.00121921482565228,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,Iraq,I,4,0.0002,0.000243842965130456,16404,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Bosnia-Herzegovina,B,United States,D,13532,0.6766,0.6766,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Bosnia-Herzegovina,B,Germany,E,6468,0.3234,0.3234,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Brazil,C,Japan,F,9983,0.49915,0.49915,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Brazil,C,Netherlands,F,7246,0.3623,0.3623,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Brazil,C,Sweden,F,2771,0.13855,0.13855,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Canada,B,South Africa,A,20000,1.0,1.0,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Cape Verde Islands,H,Argentina,J,9769,0.48845,0.8033717105263158,12160,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Cape Verde Islands,H,Mexico,A,813,0.04065,0.06685855263157894,12160,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Cape Verde Islands,H,England,L,428,0.0214,0.03519736842105263,12160,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Cape Verde Islands,H,France,I,274,0.0137,0.022532894736842106,12160,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Cape Verde Islands,H,Austria,J,197,0.00985,0.01620065789473684,12160,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Cape Verde Islands,H,Egypt,G,181,0.00905,0.014884868421052631,12160,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Cape Verde Islands,H,Algeria,J,119,0.00595,0.009786184210526315,12160,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Cape Verde Islands,H,Croatia,L,107,0.00535,0.008799342105263157,12160,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Cape Verde Islands,H,Iran,G,89,0.00445,0.007319078947368421,12160,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Cape Verde Islands,H,Norway,I,82,0.0041,0.006743421052631579,12160,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Cape Verde Islands,H,Belgium,G,52,0.0026,0.0042763157894736845,12160,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Cape Verde Islands,H,Ghana,L,49,0.00245,0.004029605263157895,12160,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Colombia,K,Ghana,L,10443,0.52215,0.52215,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Colombia,K,Croatia,L,7338,0.3669,0.3669,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Colombia,K,England,L,1853,0.09265,0.09265,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Colombia,K,Paraguay,D,95,0.00475,0.00475,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Colombia,K,Australia,D,62,0.0031,0.0031,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Colombia,K,Senegal,I,62,0.0031,0.0031,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Colombia,K,Algeria,J,51,0.00255,0.00255,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Colombia,K,Austria,J,37,0.00185,0.00185,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Colombia,K,Ecuador,E,27,0.00135,0.00135,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Colombia,K,Ivory Coast,E,26,0.0013,0.0013,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Colombia,K,Curaçao,E,6,0.0003,0.0003,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Congo DR,K,England,L,5145,0.25725,0.7224094355518113,7122,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Congo DR,K,Croatia,L,1432,0.0716,0.20106711597865767,7122,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Congo DR,K,Ghana,L,545,0.02725,0.07652344846953103,7122,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Portugal,K,7953,0.39765,0.4090838948613754,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Colombia,K,7338,0.3669,0.3774497196646263,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Congo DR,K,1432,0.0716,0.07365876240934108,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Algeria,J,755,0.03775,0.03883545085129366,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Senegal,I,564,0.0282,0.029010853351165062,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Austria,J,478,0.0239,0.02458721259194486,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Uruguay,H,201,0.01005,0.010338974332596059,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Ecuador,E,183,0.00915,0.009413096034154621,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Ivory Coast,E,120,0.006,0.006172521989609588,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Uzbekistan,K,113,0.00565,0.005812458206882362,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Cape Verde Islands,H,107,0.00535,0.005503832107401883,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Saudi Arabia,H,56,0.0028,0.0028805102618178076,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Iraq,I,52,0.0026,0.0026747595288308217,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Curaçao,E,49,0.00245,0.002520446479090582,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,Spain,H,40,0.002,0.002057507329869863,19441,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Curaçao,E,Norway,I,2203,0.11015,0.5994557823129252,3675,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Curaçao,E,France,I,589,0.02945,0.1602721088435374,3675,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Curaçao,E,Mexico,A,266,0.0133,0.07238095238095238,3675,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Curaçao,E,Switzerland,B,169,0.00845,0.04598639455782313,3675,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Curaçao,E,England,L,150,0.0075,0.04081632653061224,3675,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Curaçao,E,United States,D,104,0.0052,0.028299319727891157,3675,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Curaçao,E,Egypt,G,63,0.00315,0.017142857142857144,3675,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Curaçao,E,Croatia,L,49,0.00245,0.013333333333333334,3675,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Curaçao,E,Iran,G,36,0.0018,0.009795918367346938,3675,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Curaçao,E,Belgium,G,20,0.001,0.005442176870748299,3675,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Curaçao,E,Ghana,L,16,0.0008,0.004353741496598639,3675,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Curaçao,E,Colombia,K,6,0.0003,0.0016326530612244899,3675,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Curaçao,E,Portugal,K,4,0.0002,0.0010884353741496598,3675,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ecuador,E,Mexico,A,1259,0.06295,0.2716289104638619,4635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ecuador,E,Switzerland,B,694,0.0347,0.14973031283710894,4635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ecuador,E,Norway,I,687,0.03435,0.14822006472491908,4635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ecuador,E,England,L,594,0.0297,0.12815533980582525,4635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ecuador,E,United States,D,436,0.0218,0.09406688241639698,4635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ecuador,E,Egypt,G,252,0.0126,0.05436893203883495,4635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ecuador,E,France,I,196,0.0098,0.042286947141316075,4635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ecuador,E,Croatia,L,183,0.00915,0.039482200647249194,4635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ecuador,E,Iran,G,146,0.0073,0.03149946062567422,4635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ecuador,E,Belgium,G,84,0.0042,0.018122977346278317,4635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ecuador,E,Ghana,L,62,0.0031,0.0133764832793959,4635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ecuador,E,Colombia,K,27,0.00135,0.005825242718446602,4635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ecuador,E,Portugal,K,15,0.00075,0.003236245954692557,4635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,South Korea,A,8272,0.4136,0.4136,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Switzerland,B,2755,0.13775,0.13775,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Australia,D,2706,0.1353,0.1353,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Paraguay,D,1430,0.0715,0.0715,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,France,I,1305,0.06525,0.06525,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Algeria,J,846,0.0423,0.0423,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Senegal,I,656,0.0328,0.0328,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Austria,J,535,0.02675,0.02675,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Norway,I,344,0.0172,0.0172,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Uruguay,H,294,0.0147,0.0147,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Ecuador,E,252,0.0126,0.0126,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Cape Verde Islands,H,181,0.00905,0.00905,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Ivory Coast,E,158,0.0079,0.0079,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Spain,H,82,0.0041,0.0041,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Saudi Arabia,H,81,0.00405,0.00405,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Curaçao,E,63,0.00315,0.00315,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,Iraq,I,40,0.002,0.002,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Congo DR,K,5145,0.25725,0.25725,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Portugal,K,3852,0.1926,0.1926,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Algeria,J,2539,0.12695,0.12695,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Senegal,I,1877,0.09385,0.09385,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Colombia,K,1853,0.09265,0.09265,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Austria,J,1578,0.0789,0.0789,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Uruguay,H,680,0.034,0.034,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Ecuador,E,594,0.0297,0.0297,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Cape Verde Islands,H,428,0.0214,0.0214,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Uzbekistan,K,400,0.02,0.02,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Ivory Coast,E,374,0.0187,0.0187,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Saudi Arabia,H,185,0.00925,0.00925,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Spain,H,180,0.009,0.009,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Iraq,I,165,0.00825,0.00825,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,Curaçao,E,150,0.0075,0.0075,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Paraguay,D,4424,0.2212,0.2212,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Ivory Coast,E,3597,0.17985,0.17985,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Australia,D,2817,0.14085,0.14085,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Sweden,F,1807,0.09035,0.09035,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Iran,G,1372,0.0686,0.0686,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Egypt,G,1305,0.06525,0.06525,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Scotland,C,1206,0.0603,0.0603,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Belgium,G,806,0.0403,0.0403,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Curaçao,E,589,0.02945,0.02945,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Japan,F,459,0.02295,0.02295,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Uruguay,H,436,0.0218,0.0218,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,New Zealand,G,409,0.02045,0.02045,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Cape Verde Islands,H,274,0.0137,0.0137,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Ecuador,E,196,0.0098,0.0098,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Saudi Arabia,H,174,0.0087,0.0087,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Spain,H,121,0.00605,0.00605,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,Netherlands,F,8,0.0004,0.0004,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Germany,E,Bosnia-Herzegovina,B,6468,0.3234,0.3234,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Germany,E,South Korea,A,4412,0.2206,0.2206,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Germany,E,Paraguay,D,3505,0.17525,0.17525,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Germany,E,Australia,D,2098,0.1049,0.1049,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Germany,E,Sweden,F,1787,0.08935,0.08935,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Germany,E,Scotland,C,1255,0.06275,0.06275,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Germany,E,Japan,F,469,0.02345,0.02345,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Germany,E,Netherlands,F,6,0.0003,0.0003,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Colombia,K,10443,0.52215,0.52215,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Portugal,K,8002,0.4001,0.4001,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Congo DR,K,545,0.02725,0.02725,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Algeria,J,290,0.0145,0.0145,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Senegal,I,227,0.01135,0.01135,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Austria,J,149,0.00745,0.00745,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Uruguay,H,88,0.0044,0.0044,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Ecuador,E,62,0.0031,0.0031,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Cape Verde Islands,H,49,0.00245,0.00245,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Ivory Coast,E,48,0.0024,0.0024,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Uzbekistan,K,32,0.0016,0.0016,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Saudi Arabia,H,20,0.001,0.001,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Iraq,I,17,0.00085,0.00085,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Curaçao,E,16,0.0008,0.0008,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,Spain,H,12,0.0006,0.0006,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,South Korea,A,3611,0.18055,0.27010247587702896,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Switzerland,B,3140,0.157,0.2348717181539382,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Australia,D,2136,0.1068,0.15977260827287007,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,France,I,1372,0.0686,0.10262547684942779,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Paraguay,D,1034,0.0517,0.07734310718827138,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Algeria,J,426,0.0213,0.031864761762285886,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Norway,I,390,0.0195,0.029171964993642007,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Senegal,I,369,0.01845,0.027601166878599745,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Austria,J,306,0.0153,0.02288877253347296,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Uruguay,H,150,0.0075,0.011219986536016156,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Ecuador,E,146,0.0073,0.010920786895055726,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Cape Verde Islands,H,89,0.00445,0.006657192011369586,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Ivory Coast,E,65,0.00325,0.004861994165607001,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Saudi Arabia,H,54,0.0027,0.004039195152965817,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Curaçao,E,36,0.0018,0.0026927967686438776,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Spain,H,35,0.00175,0.00261799685840377,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,Iraq,I,10,0.0005,0.0007479991024010772,13369,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iraq,I,England,L,165,0.00825,0.25984251968503935,635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iraq,I,Switzerland,B,157,0.00785,0.247244094488189,635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iraq,I,Mexico,A,142,0.0071,0.22362204724409449,635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iraq,I,Croatia,L,52,0.0026,0.08188976377952756,635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iraq,I,United States,D,48,0.0024,0.07559055118110236,635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iraq,I,Egypt,G,40,0.002,0.06299212598425197,635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iraq,I,Ghana,L,17,0.00085,0.026771653543307086,635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iraq,I,Iran,G,10,0.0005,0.015748031496062992,635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iraq,I,Belgium,G,4,0.0002,0.006299212598425197,635,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ivory Coast,E,Norway,I,12728,0.6364,0.6857389149291525,18561,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ivory Coast,E,France,I,3597,0.17985,0.19379343785356393,18561,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ivory Coast,E,Mexico,A,736,0.0368,0.03965303593556382,18561,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ivory Coast,E,Switzerland,B,430,0.0215,0.02316685523409299,18561,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ivory Coast,E,England,L,374,0.0187,0.020149776412908788,18561,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ivory Coast,E,United States,D,227,0.01135,0.012229944507300253,18561,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ivory Coast,E,Egypt,G,158,0.0079,0.008512472388341146,18561,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ivory Coast,E,Croatia,L,120,0.006,0.006465168902537579,18561,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ivory Coast,E,Iran,G,65,0.00325,0.003501966488874522,18561,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ivory Coast,E,Belgium,G,48,0.0024,0.0025860675610150314,18561,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ivory Coast,E,Ghana,L,48,0.0024,0.0025860675610150314,18561,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ivory Coast,E,Colombia,K,26,0.0013,0.0014007865955498087,18561,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ivory Coast,E,Portugal,K,4,0.0002,0.00021550563008458596,18561,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Japan,F,Brazil,C,9983,0.49915,0.49915,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Japan,F,Morocco,C,6355,0.31775,0.31775,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Japan,F,Mexico,A,1348,0.0674,0.0674,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Japan,F,Switzerland,B,771,0.03855,0.03855,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Japan,F,United States,D,492,0.0246,0.0246,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Japan,F,Germany,E,469,0.02345,0.02345,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Japan,F,France,I,459,0.02295,0.02295,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Japan,F,Norway,I,123,0.00615,0.00615,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Mexico,A,Sweden,F,5347,0.26735,0.26735,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Mexico,A,Scotland,C,4424,0.2212,0.2212,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Mexico,A,Senegal,I,3441,0.17205,0.17205,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Mexico,A,Uruguay,H,1387,0.06935,0.06935,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Mexico,A,Japan,F,1348,0.0674,0.0674,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Mexico,A,Ecuador,E,1259,0.06295,0.06295,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Mexico,A,Cape Verde Islands,H,813,0.04065,0.04065,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Mexico,A,Ivory Coast,E,736,0.0368,0.0368,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Mexico,A,Saudi Arabia,H,444,0.0222,0.0222,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Mexico,A,Spain,H,359,0.01795,0.01795,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Mexico,A,Curaçao,E,266,0.0133,0.0133,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Mexico,A,Iraq,I,142,0.0071,0.0071,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Mexico,A,Netherlands,F,34,0.0017,0.0017,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Morocco,C,Netherlands,F,12676,0.6338,0.6338,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Morocco,C,Japan,F,6355,0.31775,0.31775,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Morocco,C,Sweden,F,969,0.04845,0.04845,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Netherlands,F,Morocco,C,12676,0.6338,0.6338,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Netherlands,F,Brazil,C,7246,0.3623,0.3623,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Netherlands,F,Mexico,A,34,0.0017,0.0017,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Netherlands,F,Switzerland,B,18,0.0009,0.0009,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Netherlands,F,France,I,8,0.0004,0.0004,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Netherlands,F,United States,D,8,0.0004,0.0004,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Netherlands,F,Germany,E,6,0.0003,0.0003,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Netherlands,F,Norway,I,4,0.0002,0.0002,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+New Zealand,G,Australia,D,1484,0.0742,0.4134856505990527,3589,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+New Zealand,G,Switzerland,B,829,0.04145,0.2309835608804681,3589,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+New Zealand,G,Paraguay,D,742,0.0371,0.20674282529952634,3589,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+New Zealand,G,France,I,409,0.02045,0.11395932014488716,3589,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+New Zealand,G,Norway,I,125,0.00625,0.03482864307606576,3589,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Ivory Coast,E,12728,0.6364,0.6364,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Curaçao,E,2203,0.11015,0.11015,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Paraguay,D,1300,0.065,0.065,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Australia,D,753,0.03765,0.03765,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Ecuador,E,687,0.03435,0.03435,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Sweden,F,512,0.0256,0.0256,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Iran,G,390,0.0195,0.0195,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Scotland,C,361,0.01805,0.01805,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Egypt,G,344,0.0172,0.0172,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Belgium,G,192,0.0096,0.0096,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Uruguay,H,126,0.0063,0.0063,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,New Zealand,G,125,0.00625,0.00625,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Japan,F,123,0.00615,0.00615,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Cape Verde Islands,H,82,0.0041,0.0041,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Saudi Arabia,H,41,0.00205,0.00205,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Spain,H,29,0.00145,0.00145,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,Netherlands,F,4,0.0002,0.0002,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Paraguay,D,France,I,4424,0.2212,0.27601697030197153,16028,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Paraguay,D,Germany,E,3505,0.17525,0.21867981033191913,16028,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Paraguay,D,Belgium,G,3440,0.172,0.21462440728724733,16028,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Paraguay,D,Egypt,G,1430,0.0715,0.08921886698278013,16028,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Paraguay,D,Norway,I,1300,0.065,0.08110806089343649,16028,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Paraguay,D,Iran,G,1034,0.0517,0.06451210381831794,16028,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Paraguay,D,New Zealand,G,742,0.0371,0.04629398552533067,16028,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Paraguay,D,Colombia,K,95,0.00475,0.005927127526828051,16028,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Paraguay,D,Portugal,K,58,0.0029,0.0036186673321687048,16028,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Portugal,K,Ghana,L,8002,0.4001,0.4001,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Portugal,K,Croatia,L,7953,0.39765,0.39765,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Portugal,K,England,L,3852,0.1926,0.1926,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Portugal,K,Paraguay,D,58,0.0029,0.0029,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Portugal,K,Australia,D,37,0.00185,0.00185,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Portugal,K,Algeria,J,28,0.0014,0.0014,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Portugal,K,Senegal,I,24,0.0012,0.0012,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Portugal,K,Austria,J,23,0.00115,0.00115,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Portugal,K,Ecuador,E,15,0.00075,0.00075,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Portugal,K,Curaçao,E,4,0.0002,0.0002,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Portugal,K,Ivory Coast,E,4,0.0002,0.0002,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Saudi Arabia,H,Argentina,J,6758,0.3379,0.8613306143257711,7846,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Saudi Arabia,H,Mexico,A,444,0.0222,0.056589344889115475,7846,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Saudi Arabia,H,England,L,185,0.00925,0.023578893703798114,7846,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Saudi Arabia,H,France,I,174,0.0087,0.022176905429518227,7846,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Saudi Arabia,H,Egypt,G,81,0.00405,0.010323731837879175,7846,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Saudi Arabia,H,Croatia,L,56,0.0028,0.007137394850879429,7846,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Saudi Arabia,H,Iran,G,54,0.0027,0.006882487891919449,7846,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Saudi Arabia,H,Norway,I,41,0.00205,0.005225592658679582,7846,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Saudi Arabia,H,Belgium,G,33,0.00165,0.004205964822839663,7846,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Saudi Arabia,H,Ghana,L,20,0.001,0.0025490695895997962,7846,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Scotland,C,Mexico,A,4424,0.2212,0.6105437482749103,7246,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Scotland,C,Germany,E,1255,0.06275,0.1731990063483301,7246,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Scotland,C,France,I,1206,0.0603,0.1664366547060447,7246,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Scotland,C,Norway,I,361,0.01805,0.04982059067071488,7246,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Senegal,I,Mexico,A,3441,0.17205,0.32285607055732785,10658,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Senegal,I,Switzerland,B,2068,0.1034,0.1940326515293676,10658,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Senegal,I,England,L,1877,0.09385,0.17611184087070744,10658,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Senegal,I,United States,D,1163,0.05815,0.10911990992681554,10658,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Senegal,I,Egypt,G,656,0.0328,0.06155000938262338,10658,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Senegal,I,Croatia,L,564,0.0282,0.05291799587164571,10658,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Senegal,I,Iran,G,369,0.01845,0.03462188027772565,10658,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Senegal,I,Ghana,L,227,0.01135,0.02129855507599925,10658,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Senegal,I,Belgium,G,207,0.01035,0.019422030399699756,10658,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Senegal,I,Colombia,K,62,0.0031,0.0058172264965284295,10658,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Senegal,I,Portugal,K,24,0.0012,0.002251829611559392,10658,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+South Africa,A,Canada,B,20000,1.0,1.0,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+South Korea,A,Egypt,G,8272,0.4136,0.44549763033175355,18568,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+South Korea,A,Germany,E,4412,0.2206,0.23761309780267126,18568,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+South Korea,A,Iran,G,3611,0.18055,0.1944743644980612,18568,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+South Korea,A,Belgium,G,2273,0.11365,0.12241490736751401,18568,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Spain,H,Austria,J,11591,0.57955,0.57955,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Spain,H,Algeria,J,5558,0.2779,0.2779,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Spain,H,Argentina,J,1970,0.0985,0.0985,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Spain,H,Mexico,A,359,0.01795,0.01795,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Spain,H,England,L,180,0.009,0.009,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Spain,H,France,I,121,0.00605,0.00605,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Spain,H,Egypt,G,82,0.0041,0.0041,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Spain,H,Croatia,L,40,0.002,0.002,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Spain,H,Iran,G,35,0.00175,0.00175,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Spain,H,Norway,I,29,0.00145,0.00145,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Spain,H,Belgium,G,23,0.00115,0.00115,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Spain,H,Ghana,L,12,0.0006,0.0006,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Sweden,F,Mexico,A,5347,0.26735,0.29463301741238707,18148,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Sweden,F,Switzerland,B,3150,0.1575,0.17357284549261626,18148,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Sweden,F,Brazil,C,2771,0.13855,0.15268900154286974,18148,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Sweden,F,France,I,1807,0.09035,0.0995702005730659,18148,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Sweden,F,United States,D,1805,0.09025,0.09945999559180074,18148,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Sweden,F,Germany,E,1787,0.08935,0.09846815076041437,18148,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Sweden,F,Morocco,C,969,0.04845,0.053394313422966716,18148,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Sweden,F,Norway,I,512,0.0256,0.028212475203879216,18148,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,Sweden,F,3150,0.1575,0.1575,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,Iran,G,3140,0.157,0.157,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,Egypt,G,2755,0.13775,0.13775,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,Algeria,J,2515,0.12575,0.12575,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,Senegal,I,2068,0.1034,0.1034,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,Belgium,G,1695,0.08475,0.08475,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,Austria,J,1609,0.08045,0.08045,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,New Zealand,G,829,0.04145,0.04145,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,Japan,F,771,0.03855,0.03855,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,Ecuador,E,694,0.0347,0.0347,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,Ivory Coast,E,430,0.0215,0.0215,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,Curaçao,E,169,0.00845,0.00845,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,Iraq,I,157,0.00785,0.00785,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,Netherlands,F,18,0.0009,0.0009,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+United States,D,Bosnia-Herzegovina,B,13532,0.6766,0.6766,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+United States,D,Sweden,F,1805,0.09025,0.09025,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+United States,D,Algeria,J,1333,0.06665,0.06665,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+United States,D,Senegal,I,1163,0.05815,0.05815,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+United States,D,Austria,J,852,0.0426,0.0426,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+United States,D,Japan,F,492,0.0246,0.0246,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+United States,D,Ecuador,E,436,0.0218,0.0218,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+United States,D,Ivory Coast,E,227,0.01135,0.01135,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+United States,D,Curaçao,E,104,0.0052,0.0052,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+United States,D,Iraq,I,48,0.0024,0.0024,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+United States,D,Netherlands,F,8,0.0004,0.0004,20000,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uruguay,H,Austria,J,1708,0.0854,0.22815923056371895,7486,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uruguay,H,Argentina,J,1503,0.07515,0.20077477958856532,7486,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uruguay,H,Mexico,A,1387,0.06935,0.18527918781725888,7486,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uruguay,H,Algeria,J,827,0.04135,0.11047288271440021,7486,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uruguay,H,England,L,680,0.034,0.09083622762489982,7486,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uruguay,H,France,I,436,0.0218,0.05824205183008282,7486,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uruguay,H,Egypt,G,294,0.0147,0.0392733101790008,7486,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uruguay,H,Croatia,L,201,0.01005,0.026850120224418916,7486,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uruguay,H,Iran,G,150,0.0075,0.02003740315255143,7486,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uruguay,H,Norway,I,126,0.0063,0.0168314186481432,7486,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uruguay,H,Ghana,L,88,0.0044,0.011755276516163505,7486,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uruguay,H,Belgium,G,86,0.0043,0.011488111140796153,7486,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uzbekistan,K,England,L,400,0.02,0.7339449541284404,545,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uzbekistan,K,Croatia,L,113,0.00565,0.20733944954128442,545,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uzbekistan,K,Ghana,L,32,0.0016,0.05871559633027523,545,20000,2026-06-25T04:07:58.145654+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment

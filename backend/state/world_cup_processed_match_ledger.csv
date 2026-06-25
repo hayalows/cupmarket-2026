@@ -49,3 +49,7 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537406,2026-06-24 02:00:00+00:00,GROUP_STAGE,Colombia,Congo DR,1,0,2026-06-24 05:46:07.004463+00:00,phase7_automated_group_stage_v1
 537337,2026-06-24 19:00:00+00:00,GROUP_STAGE,Switzerland,Canada,2,1,2026-06-24 21:55:21.112438+00:00,phase7_automated_group_stage_v1
 537338,2026-06-24 19:00:00+00:00,GROUP_STAGE,Bosnia-Herzegovina,Qatar,3,1,2026-06-24 21:55:21.112464+00:00,phase7_automated_group_stage_v1
+537343,2026-06-24 22:00:00+00:00,GROUP_STAGE,Scotland,Brazil,0,3,2026-06-25 04:07:44.949538+00:00,phase7_automated_group_stage_v1
+537344,2026-06-24 22:00:00+00:00,GROUP_STAGE,Morocco,Haiti,4,2,2026-06-25 04:07:44.949564+00:00,phase7_automated_group_stage_v1
+537331,2026-06-25 01:00:00+00:00,GROUP_STAGE,Czechia,Mexico,0,3,2026-06-25 04:07:44.949606+00:00,phase7_automated_group_stage_v1
+537332,2026-06-25 01:00:00+00:00,GROUP_STAGE,South Africa,South Korea,1,0,2026-06-25 04:07:44.949621+00:00,phase7_automated_group_stage_v1
