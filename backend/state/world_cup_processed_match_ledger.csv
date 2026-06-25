@@ -53,3 +53,5 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537344,2026-06-24 22:00:00+00:00,GROUP_STAGE,Morocco,Haiti,4,2,2026-06-25 04:07:44.949564+00:00,phase7_automated_group_stage_v1
 537331,2026-06-25 01:00:00+00:00,GROUP_STAGE,Czechia,Mexico,0,3,2026-06-25 04:07:44.949606+00:00,phase7_automated_group_stage_v1
 537332,2026-06-25 01:00:00+00:00,GROUP_STAGE,South Africa,South Korea,1,0,2026-06-25 04:07:44.949621+00:00,phase7_automated_group_stage_v1
+537355,2026-06-25 20:00:00+00:00,GROUP_STAGE,Ecuador,Germany,2,1,2026-06-25 22:11:35.054353+00:00,phase7_automated_group_stage_v1
+537356,2026-06-25 20:00:00+00:00,GROUP_STAGE,Curaçao,Ivory Coast,0,2,2026-06-25 22:11:35.054412+00:00,phase7_automated_group_stage_v1
