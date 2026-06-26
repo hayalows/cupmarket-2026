@@ -65,6 +65,7 @@ def render_specialist_sidebar(active_page: str) -> None:
         st.page_link("pages/5_Market_Story.py", label="Market", icon="📈")
         st.page_link("pages/6_Analytics_Dashboard.py", label="Analytics", icon="📊")
         st.markdown('<div class="cm-side-label">About</div>', unsafe_allow_html=True)
+        st.page_link("pages/10_Glossary.py", label="Guide", icon="ℹ️")
         render_project_credit(compact=True)
         st.link_button("View the project on GitHub", PROJECT_REPOSITORY)
 
@@ -90,11 +91,9 @@ def render_live_vs_official_note() -> None:
 
 
 def render_live_feed_notice(metadata: dict) -> None:
-    """Show a concise recovery-focused message to ordinary users."""
     message = metadata.get("public_notice")
     if not message:
         return
-
     level = metadata.get("notice_level")
     if level == "error":
         st.error(message)
@@ -104,18 +103,12 @@ def render_live_feed_notice(metadata: dict) -> None:
         st.info(message)
 
 
-def render_official_data_caption(
-    frame: pd.DataFrame,
-    *,
-    label: str = "Official market",
-) -> None:
-    """Expose the publication source without overwhelming the main interface."""
+def render_official_data_caption(frame: pd.DataFrame, *, label: str = "Official market") -> None:
     source = frame.attrs.get("cupmarket_source")
     commit_sha = frame.attrs.get("cupmarket_commit")
     fallback_reason = frame.attrs.get("cupmarket_fallback_reason")
     if not source:
         return
-
     commit_text = f" · snapshot {str(commit_sha)[:7]}" if commit_sha else ""
     st.caption(f"{label} source: {source}{commit_text}")
     if source == "Deployed fallback" and fallback_reason:
@@ -146,9 +139,7 @@ def render_data_diagnostics(
         if pending_updates is not None
         else ""
     )
-    st.caption(
-        f"Scores refreshed {score_refreshed} · Published model {model_generated}{pending_text}"
-    )
+    st.caption(f"Scores refreshed {score_refreshed} · Published model {model_generated}{pending_text}")
     with st.expander("Data freshness and system details", expanded=False):
         columns = st.columns(4 if pending_updates is not None else 3)
         columns[0].metric("Score source", score_source)
@@ -156,12 +147,9 @@ def render_data_diagnostics(
         columns[2].metric("Model generated", model_generated)
         if pending_updates is not None:
             columns[3].metric("Results awaiting model", pending_updates)
-
         detail_parts = []
         if token_configured is not None:
-            detail_parts.append(
-                "Streamlit token configured" if token_configured else "Streamlit token missing"
-            )
+            detail_parts.append("Streamlit token configured" if token_configured else "Streamlit token missing")
         if feed_state:
             detail_parts.append(f"Feed state: {feed_state.replace('_', ' ')}")
         if requests_remaining is not None:
@@ -172,13 +160,8 @@ def render_data_diagnostics(
             st.caption(f"Technical detail: {technical_details}")
         if load_time_ms is not None:
             st.caption(f"Page data prepared in {load_time_ms:.0f} ms on this rerun.")
-        if refresh_key and st.button(
-            "Refresh live scores",
-            key=refresh_key,
-            help="Clears only the football-feed cache and requests the latest match states.",
-        ):
+        if refresh_key and st.button("Refresh live scores", key=refresh_key):
             from features.live_match_data import clear_live_match_cache
-
             clear_live_match_cache()
             st.rerun()
         if warning:
