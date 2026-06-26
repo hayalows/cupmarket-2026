@@ -1,0 +1,48 @@
+import streamlit as st
+
+from features.bracket_view import render_dynamic_bracket_view
+from features.product_ui import (
+    inject_styles,
+    render_project_footer,
+    render_specialist_sidebar,
+)
+from features.tournament_data import DATA_DIR
+from features.tournament_path_data import load_tournament_path_data, tournament_summary
+
+
+st.set_page_config(
+    page_title="CupMarket Bracket View",
+    page_icon="🏆",
+    layout="wide",
+    initial_sidebar_state="auto",
+)
+
+inject_styles(DATA_DIR.parent)
+render_specialist_sidebar("bracket")
+
+st.markdown(
+    '''
+    <div class="cm-hero">
+        <div class="cm-eyebrow">CupMarket 2026 · Bracket View</div>
+        <h1>See the bracket as it stands now.</h1>
+        <p>Confirmed fixtures appear when the official bracket locks. Until then, CupMarket fills uncertain slots with the model's most likely projected teams and opponents.</p>
+    </div>
+    ''',
+    unsafe_allow_html=True,
+)
+
+data = load_tournament_path_data()
+summary = tournament_summary(data)
+
+metrics = st.columns(4)
+metrics[0].metric("Tournament stage", summary["current_stage"])
+metrics[1].metric("Bracket", summary["bracket_status"])
+metrics[2].metric("Knockout matches finished", summary["completed_knockout_matches"])
+metrics[3].metric("Knockout matches live", summary["live_knockout_matches"])
+
+st.info(
+    "Use Confirmed + projected to see the full current picture. Confirmed fixtures come from the official feed. Projected fixtures come from the latest model run and update after the next successful publication."
+)
+
+render_dynamic_bracket_view(data)
+render_project_footer()
