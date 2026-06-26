@@ -59,3 +59,5 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537362,2026-06-25 23:00:00+00:00,GROUP_STAGE,Japan,Sweden,1,1,2026-06-26 06:59:14.818286+00:00,phase7_automated_group_stage_v1
 537349,2026-06-26 02:00:00+00:00,GROUP_STAGE,Turkey,United States,3,2,2026-06-26 06:59:14.818302+00:00,phase7_automated_group_stage_v1
 537350,2026-06-26 02:00:00+00:00,GROUP_STAGE,Paraguay,Australia,0,0,2026-06-26 06:59:14.818312+00:00,phase7_automated_group_stage_v1
+537395,2026-06-26 19:00:00+00:00,GROUP_STAGE,Norway,France,1,4,2026-06-26 21:42:53.113241+00:00,phase7_automated_group_stage_v1
+537396,2026-06-26 19:00:00+00:00,GROUP_STAGE,Senegal,Iraq,5,0,2026-06-26 21:42:53.113270+00:00,phase7_automated_group_stage_v1

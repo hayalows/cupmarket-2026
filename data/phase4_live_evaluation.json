@@ -1,6 +1,6 @@
 {
-  "eligible_completed_predictions": 56,
-  "accuracy": 0.5892857142857143,
-  "log_loss": 0.9567628575852429,
-  "multiclass_brier": 0.5753309037133929
+  "eligible_completed_predictions": 58,
+  "accuracy": 0.603448275862069,
+  "log_loss": 0.943515287234535,
+  "multiclass_brier": 0.5653401341038793
 }
