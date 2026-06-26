@@ -1,14 +1,10 @@
 import streamlit as st
 
+from features.bracket_stage_view import render_stage_bracket_view
 from features.bracket_view import render_dynamic_bracket_view
-from features.product_ui import (
-    inject_styles,
-    render_project_footer,
-    render_specialist_sidebar,
-)
+from features.product_ui import inject_styles, render_project_footer, render_specialist_sidebar
 from features.tournament_data import DATA_DIR
 from features.tournament_path_data import load_tournament_path_data, tournament_summary
-
 
 st.set_page_config(
     page_title="CupMarket Bracket View",
@@ -23,7 +19,7 @@ render_specialist_sidebar("bracket")
 st.markdown(
     '''
     <div class="cm-hero">
-        <div class="cm-eyebrow">CupMarket 2026 · Bracket View</div>
+        <div class="cm-eyebrow">CupMarket 2026 · Bracket</div>
         <h1>See the bracket as it stands now.</h1>
         <p>Confirmed fixtures appear when the official bracket locks. Until then, CupMarket fills uncertain slots with the model's most likely projected teams and opponents.</p>
     </div>
@@ -41,8 +37,13 @@ metrics[2].metric("Knockout matches finished", summary["completed_knockout_match
 metrics[3].metric("Knockout matches live", summary["live_knockout_matches"])
 
 st.info(
-    "Use Confirmed + projected to see the full current picture. Confirmed fixtures come from the official feed. Projected fixtures come from the latest model run and update after the next successful publication."
+    "Use Stage view on mobile. Use Full bracket on wider screens. Confirmed fixtures come from the official feed. Projected fixtures come from the latest model run."
 )
 
-render_dynamic_bracket_view(data)
+stage_tab, full_tab = st.tabs(["Stage view", "Full bracket"])
+with stage_tab:
+    render_stage_bracket_view(data)
+with full_tab:
+    render_dynamic_bracket_view(data)
+
 render_project_footer()
