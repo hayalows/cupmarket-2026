@@ -70,7 +70,7 @@ def render_start_here_panel(default_team: str | None = None) -> None:
     rows = [
         ("What changed today?", "Results, live matches and market movement", "pages/Tournament_Pulse.py"),
         ("Show me the bracket", "Confirmed and projected knockout path", "pages/8_Bracket_View.py"),
-        ("Check a country", "One country’s price, next match and path", "pages/9_Country_Snapshot.py"),
+        ("Check a country", "One country's price, next match and path", "pages/Country_Snapshot.py"),
         ("Which match matters?", "Live and upcoming match context", "pages/4_Match_Hub.py"),
         ("Who can qualify?", "Group and qualification pressure", "pages/2_Qualification_Lab.py"),
         ("Why did price move?", "Market story and rank movement", "pages/5_Market_Story.py"),
@@ -87,7 +87,7 @@ def render_start_here_panel(default_team: str | None = None) -> None:
 
 
 def render_todays_story(matches: pd.DataFrame, prices: pd.DataFrame) -> None:
-    st.markdown("### Today’s story")
+    st.markdown("### Today's story")
     finished = pd.DataFrame()
     live = pd.DataFrame()
     upcoming = pd.DataFrame()
