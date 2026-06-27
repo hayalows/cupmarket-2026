@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 
+from features.match_story import render_match_story
 from features.product_ui import inject_styles, render_project_footer, render_specialist_sidebar
 from features.tournament_data_v2 import DATA_DIR, STATE_DIR, load_static_data
 from features.tournament_insights import render_tournament_insights
@@ -40,12 +41,17 @@ if prediction_ledger.empty:
     ledger_path = STATE_DIR / "world_cup_prediction_ledger.csv"
     prediction_ledger = pd.read_csv(ledger_path) if ledger_path.exists() else pd.DataFrame()
 
-render_tournament_insights(
-    prices,
-    tables,
-    movements,
-    path_status,
-    snapshots=snapshots,
-    prediction_ledger=prediction_ledger,
-)
+main_tab, match_tab = st.tabs(["Tournament insights", "Match story"])
+with main_tab:
+    render_tournament_insights(
+        prices,
+        tables,
+        movements,
+        path_status,
+        snapshots=snapshots,
+        prediction_ledger=prediction_ledger,
+    )
+with match_tab:
+    render_match_story(prediction_ledger, movements)
+
 render_project_footer()
