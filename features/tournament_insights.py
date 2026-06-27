@@ -62,6 +62,13 @@ def _percent(value, digits: int = 1) -> str:
     return f"{100 * float(number):.{digits}f}%"
 
 
+def _percentage_points(value, digits: int = 1) -> str:
+    number = pd.to_numeric(value, errors="coerce")
+    if pd.isna(number):
+        return "—"
+    return f"{100 * float(number):+.{digits}f} pts"
+
+
 def _number(value, digits: int = 2) -> str:
     number = pd.to_numeric(value, errors="coerce")
     if pd.isna(number):
@@ -98,17 +105,21 @@ def _qualifying_frame(prices: pd.DataFrame, threshold: float = 0.999) -> pd.Data
     return frame.loc[frame["prob_reach_round_32"] >= threshold].copy()
 
 
-def _render_table(frame: pd.DataFrame, columns: list[str], labels: dict[str, str], percent_columns: list[str] | None = None) -> None:
+def _render_table(frame: pd.DataFrame, columns: list[str], labels: dict[str, str], percent_columns: list[str] | None = None, pp_columns: list[str] | None = None) -> None:
     if frame.empty:
         st.caption("No data available for this section yet.")
         return
     display = frame[[column for column in columns if column in frame.columns]].copy()
     percent_columns = percent_columns or []
+    pp_columns = pp_columns or []
     for column in percent_columns:
         if column in display.columns:
             display[column] = display[column].map(_percent)
-    for column in ["cupmarket_price", "previous_price", "price_change", "price_change_percent"]:
-        if column in display.columns and column not in percent_columns:
+    for column in pp_columns:
+        if column in display.columns:
+            display[column] = display[column].map(_percentage_points)
+    for column in ["cupmarket_price", "opening_price", "current_price", "price_change", "price_gain", "price_change_percent"]:
+        if column in display.columns and column not in percent_columns and column not in pp_columns:
             if column == "price_change_percent":
                 display[column] = display[column].map(lambda value: f"{float(value):+.2f}%" if pd.notna(value) else "—")
             else:
@@ -117,23 +128,262 @@ def _render_table(frame: pd.DataFrame, columns: list[str], labels: dict[str, str
     st.dataframe(display, hide_index=True, use_container_width=True)
 
 
-def render_tournament_insights(prices: pd.DataFrame, tables: pd.DataFrame, movements: pd.DataFrame, path_status: pd.DataFrame) -> None:
+def _prepare_prices(prices: pd.DataFrame) -> pd.DataFrame:
+    if prices.empty:
+        return pd.DataFrame()
+    frame = prices.copy()
+    frame["continent"] = frame["team"].map(CONTINENT_MAP).fillna("Other") if "team" in frame.columns else "Other"
+    numeric_columns = [
+        "prob_reach_round_32",
+        "prob_group_exit",
+        "prob_champion",
+        "cupmarket_price",
+        "price_change_percent",
+        "price_change",
+        "market_rank",
+    ]
+    for column in numeric_columns:
+        if column in frame.columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame
+
+
+def _prepare_tables(tables: pd.DataFrame) -> pd.DataFrame:
+    if tables.empty:
+        return pd.DataFrame()
+    frame = tables.copy()
+    for column in ["goals_for", "goals_against", "goal_difference", "points", "played", "wins", "draws", "losses"]:
+        if column in frame.columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame
+
+
+def _snapshot_change_frame(snapshots: pd.DataFrame, prices: pd.DataFrame) -> pd.DataFrame:
+    if snapshots.empty or "team" not in snapshots.columns:
+        return pd.DataFrame()
+    frame = snapshots.copy()
+    if "generated_at_utc" not in frame.columns:
+        return pd.DataFrame()
+    frame["generated_at_utc"] = pd.to_datetime(frame["generated_at_utc"], errors="coerce", utc=True)
+    frame = frame.dropna(subset=["generated_at_utc", "team"])
+    for column in ["cupmarket_price", "prob_reach_round_32", "prob_champion", "market_rank"]:
+        if column in frame.columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    if frame.empty:
+        return pd.DataFrame()
+
+    earliest = frame.sort_values("generated_at_utc").groupby("team", as_index=False).first()
+    latest_from_snapshots = frame.sort_values("generated_at_utc").groupby("team", as_index=False).last()
+
+    latest = latest_from_snapshots
+    if not prices.empty and "team" in prices.columns:
+        latest_prices = prices.copy()
+        for column in ["cupmarket_price", "prob_reach_round_32", "prob_champion", "market_rank"]:
+            if column in latest_prices.columns:
+                latest_prices[column] = pd.to_numeric(latest_prices[column], errors="coerce")
+        latest_prices["generated_at_utc"] = pd.to_datetime(latest_prices.get("generated_at_utc"), errors="coerce", utc=True) if "generated_at_utc" in latest_prices.columns else pd.NaT
+        latest = pd.concat([latest_from_snapshots, latest_prices], ignore_index=True, sort=False).sort_values("generated_at_utc").groupby("team", as_index=False).last()
+
+    merged = earliest.merge(latest, on="team", suffixes=("_opening", "_current"))
+    if merged.empty:
+        return merged
+    merged["continent"] = merged["team"].map(CONTINENT_MAP).fillna("Other")
+    merged["opening_time"] = merged.get("generated_at_utc_opening")
+    merged["current_time"] = merged.get("generated_at_utc_current")
+    merged["opening_price"] = merged.get("cupmarket_price_opening")
+    merged["current_price"] = merged.get("cupmarket_price_current")
+    merged["price_gain"] = merged["current_price"] - merged["opening_price"]
+    merged["opening_r32"] = merged.get("prob_reach_round_32_opening")
+    merged["current_r32"] = merged.get("prob_reach_round_32_current")
+    merged["r32_change"] = merged["current_r32"] - merged["opening_r32"]
+    merged["opening_champion"] = merged.get("prob_champion_opening")
+    merged["current_champion"] = merged.get("prob_champion_current")
+    merged["champion_change"] = merged["current_champion"] - merged["opening_champion"]
+    return merged
+
+
+def _prediction_review(prediction_ledger: pd.DataFrame) -> pd.DataFrame:
+    if prediction_ledger.empty:
+        return pd.DataFrame()
+    required = {"match_id", "home_team", "away_team", "predicted_result", "actual_home_score", "actual_away_score"}
+    if not required.issubset(prediction_ledger.columns):
+        return pd.DataFrame()
+    frame = prediction_ledger.copy()
+    frame["generated_at_utc"] = pd.to_datetime(frame.get("generated_at_utc"), errors="coerce", utc=True)
+    frame["actual_home_score"] = pd.to_numeric(frame["actual_home_score"], errors="coerce")
+    frame["actual_away_score"] = pd.to_numeric(frame["actual_away_score"], errors="coerce")
+    frame = frame.dropna(subset=["match_id", "actual_home_score", "actual_away_score"])
+    if "created_before_kickoff" in frame.columns:
+        created = frame["created_before_kickoff"].astype(str).str.lower().isin(["true", "1", "yes"])
+        frame = frame.loc[created | frame["prediction_type"].astype(str).str.contains("pre", case=False, na=False)]
+    frame = frame.sort_values("generated_at_utc").drop_duplicates("match_id", keep="first")
+    if frame.empty:
+        return frame
+
+    def actual(row: pd.Series) -> str:
+        if row["actual_home_score"] > row["actual_away_score"]:
+            return "HOME_WIN"
+        if row["actual_home_score"] < row["actual_away_score"]:
+            return "AWAY_WIN"
+        return "DRAW"
+
+    frame["actual_result"] = frame.apply(actual, axis=1)
+    frame["model_correct"] = frame["predicted_result"].astype(str) == frame["actual_result"].astype(str)
+    probability_columns = {"HOME_WIN": "prob_home_win", "DRAW": "prob_draw", "AWAY_WIN": "prob_away_win"}
+    for column in probability_columns.values():
+        if column in frame.columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    frame["actual_result_probability"] = frame.apply(lambda row: row.get(probability_columns.get(row["actual_result"], ""), pd.NA), axis=1)
+    frame["scoreline"] = frame["actual_home_score"].astype(int).astype(str) + "-" + frame["actual_away_score"].astype(int).astype(str)
+    frame["match"] = frame["home_team"].astype(str) + " " + frame["scoreline"] + " " + frame["away_team"].astype(str)
+    return frame
+
+
+def _render_tournament_so_far(prices: pd.DataFrame, snapshots: pd.DataFrame, prediction_ledger: pd.DataFrame) -> None:
+    st.markdown("## Tournament So Far")
+    st.caption("This section compares the earliest stored CupMarket snapshot with the latest model output. If the first snapshot is not pre-tournament, the label stays honest: earliest stored snapshot.")
+    changes = _snapshot_change_frame(snapshots, prices)
+    reviews = _prediction_review(prediction_ledger)
+
+    if changes.empty:
+        st.info("No team snapshot history found yet. Once snapshots exist, this section will show full tournament movement.")
+        return
+
+    opening_time = pd.to_datetime(changes["opening_time"], errors="coerce", utc=True).min()
+    current_time = pd.to_datetime(changes["current_time"], errors="coerce", utc=True).max()
+    cols = st.columns(4)
+    cols[0].metric("Teams tracked", len(changes))
+    cols[1].metric("Baseline", opening_time.strftime("%d %b") if pd.notna(opening_time) else "—")
+    cols[2].metric("Latest", current_time.strftime("%d %b · %H:%M") if pd.notna(current_time) else "—")
+    if not reviews.empty:
+        accuracy = reviews["model_correct"].mean()
+        cols[3].metric("Pre-match calls", f"{100 * accuracy:.1f}%")
+    else:
+        cols[3].metric("Pre-match calls", "—")
+
+    tab1, tab2, tab3, tab4 = st.tabs(["Overperformers", "Underperformers", "Market journey", "Model calls"])
+
+    with tab1:
+        st.markdown("### Biggest Round-of-32 probability gainers")
+        gainers = changes.dropna(subset=["r32_change"]).sort_values("r32_change", ascending=False).head(10)
+        _render_table(
+            gainers,
+            ["team", "continent", "opening_r32", "current_r32", "r32_change", "opening_price", "current_price", "price_gain"],
+            {
+                "team": "Country",
+                "continent": "Continent",
+                "opening_r32": "Opening R32",
+                "current_r32": "Current R32",
+                "r32_change": "R32 change",
+                "opening_price": "Opening price",
+                "current_price": "Current price",
+                "price_gain": "Price gain",
+            },
+            percent_columns=["opening_r32", "current_r32"],
+            pp_columns=["r32_change"],
+        )
+        st.caption("Use this to spot teams that moved from doubt to safety.")
+
+    with tab2:
+        st.markdown("### Biggest Round-of-32 probability fallers")
+        fallers = changes.dropna(subset=["r32_change"]).sort_values("r32_change", ascending=True).head(10)
+        _render_table(
+            fallers,
+            ["team", "continent", "opening_r32", "current_r32", "r32_change", "opening_price", "current_price", "price_gain"],
+            {
+                "team": "Country",
+                "continent": "Continent",
+                "opening_r32": "Opening R32",
+                "current_r32": "Current R32",
+                "r32_change": "R32 change",
+                "opening_price": "Opening price",
+                "current_price": "Current price",
+                "price_gain": "Price gain",
+            },
+            percent_columns=["opening_r32", "current_r32"],
+            pp_columns=["r32_change"],
+        )
+        st.caption("Use this to spot teams that lost control of their tournament path.")
+
+    with tab3:
+        st.markdown("### Biggest price risers since earliest stored snapshot")
+        price_risers = changes.dropna(subset=["price_gain"]).sort_values("price_gain", ascending=False).head(10)
+        _render_table(
+            price_risers,
+            ["team", "continent", "opening_price", "current_price", "price_gain", "opening_champion", "current_champion", "champion_change"],
+            {
+                "team": "Country",
+                "continent": "Continent",
+                "opening_price": "Opening price",
+                "current_price": "Current price",
+                "price_gain": "Price gain",
+                "opening_champion": "Opening champion",
+                "current_champion": "Current champion",
+                "champion_change": "Champion change",
+            },
+            percent_columns=["opening_champion", "current_champion"],
+            pp_columns=["champion_change"],
+        )
+        st.markdown("### Biggest price fallers")
+        price_fallers = changes.dropna(subset=["price_gain"]).sort_values("price_gain", ascending=True).head(8)
+        _render_table(
+            price_fallers,
+            ["team", "continent", "opening_price", "current_price", "price_gain", "opening_r32", "current_r32", "r32_change"],
+            {
+                "team": "Country",
+                "continent": "Continent",
+                "opening_price": "Opening price",
+                "current_price": "Current price",
+                "price_gain": "Price gain",
+                "opening_r32": "Opening R32",
+                "current_r32": "Current R32",
+                "r32_change": "R32 change",
+            },
+            percent_columns=["opening_r32", "current_r32"],
+            pp_columns=["r32_change"],
+        )
+
+    with tab4:
+        if reviews.empty:
+            st.caption("Prediction ledger review is not available yet.")
+        else:
+            st.markdown("### Strongest model calls")
+            correct = reviews.loc[reviews["model_correct"]].sort_values("actual_result_probability", ascending=False).head(8)
+            _render_table(
+                correct,
+                ["match", "predicted_result", "actual_result", "actual_result_probability"],
+                {
+                    "match": "Match",
+                    "predicted_result": "Model call",
+                    "actual_result": "Actual",
+                    "actual_result_probability": "Model confidence",
+                },
+                percent_columns=["actual_result_probability"],
+            )
+            st.markdown("### Biggest model surprises")
+            surprises = reviews.sort_values("actual_result_probability", ascending=True).head(8)
+            _render_table(
+                surprises,
+                ["match", "predicted_result", "actual_result", "actual_result_probability"],
+                {
+                    "match": "Match",
+                    "predicted_result": "Model call",
+                    "actual_result": "Actual",
+                    "actual_result_probability": "Actual-result probability",
+                },
+                percent_columns=["actual_result_probability"],
+            )
+
+
+def render_tournament_insights(prices: pd.DataFrame, tables: pd.DataFrame, movements: pd.DataFrame, path_status: pd.DataFrame, snapshots: pd.DataFrame | None = None, prediction_ledger: pd.DataFrame | None = None) -> None:
+    prices = _prepare_prices(prices)
+    tables = _prepare_tables(tables)
+    snapshots = snapshots if isinstance(snapshots, pd.DataFrame) else pd.DataFrame()
+    prediction_ledger = prediction_ledger if isinstance(prediction_ledger, pd.DataFrame) else pd.DataFrame()
+
     st.markdown("### What changed after the latest model run?")
     st.caption(f"Published model: {_timestamp(prices)}")
     st.info(_latest_event(movements))
-
-    if not prices.empty:
-        prices = prices.copy()
-        prices["continent"] = prices["team"].map(CONTINENT_MAP).fillna("Other")
-        for column in ["prob_reach_round_32", "cupmarket_price", "price_change_percent", "price_change"]:
-            if column in prices.columns:
-                prices[column] = pd.to_numeric(prices[column], errors="coerce")
-
-    if not tables.empty:
-        tables = tables.copy()
-        for column in ["goals_for", "goals_against", "goal_difference", "points", "played", "wins", "draws", "losses"]:
-            if column in tables.columns:
-                tables[column] = pd.to_numeric(tables[column], errors="coerce")
 
     top_cards = st.columns(4)
     qualified = _qualifying_frame(prices)
@@ -146,6 +396,9 @@ def render_tournament_insights(prices: pd.DataFrame, tables: pd.DataFrame, movem
         top_cards[2].metric("Most goals by a team", "—")
         top_cards[3].metric("Worst goals against", "—")
 
+    _render_tournament_so_far(prices, snapshots, prediction_ledger)
+
+    st.markdown("## Latest Model Run")
     st.markdown("### Biggest model winners")
     if not prices.empty and "price_change_percent" in prices.columns:
         winners = prices.dropna(subset=["price_change_percent"]).sort_values("price_change_percent", ascending=False).head(8)
