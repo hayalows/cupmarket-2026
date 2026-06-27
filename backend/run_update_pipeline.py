@@ -25,7 +25,7 @@ except ImportError:
     import update_pipeline
 
 
-ACTIVE_GROUP_MATCH_STATUSES = {"IN_PLAY", "PAUSED"}
+ACTIVE_GROUP_MATCH_STATUSES = {"IN_PLAY", "LIVE", "PAUSED", "SUSPENDED"}
 PRICE_CHANGE_COLUMNS = [
     "previous_price",
     "price_change",
