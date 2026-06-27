@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 
 from features.product_ui import inject_styles, render_project_footer, render_specialist_sidebar
-from features.tournament_data_v2 import DATA_DIR, load_static_data
+from features.tournament_data_v2 import DATA_DIR, STATE_DIR, load_static_data
 from features.tournament_insights import render_tournament_insights
 from features.tournament_path_data import load_tournament_path_data
 
@@ -16,7 +16,7 @@ st.markdown(
     <div class="cm-hero">
         <div class="cm-eyebrow">CupMarket 2026 · Tournament Insights</div>
         <h1>What changed, who benefited, and what still matters.</h1>
-        <p>Automatic insights from the latest model run: movers, qualification pressure, continent picture, surprise teams and bracket stories.</p>
+        <p>Track the tournament story from the earliest stored snapshot to the latest model run: overperformers, collapses, market movement, prediction calls and bracket pressure.</p>
     </div>
     ''',
     unsafe_allow_html=True,
@@ -30,6 +30,18 @@ tables = pd.read_csv(DATA_DIR / "current_group_tables.csv")
 movements_path = DATA_DIR / "market_movements_latest.csv"
 movements = pd.read_csv(movements_path) if movements_path.exists() else pd.DataFrame()
 path_status = path_data.get("path_status", pd.DataFrame())
+snapshots = path_data.get("snapshots", pd.DataFrame())
+prediction_ledger = static.get("prediction_ledger", pd.DataFrame())
+if prediction_ledger.empty:
+    ledger_path = STATE_DIR / "world_cup_prediction_ledger.csv"
+    prediction_ledger = pd.read_csv(ledger_path) if ledger_path.exists() else pd.DataFrame()
 
-render_tournament_insights(prices, tables, movements, path_status)
+render_tournament_insights(
+    prices,
+    tables,
+    movements,
+    path_status,
+    snapshots=snapshots,
+    prediction_ledger=prediction_ledger,
+)
 render_project_footer()
