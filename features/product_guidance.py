@@ -3,7 +3,6 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-
 LIVE_STATUSES = {"IN_PLAY", "PAUSED"}
 UPCOMING_STATUSES = {"TIMED", "SCHEDULED"}
 FINISHED_STATUSES = {"FINISHED", "AWARDED"}
@@ -66,13 +65,13 @@ def go_to(page: str, team: str | None = None) -> None:
 
 def render_start_here_panel(default_team: str | None = None) -> None:
     st.markdown("### Start here")
-    st.caption("Choose the question you have. CupMarket will open the page that answers it.")
+    st.caption("Pick the question you want answered. Each card opens the clearest page for that job.")
     rows = [
-        ("What changed today?", "Results, live matches and market movement", "pages/Tournament_Pulse.py"),
-        ("Show me the bracket", "Confirmed and projected knockout path", "pages/8_Bracket_View.py"),
-        ("Check a country", "One country's price, next match and path", "pages/Country_Snapshot.py"),
+        ("What changed?", "Latest results, movers and tournament story", "pages/11_Tournament_Insights.py"),
+        ("Check one country", "Price, next match, likely path and journey", "pages/Country_Snapshot.py"),
+        ("See the bracket", "Confirmed and projected knockout view", "pages/8_Bracket_View.py"),
         ("Which match matters?", "Live and upcoming match context", "pages/4_Match_Hub.py"),
-        ("Who can qualify?", "Group and qualification pressure", "pages/2_Qualification_Lab.py"),
+        ("Who is in danger?", "Qualification pressure and group outlook", "pages/2_Qualification_Lab.py"),
         ("Why did price move?", "Market story and rank movement", "pages/5_Market_Story.py"),
     ]
     for start in range(0, len(rows), 3):
@@ -109,7 +108,7 @@ def render_todays_story(matches: pd.DataFrame, prices: pd.DataFrame) -> None:
     if not leader.empty:
         price = _number(leader.get("cupmarket_price"), suffix=" CM")
         champion = _percent(leader.get("prob_champion"))
-        parts.append(f"The current market leader is **{leader.get('team')}** at **{price}**, with champion chance **{champion}**.")
+        parts.append(f"Market leader: **{leader.get('team')}** at **{price}**, title chance **{champion}**.")
 
     if not parts:
         st.info("CupMarket is waiting for match and market data to publish the current story.")
@@ -122,7 +121,8 @@ def render_so_what(label: str, text: str) -> None:
 
 
 def render_country_snapshot(matches: pd.DataFrame, prices: pd.DataFrame, default_team: str | None = None) -> None:
-    st.markdown("### Country Snapshot")
+    st.markdown("### Country snapshot")
+    st.caption("Fast answer first. Detailed journey and path context appear below.")
     if prices.empty or "team" not in prices.columns:
         st.warning("Country market data is not available yet.")
         return
@@ -145,7 +145,7 @@ def render_country_snapshot(matches: pd.DataFrame, prices: pd.DataFrame, default
     cols[0].metric("Price", _number(row.get("cupmarket_price"), suffix=" CM") if not row.empty else "—")
     cols[1].metric("Reach R32", _percent(row.get("prob_reach_round_32")) if not row.empty else "—")
     cols[2].metric("Reach final", _percent(row.get("prob_reach_final")) if not row.empty else "—")
-    cols[3].metric("Champion", _percent(row.get("prob_champion")) if not row.empty else "—")
+    cols[3].metric("Win title", _percent(row.get("prob_champion")) if not row.empty else "—")
 
     if not latest_result.empty:
         st.write(f"Latest result: **{latest_result.get('home_team')} {_score(latest_result)} {latest_result.get('away_team')}**")
@@ -162,11 +162,11 @@ def render_country_snapshot(matches: pd.DataFrame, prices: pd.DataFrame, default
 
     action_cols = st.columns(3)
     with action_cols[0]:
-        if st.button("Open country path", use_container_width=True):
+        if st.button("Country path", use_container_width=True):
             go_to("pages/7_Tournament_Path.py", team)
     with action_cols[1]:
-        if st.button("Open market story", use_container_width=True):
+        if st.button("Market story", use_container_width=True):
             go_to("pages/5_Market_Story.py", team)
     with action_cols[2]:
-        if st.button("Open bracket", use_container_width=True):
+        if st.button("Bracket", use_container_width=True):
             go_to("pages/8_Bracket_View.py", team)
