@@ -2,6 +2,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
+from features.adaptive_ratings import build_adaptive_ratings, render_country_learning
 from features.live_match_data import load_matches
 from features.product_guidance import render_country_snapshot
 from features.product_ui import inject_styles, render_project_footer, render_specialist_sidebar
@@ -50,7 +51,6 @@ def _plot_history(history: pd.DataFrame, column: str, title: str, percent: bool 
 
 
 st.set_page_config(page_title="CupMarket Country", page_icon="🔎", layout="wide")
-
 inject_styles(DATA_DIR.parent)
 render_specialist_sidebar("country")
 
@@ -58,16 +58,7 @@ matches, metadata = load_matches(DATA_DIR / "world_cup_2026_matches_latest.csv")
 static = load_static_data()
 path_data = load_tournament_path_data()
 
-st.markdown(
-    '''
-    <div class="cm-hero">
-        <div class="cm-eyebrow">CupMarket 2026 · Country</div>
-        <h1>One country. The full tournament story.</h1>
-        <p>Price, next match, likely path, market journey, title chance and match timeline.</p>
-    </div>
-    ''',
-    unsafe_allow_html=True,
-)
+st.markdown('''<div class="cm-hero"><div class="cm-eyebrow">CupMarket 2026 · Country</div><h1>One country. The full tournament story.</h1><p>Price, path, market journey, learning signal and match timeline.</p></div>''', unsafe_allow_html=True)
 
 render_country_snapshot(matches, static["prices"], default_team="Ghana")
 
@@ -77,6 +68,8 @@ opponents = path_data.get("opponents", pd.DataFrame())
 snapshots = path_data.get("snapshots", pd.DataFrame())
 prices = static.get("prices", pd.DataFrame())
 processed = static.get("processed_ledger", pd.DataFrame())
+history_static = static.get("history", pd.DataFrame())
+adaptive_ratings = build_adaptive_ratings(prices, history_static, processed)
 
 if team and isinstance(path_status, pd.DataFrame) and not path_status.empty and "team" in path_status.columns:
     rows = path_status.loc[path_status["team"].astype(str) == str(team)]
@@ -91,7 +84,6 @@ if team and isinstance(path_status, pd.DataFrame) and not path_status.empty and 
             opponent = "Waiting for model"
         cols[2].metric("Likely opponent", str(opponent))
         st.caption("Official means locked by the bracket. Projected means model-based and can still change after new results.")
-
         if isinstance(opponents, pd.DataFrame) and not opponents.empty and {"team", "opponent"}.issubset(opponents.columns):
             choices = opponents.loc[opponents["team"].astype(str) == str(team)].copy()
             probability_column = "probability_given_qualification" if "probability_given_qualification" in choices.columns else "probability_unconditional"
@@ -105,16 +97,16 @@ if team and isinstance(path_status, pd.DataFrame) and not path_status.empty and 
 else:
     st.info("Projected knockout path data will appear here after the model publishes it.")
 
+render_country_learning(team, adaptive_ratings)
+
 st.markdown("### Country journey")
 st.caption("This uses the earliest stored CupMarket snapshot as the baseline, then compares it with the latest model output.")
-
 history_parts = []
 for frame in [snapshots, prices]:
     if isinstance(frame, pd.DataFrame) and not frame.empty and "team" in frame.columns and team:
         part = frame.loc[frame["team"].astype(str) == str(team)].copy()
         if not part.empty:
             history_parts.append(part)
-
 if history_parts:
     history = pd.concat(history_parts, ignore_index=True, sort=False)
     if "generated_at_utc" in history.columns:
@@ -162,12 +154,7 @@ if isinstance(processed, pd.DataFrame) and not processed.empty and team and {"ho
             team_games = team_games.sort_values("utc_date")
         rows = []
         for _, row in team_games.iterrows():
-            rows.append({
-                "Date": _time(row.get("utc_date")),
-                "Match": f"{row.get('home_team')} {_score(row)} {row.get('away_team')}",
-                "Stage": str(row.get("stage", "")).replace("_", " ").title(),
-                "Model": row.get("model_version", "—"),
-            })
+            rows.append({"Date": _time(row.get("utc_date")), "Match": f"{row.get('home_team')} {_score(row)} {row.get('away_team')}", "Stage": str(row.get("stage", "")).replace("_", " ").title(), "Model": row.get("model_version", "—")})
         st.dataframe(pd.DataFrame(rows), hide_index=True, use_container_width=True)
 else:
     st.caption("Processed match ledger is not available yet.")
