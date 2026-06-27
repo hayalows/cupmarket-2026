@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 
+from features.knockout_readiness import render_knockout_readiness
 from features.match_story import render_match_story
 from features.model_performance import render_model_performance
 from features.product_ui import inject_styles, render_project_footer, render_specialist_sidebar
@@ -19,7 +20,7 @@ st.markdown(
     <div class="cm-hero">
         <div class="cm-eyebrow">CupMarket 2026 · Insights</div>
         <h1>The tournament story, not just the tables.</h1>
-        <p>See who improved, who collapsed, how matches changed the market, and how the model is performing.</p>
+        <p>See who improved, who collapsed, how matches changed the market, how the model is performing, and whether knockout mode is ready.</p>
     </div>
     ''',
     unsafe_allow_html=True,
@@ -33,6 +34,7 @@ static = load_static_data()
 path_data = load_tournament_path_data()
 
 prices = static.get("prices", pd.DataFrame())
+predictions = static.get("latest_predictions", pd.DataFrame())
 tables = pd.read_csv(DATA_DIR / "current_group_tables.csv")
 movements_path = DATA_DIR / "market_movements_latest.csv"
 movements = pd.read_csv(movements_path) if movements_path.exists() else pd.DataFrame()
@@ -44,11 +46,12 @@ if prediction_ledger.empty:
     ledger_path = STATE_DIR / "world_cup_prediction_ledger.csv"
     prediction_ledger = pd.read_csv(ledger_path) if ledger_path.exists() else pd.DataFrame()
 
-main_tab, match_tab, timeline_tab, model_tab = st.tabs([
+main_tab, match_tab, timeline_tab, model_tab, readiness_tab = st.tabs([
     "Tournament insights",
     "Match story",
     "Timeline",
     "Model performance",
+    "Knockout readiness",
 ])
 with main_tab:
     render_tournament_insights(
@@ -65,5 +68,7 @@ with timeline_tab:
     render_tournament_timeline(processed_ledger, movements)
 with model_tab:
     render_model_performance()
+with readiness_tab:
+    render_knockout_readiness(prices, predictions, path_status)
 
 render_project_footer()
