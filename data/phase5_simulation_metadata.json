@@ -5,7 +5,7 @@
   "bracket_mode": "provisional_constraint_assignment",
   "finished_group_matches": 66,
   "remaining_group_matches": 6,
-  "simulation_seconds": 10.68972134590149,
+  "simulation_seconds": 10.690673828125,
   "pair_xg_cache_size": 777,
   "elo_fallback_uses": 12,
   "average_valid_third_place_assignments": 22.0444,
@@ -32,12 +32,12 @@
     "Before the Round of 32 is populated, third-place teams are sampled across valid official slot constraints.",
     "Extra-time and penalties use transparent approximation rules."
   ],
-  "generated_at_utc": "2026-06-27T05:30:28.588879+00:00",
-  "new_finished_matches_processed": 4,
+  "generated_at_utc": "2026-06-27T16:35:15.162121+00:00",
+  "new_finished_matches_processed": 0,
   "api": {
     "http_status": 200,
     "matches_returned": 104,
     "requests_remaining": "9",
-    "request_counter_reset": "60"
+    "request_counter_reset": "59"
   }
 }

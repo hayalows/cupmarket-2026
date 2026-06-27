@@ -1,49 +1,49 @@
 team,group,fixture_status,confirmed_slot,round_32_match_id,current_group_position,group_complete,prob_reach_round_32,prob_eliminated,most_likely_opponent,most_likely_opponent_probability_unconditional,most_likely_opponent_probability_given_qualification,prob_finish_1st_group,prob_finish_2nd_group,prob_finish_3rd_group,prob_finish_4th_group,number_of_simulations,generated_at_utc,model_version,bracket_mode
-Algeria,J,projected,,,3,False,0.59335,0.40664999999999996,Spain,0.3174,0.5349287941349962,0.0,0.3174,0.6826,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Argentina,J,projected,,,1,False,1.0,0.0,Cape Verde Islands,1.0,1.0,1.0,0.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Australia,D,confirmed,2D,88.0,2,True,1.0,0.0,Egypt,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Austria,J,projected,,,2,False,0.8181,0.18189999999999995,Spain,0.6826,0.834372326121501,0.0,0.6826,0.3174,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Belgium,G,slot_confirmed_opponent_pending,1G,82.0,1,True,1.0,0.0,South Korea,0.34025,0.34025,1.0,0.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Bosnia-Herzegovina,B,third_place_ranking_pending,3B,,3,True,1.0,0.0,United States,0.63955,0.63955,0.0,0.0,1.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Brazil,C,confirmed,1C,76.0,1,True,1.0,0.0,Japan,1.0,1.0,1.0,0.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Canada,B,confirmed,2B,73.0,2,True,1.0,0.0,South Africa,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Cape Verde Islands,H,slot_confirmed,2H,86.0,2,True,1.0,0.0,Argentina,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Colombia,K,projected,,,1,False,1.0,0.0,Ghana,0.5196,0.5196,0.67275,0.32725,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Congo DR,K,projected,,,3,False,0.36555,0.63445,England,0.26035,0.7122144713445493,0.0,0.0022,0.64525,0.35255,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Croatia,L,projected,,,3,False,0.895,0.10499999999999998,Portugal,0.37055,0.4140223463687151,0.20835,0.41495,0.3767,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Curaçao,E,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Czechia,A,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ecuador,E,third_place_ranking_pending,3E,,3,True,1.0,0.0,Mexico,0.30005,0.30005,0.0,0.0,1.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Egypt,G,confirmed,2G,88.0,2,True,1.0,0.0,Australia,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-England,L,projected,,,1,False,1.0,0.0,Congo DR,0.26035,0.26035,0.7109,0.2875,0.0016,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-France,I,slot_confirmed_opponent_pending,1I,77.0,1,True,1.0,0.0,Paraguay,0.52845,0.52845,1.0,0.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Germany,E,slot_confirmed_opponent_pending,1E,74.0,1,True,1.0,0.0,Paraguay,0.41785,0.41785,1.0,0.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ghana,L,projected,,,2,False,1.0,0.0,Colombia,0.5196,0.5196,0.08075,0.29755,0.6217,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Haiti,C,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iran,G,third_place_ranking_pending,3G,,3,True,0.91295,0.08704999999999996,Switzerland,0.59295,0.6494879237636234,0.0,0.0,1.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Iraq,I,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Ivory Coast,E,confirmed,2E,78.0,2,True,1.0,0.0,Norway,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Japan,F,confirmed,2F,76.0,2,True,1.0,0.0,Brazil,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Jordan,J,projected,,,4,False,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Mexico,A,slot_confirmed_opponent_pending,1A,79.0,1,True,1.0,0.0,Sweden,0.39615,0.39615,1.0,0.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Morocco,C,confirmed,2C,75.0,2,True,1.0,0.0,Netherlands,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Netherlands,F,confirmed,1F,75.0,1,True,1.0,0.0,Morocco,1.0,1.0,1.0,0.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-New Zealand,G,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Norway,I,confirmed,2I,78.0,2,True,1.0,0.0,Ivory Coast,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Panama,L,projected,,,4,False,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Paraguay,D,third_place_ranking_pending,3D,,3,True,1.0,0.0,France,0.52845,0.52845,0.0,0.0,1.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Portugal,K,projected,,,2,False,1.0,0.0,Ghana,0.39905,0.39905,0.32725,0.67055,0.0022,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Qatar,B,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Saudi Arabia,H,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Scotland,C,third_place_ranking_pending,3C,,3,True,0.00125,0.99875,Mexico,0.0007,0.56,0.0,0.0,1.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Senegal,I,third_place_ranking_pending,3I,,3,True,1.0,0.0,Mexico,0.3031,0.3031,0.0,0.0,1.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-South Africa,A,confirmed,2A,73.0,2,True,1.0,0.0,Canada,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-South Korea,A,third_place_ranking_pending,3A,,3,True,0.4134,0.5866,Belgium,0.34025,0.8230527334300919,0.0,0.0,1.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Spain,H,slot_confirmed,1H,84.0,1,True,1.0,0.0,Austria,0.6826,0.6826,1.0,0.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Sweden,F,third_place_ranking_pending,3F,,3,True,1.0,0.0,Mexico,0.39615,0.39615,0.0,0.0,1.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Switzerland,B,slot_confirmed_opponent_pending,1B,85.0,1,True,1.0,0.0,Iran,0.59295,0.59295,1.0,0.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Tunisia,F,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Turkey,D,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-United States,D,slot_confirmed_opponent_pending,1D,81.0,1,True,1.0,0.0,Bosnia-Herzegovina,0.63955,0.63955,1.0,0.0,0.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uruguay,H,third_place_ranking_pending,3H,,3,True,0.0,1.0,,0.0,0.0,0.0,0.0,1.0,0.0,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
-Uzbekistan,K,projected,,,4,False,0.0004,0.9996,Ghana,0.00025,0.625,0.0,0.0,0.35255,0.64745,20000,2026-06-27T05:30:28.588879+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Algeria,J,projected,,,3,False,0.59335,0.40664999999999996,Spain,0.3174,0.5349287941349962,0.0,0.3174,0.6826,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Argentina,J,projected,,,1,False,1.0,0.0,Cape Verde Islands,1.0,1.0,1.0,0.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Australia,D,confirmed,2D,88.0,2,True,1.0,0.0,Egypt,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Austria,J,projected,,,2,False,0.8181,0.18189999999999995,Spain,0.6826,0.834372326121501,0.0,0.6826,0.3174,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Belgium,G,slot_confirmed_opponent_pending,1G,82.0,1,True,1.0,0.0,South Korea,0.34025,0.34025,1.0,0.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Bosnia-Herzegovina,B,third_place_ranking_pending,3B,,3,True,1.0,0.0,United States,0.63955,0.63955,0.0,0.0,1.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Brazil,C,confirmed,1C,76.0,1,True,1.0,0.0,Japan,1.0,1.0,1.0,0.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Canada,B,confirmed,2B,73.0,2,True,1.0,0.0,South Africa,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Cape Verde Islands,H,slot_confirmed,2H,86.0,2,True,1.0,0.0,Argentina,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Colombia,K,projected,,,1,False,1.0,0.0,Ghana,0.5196,0.5196,0.67275,0.32725,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Congo DR,K,projected,,,3,False,0.36555,0.63445,England,0.26035,0.7122144713445493,0.0,0.0022,0.64525,0.35255,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Croatia,L,projected,,,3,False,0.895,0.10499999999999998,Portugal,0.37055,0.4140223463687151,0.20835,0.41495,0.3767,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Curaçao,E,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Czechia,A,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ecuador,E,third_place_ranking_pending,3E,,3,True,1.0,0.0,Mexico,0.30005,0.30005,0.0,0.0,1.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Egypt,G,confirmed,2G,88.0,2,True,1.0,0.0,Australia,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+England,L,projected,,,1,False,1.0,0.0,Congo DR,0.26035,0.26035,0.7109,0.2875,0.0016,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+France,I,slot_confirmed_opponent_pending,1I,77.0,1,True,1.0,0.0,Paraguay,0.52845,0.52845,1.0,0.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Germany,E,slot_confirmed_opponent_pending,1E,74.0,1,True,1.0,0.0,Paraguay,0.41785,0.41785,1.0,0.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ghana,L,projected,,,2,False,1.0,0.0,Colombia,0.5196,0.5196,0.08075,0.29755,0.6217,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Haiti,C,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iran,G,third_place_ranking_pending,3G,,3,True,0.91295,0.08704999999999996,Switzerland,0.59295,0.6494879237636234,0.0,0.0,1.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Iraq,I,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Ivory Coast,E,confirmed,2E,78.0,2,True,1.0,0.0,Norway,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Japan,F,confirmed,2F,76.0,2,True,1.0,0.0,Brazil,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Jordan,J,projected,,,4,False,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Mexico,A,slot_confirmed_opponent_pending,1A,79.0,1,True,1.0,0.0,Sweden,0.39615,0.39615,1.0,0.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Morocco,C,confirmed,2C,75.0,2,True,1.0,0.0,Netherlands,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Netherlands,F,confirmed,1F,75.0,1,True,1.0,0.0,Morocco,1.0,1.0,1.0,0.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+New Zealand,G,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Norway,I,confirmed,2I,78.0,2,True,1.0,0.0,Ivory Coast,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Panama,L,projected,,,4,False,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Paraguay,D,third_place_ranking_pending,3D,,3,True,1.0,0.0,France,0.52845,0.52845,0.0,0.0,1.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Portugal,K,projected,,,2,False,1.0,0.0,Ghana,0.39905,0.39905,0.32725,0.67055,0.0022,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Qatar,B,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Saudi Arabia,H,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Scotland,C,third_place_ranking_pending,3C,,3,True,0.00125,0.99875,Mexico,0.0007,0.56,0.0,0.0,1.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Senegal,I,third_place_ranking_pending,3I,,3,True,1.0,0.0,Mexico,0.3031,0.3031,0.0,0.0,1.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+South Africa,A,confirmed,2A,73.0,2,True,1.0,0.0,Canada,1.0,1.0,0.0,1.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+South Korea,A,third_place_ranking_pending,3A,,3,True,0.4134,0.5866,Belgium,0.34025,0.8230527334300919,0.0,0.0,1.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Spain,H,slot_confirmed,1H,84.0,1,True,1.0,0.0,Austria,0.6826,0.6826,1.0,0.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Sweden,F,third_place_ranking_pending,3F,,3,True,1.0,0.0,Mexico,0.39615,0.39615,0.0,0.0,1.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Switzerland,B,slot_confirmed_opponent_pending,1B,85.0,1,True,1.0,0.0,Iran,0.59295,0.59295,1.0,0.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Tunisia,F,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Turkey,D,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+United States,D,slot_confirmed_opponent_pending,1D,81.0,1,True,1.0,0.0,Bosnia-Herzegovina,0.63955,0.63955,1.0,0.0,0.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uruguay,H,third_place_ranking_pending,3H,,3,True,0.0,1.0,,0.0,0.0,0.0,0.0,1.0,0.0,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
+Uzbekistan,K,projected,,,4,False,0.0004,0.9996,Ghana,0.00025,0.625,0.0,0.0,0.35255,0.64745,20000,2026-06-27T16:35:15.162121+00:00,phase7_automated_group_stage_v1,provisional_constraint_assignment
