@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 
 from features.match_story import render_match_story
+from features.model_performance import render_model_performance
 from features.product_ui import inject_styles, render_project_footer, render_specialist_sidebar
 from features.tournament_data_v2 import DATA_DIR, STATE_DIR, load_static_data
 from features.tournament_insights import render_tournament_insights
@@ -18,14 +19,14 @@ st.markdown(
     <div class="cm-hero">
         <div class="cm-eyebrow">CupMarket 2026 · Insights</div>
         <h1>The tournament story, not just the tables.</h1>
-        <p>See who improved, who collapsed, what the model got right, and how the tournament has moved over time.</p>
+        <p>See who improved, who collapsed, how matches changed the market, and how the model is performing.</p>
     </div>
     ''',
     unsafe_allow_html=True,
 )
 
 st.info(
-    "Trust guide: official results are fixed, published market values update after model runs, and projected paths can still change."
+    "Trust guide: official results are fixed, published market values update after model runs, projected paths can still change, and model performance only includes verified pre-match forecasts."
 )
 
 static = load_static_data()
@@ -43,7 +44,12 @@ if prediction_ledger.empty:
     ledger_path = STATE_DIR / "world_cup_prediction_ledger.csv"
     prediction_ledger = pd.read_csv(ledger_path) if ledger_path.exists() else pd.DataFrame()
 
-main_tab, match_tab, timeline_tab = st.tabs(["Tournament insights", "Match story", "Timeline"])
+main_tab, match_tab, timeline_tab, model_tab = st.tabs([
+    "Tournament insights",
+    "Match story",
+    "Timeline",
+    "Model performance",
+])
 with main_tab:
     render_tournament_insights(
         prices,
@@ -57,5 +63,7 @@ with match_tab:
     render_match_story(prediction_ledger, movements, processed_ledger)
 with timeline_tab:
     render_tournament_timeline(processed_ledger, movements)
+with model_tab:
+    render_model_performance()
 
 render_project_footer()
