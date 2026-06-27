@@ -14,12 +14,14 @@ try:
         history_store,
         market_impact_store,
         opponent_probability_store,
+        provisional_knockout_fallback,
         update_pipeline,
     )
 except ImportError:
     import history_store
     import market_impact_store
     import opponent_probability_store
+    import provisional_knockout_fallback
     import update_pipeline
 
 
@@ -61,6 +63,7 @@ def concat_with_normalized_timestamps(*args, **kwargs):
 
 
 update_pipeline.pd.concat = concat_with_normalized_timestamps
+provisional_knockout_fallback.install(update_pipeline)
 
 
 def active_group_matches(world_cup: pd.DataFrame) -> pd.DataFrame:
