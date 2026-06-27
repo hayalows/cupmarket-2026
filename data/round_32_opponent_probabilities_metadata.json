@@ -1,17 +1,17 @@
 {
   "status": "generated",
-  "generated_at_utc": "2026-06-27T16:35:15.162121+00:00",
+  "generated_at_utc": "2026-06-27T18:17:15.446114+00:00",
   "number_of_simulations": 20000,
   "random_seed": 20261031,
   "teams": 48,
-  "opponent_rows": 142,
+  "opponent_rows": 166,
   "fixture_status_counts": {
-    "projected": 12,
-    "confirmed": 10,
-    "third_place_ranking_pending": 9,
-    "eliminated": 9,
-    "slot_confirmed_opponent_pending": 6,
-    "slot_confirmed": 2
+    "projected": 16,
+    "confirmed": 8,
+    "third_place_ranking_pending": 8,
+    "eliminated": 8,
+    "slot_confirmed_opponent_pending": 5,
+    "slot_confirmed": 3
   },
   "bracket_mode": "provisional_constraint_assignment",
   "note": "Third-place opponent assignments remain provisional while the main bracket mode is provisional_constraint_assignment."

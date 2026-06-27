@@ -1,14 +1,14 @@
 {
-  "model_version": "phase7_automated_group_stage_v1",
+  "model_version": "phase8_knockout_publication_v1",
   "number_of_simulations": 20000,
   "random_seed": 20260627,
   "bracket_mode": "provisional_constraint_assignment",
-  "finished_group_matches": 66,
-  "remaining_group_matches": 6,
-  "simulation_seconds": 10.690673828125,
-  "pair_xg_cache_size": 777,
-  "elo_fallback_uses": 12,
-  "average_valid_third_place_assignments": 22.0444,
+  "finished_group_matches": 64,
+  "remaining_group_matches": 8,
+  "simulation_seconds": 10.120429515838623,
+  "pair_xg_cache_size": 842,
+  "elo_fallback_uses": 8,
+  "average_valid_third_place_assignments": 15.4311,
   "stage_probability_totals": {
     "round_32_total": 32.0,
     "round_16_total": 16.0,
@@ -26,18 +26,20 @@
     "runner_up": 85.0,
     "champion": 100.0
   },
+  "knockout_settlements_applied": 0,
+  "knockout_settlement_matches": [],
   "limitations": [
-    "Automation v1 processes completed group-stage matches. Exact knockout-result ingestion is a later phase.",
+    "Phase 8 processes completed official group and knockout matches with real teams.",
     "Team conduct data is unavailable; live Elo is used only after football tiebreak criteria remain equal.",
     "Before the Round of 32 is populated, third-place teams are sampled across valid official slot constraints.",
     "Extra-time and penalties use transparent approximation rules."
   ],
-  "generated_at_utc": "2026-06-27T16:35:15.162121+00:00",
+  "generated_at_utc": "2026-06-27T18:17:15.446114+00:00",
   "new_finished_matches_processed": 0,
   "api": {
     "http_status": 200,
     "matches_returned": 104,
     "requests_remaining": "9",
-    "request_counter_reset": "59"
+    "request_counter_reset": "60"
   }
 }
