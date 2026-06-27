@@ -1,167 +1,143 @@
 team,team_group,opponent,opponent_group,pairing_count,probability_unconditional,probability_given_qualification,qualification_count,number_of_simulations,generated_at_utc,model_version,bracket_mode
-Algeria,J,Spain,H,6469,0.32345,0.5066572681704261,12768,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Algeria,J,Belgium,G,2222,0.1111,0.17402882205513784,12768,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Algeria,J,England,L,1816,0.0908,0.14223057644110276,12768,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Algeria,J,Switzerland,B,688,0.0344,0.05388471177944862,12768,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Algeria,J,United States,D,657,0.03285,0.051456766917293235,12768,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Algeria,J,Croatia,L,567,0.02835,0.044407894736842105,12768,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Algeria,J,Ghana,L,191,0.00955,0.014959273182957393,12768,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Algeria,J,Colombia,K,104,0.0052,0.008145363408521303,12768,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Algeria,J,Portugal,K,54,0.0027,0.0042293233082706765,12768,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Argentina,J,Cape Verde Islands,H,20000,1.0,1.0,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Australia,D,Iran,G,20000,1.0,1.0,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Austria,J,Spain,H,13531,0.67655,0.7739961102848645,17482,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Austria,J,England,L,1338,0.0669,0.07653586546161767,17482,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Austria,J,Belgium,G,1187,0.05935,0.06789840979292987,17482,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Austria,J,Switzerland,B,442,0.0221,0.025283148381192083,17482,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Austria,J,Croatia,L,369,0.01845,0.02110742477977348,17482,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Austria,J,United States,D,358,0.0179,0.020478206154902184,17482,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Austria,J,Ghana,L,131,0.00655,0.0074934218052854365,17482,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Austria,J,Colombia,K,88,0.0044,0.005033748998970369,17482,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Austria,J,Portugal,K,38,0.0019,0.002173664340464478,17482,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Belgium,G,South Korea,A,10941,0.54705,0.54705,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Belgium,G,Ecuador,E,3467,0.17335,0.17335,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Belgium,G,Algeria,J,2222,0.1111,0.1111,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Belgium,G,Senegal,I,2181,0.10905,0.10905,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Belgium,G,Austria,J,1187,0.05935,0.05935,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Belgium,G,Iraq,I,2,0.0001,0.0001,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Bosnia-Herzegovina,B,United States,D,13631,0.68155,0.68155,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Bosnia-Herzegovina,B,Germany,E,6369,0.31845,0.31845,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Brazil,C,Japan,F,20000,1.0,1.0,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Canada,B,South Africa,A,20000,1.0,1.0,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Cape Verde Islands,H,Argentina,J,20000,1.0,1.0,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Colombia,K,Ghana,L,10404,0.5202,0.5202,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Colombia,K,Croatia,L,6660,0.333,0.333,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Colombia,K,England,L,1869,0.09345,0.09345,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Colombia,K,Paraguay,D,565,0.02825,0.02825,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Colombia,K,Ecuador,E,162,0.0081,0.0081,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Colombia,K,Senegal,I,148,0.0074,0.0074,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Colombia,K,Algeria,J,104,0.0052,0.0052,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Colombia,K,Austria,J,88,0.0044,0.0044,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Congo DR,K,England,L,5067,0.25335,0.7121574139142657,7115,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Congo DR,K,Croatia,L,1503,0.07515,0.211243851018974,7115,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Congo DR,K,Ghana,L,545,0.02725,0.07659873506676036,7115,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Croatia,L,Portugal,K,7599,0.37995,0.412249769435252,18433,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Croatia,L,Colombia,K,6660,0.333,0.3613085227580969,18433,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Croatia,L,Congo DR,K,1503,0.07515,0.08153854500081376,18433,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Croatia,L,Ecuador,E,1086,0.0543,0.05891607443172571,18433,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Croatia,L,Senegal,I,640,0.032,0.0347203385233006,18433,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Croatia,L,Algeria,J,567,0.02835,0.030760049910486628,18433,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Croatia,L,Austria,J,369,0.01845,0.020018445179840503,18433,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Croatia,L,Uzbekistan,K,9,0.00045,0.0004882547604839147,18433,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ecuador,E,Mexico,A,7295,0.36475,0.36475,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ecuador,E,England,L,3685,0.18425,0.18425,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ecuador,E,Belgium,G,3467,0.17335,0.17335,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ecuador,E,United States,D,1904,0.0952,0.0952,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ecuador,E,Switzerland,B,1859,0.09295,0.09295,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ecuador,E,Croatia,L,1086,0.0543,0.0543,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ecuador,E,Ghana,L,456,0.0228,0.0228,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ecuador,E,Colombia,K,162,0.0081,0.0081,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ecuador,E,Portugal,K,86,0.0043,0.0043,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Egypt,G,Switzerland,B,13389,0.66945,0.66945,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Egypt,G,France,I,5686,0.2843,0.2843,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Egypt,G,Norway,I,925,0.04625,0.04625,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-England,L,Congo DR,K,5067,0.25335,0.25335,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-England,L,Portugal,K,3892,0.1946,0.1946,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-England,L,Ecuador,E,3685,0.18425,0.18425,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-England,L,Senegal,I,2289,0.11445,0.11445,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-England,L,Colombia,K,1869,0.09345,0.09345,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-England,L,Algeria,J,1816,0.0908,0.0908,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-England,L,Austria,J,1338,0.0669,0.0669,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-England,L,Uzbekistan,K,34,0.0017,0.0017,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-England,L,Iraq,I,10,0.0005,0.0005,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-France,I,Paraguay,D,9061,0.45305,0.45305,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-France,I,Egypt,G,5686,0.2843,0.2843,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-France,I,Ivory Coast,E,2885,0.14425,0.14425,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-France,I,Sweden,F,2270,0.1135,0.1135,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-France,I,Scotland,C,98,0.0049,0.0049,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Germany,E,Paraguay,D,8582,0.4291,0.4291,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Germany,E,Bosnia-Herzegovina,B,6369,0.31845,0.31845,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Germany,E,Sweden,F,2615,0.13075,0.13075,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Germany,E,South Korea,A,2292,0.1146,0.1146,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Germany,E,Scotland,C,142,0.0071,0.0071,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ghana,L,Colombia,K,10404,0.5202,0.5202,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ghana,L,Portugal,K,8009,0.40045,0.40045,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ghana,L,Congo DR,K,545,0.02725,0.02725,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ghana,L,Ecuador,E,456,0.0228,0.0228,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ghana,L,Senegal,I,254,0.0127,0.0127,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ghana,L,Algeria,J,191,0.00955,0.00955,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ghana,L,Austria,J,131,0.00655,0.00655,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ghana,L,Uzbekistan,K,10,0.0005,0.0005,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Iran,G,Australia,D,20000,1.0,1.0,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Iraq,I,Mexico,A,13,0.00065,0.41935483870967744,31,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Iraq,I,England,L,10,0.0005,0.3225806451612903,31,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Iraq,I,Switzerland,B,4,0.0002,0.12903225806451613,31,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Iraq,I,Belgium,G,2,0.0001,0.06451612903225806,31,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Iraq,I,Portugal,K,1,5e-05,0.03225806451612903,31,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Iraq,I,United States,D,1,5e-05,0.03225806451612903,31,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ivory Coast,E,Norway,I,17115,0.85575,0.85575,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Ivory Coast,E,France,I,2885,0.14425,0.14425,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Japan,F,Brazil,C,20000,1.0,1.0,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Mexico,A,Sweden,F,9225,0.46125,0.46125,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Mexico,A,Ecuador,E,7295,0.36475,0.36475,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Mexico,A,Senegal,I,2975,0.14875,0.14875,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Mexico,A,Scotland,C,492,0.0246,0.0246,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Mexico,A,Iraq,I,13,0.00065,0.00065,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Morocco,C,Netherlands,F,20000,1.0,1.0,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Netherlands,F,Morocco,C,20000,1.0,1.0,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Norway,I,Ivory Coast,E,17115,0.85575,0.85575,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Norway,I,Paraguay,D,1537,0.07685,0.07685,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Norway,I,Egypt,G,925,0.04625,0.04625,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Norway,I,Sweden,F,401,0.02005,0.02005,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Norway,I,Scotland,C,22,0.0011,0.0011,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Paraguay,D,France,I,9061,0.45305,0.45305,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Paraguay,D,Germany,E,8582,0.4291,0.4291,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Paraguay,D,Norway,I,1537,0.07685,0.07685,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Paraguay,D,Colombia,K,565,0.02825,0.02825,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Paraguay,D,Portugal,K,255,0.01275,0.01275,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Portugal,K,Ghana,L,8009,0.40045,0.40045,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Portugal,K,Croatia,L,7599,0.37995,0.37995,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Portugal,K,England,L,3892,0.1946,0.1946,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Portugal,K,Paraguay,D,255,0.01275,0.01275,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Portugal,K,Ecuador,E,86,0.0043,0.0043,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Portugal,K,Senegal,I,66,0.0033,0.0033,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Portugal,K,Algeria,J,54,0.0027,0.0027,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Portugal,K,Austria,J,38,0.0019,0.0019,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Portugal,K,Iraq,I,1,5e-05,5e-05,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Scotland,C,Mexico,A,492,0.0246,0.6525198938992043,754,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Scotland,C,Germany,E,142,0.0071,0.1883289124668435,754,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Scotland,C,France,I,98,0.0049,0.129973474801061,754,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Scotland,C,Norway,I,22,0.0011,0.029177718832891247,754,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Senegal,I,Mexico,A,2975,0.14875,0.29365314381601026,10131,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Senegal,I,England,L,2289,0.11445,0.22594018359490672,10131,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Senegal,I,Belgium,G,2181,0.10905,0.2152798341723423,10131,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Senegal,I,Switzerland,B,828,0.0414,0.08172934557299379,10131,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Senegal,I,United States,D,750,0.0375,0.07403020432336394,10131,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Senegal,I,Croatia,L,640,0.032,0.06317244102260389,10131,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Senegal,I,Ghana,L,254,0.0127,0.025071562530845918,10131,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Senegal,I,Colombia,K,148,0.0074,0.01460862698647715,10131,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Senegal,I,Portugal,K,66,0.0033,0.006514657980456026,10131,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-South Africa,A,Canada,B,20000,1.0,1.0,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-South Korea,A,Belgium,G,10941,0.54705,0.826796644751757,13233,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-South Korea,A,Germany,E,2292,0.1146,0.17320335524824304,13233,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Spain,H,Austria,J,13531,0.67655,0.67655,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Spain,H,Algeria,J,6469,0.32345,0.32345,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Sweden,F,Mexico,A,9225,0.46125,0.46125,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Sweden,F,Switzerland,B,2790,0.1395,0.1395,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Sweden,F,United States,D,2699,0.13495,0.13495,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Sweden,F,Germany,E,2615,0.13075,0.13075,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Sweden,F,France,I,2270,0.1135,0.1135,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Sweden,F,Norway,I,401,0.02005,0.02005,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Switzerland,B,Egypt,G,13389,0.66945,0.66945,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Switzerland,B,Sweden,F,2790,0.1395,0.1395,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Switzerland,B,Ecuador,E,1859,0.09295,0.09295,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Switzerland,B,Senegal,I,828,0.0414,0.0414,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Switzerland,B,Algeria,J,688,0.0344,0.0344,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Switzerland,B,Austria,J,442,0.0221,0.0221,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Switzerland,B,Iraq,I,4,0.0002,0.0002,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-United States,D,Bosnia-Herzegovina,B,13631,0.68155,0.68155,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-United States,D,Sweden,F,2699,0.13495,0.13495,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-United States,D,Ecuador,E,1904,0.0952,0.0952,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-United States,D,Senegal,I,750,0.0375,0.0375,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-United States,D,Algeria,J,657,0.03285,0.03285,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-United States,D,Austria,J,358,0.0179,0.0179,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-United States,D,Iraq,I,1,5e-05,5e-05,20000,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Uzbekistan,K,England,L,34,0.0017,0.6415094339622641,53,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Uzbekistan,K,Ghana,L,10,0.0005,0.18867924528301888,53,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
-Uzbekistan,K,Croatia,L,9,0.00045,0.16981132075471697,53,20000,2026-06-27T18:17:15.446114+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Algeria,J,Spain,H,6348,0.3174,0.5349287941349962,11867,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Algeria,J,Belgium,G,2166,0.1083,0.18252296283812253,11867,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Algeria,J,England,L,1089,0.05445,0.09176708519423611,11867,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Algeria,J,Switzerland,B,978,0.0489,0.0824134153535013,11867,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Algeria,J,United States,D,660,0.033,0.05561641526923401,11867,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Algeria,J,Croatia,L,324,0.0162,0.02730260385944215,11867,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Algeria,J,Ghana,L,128,0.0064,0.0107862138703969,11867,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Algeria,J,Colombia,K,115,0.00575,0.009690739024184714,11867,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Algeria,J,Portugal,K,59,0.00295,0.004971770455886071,11867,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Argentina,J,Cape Verde Islands,H,20000,1.0,1.0,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Australia,D,Egypt,G,20000,1.0,1.0,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Austria,J,Spain,H,13652,0.6826,0.834372326121501,16362,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Austria,J,Belgium,G,1027,0.05135,0.0627673878498961,16362,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Austria,J,England,L,781,0.03905,0.047732551032881064,16362,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Austria,J,United States,D,232,0.0116,0.014179195697347512,16362,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Austria,J,Switzerland,B,228,0.0114,0.013934726806013934,16362,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Austria,J,Croatia,L,220,0.011,0.013445789023346779,16362,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Austria,J,Ghana,L,103,0.00515,0.006295073951839629,16362,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Austria,J,Colombia,K,74,0.0037,0.004522674489671189,16362,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Austria,J,Portugal,K,45,0.00225,0.0027502750275027505,16362,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Belgium,G,South Korea,A,6805,0.34025,0.34025,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Belgium,G,Ecuador,E,5090,0.2545,0.2545,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Belgium,G,Senegal,I,4912,0.2456,0.2456,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Belgium,G,Algeria,J,2166,0.1083,0.1083,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Belgium,G,Austria,J,1027,0.05135,0.05135,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Bosnia-Herzegovina,B,United States,D,12791,0.63955,0.63955,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Bosnia-Herzegovina,B,Germany,E,7209,0.36045,0.36045,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Brazil,C,Japan,F,20000,1.0,1.0,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Canada,B,South Africa,A,20000,1.0,1.0,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Cape Verde Islands,H,Argentina,J,20000,1.0,1.0,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Colombia,K,Ghana,L,10392,0.5196,0.5196,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Colombia,K,Croatia,L,6322,0.3161,0.3161,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Colombia,K,England,L,1855,0.09275,0.09275,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Colombia,K,Paraguay,D,731,0.03655,0.03655,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Colombia,K,Senegal,I,265,0.01325,0.01325,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Colombia,K,Ecuador,E,246,0.0123,0.0123,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Colombia,K,Algeria,J,115,0.00575,0.00575,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Colombia,K,Austria,J,74,0.0037,0.0037,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Congo DR,K,England,L,5207,0.26035,0.7122144713445493,7311,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Congo DR,K,Croatia,L,1500,0.075,0.2051702913418137,7311,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Congo DR,K,Ghana,L,604,0.0302,0.08261523731363699,7311,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Croatia,L,Portugal,K,7411,0.37055,0.4140223463687151,17900,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Croatia,L,Colombia,K,6322,0.3161,0.3531843575418994,17900,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Croatia,L,Congo DR,K,1500,0.075,0.08379888268156424,17900,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Croatia,L,Senegal,I,1094,0.0547,0.06111731843575419,17900,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Croatia,L,Ecuador,E,1029,0.05145,0.05748603351955307,17900,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Croatia,L,Algeria,J,324,0.0162,0.018100558659217877,17900,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Croatia,L,Austria,J,220,0.011,0.012290502793296089,17900,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ecuador,E,Mexico,A,6001,0.30005,0.30005,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ecuador,E,Belgium,G,5090,0.2545,0.2545,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ecuador,E,England,L,3574,0.1787,0.1787,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ecuador,E,Switzerland,B,1979,0.09895,0.09895,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ecuador,E,United States,D,1601,0.08005,0.08005,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ecuador,E,Croatia,L,1029,0.05145,0.05145,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ecuador,E,Ghana,L,368,0.0184,0.0184,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ecuador,E,Colombia,K,246,0.0123,0.0123,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ecuador,E,Portugal,K,112,0.0056,0.0056,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Egypt,G,Australia,D,20000,1.0,1.0,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+England,L,Congo DR,K,5207,0.26035,0.26035,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+England,L,Portugal,K,3939,0.19695,0.19695,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+England,L,Ecuador,E,3574,0.1787,0.1787,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+England,L,Senegal,I,3552,0.1776,0.1776,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+England,L,Colombia,K,1855,0.09275,0.09275,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+England,L,Algeria,J,1089,0.05445,0.05445,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+England,L,Austria,J,781,0.03905,0.03905,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+England,L,Uzbekistan,K,3,0.00015,0.00015,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+France,I,Paraguay,D,10569,0.52845,0.52845,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+France,I,Iran,G,6400,0.32,0.32,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+France,I,Sweden,F,3023,0.15115,0.15115,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+France,I,Scotland,C,8,0.0004,0.0004,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Germany,E,Paraguay,D,8357,0.41785,0.41785,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Germany,E,Bosnia-Herzegovina,B,7209,0.36045,0.36045,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Germany,E,Sweden,F,2968,0.1484,0.1484,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Germany,E,South Korea,A,1463,0.07315,0.07315,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Germany,E,Scotland,C,3,0.00015,0.00015,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ghana,L,Colombia,K,10392,0.5196,0.5196,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ghana,L,Portugal,K,7981,0.39905,0.39905,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ghana,L,Congo DR,K,604,0.0302,0.0302,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ghana,L,Senegal,I,419,0.02095,0.02095,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ghana,L,Ecuador,E,368,0.0184,0.0184,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ghana,L,Algeria,J,128,0.0064,0.0064,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ghana,L,Austria,J,103,0.00515,0.00515,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ghana,L,Uzbekistan,K,5,0.00025,0.00025,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Iran,G,Switzerland,B,11859,0.59295,0.6494879237636234,18259,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Iran,G,France,I,6400,0.32,0.3505120762363766,18259,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Ivory Coast,E,Norway,I,20000,1.0,1.0,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Japan,F,Brazil,C,20000,1.0,1.0,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Mexico,A,Sweden,F,7923,0.39615,0.39615,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Mexico,A,Senegal,I,6062,0.3031,0.3031,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Mexico,A,Ecuador,E,6001,0.30005,0.30005,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Mexico,A,Scotland,C,14,0.0007,0.0007,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Morocco,C,Netherlands,F,20000,1.0,1.0,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Netherlands,F,Morocco,C,20000,1.0,1.0,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Norway,I,Ivory Coast,E,20000,1.0,1.0,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Paraguay,D,France,I,10569,0.52845,0.52845,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Paraguay,D,Germany,E,8357,0.41785,0.41785,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Paraguay,D,Colombia,K,731,0.03655,0.03655,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Paraguay,D,Portugal,K,343,0.01715,0.01715,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Portugal,K,Ghana,L,7981,0.39905,0.39905,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Portugal,K,Croatia,L,7411,0.37055,0.37055,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Portugal,K,England,L,3939,0.19695,0.19695,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Portugal,K,Paraguay,D,343,0.01715,0.01715,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Portugal,K,Ecuador,E,112,0.0056,0.0056,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Portugal,K,Senegal,I,110,0.0055,0.0055,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Portugal,K,Algeria,J,59,0.00295,0.00295,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Portugal,K,Austria,J,45,0.00225,0.00225,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Scotland,C,Mexico,A,14,0.0007,0.56,25,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Scotland,C,France,I,8,0.0004,0.32,25,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Scotland,C,Germany,E,3,0.00015,0.12,25,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Senegal,I,Mexico,A,6062,0.3031,0.3031,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Senegal,I,Belgium,G,4912,0.2456,0.2456,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Senegal,I,England,L,3552,0.1776,0.1776,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Senegal,I,Switzerland,B,1871,0.09355,0.09355,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Senegal,I,United States,D,1715,0.08575,0.08575,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Senegal,I,Croatia,L,1094,0.0547,0.0547,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Senegal,I,Ghana,L,419,0.02095,0.02095,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Senegal,I,Colombia,K,265,0.01325,0.01325,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Senegal,I,Portugal,K,110,0.0055,0.0055,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+South Africa,A,Canada,B,20000,1.0,1.0,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+South Korea,A,Belgium,G,6805,0.34025,0.8230527334300919,8268,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+South Korea,A,Germany,E,1463,0.07315,0.17694726656990808,8268,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Spain,H,Austria,J,13652,0.6826,0.6826,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Spain,H,Algeria,J,6348,0.3174,0.3174,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Sweden,F,Mexico,A,7923,0.39615,0.39615,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Sweden,F,Switzerland,B,3085,0.15425,0.15425,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Sweden,F,France,I,3023,0.15115,0.15115,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Sweden,F,United States,D,3001,0.15005,0.15005,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Sweden,F,Germany,E,2968,0.1484,0.1484,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Switzerland,B,Iran,G,11859,0.59295,0.59295,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Switzerland,B,Sweden,F,3085,0.15425,0.15425,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Switzerland,B,Ecuador,E,1979,0.09895,0.09895,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Switzerland,B,Senegal,I,1871,0.09355,0.09355,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Switzerland,B,Algeria,J,978,0.0489,0.0489,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Switzerland,B,Austria,J,228,0.0114,0.0114,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+United States,D,Bosnia-Herzegovina,B,12791,0.63955,0.63955,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+United States,D,Sweden,F,3001,0.15005,0.15005,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+United States,D,Senegal,I,1715,0.08575,0.08575,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+United States,D,Ecuador,E,1601,0.08005,0.08005,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+United States,D,Algeria,J,660,0.033,0.033,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+United States,D,Austria,J,232,0.0116,0.0116,20000,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Uzbekistan,K,Ghana,L,5,0.00025,0.625,8,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
+Uzbekistan,K,England,L,3,0.00015,0.375,8,20000,2026-06-27T20:02:46.406112+00:00,phase8_knockout_publication_v1,provisional_constraint_assignment
