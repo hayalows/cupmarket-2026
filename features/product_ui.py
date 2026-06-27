@@ -53,6 +53,7 @@ def render_specialist_sidebar(active_page: str) -> None:
         )
         st.markdown('<div class="cm-side-label">Start</div>', unsafe_allow_html=True)
         st.page_link("pages/Tournament_Pulse.py", label="Pulse", icon="🏠")
+        st.page_link("pages/11_Tournament_Insights.py", label="Insights", icon="💡")
         st.page_link("pages/Country_Snapshot.py", label="Country", icon="🔎")
         st.page_link("pages/8_Bracket_View.py", label="Bracket", icon="🏆")
 
