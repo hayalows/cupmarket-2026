@@ -6,6 +6,7 @@ from features.product_ui import inject_styles, render_project_footer, render_spe
 from features.tournament_data_v2 import DATA_DIR, STATE_DIR, load_static_data
 from features.tournament_insights import render_tournament_insights
 from features.tournament_path_data import load_tournament_path_data
+from features.tournament_timeline import render_tournament_timeline
 
 st.set_page_config(page_title="CupMarket Insights", page_icon="💡", layout="wide")
 
@@ -17,7 +18,7 @@ st.markdown(
     <div class="cm-hero">
         <div class="cm-eyebrow">CupMarket 2026 · Insights</div>
         <h1>The tournament story, not just the tables.</h1>
-        <p>See who improved, who collapsed, what the model got right, and which bracket paths still depend on future results.</p>
+        <p>See who improved, who collapsed, what the model got right, and how the tournament has moved over time.</p>
     </div>
     ''',
     unsafe_allow_html=True,
@@ -36,12 +37,13 @@ movements_path = DATA_DIR / "market_movements_latest.csv"
 movements = pd.read_csv(movements_path) if movements_path.exists() else pd.DataFrame()
 path_status = path_data.get("path_status", pd.DataFrame())
 snapshots = path_data.get("snapshots", pd.DataFrame())
+processed_ledger = static.get("processed_ledger", pd.DataFrame())
 prediction_ledger = static.get("prediction_ledger", pd.DataFrame())
 if prediction_ledger.empty:
     ledger_path = STATE_DIR / "world_cup_prediction_ledger.csv"
     prediction_ledger = pd.read_csv(ledger_path) if ledger_path.exists() else pd.DataFrame()
 
-main_tab, match_tab = st.tabs(["Tournament insights", "Match story"])
+main_tab, match_tab, timeline_tab = st.tabs(["Tournament insights", "Match story", "Timeline"])
 with main_tab:
     render_tournament_insights(
         prices,
@@ -52,6 +54,8 @@ with main_tab:
         prediction_ledger=prediction_ledger,
     )
 with match_tab:
-    render_match_story(prediction_ledger, movements)
+    render_match_story(prediction_ledger, movements, processed_ledger)
+with timeline_tab:
+    render_tournament_timeline(processed_ledger, movements)
 
 render_project_footer()
