@@ -103,6 +103,7 @@ def render_match_story(prediction_ledger: pd.DataFrame, market_movements: pd.Dat
     rows = pd.concat([predicted, processed], ignore_index=True, sort=False)
     rows = rows.sort_values("story_time", ascending=False, na_position="last")
 
+    st.caption(f"Showing {len(rows)} completed match stories. Full model calls are shown only for rows stored in the prediction ledger.")
     labels = rows.apply(lambda r: f"{r.get('home_team')} {r.get('scoreline')} {r.get('away_team')} · {r.get('story_source')}", axis=1).tolist()
     selected = st.selectbox("Completed match", labels, key="match_story_selector")
     row = rows.iloc[labels.index(selected)]
@@ -125,13 +126,20 @@ def render_match_story(prediction_ledger: pd.DataFrame, market_movements: pd.Dat
         else:
             st.warning("This result went against the stored model call.")
     else:
-        st.info("This result is available from the processed ledger, but a full pre-match model call was not stored for it.")
+        st.info("This match result is stored, but its full pre-match prediction was not linked into the prediction ledger. The app is using the processed match ledger so the match still appears in the story list.")
 
     st.write(
         f"**Story:** {row.get('home_team')} and {row.get('away_team')} finished {row.get('scoreline')}. "
         f"Actual outcome: {_format_call(actual)}. "
         f"Model call: {_format_call(model_call) if has_model_call else 'not stored for this row'}."
     )
+
+    with st.expander("Why might model call say Not stored?", expanded=False):
+        st.write(
+            "The processed match ledger records completed results. The prediction ledger records pre-match model calls. "
+            "Some older or fallback rows have the result but do not have a linked pre-match prediction row yet. "
+            "That is why CupMarket can show the match result but cannot show actual-result probability for that row."
+        )
 
     if isinstance(market_movements, pd.DataFrame) and not market_movements.empty and "team" in market_movements.columns:
         focus = market_movements.loc[market_movements["team"].astype(str).isin([str(row.get("home_team")), str(row.get("away_team"))])].copy()
