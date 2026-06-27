@@ -68,6 +68,36 @@ def active_group_matches(world_cup: pd.DataFrame) -> pd.DataFrame:
     ].copy().reset_index(drop=True)
 
 
+def official_upcoming_prediction_gaps(
+    world_cup: pd.DataFrame,
+    predictions_path: Path | None = None,
+) -> pd.DataFrame:
+    """Return official upcoming fixtures missing from the latest prediction file."""
+    upcoming = update_pipeline.official_upcoming_fixtures(world_cup)
+    if upcoming.empty:
+        return upcoming
+
+    path = predictions_path or update_pipeline.LIVE_PREDICTIONS_OUTPUT_PATH
+    if not path.exists():
+        return upcoming.copy()
+
+    try:
+        predictions = pd.read_csv(path)
+    except (OSError, pd.errors.ParserError):
+        return upcoming.copy()
+    if "match_id" not in predictions.columns:
+        return upcoming.copy()
+
+    published_ids = set(
+        pd.to_numeric(predictions["match_id"], errors="coerce")
+        .dropna()
+        .astype(int)
+    )
+    upcoming_ids = pd.to_numeric(upcoming["match_id"], errors="coerce")
+    missing_mask = ~upcoming_ids.isin(published_ids)
+    return upcoming.loc[missing_mask].copy().reset_index(drop=True)
+
+
 def deferred_run_summary(active_matches: pd.DataFrame, api_metadata: dict) -> dict:
     """Describe a safe delay without recording it as a model failure."""
     records = []
@@ -218,8 +248,23 @@ def run_guarded_pipeline() -> bool:
         )
         return False
 
+    missing_predictions = official_upcoming_prediction_gaps(world_cup)
+    force_for_missing_predictions = not missing_predictions.empty
     price_anchor = _load_price_anchor()
-    update_pipeline.main()
+    previous_force_run = update_pipeline.FORCE_RUN
+    if force_for_missing_predictions:
+        update_pipeline.FORCE_RUN = True
+        print(
+            "Forcing CupMarket update; official upcoming fixtures without "
+            "published predictions:",
+            len(missing_predictions),
+        )
+
+    try:
+        update_pipeline.main()
+    finally:
+        update_pipeline.FORCE_RUN = previous_force_run
+
     _restore_meaningful_market_move(price_anchor)
     _archive_history_safely()
     _archive_market_impact_safely()

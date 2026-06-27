@@ -45,7 +45,7 @@ if not TOKEN:
         "FOOTBALL_DATA_TOKEN is missing from GitHub Actions secrets."
     )
 
-MODEL_VERSION = "phase7_automated_group_stage_v1"
+MODEL_VERSION = "phase8_knockout_publication_v1"
 BRACKET_MODE = "provisional_constraint_assignment"
 
 HOME_MODEL_PATH = MODELS_DIR / "phase3_home_goal_model.joblib"
@@ -109,6 +109,41 @@ SETTLEMENT_VALUES = {
     "champion": 100.0,
 }
 
+UPCOMING_MATCH_STATUSES = {"TIMED", "SCHEDULED"}
+PLACEHOLDER_TEAM_NAMES = {
+    "",
+    "TBD",
+    "TBA",
+    "TO BE DECIDED",
+    "TO BE CONFIRMED",
+    "UNKNOWN",
+    "NULL",
+    "NONE",
+    "NAN",
+}
+KNOCKOUT_SETTLEMENT_STAGES = {
+    "LAST_32": "round_32",
+    "ROUND_OF_32": "round_32",
+    "R32": "round_32",
+    "LAST_16": "round_16",
+    "ROUND_OF_16": "round_16",
+    "R16": "round_16",
+    "QUARTER_FINALS": "quarter_final",
+    "QUARTER_FINAL": "quarter_final",
+    "QF": "quarter_final",
+    "SEMI_FINALS": "semi_final",
+    "SEMI_FINAL": "semi_final",
+    "SF": "semi_final",
+    "FINAL": "final",
+}
+REACH_PROBABILITY_COLUMNS = [
+    "prob_reach_round_32",
+    "prob_reach_round_16",
+    "prob_reach_quarter_final",
+    "prob_reach_semi_final",
+    "prob_reach_final",
+    "prob_champion",
+]
 FIXED_R32 = {
     73: ("2A", "2B"),
     75: ("1F", "2C"),
@@ -188,6 +223,57 @@ def nested_get(dictionary: dict, keys: list[str], default=None):
         if current is None:
             return default
     return current
+
+
+def is_real_team_name(value) -> bool:
+    if value is None or pd.isna(value):
+        return False
+    team_name = str(value).strip()
+    normalized = team_name.upper()
+    if normalized in PLACEHOLDER_TEAM_NAMES:
+        return False
+    if normalized.startswith(("WINNER OF", "LOSER OF")):
+        return False
+    return True
+
+
+def real_team_fixture_mask(matches: pd.DataFrame) -> pd.Series:
+    return (
+        matches["home_team"].map(is_real_team_name)
+        & matches["away_team"].map(is_real_team_name)
+    )
+
+
+def official_upcoming_fixtures(matches: pd.DataFrame) -> pd.DataFrame:
+    return (
+        matches[
+            matches["status"].isin(UPCOMING_MATCH_STATUSES)
+            & real_team_fixture_mask(matches)
+        ]
+        .sort_values("utc_date")
+        .reset_index(drop=True)
+    )
+
+
+def settlement_stage_key(stage) -> str | None:
+    return KNOCKOUT_SETTLEMENT_STAGES.get(str(stage).upper())
+
+
+def knockout_match_winner(match) -> str | None:
+    winner = str(getattr(match, "winner", "") or "").upper()
+    if winner == "HOME_TEAM":
+        return str(match.home_team)
+    if winner == "AWAY_TEAM":
+        return str(match.away_team)
+
+    home_score = getattr(match, "home_score_full_time", np.nan)
+    away_score = getattr(match, "away_score_full_time", np.nan)
+    if pd.notna(home_score) and pd.notna(away_score):
+        if int(home_score) > int(away_score):
+            return str(match.home_team)
+        if int(away_score) > int(home_score):
+            return str(match.away_team)
+    return None
 
 
 def fetch_world_cup_matches() -> tuple[pd.DataFrame, dict]:
@@ -652,22 +738,27 @@ def update_live_state(
         .astype(int)
     )
 
-    finished_group_matches = (
+    finished_official_matches = (
         world_cup[
-            (world_cup["stage"] == "GROUP_STAGE")
-            & (world_cup["status"] == "FINISHED")
-            & world_cup["home_team"].notna()
-            & world_cup["away_team"].notna()
+            (world_cup["status"] == "FINISHED")
+            & real_team_fixture_mask(world_cup)
             & world_cup["home_score_full_time"].notna()
             & world_cup["away_score_full_time"].notna()
         ]
         .sort_values("utc_date")
         .copy()
     )
+    finished_group_matches = (
+        finished_official_matches[
+            finished_official_matches["stage"] == "GROUP_STAGE"
+        ]
+        .sort_values("utc_date")
+        .copy()
+    )
 
     new_finished_matches = (
-        finished_group_matches[
-            ~finished_group_matches["match_id"]
+        finished_official_matches[
+            ~finished_official_matches["match_id"]
             .astype(int)
             .isin(processed_ids)
         ]
@@ -935,16 +1026,7 @@ def generate_live_predictions(
             "k_factor": WORLD_CUP_K,
         }
 
-    upcoming = (
-        world_cup[
-            (world_cup["stage"] == "GROUP_STAGE")
-            & world_cup["status"].isin(["TIMED", "SCHEDULED"])
-            & world_cup["home_team"].notna()
-            & world_cup["away_team"].notna()
-        ]
-        .sort_values("utc_date")
-        .reset_index(drop=True)
-    )
+    upcoming = official_upcoming_fixtures(world_cup)
 
     generated_at = datetime.now(timezone.utc)
     state_match_count = int(len(processed_ledger))
@@ -976,14 +1058,18 @@ def generate_live_predictions(
         rows.append(
             {
                 "prediction_id": str(uuid4()),
-                "prediction_source": "phase7_automation",
+                "prediction_source": "phase8_publication",
                 "model_version": MODEL_VERSION,
                 "generated_at_utc": generated_at.isoformat(),
                 "state_matches_processed": state_match_count,
                 "created_before_kickoff": (
                     generated_at < match.utc_date.to_pydatetime()
                 ),
-                "prediction_type": "live_pre_match",
+                "prediction_type": (
+                    "live_pre_match"
+                    if match.stage == "GROUP_STAGE"
+                    else "knockout_pre_match"
+                ),
                 "match_id": int(match.match_id),
                 "utc_date": match.utc_date,
                 "status": match.status,
@@ -1158,6 +1244,165 @@ def create_live_scorecard(
         "log_loss": float(scorecard_log_loss),
         "multiclass_brier": brier,
     }
+
+
+def recompute_settlement_probabilities(
+    probabilities: pd.DataFrame,
+) -> pd.DataFrame:
+    probabilities = probabilities.copy()
+    for column in REACH_PROBABILITY_COLUMNS:
+        probabilities[column] = pd.to_numeric(
+            probabilities[column], errors="coerce"
+        ).fillna(0.0)
+        probabilities[column] = probabilities[column].clip(0.0, 1.0)
+
+    for previous, current in zip(
+        REACH_PROBABILITY_COLUMNS,
+        REACH_PROBABILITY_COLUMNS[1:],
+    ):
+        probabilities[current] = np.minimum(
+            probabilities[current],
+            probabilities[previous],
+        )
+
+    probabilities["prob_group_exit"] = (
+        1.0 - probabilities["prob_reach_round_32"]
+    )
+    probabilities["prob_round_32_exit"] = (
+        probabilities["prob_reach_round_32"]
+        - probabilities["prob_reach_round_16"]
+    )
+    probabilities["prob_round_16_exit"] = (
+        probabilities["prob_reach_round_16"]
+        - probabilities["prob_reach_quarter_final"]
+    )
+    probabilities["prob_quarter_final_exit"] = (
+        probabilities["prob_reach_quarter_final"]
+        - probabilities["prob_reach_semi_final"]
+    )
+    probabilities["prob_semi_final_exit"] = (
+        probabilities["prob_reach_semi_final"]
+        - probabilities["prob_reach_final"]
+    )
+    probabilities["prob_runner_up"] = (
+        probabilities["prob_reach_final"] - probabilities["prob_champion"]
+    )
+    return probabilities
+
+
+def _apply_knockout_progress_lock(
+    indexed_probabilities: pd.DataFrame,
+    team: str,
+    stage_key: str,
+    advanced: bool,
+) -> bool:
+    if team not in indexed_probabilities.index:
+        return False
+
+    current_stage_index = {
+        "round_32": 0,
+        "round_16": 1,
+        "quarter_final": 2,
+        "semi_final": 3,
+        "final": 4,
+    }[stage_key]
+    reached_through_index = (
+        current_stage_index + 1
+        if advanced and stage_key != "final"
+        else current_stage_index
+    )
+    if advanced and stage_key == "final":
+        reached_through_index = len(REACH_PROBABILITY_COLUMNS) - 1
+
+    for index, column in enumerate(REACH_PROBABILITY_COLUMNS):
+        current_value = float(indexed_probabilities.loc[team, column])
+        if index <= reached_through_index:
+            indexed_probabilities.loc[team, column] = 1.0
+        elif not advanced:
+            indexed_probabilities.loc[team, column] = 0.0
+        else:
+            indexed_probabilities.loc[team, column] = float(
+                np.clip(current_value, 0.0, 1.0)
+            )
+    return True
+
+
+def apply_knockout_settlements(
+    probabilities: pd.DataFrame,
+    world_cup: pd.DataFrame,
+) -> tuple[pd.DataFrame, list[dict]]:
+    if probabilities.empty:
+        return probabilities, []
+
+    knockout = (
+        world_cup[
+            world_cup["stage"].map(settlement_stage_key).notna()
+            & (world_cup["status"] == "FINISHED")
+            & real_team_fixture_mask(world_cup)
+            & world_cup["home_score_full_time"].notna()
+            & world_cup["away_score_full_time"].notna()
+        ]
+        .sort_values("utc_date")
+        .reset_index(drop=True)
+    )
+    if knockout.empty:
+        return probabilities, []
+
+    adjusted = probabilities.copy()
+    adjusted = recompute_settlement_probabilities(adjusted)
+    indexed = adjusted.set_index("team", drop=False)
+    settlement_rows = []
+
+    for match in knockout.itertuples(index=False):
+        stage_key = settlement_stage_key(match.stage)
+        winner = knockout_match_winner(match)
+        if stage_key is None or winner is None:
+            continue
+
+        home_team = str(match.home_team)
+        away_team = str(match.away_team)
+        loser = away_team if winner == home_team else home_team
+        winner_applied = _apply_knockout_progress_lock(
+            indexed,
+            winner,
+            stage_key,
+            advanced=True,
+        )
+        loser_applied = _apply_knockout_progress_lock(
+            indexed,
+            loser,
+            stage_key,
+            advanced=False,
+        )
+        if not (winner_applied and loser_applied):
+            continue
+
+        settlement_rows.append(
+            {
+                "match_id": int(match.match_id),
+                "stage": str(match.stage),
+                "winner": winner,
+                "loser": loser,
+                "winner_locked_to_at_least": stage_key,
+                "loser_exit_stage": stage_key,
+            }
+        )
+
+    adjusted = indexed.reset_index(drop=True)
+    adjusted = recompute_settlement_probabilities(adjusted)
+    adjusted = (
+        adjusted.sort_values(
+            [
+                "prob_champion",
+                "prob_reach_final",
+                "prob_reach_semi_final",
+            ],
+            ascending=False,
+        )
+        .reset_index(drop=True)
+    )
+    adjusted["champion_rank"] = np.arange(1, len(adjusted) + 1)
+    return adjusted, settlement_rows
 
 
 def build_current_tables(
@@ -1667,6 +1912,11 @@ def run_tournament_simulation(
         1, len(probabilities) + 1
     )
 
+    probabilities, knockout_settlements = apply_knockout_settlements(
+        probabilities,
+        world_cup,
+    )
+
     validation = {
         "round_32_total": float(
             probabilities["prob_reach_round_32"].sum()
@@ -1699,8 +1949,12 @@ def run_tournament_simulation(
         if not np.isclose(
             validation[key], expected_value, atol=1e-6
         ):
-            raise ValueError(
-                f"{key} failed: {validation[key]} != {expected_value}"
+            if not knockout_settlements:
+                raise ValueError(
+                    f"{key} failed: {validation[key]} != {expected_value}"
+                )
+            validation[f"{key}_warning"] = (
+                "Knockout settlement locks changed this provisional total."
             )
 
     prices = probabilities.copy()
@@ -1765,10 +2019,12 @@ def run_tournament_simulation(
         ),
         "stage_probability_totals": validation,
         "settlement_values": SETTLEMENT_VALUES,
+        "knockout_settlements_applied": int(len(knockout_settlements)),
+        "knockout_settlement_matches": knockout_settlements,
         "limitations": [
             (
-                "Automation v1 processes completed group-stage "
-                "matches. Exact knockout-result ingestion is a later phase."
+                "Phase 8 processes completed official group and knockout "
+                "matches with real teams."
             ),
             (
                 "Team conduct data is unavailable; live Elo is used "
@@ -1820,7 +2076,7 @@ def main() -> None:
         processed_ledger,
     )
 
-    print("New finished group matches:", len(new_finished_matches))
+    print("New finished official matches:", len(new_finished_matches))
 
     if new_finished_matches.empty and not FORCE_RUN:
         summary = {
@@ -1830,7 +2086,7 @@ def main() -> None:
             "number_of_simulations": N_SIMULATIONS,
         }
         atomic_to_json(summary, RUN_SUMMARY_PATH)
-        print("No new finished group match. No model files changed.")
+        print("No new finished official match. No model files changed.")
         return
 
     live_predictions, prediction_ledger_updated = (
