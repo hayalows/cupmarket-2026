@@ -6,7 +6,7 @@ from features.tournament_data_v2 import DATA_DIR, STATE_DIR, load_static_data
 from features.tournament_insights import render_tournament_insights
 from features.tournament_path_data import load_tournament_path_data
 
-st.set_page_config(page_title="CupMarket Tournament Insights", page_icon="💡", layout="wide")
+st.set_page_config(page_title="CupMarket Insights", page_icon="💡", layout="wide")
 
 inject_styles(DATA_DIR.parent)
 render_specialist_sidebar("insights")
@@ -14,12 +14,16 @@ render_specialist_sidebar("insights")
 st.markdown(
     '''
     <div class="cm-hero">
-        <div class="cm-eyebrow">CupMarket 2026 · Tournament Insights</div>
-        <h1>What changed, who benefited, and what still matters.</h1>
-        <p>Track the tournament story from the earliest stored snapshot to the latest model run: overperformers, collapses, market movement, prediction calls and bracket pressure.</p>
+        <div class="cm-eyebrow">CupMarket 2026 · Insights</div>
+        <h1>The tournament story, not just the tables.</h1>
+        <p>See who improved, who collapsed, what the model got right, and which bracket paths still depend on future results.</p>
     </div>
     ''',
     unsafe_allow_html=True,
+)
+
+st.info(
+    "Trust guide: official results are fixed, published market values update after model runs, and projected paths can still change."
 )
 
 static = load_static_data()
