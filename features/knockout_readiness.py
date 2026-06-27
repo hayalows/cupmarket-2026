@@ -15,6 +15,18 @@ def _time(value) -> str:
     return ts.strftime("%d %b %Y · %H:%M UTC")
 
 
+ADAPTIVE_COLUMNS = {
+    "home_base_elo",
+    "away_base_elo",
+    "home_adaptive_adjustment",
+    "away_adaptive_adjustment",
+    "home_prediction_elo",
+    "away_prediction_elo",
+    "adaptive_prediction_enabled",
+    "adaptive_model_version",
+}
+
+
 def render_knockout_readiness(prices: pd.DataFrame, predictions: pd.DataFrame, path_status: pd.DataFrame) -> None:
     st.markdown("## Knockout Readiness")
     st.caption("Checks whether CupMarket is ready to move from group-stage projection into knockout-stage intelligence.")
@@ -36,6 +48,18 @@ def render_knockout_readiness(prices: pd.DataFrame, predictions: pd.DataFrame, p
 
     expected_goal_ready = not knockout_predictions.empty and {"expected_home_goals", "expected_away_goals"}.issubset(knockout_predictions.columns)
     likely_score_ready = not knockout_predictions.empty and "most_likely_score" in knockout_predictions.columns
+    adaptive_columns_ready = not predictions.empty and ADAPTIVE_COLUMNS.issubset(predictions.columns)
+    adaptive_rows = (
+        int(predictions[list(ADAPTIVE_COLUMNS)].dropna(how="all").shape[0])
+        if adaptive_columns_ready
+        else 0
+    )
+    adaptive_enabled = False
+    if adaptive_columns_ready:
+        adaptive_enabled = predictions["adaptive_prediction_enabled"].astype(str).str.lower().isin(["true", "1", "yes"]).any()
+    adaptive_model = "Unavailable"
+    if adaptive_columns_ready and not predictions["adaptive_model_version"].dropna().empty:
+        adaptive_model = str(predictions["adaptive_model_version"].dropna().iloc[0])
     path_ready = not path_status.empty and "prob_reach_round_32" in path_status.columns
     price_ready = not prices.empty and {"prob_reach_round_16", "prob_champion", "cupmarket_price"}.issubset(prices.columns)
     model_text = "Unavailable"
@@ -50,6 +74,7 @@ def render_knockout_readiness(prices: pd.DataFrame, predictions: pd.DataFrame, p
         {"Check": "Knockout match predictions generated", "Status": _yes(not knockout_predictions.empty), "Evidence": f"{len(knockout_predictions)} knockout prediction rows"},
         {"Check": "Expected goals for knockout matches", "Status": _yes(expected_goal_ready), "Evidence": "Available" if expected_goal_ready else "Waiting for knockout prediction rows"},
         {"Check": "Likely scores for knockout matches", "Status": _yes(likely_score_ready), "Evidence": "Available" if likely_score_ready else "Waiting for knockout prediction rows"},
+        {"Check": "Adaptive prediction columns", "Status": _yes(adaptive_columns_ready), "Evidence": f"{adaptive_rows} prediction rows with adaptive fields"},
         {"Check": "Market probabilities include later stages", "Status": _yes(price_ready), "Evidence": "R16/champion/price columns present" if price_ready else "Missing later-stage price columns"},
     ])
 
@@ -60,6 +85,11 @@ def render_knockout_readiness(prices: pd.DataFrame, predictions: pd.DataFrame, p
     cols[3].metric("Model", model_text)
 
     st.caption(f"Latest prediction run: {generated}")
+    st.caption(
+        "Adaptive prediction enabled: "
+        f"{'yes' if adaptive_enabled else 'no'} Â· "
+        f"{adaptive_model} Â· {adaptive_rows} rows with adaptive columns"
+    )
     st.dataframe(checks, hide_index=True, use_container_width=True)
 
     if knockout_predictions.empty:

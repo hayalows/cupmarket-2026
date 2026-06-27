@@ -29,6 +29,16 @@ PRICE_CHANGE_COLUMNS = [
     "price_change",
     "price_change_percent",
 ]
+ADAPTIVE_PREDICTION_COLUMNS = {
+    "home_base_elo",
+    "away_base_elo",
+    "home_adaptive_adjustment",
+    "away_adaptive_adjustment",
+    "home_prediction_elo",
+    "away_prediction_elo",
+    "adaptive_prediction_enabled",
+    "adaptive_model_version",
+}
 
 _original_concat = update_pipeline.pd.concat
 
@@ -88,6 +98,9 @@ def official_upcoming_prediction_gaps(
     if "match_id" not in predictions.columns:
         return upcoming.copy()
 
+    missing_adaptive_columns = ADAPTIVE_PREDICTION_COLUMNS - set(
+        predictions.columns
+    )
     published_ids = set(
         pd.to_numeric(predictions["match_id"], errors="coerce")
         .dropna()
@@ -95,6 +108,8 @@ def official_upcoming_prediction_gaps(
     )
     upcoming_ids = pd.to_numeric(upcoming["match_id"], errors="coerce")
     missing_mask = ~upcoming_ids.isin(published_ids)
+    if missing_adaptive_columns:
+        missing_mask = missing_mask | upcoming_ids.isin(published_ids)
     return upcoming.loc[missing_mask].copy().reset_index(drop=True)
 
 

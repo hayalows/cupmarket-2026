@@ -17,6 +17,11 @@ import requests
 from scipy.stats import poisson
 from sklearn.metrics import accuracy_score, log_loss
 
+try:
+    from features import adaptive_ratings
+except ImportError:
+    adaptive_ratings = None
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = REPO_ROOT / "data"
@@ -45,7 +50,7 @@ if not TOKEN:
         "FOOTBALL_DATA_TOKEN is missing from GitHub Actions secrets."
     )
 
-MODEL_VERSION = "phase8_knockout_publication_v1"
+MODEL_VERSION = "phase9b_adaptive_prediction_v1"
 BRACKET_MODE = "provisional_constraint_assignment"
 
 HOME_MODEL_PATH = MODELS_DIR / "phase3_home_goal_model.joblib"
@@ -65,6 +70,7 @@ PRICES_OUTPUT_PATH = DATA_DIR / "cupmarket_prices_latest.csv"
 LIVE_EVALUATION_OUTPUT_PATH = DATA_DIR / "phase4_live_evaluation.json"
 SIMULATION_METADATA_OUTPUT_PATH = DATA_DIR / "phase5_simulation_metadata.json"
 RUN_SUMMARY_PATH = STATE_DIR / "last_automation_run.json"
+ADAPTIVE_RATINGS_OUTPUT_PATH = DATA_DIR / "adaptive_ratings_latest.csv"
 
 INITIAL_RATING = 1500.0
 INITIAL_GOALS_AVERAGE = 1.25
@@ -274,6 +280,70 @@ def knockout_match_winner(match) -> str | None:
         if int(away_score) > int(home_score):
             return str(match.away_team)
     return None
+
+
+def build_adaptive_rating_frame(
+    team_map: pd.DataFrame,
+    live_elo: pd.DataFrame,
+    processed_ledger: pd.DataFrame,
+) -> pd.DataFrame:
+    if adaptive_ratings is None:
+        return pd.DataFrame()
+    prices = pd.DataFrame()
+    if PRICES_OUTPUT_PATH.exists():
+        try:
+            prices = pd.read_csv(PRICES_OUTPUT_PATH)
+        except (OSError, pd.errors.ParserError):
+            prices = pd.DataFrame()
+    if prices.empty and isinstance(live_elo, pd.DataFrame) and not live_elo.empty:
+        prices = pd.DataFrame(
+            {
+                "team": live_elo["team"],
+                "cupmarket_price": np.nan,
+                "previous_price": np.nan,
+            }
+        )
+
+    history_frames = []
+    for path in sorted(HISTORY_DIR.glob("cupmarket_prices_*.csv")):
+        try:
+            history_frames.append(pd.read_csv(path))
+        except (OSError, pd.errors.ParserError):
+            continue
+    history = (
+        pd.concat(history_frames, ignore_index=True, sort=False)
+        if history_frames
+        else pd.DataFrame()
+    )
+    return adaptive_ratings.build_adaptive_ratings(
+        prices,
+        history,
+        processed_ledger,
+    )
+
+
+def adaptive_adjustment_detail(
+    team: str,
+    adaptive_rating_frame: pd.DataFrame | None,
+    stage=None,
+) -> dict:
+    if adaptive_ratings is None:
+        return {
+            "team": str(team),
+            "adaptive_adjustment": 0.0,
+            "rating_change": 0.0,
+            "confidence_level": "Low",
+            "confidence_multiplier": 0.15,
+            "overreaction_risk": "Normal watch",
+            "risk_multiplier": 0.80,
+            "stage_multiplier": 1.0,
+            "adaptive_model_version": MODEL_VERSION,
+        }
+    return adaptive_ratings.adaptive_adjustment_detail(
+        team,
+        adaptive_rating_frame,
+        stage=stage,
+    )
 
 
 def fetch_world_cup_matches() -> tuple[pd.DataFrame, dict]:
@@ -954,6 +1024,7 @@ def generate_live_predictions(
     live_team_state: pd.DataFrame,
     processed_ledger: pd.DataFrame,
     prediction_ledger: pd.DataFrame,
+    adaptive_rating_frame: pd.DataFrame | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     name_lookup = dict(
         zip(team_map["live_team_name"], team_map["historical_team_name"])
@@ -961,6 +1032,15 @@ def generate_live_predictions(
     rating_lookup = dict(zip(live_elo["team"], live_elo["elo_rating"]))
     state_lookup = (
         live_team_state.set_index("team").to_dict(orient="index")
+    )
+    if adaptive_rating_frame is None:
+        adaptive_rating_frame = build_adaptive_rating_frame(
+            team_map,
+            live_elo,
+            processed_ledger,
+        )
+    adaptive_enabled = bool(
+        adaptive_rating_frame is not None and not adaptive_rating_frame.empty
     )
 
     def current_state(team):
@@ -975,21 +1055,36 @@ def generate_live_predictions(
             }
         return state
 
-    def build_features(home_live, away_live, match_date):
+    def build_features(home_live, away_live, match_date, stage):
         home_team = name_lookup.get(home_live, home_live)
         away_team = name_lookup.get(away_live, away_live)
 
-        home_rating = float(
+        home_base_rating = float(
             rating_lookup.get(home_team, INITIAL_RATING)
         )
-        away_rating = float(
+        away_base_rating = float(
             rating_lookup.get(away_team, INITIAL_RATING)
         )
 
         if home_live in WORLD_CUP_HOSTS:
-            home_rating += HOST_ELO_ADJUSTMENT
+            home_base_rating += HOST_ELO_ADJUSTMENT
         if away_live in WORLD_CUP_HOSTS:
-            away_rating += HOST_ELO_ADJUSTMENT
+            away_base_rating += HOST_ELO_ADJUSTMENT
+
+        home_detail = adaptive_adjustment_detail(
+            home_team,
+            adaptive_rating_frame,
+            stage=stage,
+        )
+        away_detail = adaptive_adjustment_detail(
+            away_team,
+            adaptive_rating_frame,
+            stage=stage,
+        )
+        home_adjustment = float(home_detail["adaptive_adjustment"])
+        away_adjustment = float(away_detail["adaptive_adjustment"])
+        home_prediction_rating = home_base_rating + home_adjustment
+        away_prediction_rating = away_base_rating + away_adjustment
 
         home_state = current_state(home_team)
         away_state = current_state(away_team)
@@ -1001,22 +1096,12 @@ def generate_live_predictions(
             away_state["last_date"], errors="coerce", utc=True
         )
 
-        elo_diff = home_rating - away_rating
-
-        return {
-            "home_elo": home_rating,
-            "away_elo": away_rating,
-            "elo_diff": elo_diff,
-            "abs_elo_diff": abs(elo_diff),
+        common = {
             "neutral": 1,
             "home_attack_form": float(home_state["ema_goals_for"]),
-            "home_defence_form": float(
-                home_state["ema_goals_against"]
-            ),
+            "home_defence_form": float(home_state["ema_goals_against"]),
             "away_attack_form": float(away_state["ema_goals_for"]),
-            "away_defence_form": float(
-                away_state["ema_goals_against"]
-            ),
+            "away_defence_form": float(away_state["ema_goals_against"]),
             "home_points_form": float(home_state["ema_points"]),
             "away_points_form": float(away_state["ema_points"]),
             "home_matches_before": int(home_state["matches"]),
@@ -1025,6 +1110,35 @@ def generate_live_predictions(
             "away_rest_days": rest_days(away_last_date, match_date),
             "k_factor": WORLD_CUP_K,
         }
+        baseline_diff = home_base_rating - away_base_rating
+        prediction_diff = home_prediction_rating - away_prediction_rating
+        baseline_features = {
+            "home_elo": home_base_rating,
+            "away_elo": away_base_rating,
+            "elo_diff": baseline_diff,
+            "abs_elo_diff": abs(baseline_diff),
+            **common,
+        }
+        prediction_features = {
+            "home_elo": home_prediction_rating,
+            "away_elo": away_prediction_rating,
+            "elo_diff": prediction_diff,
+            "abs_elo_diff": abs(prediction_diff),
+            **common,
+        }
+        metadata = {
+            "home_base_elo": home_base_rating,
+            "away_base_elo": away_base_rating,
+            "home_adaptive_adjustment": home_adjustment,
+            "away_adaptive_adjustment": away_adjustment,
+            "home_prediction_elo": home_prediction_rating,
+            "away_prediction_elo": away_prediction_rating,
+            "home_adaptive_confidence": home_detail["confidence_level"],
+            "away_adaptive_confidence": away_detail["confidence_level"],
+            "home_overreaction_risk": home_detail["overreaction_risk"],
+            "away_overreaction_risk": away_detail["overreaction_risk"],
+        }
+        return baseline_features, prediction_features, metadata
 
     upcoming = official_upcoming_fixtures(world_cup)
 
@@ -1033,15 +1147,28 @@ def generate_live_predictions(
     rows = []
 
     for match in upcoming.itertuples(index=False):
-        features = build_features(
+        baseline_features, features, adaptive_metadata = build_features(
             match.home_team,
             match.away_team,
             match.utc_date,
+            match.stage,
         )
+        baseline_feature_frame = pd.DataFrame([baseline_features])[
+            FEATURE_COLUMNS
+        ]
         feature_frame = pd.DataFrame([features])[FEATURE_COLUMNS]
+        baseline_home_xg = clip_xg(
+            home_model.predict(baseline_feature_frame)[0]
+        )
+        baseline_away_xg = clip_xg(
+            away_model.predict(baseline_feature_frame)[0]
+        )
         home_xg = clip_xg(home_model.predict(feature_frame)[0])
         away_xg = clip_xg(away_model.predict(feature_frame)[0])
 
+        baseline_summary = summarize_score_matrix(
+            score_probability_matrix(baseline_home_xg, baseline_away_xg)
+        )
         summary = summarize_score_matrix(
             score_probability_matrix(home_xg, away_xg)
         )
@@ -1058,7 +1185,7 @@ def generate_live_predictions(
         rows.append(
             {
                 "prediction_id": str(uuid4()),
-                "prediction_source": "phase8_publication",
+                "prediction_source": "phase9b_adaptive_publication",
                 "model_version": MODEL_VERSION,
                 "generated_at_utc": generated_at.isoformat(),
                 "state_matches_processed": state_match_count,
@@ -1077,6 +1204,26 @@ def generate_live_predictions(
                 "group": match.group,
                 "home_team": match.home_team,
                 "away_team": match.away_team,
+                "baseline_expected_home_goals": round(
+                    baseline_home_xg,
+                    3,
+                ),
+                "baseline_expected_away_goals": round(
+                    baseline_away_xg,
+                    3,
+                ),
+                "baseline_prob_home_win": round(
+                    baseline_summary["prob_home_win"],
+                    6,
+                ),
+                "baseline_prob_draw": round(
+                    baseline_summary["prob_draw"],
+                    6,
+                ),
+                "baseline_prob_away_win": round(
+                    baseline_summary["prob_away_win"],
+                    6,
+                ),
                 "expected_home_goals": round(home_xg, 3),
                 "expected_away_goals": round(away_xg, 3),
                 "prob_home_win": round(summary["prob_home_win"], 6),
@@ -1102,6 +1249,42 @@ def generate_live_predictions(
                 "third_likely_score_probability": round(
                     top_scores[2]["probability"], 6
                 ),
+                "home_base_elo": round(adaptive_metadata["home_base_elo"], 3),
+                "away_base_elo": round(adaptive_metadata["away_base_elo"], 3),
+                "home_adaptive_adjustment": round(
+                    adaptive_metadata["home_adaptive_adjustment"],
+                    3,
+                ),
+                "away_adaptive_adjustment": round(
+                    adaptive_metadata["away_adaptive_adjustment"],
+                    3,
+                ),
+                "home_prediction_elo": round(
+                    adaptive_metadata["home_prediction_elo"],
+                    3,
+                ),
+                "away_prediction_elo": round(
+                    adaptive_metadata["away_prediction_elo"],
+                    3,
+                ),
+                "adaptive_prediction_enabled": adaptive_enabled,
+                "adaptive_model_version": (
+                    adaptive_ratings.ADAPTIVE_MODEL_VERSION
+                    if adaptive_ratings is not None
+                    else MODEL_VERSION
+                ),
+                "home_adaptive_confidence": adaptive_metadata[
+                    "home_adaptive_confidence"
+                ],
+                "away_adaptive_confidence": adaptive_metadata[
+                    "away_adaptive_confidence"
+                ],
+                "home_overreaction_risk": adaptive_metadata[
+                    "home_overreaction_risk"
+                ],
+                "away_overreaction_risk": adaptive_metadata[
+                    "away_overreaction_risk"
+                ],
             }
         )
 
@@ -1508,6 +1691,7 @@ def run_tournament_simulation(
     team_map: pd.DataFrame,
     live_elo: pd.DataFrame,
     live_team_state: pd.DataFrame,
+    adaptive_rating_frame: pd.DataFrame | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     group_matches = (
         world_cup[world_cup["stage"] == "GROUP_STAGE"]
@@ -1556,6 +1740,8 @@ def run_tournament_simulation(
         live_elo_lookup[live_team] = float(
             rating_lookup.get(historical_team, INITIAL_RATING)
         )
+    if adaptive_rating_frame is None:
+        adaptive_rating_frame = pd.DataFrame()
 
     simulation_matches_by_group = {
         letter: [] for letter in "ABCDEFGHIJKL"
@@ -1617,22 +1803,33 @@ def run_tournament_simulation(
             }
         return state
 
-    def predict_knockout_xg(home_team, away_team):
-        key = (home_team, away_team)
+    def prediction_rating_for_team(live_team, stage, include_host=False):
+        historical_team = name_lookup.get(live_team, live_team)
+        rating = float(live_elo_lookup.get(live_team, INITIAL_RATING))
+        if include_host and live_team in WORLD_CUP_HOSTS:
+            rating += HOST_ELO_ADJUSTMENT
+        detail = adaptive_adjustment_detail(
+            historical_team,
+            adaptive_rating_frame,
+            stage=stage,
+        )
+        return rating + float(detail["adaptive_adjustment"])
+
+    def predict_knockout_xg(home_team, away_team, stage):
+        key = (home_team, away_team, stage)
         if key in pair_xg_cache:
             return pair_xg_cache[key]
 
-        home_rating = float(
-            live_elo_lookup.get(home_team, INITIAL_RATING)
+        home_rating = prediction_rating_for_team(
+            home_team,
+            stage,
+            include_host=True,
         )
-        away_rating = float(
-            live_elo_lookup.get(away_team, INITIAL_RATING)
+        away_rating = prediction_rating_for_team(
+            away_team,
+            stage,
+            include_host=True,
         )
-
-        if home_team in WORLD_CUP_HOSTS:
-            home_rating += HOST_ELO_ADJUSTMENT
-        if away_team in WORLD_CUP_HOSTS:
-            away_rating += HOST_ELO_ADJUSTMENT
 
         home_state = get_state_for_live_team(home_team)
         away_state = get_state_for_live_team(away_team)
@@ -1682,17 +1879,19 @@ def run_tournament_simulation(
         pair_xg_cache[key] = (home_xg, away_xg)
         return home_xg, away_xg
 
-    def penalty_home_probability(home_team, away_team):
-        home_elo = live_elo_lookup.get(home_team, INITIAL_RATING)
-        away_elo = live_elo_lookup.get(away_team, INITIAL_RATING)
+    def penalty_home_probability(home_team, away_team, stage):
+        home_elo = prediction_rating_for_team(home_team, stage)
+        away_elo = prediction_rating_for_team(away_team, stage)
         probability = 1.0 / (
             1.0 + 10.0 ** ((away_elo - home_elo) / 500.0)
         )
         return float(np.clip(probability, 0.35, 0.65))
 
-    def simulate_knockout_match(home_team, away_team, rng):
+    def simulate_knockout_match(home_team, away_team, rng, stage):
         home_xg, away_xg = predict_knockout_xg(
-            home_team, away_team
+            home_team,
+            away_team,
+            stage,
         )
         home_goals = int(rng.poisson(home_xg))
         away_goals = int(rng.poisson(away_xg))
@@ -1707,7 +1906,9 @@ def run_tournament_simulation(
 
         if home_goals == away_goals:
             if rng.random() < penalty_home_probability(
-                home_team, away_team
+                home_team,
+                away_team,
+                stage,
             ):
                 return home_team, away_team
             return away_team, home_team
@@ -1829,34 +2030,49 @@ def run_tournament_simulation(
         for match_id in sorted(r32_pairings):
             home_team, away_team = r32_pairings[match_id]
             winner, _ = simulate_knockout_match(
-                home_team, away_team, rng
+                home_team,
+                away_team,
+                rng,
+                "LAST_32",
             )
             winners[match_id] = winner
             counters[winner]["reach_round_16"] += 1
 
         for match_id, (source_a, source_b) in ROUND_OF_16.items():
             winner, _ = simulate_knockout_match(
-                winners[source_a], winners[source_b], rng
+                winners[source_a],
+                winners[source_b],
+                rng,
+                "LAST_16",
             )
             winners[match_id] = winner
             counters[winner]["reach_quarter_final"] += 1
 
         for match_id, (source_a, source_b) in QUARTER_FINALS.items():
             winner, _ = simulate_knockout_match(
-                winners[source_a], winners[source_b], rng
+                winners[source_a],
+                winners[source_b],
+                rng,
+                "QUARTER_FINALS",
             )
             winners[match_id] = winner
             counters[winner]["reach_semi_final"] += 1
 
         for match_id, (source_a, source_b) in SEMI_FINALS.items():
             winner, _ = simulate_knockout_match(
-                winners[source_a], winners[source_b], rng
+                winners[source_a],
+                winners[source_b],
+                rng,
+                "SEMI_FINALS",
             )
             winners[match_id] = winner
             counters[winner]["reach_final"] += 1
 
         champion, _ = simulate_knockout_match(
-            winners[101], winners[102], rng
+            winners[101],
+            winners[102],
+            rng,
+            "FINAL",
         )
         counters[champion]["champion"] += 1
 
@@ -2089,6 +2305,12 @@ def main() -> None:
         print("No new finished official match. No model files changed.")
         return
 
+    adaptive_rating_frame = build_adaptive_rating_frame(
+        team_map,
+        live_elo_updated,
+        processed_ledger_updated,
+    )
+
     live_predictions, prediction_ledger_updated = (
         generate_live_predictions(
             world_cup,
@@ -2099,6 +2321,7 @@ def main() -> None:
             live_team_state_updated,
             processed_ledger_updated,
             prediction_ledger,
+            adaptive_rating_frame=adaptive_rating_frame,
         )
     )
 
@@ -2147,6 +2370,7 @@ def main() -> None:
             team_map,
             live_elo_updated,
             live_team_state_updated,
+            adaptive_rating_frame=adaptive_rating_frame,
         )
     )
 
@@ -2176,6 +2400,7 @@ def main() -> None:
     atomic_to_csv(current_tables, CURRENT_TABLES_OUTPUT_PATH)
     atomic_to_csv(probabilities, TOURNAMENT_OUTPUT_PATH)
     atomic_to_csv(prices, PRICES_OUTPUT_PATH)
+    atomic_to_csv(adaptive_rating_frame, ADAPTIVE_RATINGS_OUTPUT_PATH)
     atomic_to_json(
         live_evaluation,
         LIVE_EVALUATION_OUTPUT_PATH,

@@ -57,6 +57,142 @@ def _render_selected_match_card(match: pd.Series) -> None:
     )
 
 
+def _adaptive_enabled(prediction: pd.Series) -> bool:
+    value = prediction.get("adaptive_prediction_enabled")
+    if isinstance(value, bool):
+        return value
+    return str(value).strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _signed_elo(value) -> str:
+    if value is None or pd.isna(value):
+        return "+0.0"
+    return f"{float(value):+,.1f}"
+
+
+def _render_adaptive_layer_note(match: pd.Series, prediction: pd.Series) -> None:
+    required = {
+        "home_adaptive_adjustment",
+        "away_adaptive_adjustment",
+        "home_base_elo",
+        "away_base_elo",
+        "home_prediction_elo",
+        "away_prediction_elo",
+    }
+    if not required.issubset(set(prediction.index)):
+        return
+
+    home_team = match.get("home_team", "Home")
+    away_team = match.get("away_team", "Away")
+    home_adjustment = prediction.get("home_adaptive_adjustment")
+    away_adjustment = prediction.get("away_adaptive_adjustment")
+    st.caption(
+        "Adaptive layer: "
+        f"{_signed_elo(home_adjustment)} Elo for {home_team}, "
+        f"{_signed_elo(away_adjustment)} Elo for {away_team}."
+    )
+
+    with st.expander("Adaptive layer details", expanded=False):
+        st.write(
+            "The historical goal model and live Elo remain the main forecast. "
+            "The adaptive layer only applies a capped, confidence-weighted Elo "
+            "nudge for this prediction."
+        )
+        st.dataframe(
+            pd.DataFrame(
+                [
+                    {
+                        "Team": home_team,
+                        "Base Elo": format_number(prediction.get("home_base_elo"), 1),
+                        "Adaptive adjustment": _signed_elo(home_adjustment),
+                        "Prediction Elo": format_number(
+                            prediction.get("home_prediction_elo"),
+                            1,
+                        ),
+                        "Confidence": prediction.get(
+                            "home_adaptive_confidence",
+                            "Low",
+                        ),
+                        "Risk": prediction.get(
+                            "home_overreaction_risk",
+                            "Normal watch",
+                        ),
+                    },
+                    {
+                        "Team": away_team,
+                        "Base Elo": format_number(prediction.get("away_base_elo"), 1),
+                        "Adaptive adjustment": _signed_elo(away_adjustment),
+                        "Prediction Elo": format_number(
+                            prediction.get("away_prediction_elo"),
+                            1,
+                        ),
+                        "Confidence": prediction.get(
+                            "away_adaptive_confidence",
+                            "Low",
+                        ),
+                        "Risk": prediction.get(
+                            "away_overreaction_risk",
+                            "Normal watch",
+                        ),
+                    },
+                ]
+            ),
+            hide_index=True,
+            use_container_width=True,
+        )
+        if {
+            "baseline_prob_home_win",
+            "baseline_prob_draw",
+            "baseline_prob_away_win",
+        }.issubset(set(prediction.index)):
+            st.dataframe(
+                pd.DataFrame(
+                    [
+                        {
+                            "Forecast": "Baseline",
+                            f"{home_team} win": format_percent(
+                                prediction.get("baseline_prob_home_win")
+                            ),
+                            "Draw": format_percent(
+                                prediction.get("baseline_prob_draw")
+                            ),
+                            f"{away_team} win": format_percent(
+                                prediction.get("baseline_prob_away_win")
+                            ),
+                            "Home xG": format_number(
+                                prediction.get("baseline_expected_home_goals")
+                            ),
+                            "Away xG": format_number(
+                                prediction.get("baseline_expected_away_goals")
+                            ),
+                        },
+                        {
+                            "Forecast": "Adaptive",
+                            f"{home_team} win": format_percent(
+                                prediction.get("prob_home_win")
+                            ),
+                            "Draw": format_percent(prediction.get("prob_draw")),
+                            f"{away_team} win": format_percent(
+                                prediction.get("prob_away_win")
+                            ),
+                            "Home xG": format_number(
+                                prediction.get("expected_home_goals")
+                            ),
+                            "Away xG": format_number(
+                                prediction.get("expected_away_goals")
+                            ),
+                        },
+                    ]
+                ),
+                hide_index=True,
+                use_container_width=True,
+            )
+        st.caption(
+            f"Adaptive prediction enabled: {'yes' if _adaptive_enabled(prediction) else 'no'} "
+            f"- {prediction.get('adaptive_model_version', 'Unavailable')}"
+        )
+
+
 def _render_saved_forecast(
     matches: pd.DataFrame,
     predictions: pd.DataFrame,
@@ -81,6 +217,7 @@ def _render_saved_forecast(
         f"{match.get('away_team')} win",
         format_percent(prediction.get("prob_away_win")),
     )
+    _render_adaptive_layer_note(match, prediction)
 
     with st.expander("More forecast detail", expanded=False):
         details = st.columns(4)

@@ -13,6 +13,7 @@ os.environ.setdefault("N_SIMULATIONS", "20")
 
 from backend import run_update_pipeline
 from backend import update_pipeline
+from features import adaptive_ratings
 
 
 class ConstantGoalModel:
@@ -113,13 +114,30 @@ class Phase8KnockoutPublicationTests(unittest.TestCase):
             "prob_home_win",
             "prob_draw",
             "prob_away_win",
+            "baseline_expected_home_goals",
+            "baseline_expected_away_goals",
+            "baseline_prob_home_win",
+            "baseline_prob_draw",
+            "baseline_prob_away_win",
             "most_likely_score",
             "second_likely_score",
             "third_likely_score",
+            "home_base_elo",
+            "away_base_elo",
+            "home_adaptive_adjustment",
+            "away_adaptive_adjustment",
+            "home_prediction_elo",
+            "away_prediction_elo",
+            "adaptive_prediction_enabled",
+            "adaptive_model_version",
         ]:
             self.assertIn(column, predictions.columns)
             self.assertFalse(predictions[column].isna().any())
         self.assertEqual(len(ledger), 2)
+        self.assertEqual(
+            set(predictions["model_version"]),
+            {"phase9b_adaptive_prediction_v1"},
+        )
 
     def test_finished_knockout_match_updates_processed_ledger(self):
         matches = pd.DataFrame(
@@ -272,7 +290,87 @@ class Phase8KnockoutPublicationTests(unittest.TestCase):
                 predictions_path=path,
             )
 
+        self.assertEqual(missing["match_id"].astype(int).tolist(), [1, 2])
+
+    def test_official_upcoming_prediction_gaps_ignore_adaptive_ready_rows(self):
+        matches = pd.DataFrame(
+            [
+                {
+                    "match_id": 1,
+                    "utc_date": pd.Timestamp("2026-06-20", tz="UTC"),
+                    "status": "TIMED",
+                    "stage": "GROUP_STAGE",
+                    "home_team": "Team A",
+                    "away_team": "Team B",
+                },
+                {
+                    "match_id": 2,
+                    "utc_date": pd.Timestamp("2026-07-01", tz="UTC"),
+                    "status": "SCHEDULED",
+                    "stage": "LAST_32",
+                    "home_team": "Team C",
+                    "away_team": "Team D",
+                },
+            ]
+        )
+        row = {"match_id": 1}
+        row.update({column: 0 for column in run_update_pipeline.ADAPTIVE_PREDICTION_COLUMNS})
+        row["adaptive_prediction_enabled"] = True
+        row["adaptive_model_version"] = "phase9b_adaptive_prediction_v1"
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "predictions.csv"
+            pd.DataFrame([row]).to_csv(path, index=False)
+            missing = run_update_pipeline.official_upcoming_prediction_gaps(
+                matches,
+                predictions_path=path,
+            )
+
         self.assertEqual(missing["match_id"].astype(int).tolist(), [2])
+
+    def test_adaptive_adjustment_is_nonzero_and_capped(self):
+        ratings = adaptive_ratings.build_adaptive_ratings(
+            pd.DataFrame(
+                {
+                    "team": ["Team A", "Team B"],
+                    "cupmarket_price": [20.0, 20.0],
+                    "previous_price": [20.0, 20.0],
+                }
+            ),
+            pd.DataFrame(
+                {
+                    "team": ["Team A", "Team B"],
+                    "cupmarket_price": [20.0, 20.0],
+                    "generated_at_utc": [
+                        "2026-06-01T00:00:00Z",
+                        "2026-06-01T00:00:00Z",
+                    ],
+                }
+            ),
+            pd.DataFrame(
+                [
+                    {
+                        "match_id": 100,
+                        "home_team": "Team A",
+                        "away_team": "Team B",
+                        "home_score": 4,
+                        "away_score": 0,
+                    }
+                ]
+            ),
+        )
+        team_a = ratings.set_index("team").loc["Team A"]
+        self.assertNotEqual(float(team_a["rating_change"]), 0.0)
+        adjustment = adaptive_ratings.adaptive_rating_adjustment(
+            "Team A",
+            ratings,
+            stage="GROUP_STAGE",
+        )
+        self.assertNotEqual(adjustment, 0.0)
+        self.assertLessEqual(
+            abs(adjustment),
+            adaptive_ratings.MAX_ADAPTIVE_ELO_ADJUSTMENT,
+        )
 
 
 if __name__ == "__main__":
