@@ -16,6 +16,11 @@ class OfficialUpdateGuardSourceTests(unittest.TestCase):
         )
         self.assertIn("def active_group_matches", source)
         self.assertIn("def run_guarded_pipeline", source)
+        self.assertIn("def publish_match_snapshot", source)
+        self.assertTrue(
+            source.find("publish_match_snapshot(world_cup)")
+            < source.find("active_matches = active_group_matches(world_cup)")
+        )
         self.assertIn('"status": "deferred_active_group_matches"', source)
         self.assertIn("main_mock", "main_mock")
         self.assertTrue(source.rfind("run_guarded_pipeline()") > source.find("if __name__"))

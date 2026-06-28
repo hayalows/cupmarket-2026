@@ -144,6 +144,11 @@ def deferred_run_summary(active_matches: pd.DataFrame, api_metadata: dict) -> di
     }
 
 
+def publish_match_snapshot(world_cup: pd.DataFrame) -> None:
+    """Publish official match status independently of model repricing."""
+    update_pipeline.atomic_to_csv(world_cup, update_pipeline.MATCHES_OUTPUT_PATH)
+
+
 def _has_meaningful_change(frame: pd.DataFrame) -> bool:
     if frame.empty or "price_change" not in frame.columns:
         return False
@@ -254,6 +259,7 @@ def _publish_opponent_probabilities_safely() -> None:
 def run_guarded_pipeline() -> bool:
     """Delay official publication while a group-stage match is active."""
     world_cup, api_metadata = update_pipeline.fetch_world_cup_matches()
+    publish_match_snapshot(world_cup)
     active_matches = active_group_matches(world_cup)
     if not active_matches.empty:
         update_pipeline.atomic_to_json(

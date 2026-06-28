@@ -313,6 +313,22 @@ class KnockoutStageTests(unittest.TestCase):
             "2026-06-28T02:00:00+00:00",
         )
 
+    def test_active_knockout_matches_include_provider_live_statuses(self):
+        matches = pd.DataFrame(
+            [
+                {"match_id": 1, "stage": "LAST_32", "status": "IN_PLAY"},
+                {"match_id": 2, "stage": "LAST_32", "status": "LIVE"},
+                {"match_id": 3, "stage": "LAST_32", "status": "PAUSED"},
+                {"match_id": 4, "stage": "LAST_32", "status": "SUSPENDED"},
+                {"match_id": 5, "stage": "LAST_32", "status": "TIMED"},
+                {"match_id": 6, "stage": "GROUP_STAGE", "status": "LIVE"},
+            ]
+        )
+
+        active = ks.active_knockout_matches(matches)
+
+        self.assertEqual(active["match_id"].astype(int).tolist(), [1, 2, 3, 4])
+
     def test_advancement_probabilities_sum_to_one(self):
         home, away = ks.advancement_probabilities(
             1.5,

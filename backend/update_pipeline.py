@@ -368,6 +368,8 @@ def fetch_world_cup_matches() -> tuple[pd.DataFrame, dict]:
                 "stage": match.get("stage"),
                 "group": match.get("group"),
                 "matchday": match.get("matchday"),
+                "minute": match.get("minute"),
+                "injury_time": match.get("injuryTime"),
                 "home_team": nested_get(match, ["homeTeam", "name"]),
                 "away_team": nested_get(match, ["awayTeam", "name"]),
                 "winner": nested_get(match, ["score", "winner"]),
@@ -392,6 +394,14 @@ def fetch_world_cup_matches() -> tuple[pd.DataFrame, dict]:
     frame["last_updated"] = pd.to_datetime(
         frame["last_updated"], errors="coerce", utc=True
     )
+    for column in (
+        "matchday",
+        "minute",
+        "injury_time",
+        "home_score_full_time",
+        "away_score_full_time",
+    ):
+        frame[column] = pd.to_numeric(frame[column], errors="coerce")
     frame = frame.sort_values(["utc_date", "match_id"]).reset_index(drop=True)
 
     metadata = {
@@ -2298,6 +2308,7 @@ def main() -> None:
     print("New finished official matches:", len(new_finished_matches))
 
     if new_finished_matches.empty and not FORCE_RUN:
+        atomic_to_csv(world_cup, MATCHES_OUTPUT_PATH)
         summary = {
             "status": "no_new_finished_match",
             "checked_at_utc": started_at.isoformat(),

@@ -76,6 +76,7 @@ def run() -> dict:
                 "was active. The next scheduled run will retry after full time."
             ),
         }
+        knockout_stage.atomic_csv(matches, update_pipeline.MATCHES_OUTPUT_PATH)
         knockout_stage.atomic_json(result, update_pipeline.RUN_SUMMARY_PATH)
         print(result["message"])
         return result

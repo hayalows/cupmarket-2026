@@ -382,6 +382,79 @@ class Phase8KnockoutPublicationTests(unittest.TestCase):
 
         self.assertEqual(missing["match_id"].astype(int).tolist(), [1, 2])
 
+    def test_fetch_world_cup_matches_keeps_live_clock_fields(self):
+        class FakeResponse:
+            status_code = 200
+            headers = {}
+
+            def raise_for_status(self):
+                return None
+
+            def json(self):
+                return {
+                    "matches": [
+                        {
+                            "id": 12,
+                            "utcDate": "2026-06-20T18:00:00Z",
+                            "status": "IN_PLAY",
+                            "stage": "LAST_32",
+                            "group": None,
+                            "matchday": 4,
+                            "minute": 37,
+                            "injuryTime": 2,
+                            "homeTeam": {"name": "Team A"},
+                            "awayTeam": {"name": "Team B"},
+                            "score": {
+                                "winner": None,
+                                "duration": "REGULAR",
+                                "fullTime": {"home": 1, "away": 0},
+                            },
+                            "lastUpdated": "2026-06-20T18:37:00Z",
+                        }
+                    ]
+                }
+
+        original_get = update_pipeline.requests.get
+        try:
+            update_pipeline.requests.get = lambda *args, **kwargs: FakeResponse()
+            frame, _ = update_pipeline.fetch_world_cup_matches()
+        finally:
+            update_pipeline.requests.get = original_get
+
+        self.assertEqual(int(frame.iloc[0]["minute"]), 37)
+        self.assertEqual(int(frame.iloc[0]["injury_time"]), 2)
+        self.assertEqual(int(frame.iloc[0]["home_score_full_time"]), 1)
+
+    def test_publish_match_snapshot_writes_live_clock_fields(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "matches.csv"
+            original_path = run_update_pipeline.update_pipeline.MATCHES_OUTPUT_PATH
+            try:
+                run_update_pipeline.update_pipeline.MATCHES_OUTPUT_PATH = path
+                run_update_pipeline.publish_match_snapshot(
+                    pd.DataFrame(
+                        [
+                            {
+                                "match_id": 12,
+                                "status": "IN_PLAY",
+                                "stage": "LAST_32",
+                                "home_team": "Team A",
+                                "away_team": "Team B",
+                                "minute": 37,
+                                "injury_time": 2,
+                            }
+                        ]
+                    )
+                )
+                saved = pd.read_csv(path)
+            finally:
+                run_update_pipeline.update_pipeline.MATCHES_OUTPUT_PATH = (
+                    original_path
+                )
+
+        self.assertEqual(int(saved.iloc[0]["minute"]), 37)
+        self.assertEqual(int(saved.iloc[0]["injury_time"]), 2)
+
     def test_official_upcoming_prediction_gaps_ignore_adaptive_ready_rows(self):
         matches = pd.DataFrame(
             [

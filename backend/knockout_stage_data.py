@@ -16,7 +16,7 @@ import pandas as pd
 
 MODEL_VERSION = "phase6_knockout_progression_v1"
 BRACKET_MODE = "official_api_locked_knockout_progression"
-ACTIVE_STATUSES = {"IN_PLAY", "PAUSED"}
+ACTIVE_STATUSES = {"IN_PLAY", "LIVE", "PAUSED", "SUSPENDED"}
 UPCOMING_STATUSES = {"TIMED", "SCHEDULED"}
 KNOCKOUT_STAGES = {
     "LAST_32",
@@ -90,6 +90,8 @@ def fetch_enhanced_matches(pipeline) -> tuple[pd.DataFrame, dict]:
                 "stage": match.get("stage"),
                 "group": match.get("group"),
                 "matchday": match.get("matchday"),
+                "minute": match.get("minute"),
+                "injury_time": match.get("injuryTime"),
                 "home_team": pipeline.nested_get(match, ["homeTeam", "name"]),
                 "away_team": pipeline.nested_get(match, ["awayTeam", "name"]),
                 "winner": score.get("winner"),
@@ -128,6 +130,20 @@ def fetch_enhanced_matches(pipeline) -> tuple[pd.DataFrame, dict]:
     frame["last_updated"] = pd.to_datetime(
         frame["last_updated"], errors="coerce", utc=True
     )
+    for column in (
+        "matchday",
+        "minute",
+        "injury_time",
+        "home_score_full_time",
+        "away_score_full_time",
+        "home_score_regular_time",
+        "away_score_regular_time",
+        "home_score_extra_time",
+        "away_score_extra_time",
+        "home_score_penalties",
+        "away_score_penalties",
+    ):
+        frame[column] = pd.to_numeric(frame[column], errors="coerce")
     frame = frame.sort_values(["utc_date", "match_id"]).reset_index(drop=True)
     metadata = {
         "http_status": response.status_code,
