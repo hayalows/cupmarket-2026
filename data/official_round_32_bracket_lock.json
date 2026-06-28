@@ -1,0 +1,9 @@
+{
+  "status": "locked",
+  "locked_at_utc": "2026-06-28T07:56:55.045859+00:00",
+  "source": "official_football_data_api",
+  "bracket_mode": "official_api_locked",
+  "fixture_count": 16,
+  "team_count": 32,
+  "fingerprint": "5155f059939d76d19b76ceb713ee216762d6b87736a18c117a22150d48756d64"
+}

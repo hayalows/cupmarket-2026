@@ -1,0 +1,17 @@
+bracket_match_number,api_match_id,utc_date,status,home_team,away_team,home_source_slot,away_source_slot,fixture_status,bracket_mode
+73,537417,2026-06-28 19:00:00+00:00,TIMED,South Africa,Canada,2A,2B,confirmed,official_api_locked
+74,537423,2026-06-29 17:00:00+00:00,TIMED,Brazil,Japan,1C,2F,confirmed,official_api_locked
+75,537415,2026-06-29 20:30:00+00:00,TIMED,Germany,Paraguay,1E,3D,confirmed,official_api_locked
+76,537418,2026-06-30 01:00:00+00:00,TIMED,Netherlands,Morocco,1F,2C,confirmed,official_api_locked
+77,537424,2026-06-30 17:00:00+00:00,TIMED,Ivory Coast,Norway,2E,2I,confirmed,official_api_locked
+78,537416,2026-06-30 21:00:00+00:00,TIMED,France,Sweden,1I,3F,confirmed,official_api_locked
+79,537425,2026-07-01 01:00:00+00:00,TIMED,Mexico,Ecuador,1A,3E,confirmed,official_api_locked
+80,537426,2026-07-01 16:00:00+00:00,TIMED,England,Congo DR,1L,3K,confirmed,official_api_locked
+81,537422,2026-07-01 20:00:00+00:00,TIMED,Belgium,Senegal,1G,3I,confirmed,official_api_locked
+82,537421,2026-07-02 00:00:00+00:00,TIMED,United States,Bosnia-Herzegovina,1D,3B,confirmed,official_api_locked
+83,537420,2026-07-02 19:00:00+00:00,TIMED,Spain,Austria,1H,2J,confirmed,official_api_locked
+84,537419,2026-07-02 23:00:00+00:00,TIMED,Portugal,Croatia,2K,2L,confirmed,official_api_locked
+85,537429,2026-07-03 03:00:00+00:00,TIMED,Switzerland,Algeria,1B,3J,confirmed,official_api_locked
+86,537428,2026-07-03 18:00:00+00:00,TIMED,Australia,Egypt,2D,2G,confirmed,official_api_locked
+87,537427,2026-07-03 22:00:00+00:00,TIMED,Argentina,Cape Verde Islands,1J,2H,confirmed,official_api_locked
+88,537430,2026-07-04 01:30:00+00:00,TIMED,Colombia,Ghana,1K,3L,confirmed,official_api_locked
