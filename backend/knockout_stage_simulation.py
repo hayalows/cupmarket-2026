@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from uuid import uuid4
-
 import numpy as np
 import pandas as pd
 
@@ -136,41 +133,33 @@ def advancement_probabilities(
     return float(home_advance), float(away_advance)
 
 
-def generate_knockout_predictions(
-    matches: pd.DataFrame,
-    home_model,
-    away_model,
-    team_map: pd.DataFrame,
-    live_elo: pd.DataFrame,
-    live_state: pd.DataFrame,
-    processed_ledger: pd.DataFrame,
-    prediction_ledger: pd.DataFrame,
+def add_advancement_columns(
+    predictions: pd.DataFrame,
+    base_rating,
     pipeline,
-) -> tuple[pd.DataFrame, pd.DataFrame]:
-    predict_xg, rating, _ = pair_xg_predictor(
-        home_model,
-        away_model,
-        team_map,
-        live_elo,
-        live_state,
-        pipeline,
-    )
-    upcoming = matches.loc[
-        matches["stage"].map(is_knockout_stage)
-        & matches["status"].isin(UPCOMING_STATUSES)
-        & matches["home_team"].notna()
-        & matches["away_team"].notna()
-    ].sort_values("utc_date")
-    generated_at = datetime.now(timezone.utc)
-    rows = []
-    for match in upcoming.itertuples(index=False):
-        home_xg, away_xg = predict_xg(
-            str(match.home_team),
-            str(match.away_team),
-        )
-        score_summary = pipeline.summarize_score_matrix(
-            pipeline.score_probability_matrix(home_xg, away_xg)
-        )
+) -> pd.DataFrame:
+    if predictions.empty:
+        return predictions
+
+    current = predictions.copy()
+    rating_by_team: dict[str, float] = {}
+    for match in current.itertuples(index=False):
+        home_rating = getattr(match, "home_prediction_elo", np.nan)
+        away_rating = getattr(match, "away_prediction_elo", np.nan)
+        if pd.notna(home_rating):
+            rating_by_team[str(match.home_team)] = float(home_rating)
+        if pd.notna(away_rating):
+            rating_by_team[str(match.away_team)] = float(away_rating)
+
+    def rating(team: str) -> float:
+        return rating_by_team.get(str(team), base_rating(team))
+
+    home_advances = []
+    away_advances = []
+    labels = []
+    for match in current.itertuples(index=False):
+        home_xg = float(match.expected_home_goals)
+        away_xg = float(match.expected_away_goals)
         penalty_home = penalty_home_probability(
             str(match.home_team),
             str(match.away_team),
@@ -182,70 +171,97 @@ def generate_knockout_predictions(
             penalty_home,
             pipeline,
         )
-        rows.append(
-            {
-                "prediction_id": str(uuid4()),
-                "prediction_source": "phase6_knockout",
-                "model_version": MODEL_VERSION,
-                "generated_at_utc": generated_at.isoformat(),
-                "state_matches_processed": int(len(processed_ledger)),
-                "created_before_kickoff": (
-                    generated_at < match.utc_date.to_pydatetime()
-                ),
-                "prediction_type": "knockout_pre_match",
-                "match_id": int(match.match_id),
-                "utc_date": match.utc_date,
-                "status": str(match.status),
-                "stage": str(match.stage),
-                "group": None,
-                "home_team": str(match.home_team),
-                "away_team": str(match.away_team),
-                "expected_home_goals": round(home_xg, 3),
-                "expected_away_goals": round(away_xg, 3),
-                "prob_home_win": round(score_summary["prob_home_win"], 6),
-                "prob_draw": round(score_summary["prob_draw"], 6),
-                "prob_away_win": round(score_summary["prob_away_win"], 6),
-                "prob_home_advance": round(home_advance, 6),
-                "prob_away_advance": round(away_advance, 6),
-                "prob_btts_yes": round(score_summary["prob_btts_yes"], 6),
-                "prob_over_2_5": round(score_summary["prob_over_2_5"], 6),
-                "predicted_result": (
-                    "HOME_ADVANCE"
-                    if home_advance >= away_advance
-                    else "AWAY_ADVANCE"
-                ),
-                "display_label": (
-                    "HOME_ADVANCE"
-                    if home_advance >= away_advance
-                    else "AWAY_ADVANCE"
-                ),
-                "most_likely_score": score_summary["top_scorelines"][0][
-                    "score"
-                ],
-                "most_likely_score_probability": round(
-                    score_summary["top_scorelines"][0]["probability"], 6
-                ),
-                "second_likely_score": score_summary["top_scorelines"][1][
-                    "score"
-                ],
-                "second_likely_score_probability": round(
-                    score_summary["top_scorelines"][1]["probability"], 6
-                ),
-                "third_likely_score": score_summary["top_scorelines"][2][
-                    "score"
-                ],
-                "third_likely_score_probability": round(
-                    score_summary["top_scorelines"][2]["probability"], 6
-                ),
-            }
+        label = (
+            "HOME_ADVANCE"
+            if home_advance >= away_advance
+            else "AWAY_ADVANCE"
         )
-    current = pd.DataFrame(rows)
+        home_advances.append(round(home_advance, 6))
+        away_advances.append(round(away_advance, 6))
+        labels.append(label)
+
+    current["prob_home_advance"] = home_advances
+    current["prob_away_advance"] = away_advances
+    current["predicted_result"] = labels
+    current["display_label"] = labels
+    return current
+
+
+def copy_knockout_columns_to_ledger(
+    prediction_ledger: pd.DataFrame,
+    current: pd.DataFrame,
+) -> pd.DataFrame:
+    if (
+        prediction_ledger.empty
+        or current.empty
+        or "prediction_id" not in prediction_ledger.columns
+        or "prediction_id" not in current.columns
+    ):
+        return prediction_ledger
+
+    updated = prediction_ledger.copy()
+    current_by_id = current.set_index("prediction_id")
+    for column in [
+        "prob_home_advance",
+        "prob_away_advance",
+        "predicted_result",
+        "display_label",
+    ]:
+        if column not in current_by_id.columns:
+            continue
+        if column not in updated.columns:
+            updated[column] = pd.NA
+        values = updated["prediction_id"].map(current_by_id[column])
+        mask = values.notna()
+        updated.loc[mask, column] = values.loc[mask]
+    return updated
+
+
+def generate_knockout_predictions(
+    matches: pd.DataFrame,
+    home_model,
+    away_model,
+    team_map: pd.DataFrame,
+    live_elo: pd.DataFrame,
+    live_state: pd.DataFrame,
+    processed_ledger: pd.DataFrame,
+    prediction_ledger: pd.DataFrame,
+    pipeline,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    _, rating, _ = pair_xg_predictor(
+        home_model,
+        away_model,
+        team_map,
+        live_elo,
+        live_state,
+        pipeline,
+    )
+    adaptive_rating_frame = pipeline.build_adaptive_rating_frame(
+        team_map,
+        live_elo,
+        processed_ledger,
+    )
+    current, prediction_ledger = pipeline.generate_live_predictions(
+        matches,
+        home_model,
+        away_model,
+        team_map,
+        live_elo,
+        live_state,
+        processed_ledger,
+        prediction_ledger,
+        adaptive_rating_frame=adaptive_rating_frame,
+    )
     if not current.empty:
-        prediction_ledger = pd.concat(
-            [prediction_ledger, current],
-            ignore_index=True,
-            sort=False,
-        ).drop_duplicates(subset=["prediction_id"], keep="first")
+        current = current.loc[
+            current["stage"].map(is_knockout_stage)
+            & current["status"].isin(UPCOMING_STATUSES)
+        ].copy()
+        current = add_advancement_columns(current, rating, pipeline)
+        prediction_ledger = copy_knockout_columns_to_ledger(
+            prediction_ledger,
+            current,
+        )
     return current, prediction_ledger
 
 

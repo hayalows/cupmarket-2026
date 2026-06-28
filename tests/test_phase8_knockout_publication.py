@@ -12,6 +12,7 @@ os.environ.setdefault("FOOTBALL_DATA_TOKEN", "test-token")
 os.environ.setdefault("N_SIMULATIONS", "20")
 
 from backend import run_update_pipeline
+from backend import knockout_stage
 from backend import update_pipeline
 from features import adaptive_ratings
 
@@ -138,6 +139,95 @@ class Phase8KnockoutPublicationTests(unittest.TestCase):
             set(predictions["model_version"]),
             {"phase9b_adaptive_prediction_v1"},
         )
+
+    def test_post_group_knockout_predictions_keep_adaptive_columns(self):
+        matches = pd.DataFrame(
+            [
+                {
+                    "match_id": 2,
+                    "utc_date": pd.Timestamp("2026-07-01", tz="UTC"),
+                    "status": "SCHEDULED",
+                    "stage": "LAST_32",
+                    "group": None,
+                    "home_team": "Team C",
+                    "away_team": "Team D",
+                },
+                {
+                    "match_id": 3,
+                    "utc_date": pd.Timestamp("2026-07-02", tz="UTC"),
+                    "status": "SCHEDULED",
+                    "stage": "LAST_32",
+                    "group": None,
+                    "home_team": "TBD",
+                    "away_team": "Team A",
+                },
+            ]
+        )
+        adaptive_frame = pd.DataFrame(
+            [
+                {
+                    "team": "Team C",
+                    "rating_change": 50.0,
+                    "confidence_level": "High",
+                    "confidence_score": 0.8,
+                    "overreaction_risk": "Stable signal",
+                },
+                {
+                    "team": "Team D",
+                    "rating_change": -20.0,
+                    "confidence_level": "High",
+                    "confidence_score": 0.8,
+                    "overreaction_risk": "Stable signal",
+                },
+            ]
+        )
+        original_builder = update_pipeline.build_adaptive_rating_frame
+        update_pipeline.build_adaptive_rating_frame = (
+            lambda *args, **kwargs: adaptive_frame
+        )
+        try:
+            predictions, ledger = knockout_stage.generate_knockout_predictions(
+                matches,
+                ConstantGoalModel(1.4),
+                ConstantGoalModel(1.1),
+                team_map("Team A", "Team C", "Team D"),
+                live_elo("Team A", "Team C", "Team D"),
+                live_state("Team A", "Team C", "Team D"),
+                pd.DataFrame(columns=["match_id"]),
+                pd.DataFrame(),
+                update_pipeline,
+            )
+        finally:
+            update_pipeline.build_adaptive_rating_frame = original_builder
+
+        self.assertEqual(predictions["match_id"].astype(int).tolist(), [2])
+        row = predictions.iloc[0]
+        for column in [
+            "baseline_expected_home_goals",
+            "baseline_expected_away_goals",
+            "home_adaptive_adjustment",
+            "away_adaptive_adjustment",
+            "home_prediction_elo",
+            "away_prediction_elo",
+            "adaptive_prediction_enabled",
+            "adaptive_model_version",
+            "prob_home_advance",
+            "prob_away_advance",
+        ]:
+            self.assertIn(column, predictions.columns)
+            self.assertFalse(pd.isna(row[column]))
+        self.assertTrue(bool(row["adaptive_prediction_enabled"]))
+        self.assertNotEqual(float(row["home_adaptive_adjustment"]), 0.0)
+        self.assertNotEqual(float(row["away_adaptive_adjustment"]), 0.0)
+        self.assertEqual(
+            row["adaptive_model_version"],
+            "phase9b_adaptive_prediction_v1",
+        )
+        self.assertEqual(row["model_version"], "phase9b_adaptive_prediction_v1")
+
+        ledger_row = ledger.loc[ledger["match_id"].astype(int).eq(2)].iloc[-1]
+        self.assertFalse(pd.isna(ledger_row["prob_home_advance"]))
+        self.assertTrue(bool(ledger_row["adaptive_prediction_enabled"]))
 
     def test_finished_knockout_match_updates_processed_ledger(self):
         matches = pd.DataFrame(
