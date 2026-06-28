@@ -1,18 +1,20 @@
 {
-  "model_version": "phase6_knockout_progression_v1",
-  "bracket_mode": "official_api_locked_knockout_progression",
+  "model_version": "phase9b_adaptive_prediction_v1",
   "number_of_simulations": 20000,
-  "random_seed": 20261234,
-  "actual_knockout_results_used": 0,
-  "actual_resolution_count_across_simulations": 0,
-  "simulated_resolution_count_across_simulations": 620000,
-  "pair_xg_cache_size": 432,
+  "random_seed": 20260628,
+  "bracket_mode": "provisional_constraint_assignment",
+  "finished_group_matches": 72,
+  "remaining_group_matches": 0,
+  "simulation_seconds": 8.889214992523193,
+  "pair_xg_cache_size": 628,
+  "elo_fallback_uses": 0,
+  "average_valid_third_place_assignments": 22.0,
   "stage_probability_totals": {
     "round_32_total": 32.0,
-    "round_16_total": 15.999999999999998,
+    "round_16_total": 16.0,
     "quarter_final_total": 8.0,
-    "semi_final_total": 4.0,
-    "final_total": 2.0,
+    "semi_final_total": 3.9999999999999996,
+    "final_total": 1.9999999999999998,
     "champion_total": 1.0
   },
   "settlement_values": {
@@ -24,17 +26,20 @@
     "runner_up": 85.0,
     "champion": 100.0
   },
+  "knockout_settlements_applied": 0,
+  "knockout_settlement_matches": [],
   "limitations": [
-    "Unfinished knockout matches use the existing Poisson goal models.",
-    "Penalty shootouts use Elo-bounded probabilities between 35% and 65%.",
-    "Finished penalty shootouts count as draws for Elo, while the official winner advances."
+    "Phase 8 processes completed official group and knockout matches with real teams.",
+    "Team conduct data is unavailable; live Elo is used only after football tiebreak criteria remain equal.",
+    "Before the Round of 32 is populated, third-place teams are sampled across valid official slot constraints.",
+    "Extra-time and penalties use transparent approximation rules."
   ],
-  "generated_at_utc": "2026-06-28T07:56:59.176117+00:00",
+  "generated_at_utc": "2026-06-28T08:03:57.033645+00:00",
   "new_finished_matches_processed": 0,
   "api": {
     "http_status": 200,
     "matches_returned": 104,
-    "requests_remaining": "8",
-    "request_counter_reset": "44"
+    "requests_remaining": "9",
+    "request_counter_reset": "59"
   }
 }
