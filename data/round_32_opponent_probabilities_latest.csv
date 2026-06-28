@@ -1,95 +1,61 @@
 team,team_group,opponent,opponent_group,pairing_count,probability_unconditional,probability_given_qualification,qualification_count,number_of_simulations,generated_at_utc,model_version,bracket_mode
-Algeria,J,Spain,H,6490,0.3245,0.5489764845203857,11822,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Algeria,J,Belgium,G,2359,0.11795,0.19954322449670106,11822,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Algeria,J,England,L,1439,0.07195,0.12172221282354931,11822,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Algeria,J,Switzerland,B,940,0.047,0.07951277279648114,11822,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Algeria,J,United States,D,594,0.0297,0.05024530536288276,11822,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Argentina,J,Cape Verde Islands,H,20000,1.0,1.0,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Australia,D,Egypt,G,20000,1.0,1.0,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Austria,J,Spain,H,13510,0.6755,0.8420068557182923,16045,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Austria,J,Belgium,G,1091,0.05455,0.06799626051729511,16045,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Austria,J,England,L,1061,0.05305,0.06612651916484887,16045,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Austria,J,Switzerland,B,197,0.00985,0.012277968214397009,16045,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Austria,J,United States,D,186,0.0093,0.01159239638516672,16045,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Belgium,G,South Korea,A,5946,0.2973,0.2973,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Belgium,G,Ecuador,E,5322,0.2661,0.2661,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Belgium,G,Senegal,I,5282,0.2641,0.2641,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Belgium,G,Algeria,J,2359,0.11795,0.11795,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Belgium,G,Austria,J,1091,0.05455,0.05455,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Bosnia-Herzegovina,B,United States,D,13037,0.65185,0.65185,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Bosnia-Herzegovina,B,Germany,E,6963,0.34815,0.34815,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Brazil,C,Japan,F,20000,1.0,1.0,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Canada,B,South Africa,A,20000,1.0,1.0,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Cape Verde Islands,H,Argentina,J,20000,1.0,1.0,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Colombia,K,Ghana,L,13692,0.6846,0.6846,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Colombia,K,Croatia,L,6308,0.3154,0.3154,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Congo DR,K,England,L,7146,0.3573,0.9951260270157359,7181,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Congo DR,K,Croatia,L,35,0.00175,0.00487397298426403,7181,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Croatia,L,Portugal,K,13657,0.68285,0.68285,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Croatia,L,Colombia,K,6308,0.3154,0.3154,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Croatia,L,Congo DR,K,35,0.00175,0.00175,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Ecuador,E,Mexico,A,6078,0.3039,0.3039,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Ecuador,E,Belgium,G,5322,0.2661,0.2661,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Ecuador,E,England,L,5178,0.2589,0.2589,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Ecuador,E,Switzerland,B,1845,0.09225,0.09225,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Ecuador,E,United States,D,1577,0.07885,0.07885,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Egypt,G,Australia,D,20000,1.0,1.0,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-England,L,Congo DR,K,7146,0.3573,0.3573,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-England,L,Ecuador,E,5178,0.2589,0.2589,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-England,L,Senegal,I,5138,0.2569,0.2569,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-England,L,Algeria,J,1439,0.07195,0.07195,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-England,L,Austria,J,1061,0.05305,0.05305,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-England,L,Portugal,K,35,0.00175,0.00175,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-England,L,Uzbekistan,K,3,0.00015,0.00015,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-France,I,Paraguay,D,11099,0.55495,0.55495,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-France,I,Iran,G,5872,0.2936,0.2936,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-France,I,Sweden,F,3029,0.15145,0.15145,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Germany,E,Paraguay,D,8901,0.44505,0.44505,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Germany,E,Bosnia-Herzegovina,B,6963,0.34815,0.34815,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Germany,E,Sweden,F,3172,0.1586,0.1586,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Germany,E,South Korea,A,964,0.0482,0.0482,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Ghana,L,Colombia,K,13692,0.6846,0.6846,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Ghana,L,Portugal,K,6308,0.3154,0.3154,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Iran,G,Switzerland,B,12167,0.60835,0.674483064471423,18039,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Iran,G,France,I,5872,0.2936,0.32551693552857697,18039,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Ivory Coast,E,Norway,I,20000,1.0,1.0,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Japan,F,Brazil,C,20000,1.0,1.0,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Mexico,A,Sweden,F,7746,0.3873,0.3873,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Mexico,A,Senegal,I,6176,0.3088,0.3088,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Mexico,A,Ecuador,E,6078,0.3039,0.3039,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Morocco,C,Netherlands,F,20000,1.0,1.0,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Netherlands,F,Morocco,C,20000,1.0,1.0,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Norway,I,Ivory Coast,E,20000,1.0,1.0,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Paraguay,D,France,I,11099,0.55495,0.55495,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Paraguay,D,Germany,E,8901,0.44505,0.44505,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Portugal,K,Croatia,L,13657,0.68285,0.68285,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Portugal,K,Ghana,L,6308,0.3154,0.3154,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Portugal,K,England,L,35,0.00175,0.00175,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Senegal,I,Mexico,A,6176,0.3088,0.3088,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Senegal,I,Belgium,G,5282,0.2641,0.2641,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Senegal,I,England,L,5138,0.2569,0.2569,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Senegal,I,Switzerland,B,1805,0.09025,0.09025,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Senegal,I,United States,D,1599,0.07995,0.07995,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-South Africa,A,Canada,B,20000,1.0,1.0,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-South Korea,A,Belgium,G,5946,0.2973,0.860492040520984,6910,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-South Korea,A,Germany,E,964,0.0482,0.13950795947901592,6910,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Spain,H,Austria,J,13510,0.6755,0.6755,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Spain,H,Algeria,J,6490,0.3245,0.3245,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Sweden,F,Mexico,A,7746,0.3873,0.3873,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Sweden,F,Germany,E,3172,0.1586,0.1586,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Sweden,F,Switzerland,B,3046,0.1523,0.1523,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Sweden,F,France,I,3029,0.15145,0.15145,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Sweden,F,United States,D,3007,0.15035,0.15035,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Switzerland,B,Iran,G,12167,0.60835,0.60835,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Switzerland,B,Sweden,F,3046,0.1523,0.1523,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Switzerland,B,Ecuador,E,1845,0.09225,0.09225,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Switzerland,B,Senegal,I,1805,0.09025,0.09025,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Switzerland,B,Algeria,J,940,0.047,0.047,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Switzerland,B,Austria,J,197,0.00985,0.00985,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-United States,D,Bosnia-Herzegovina,B,13037,0.65185,0.65185,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-United States,D,Sweden,F,3007,0.15035,0.15035,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-United States,D,Senegal,I,1599,0.07995,0.07995,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-United States,D,Ecuador,E,1577,0.07885,0.07885,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-United States,D,Algeria,J,594,0.0297,0.0297,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-United States,D,Austria,J,186,0.0093,0.0093,20000,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
-Uzbekistan,K,England,L,3,0.00015,1.0,3,20000,2026-06-27T23:05:46.774555+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Algeria,J,Belgium,G,9116,0.4558,0.4558,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Algeria,J,Switzerland,B,7233,0.36165,0.36165,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Algeria,J,United States,D,3651,0.18255,0.18255,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Argentina,J,Cape Verde Islands,H,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Australia,D,Egypt,G,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Austria,J,Spain,H,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Belgium,G,Algeria,J,9116,0.4558,0.4558,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Belgium,G,Ecuador,E,5526,0.2763,0.2763,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Belgium,G,Senegal,I,5358,0.2679,0.2679,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Bosnia-Herzegovina,B,Germany,E,12728,0.6364,0.6364,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Bosnia-Herzegovina,B,United States,D,7272,0.3636,0.3636,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Brazil,C,Japan,F,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Canada,B,South Africa,A,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Cape Verde Islands,H,Argentina,J,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Colombia,K,Ghana,L,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Congo DR,K,England,L,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Croatia,L,Portugal,K,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Ecuador,E,Mexico,A,7215,0.36075,0.36075,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Ecuador,E,Belgium,G,5526,0.2763,0.2763,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Ecuador,E,Switzerland,B,4513,0.22565,0.22565,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Ecuador,E,United States,D,2746,0.1373,0.1373,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Egypt,G,Australia,D,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+England,L,Congo DR,K,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+France,I,Paraguay,D,16320,0.816,0.816,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+France,I,Sweden,F,3680,0.184,0.184,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Germany,E,Bosnia-Herzegovina,B,12728,0.6364,0.6364,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Germany,E,Paraguay,D,3680,0.184,0.184,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Germany,E,Sweden,F,3592,0.1796,0.1796,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Ghana,L,Colombia,K,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Ivory Coast,E,Norway,I,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Japan,F,Brazil,C,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Mexico,A,Senegal,I,7287,0.36435,0.36435,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Mexico,A,Ecuador,E,7215,0.36075,0.36075,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Mexico,A,Sweden,F,5498,0.2749,0.2749,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Morocco,C,Netherlands,F,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Netherlands,F,Morocco,C,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Norway,I,Ivory Coast,E,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Paraguay,D,France,I,16320,0.816,0.816,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Paraguay,D,Germany,E,3680,0.184,0.184,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Portugal,K,Croatia,L,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Senegal,I,Mexico,A,7287,0.36435,0.36435,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Senegal,I,Belgium,G,5358,0.2679,0.2679,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Senegal,I,Switzerland,B,4597,0.22985,0.22985,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Senegal,I,United States,D,2758,0.1379,0.1379,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+South Africa,A,Canada,B,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Spain,H,Austria,J,20000,1.0,1.0,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Sweden,F,Mexico,A,5498,0.2749,0.2749,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Sweden,F,France,I,3680,0.184,0.184,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Sweden,F,Switzerland,B,3657,0.18285,0.18285,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Sweden,F,Germany,E,3592,0.1796,0.1796,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Sweden,F,United States,D,3573,0.17865,0.17865,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Switzerland,B,Algeria,J,7233,0.36165,0.36165,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Switzerland,B,Senegal,I,4597,0.22985,0.22985,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Switzerland,B,Ecuador,E,4513,0.22565,0.22565,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+Switzerland,B,Sweden,F,3657,0.18285,0.18285,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+United States,D,Bosnia-Herzegovina,B,7272,0.3636,0.3636,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+United States,D,Algeria,J,3651,0.18255,0.18255,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+United States,D,Sweden,F,3573,0.17865,0.17865,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+United States,D,Senegal,I,2758,0.1379,0.1379,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
+United States,D,Ecuador,E,2746,0.1373,0.1373,20000,20000,2026-06-28T04:23:04.379186+00:00,phase9b_adaptive_prediction_v1,provisional_constraint_assignment
