@@ -1,5 +1,5 @@
 logical_match_number,api_match_id,stage,utc_date,status,home_team,away_team,home_score,away_score,duration,decision_method,advancing_team,home_penalties,away_penalties
-73,537417,LAST_32,2026-06-28 19:00:00+00:00,TIMED,South Africa,Canada,,,REGULAR,,,,
+73,537417,LAST_32,2026-06-28 19:00:00+00:00,FINISHED,South Africa,Canada,0.0,1.0,REGULAR,regular_time,Canada,,
 74,537423,LAST_32,2026-06-29 17:00:00+00:00,TIMED,Brazil,Japan,,,REGULAR,,,,
 75,537415,LAST_32,2026-06-29 20:30:00+00:00,TIMED,Germany,Paraguay,,,REGULAR,,,,
 76,537418,LAST_32,2026-06-30 01:00:00+00:00,TIMED,Netherlands,Morocco,,,REGULAR,,,,
