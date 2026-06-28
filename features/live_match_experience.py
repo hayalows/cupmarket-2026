@@ -5,61 +5,14 @@ import streamlit as st
 
 from backend.live_qualification import LIVE_STATUSES
 from features.compact_match_room import render_compact_match_room
-from features.match_ui import score_text
+from features.match_ui import match_stage_label, score_text
 
 UPCOMING_STATUSES = {"TIMED", "SCHEDULED"}
 FINISHED_STATUSES = {"FINISHED", "AWARDED"}
-STAGE_LABELS = {
-    "LAST_32": "Round of 32",
-    "ROUND_OF_32": "Round of 32",
-    "R32": "Round of 32",
-    "LAST_16": "Round of 16",
-    "ROUND_OF_16": "Round of 16",
-    "R16": "Round of 16",
-    "QUARTER_FINALS": "Quarter-Finals",
-    "QUARTER_FINAL": "Quarter-Finals",
-    "QF": "Quarter-Finals",
-    "SEMI_FINALS": "Semi-Finals",
-    "SEMI_FINAL": "Semi-Finals",
-    "SF": "Semi-Finals",
-    "THIRD_PLACE": "Third Place",
-    "FINAL": "Final",
-}
-
-
-def _missing_text(value) -> bool:
-    if value is None:
-        return True
-    try:
-        if pd.isna(value):
-            return True
-    except (TypeError, ValueError):
-        pass
-    text = str(value).strip()
-    return not text or text.lower() in {"nan", "none", "null", "nat"}
-
-
-def _stage_text(value) -> str:
-    if _missing_text(value):
-        return ""
-    key = str(value).strip().upper()
-    return STAGE_LABELS.get(key, key.replace("_", " ").title())
-
-
-def _group_text(value, stage=None) -> str:
-    if _missing_text(value):
-        if str(stage or "").strip().upper() == "LAST_32":
-            return "Round of 32"
-        return ""
-    text = str(value).strip()
-    return text.replace("GROUP_", "Group ").replace("_", " ").title()
 
 
 def _match_context_text(row: pd.Series) -> str:
-    stage = str(row.get("stage", "") or "").strip().upper()
-    if stage and stage != "GROUP_STAGE":
-        return _stage_text(stage)
-    return _group_text(row.get("group"), stage)
+    return match_stage_label(row)
 
 
 def _kickoff_text(value) -> str:

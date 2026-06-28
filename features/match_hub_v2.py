@@ -55,7 +55,8 @@ def _render_live_safe(matches: pd.DataFrame) -> None:
             st.markdown(
                 f"**{match.get('home_team')} {base._score(match)} {match.get('away_team')}**"
             )
-            st.caption(f"{clock} · {base._group(match.get('group'))}")
+            context = base._group(match.get("group"), match.get("stage"))
+            st.caption(" · ".join(part for part in [clock, context] if part))
             if st.button(
                 "Open match intelligence",
                 key=f"hub_v2_live_{int(match['match_id'])}",
@@ -105,7 +106,7 @@ def _render_results_safe(
         return
 
     countries = sorted(set(finished["home_team"]).union(set(finished["away_team"])))
-    groups = sorted(finished["group"].dropna().astype(str).unique())
+    groups = base._group_filter_options(finished)
     with st.popover("Filter results", use_container_width=True):
         country = st.selectbox(
             "Country",
@@ -125,7 +126,7 @@ def _render_results_safe(
             | (filtered["away_team"] == country)
         ]
     if group != "All groups":
-        filtered = filtered[filtered["group"].astype(str) == group]
+        filtered = filtered[base._group_filter_mask(filtered, group)]
 
     if filtered.empty:
         st.info(

@@ -17,6 +17,7 @@ from features.product_ui import (
     render_project_footer,
     render_start_here,
 )
+from features.match_ui import match_stage_label
 
 st.set_page_config(
     page_title="CupMarket 2026",
@@ -901,6 +902,10 @@ if page == "Overview":
                     "%Y-%m-%d %H:%M"
                 )
             )
+            next_matches["match_stage_label"] = next_matches.apply(
+                match_stage_label,
+                axis=1,
+            )
 
             next_display = next_matches[
                 [
@@ -908,8 +913,7 @@ if page == "Overview":
                     "status",
                     "home_team",
                     "away_team",
-                    "group",
-                    "stage",
+                    "match_stage_label",
                 ]
             ].rename(
                 columns={
@@ -917,8 +921,7 @@ if page == "Overview":
                     "status": "Status",
                     "home_team": "Home",
                     "away_team": "Away",
-                    "group": "Group",
-                    "stage": "Stage",
+                    "match_stage_label": "Stage",
                 }
             )
 
@@ -998,6 +1001,10 @@ elif page == "Match Centre":
             score_text,
             axis=1,
         )
+        filtered["match_stage_label"] = filtered.apply(
+            match_stage_label,
+            axis=1,
+        )
 
         prediction_display = pd.DataFrame()
 
@@ -1030,8 +1037,7 @@ elif page == "Match Centre":
             "home_team",
             "score",
             "away_team",
-            "group",
-            "stage",
+            "match_stage_label",
         ]
 
         for optional in [
@@ -1076,8 +1082,7 @@ elif page == "Match Centre":
                 "home_team": "Home",
                 "score": "Score",
                 "away_team": "Away",
-                "group": "Group",
-                "stage": "Stage",
+                "match_stage_label": "Stage",
                 "expected_home_goals": "Home xG",
                 "expected_away_goals": "Away xG",
                 "prob_home_win": "Home win",

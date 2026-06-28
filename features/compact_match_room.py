@@ -6,6 +6,7 @@ import streamlit as st
 from features.live_match_room import _ordered_selectable, _render_live_room
 from features.match_ui import (
     format_number,
+    match_stage_label,
     match_option_label,
     prediction_confidence,
     score_text,
@@ -39,8 +40,10 @@ def _render_selected_match_card(match: pd.Series) -> None:
     else:
         state = status.replace("_", " ")
 
-    group = str(match.get("group", "")).replace("GROUP_", "Group ")
-    stage = str(match.get("stage", "")).replace("_", " ").title()
+    context = match_stage_label(match)
+    context_line = (
+        f'<div class="cm-match-meta">{context}</div>' if context else ""
+    )
     st.markdown(
         f'''
         <div class="cm-match-card cm-selected-match-card">
@@ -50,7 +53,7 @@ def _render_selected_match_card(match: pd.Series) -> None:
                 <span>{score_text(match)}</span>
                 <strong>{match.get('away_team', 'TBD')}</strong>
             </div>
-            <div class="cm-match-meta">{group} · {stage}</div>
+            {context_line}
         </div>
         ''',
         unsafe_allow_html=True,

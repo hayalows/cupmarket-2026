@@ -6,7 +6,11 @@ import pandas as pd
 import streamlit as st
 
 from features.live_match_data import format_source_time, load_matches
-from features.match_ui import combine_prediction_sources, prediction_confidence
+from features.match_ui import (
+    combine_prediction_sources,
+    match_stage_label,
+    prediction_confidence,
+)
 from features.tournament_data import (
     DATA_DIR,
     actual_outcome,
@@ -42,8 +46,26 @@ def _kickoff(value, short: bool = False) -> str:
     return timestamp.strftime("%d %b · %H:%M UTC" if short else "%A, %d %B · %H:%M UTC")
 
 
-def _group(value) -> str:
-    return str(value or "").replace("GROUP_", "Group ").replace("_", " ").title()
+def _group(value, stage=None) -> str:
+    return match_stage_label({"group": value, "stage": stage})
+
+
+def _group_filter_options(matches: pd.DataFrame) -> list[str]:
+    if "group" not in matches.columns:
+        return []
+    return sorted(
+        {
+            label
+            for value in matches["group"]
+            if (label := _group(value, "GROUP_STAGE"))
+        }
+    )
+
+
+def _group_filter_mask(matches: pd.DataFrame, label: str) -> pd.Series:
+    if "group" not in matches.columns:
+        return pd.Series(False, index=matches.index)
+    return matches["group"].map(lambda value: _group(value, "GROUP_STAGE")) == label
 
 
 def _pct(value, digits: int = 1) -> str:
@@ -146,11 +168,20 @@ def _render_result_detail(match: pd.Series, prediction_ledger: pd.DataFrame, pro
     actual = actual_outcome(match)
     leading = _prediction_outcome(prediction)
     actual_prob = outcome_probability(prediction, actual)
+    meta_text = " · ".join(
+        part
+        for part in [
+            "FULL TIME",
+            _group(match.get("group"), match.get("stage")),
+            _kickoff(match.get("utc_date"), True),
+        ]
+        if part
+    )
 
     st.markdown(
         f'''
         <div class="cm-match-card cm-selected-match-card">
-            <div class="cm-match-meta">FULL TIME · {_group(match.get('group'))} · {_kickoff(match.get('utc_date'), True)}</div>
+            <div class="cm-match-meta">{meta_text}</div>
             <div class="cm-match-teams">
                 <strong>{match.get('home_team')}</strong>
                 <span>{_score(match)}</span>
@@ -233,7 +264,7 @@ def _render_results(matches: pd.DataFrame, static: dict[str, pd.DataFrame]) -> N
         return
 
     countries = sorted(set(finished["home_team"]).union(set(finished["away_team"])))
-    groups = sorted(finished["group"].dropna().astype(str).unique())
+    groups = _group_filter_options(finished)
     with st.popover("Filter results", use_container_width=True):
         country = st.selectbox("Country", ["All countries", *countries])
         group = st.selectbox("Group", ["All groups", *groups])
@@ -241,7 +272,7 @@ def _render_results(matches: pd.DataFrame, static: dict[str, pd.DataFrame]) -> N
     if country != "All countries":
         filtered = filtered[(filtered["home_team"] == country) | (filtered["away_team"] == country)]
     if group != "All groups":
-        filtered = filtered[filtered["group"].astype(str) == group]
+        filtered = filtered[_group_filter_mask(filtered, group)]
 
     review_table, match_ids = _finished_review_rows(filtered, prediction_ledger)
     event = st.dataframe(
@@ -284,7 +315,8 @@ def _render_live(matches: pd.DataFrame) -> None:
         clock = "HT" if str(match.get("status")) == "PAUSED" else (f"{int(minute)}'" if pd.notna(minute) else "LIVE")
         with st.container(border=True):
             st.markdown(f"**{match.get('home_team')} {_score(match)} {match.get('away_team')}**")
-            st.caption(f"{clock} · {_group(match.get('group'))}")
+            context = _group(match.get("group"), match.get("stage"))
+            st.caption(" · ".join(part for part in [clock, context] if part))
             if st.button("Open live intelligence", key=f"hub_live_{int(match['match_id'])}", use_container_width=True):
                 _open_match_room(int(match["match_id"]))
 
@@ -331,7 +363,11 @@ def _render_upcoming(matches: pd.DataFrame, static: dict[str, pd.DataFrame]) -> 
     match = merged[merged["match_id"] == int(selected_id)].iloc[0]
     with st.container(border=True):
         st.markdown(f"### {match.get('home_team')} vs {match.get('away_team')}")
-        st.caption(f"{_kickoff(match.get('utc_date'))} · {_group(match.get('group'))}")
+        context = _group(match.get("group"), match.get("stage"))
+        caption = " · ".join(
+            part for part in [_kickoff(match.get("utc_date")), context] if part
+        )
+        st.caption(caption)
         probabilities = st.columns(3)
         probabilities[0].metric(f"{match.get('home_team')} win", _pct(match.get("prob_home_win")))
         probabilities[1].metric("Draw", _pct(match.get("prob_draw")))

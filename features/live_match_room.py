@@ -13,6 +13,7 @@ from backend.live_qualification import (
 from features.live_qualification_ui import cached_projection, pct
 from features.match_ui import (
     format_number,
+    match_stage_label,
     match_option_label,
     prediction_confidence,
     score_text,
@@ -29,6 +30,17 @@ def _minute_text(row: pd.Series) -> str:
         return "HT"
     minute = row.get("minute")
     return f"{int(minute)}'" if minute is not None and pd.notna(minute) else "LIVE"
+
+
+def _live_meta_text(row: pd.Series) -> str:
+    minute = _minute_text(row)
+    parts = ["LIVE"]
+    if minute != "LIVE":
+        parts.append(minute)
+    context = match_stage_label(row)
+    if context:
+        parts.append(context)
+    return " \u00b7 ".join(parts)
 
 
 def _pp_delta(current, baseline) -> str | None:
@@ -99,7 +111,7 @@ def _render_score_cards(active_matches: pd.DataFrame) -> None:
             st.markdown(
                 f'''
                 <div class="cm-match-card">
-                    <div class="cm-match-meta">● LIVE · {_minute_text(series)}</div>
+                    <div class="cm-match-meta">&bull; {_live_meta_text(series)}</div>
                     <div class="cm-match-teams">
                         <strong>{series.get('home_team', 'TBD')}</strong>
                         <span>{score_text(series)}</span>
@@ -399,7 +411,7 @@ def _render_live_entries(matches: pd.DataFrame) -> None:
             st.markdown(
                 f'''
                 <div class="cm-match-card">
-                    <div class="cm-match-meta">● LIVE · {_minute_text(series)} · {str(series.get('group', '')).replace('GROUP_', 'Group ')}</div>
+                    <div class="cm-match-meta">● {_live_meta_text(series)}</div>
                     <div class="cm-match-teams">
                         <strong>{series.get('home_team', 'TBD')}</strong>
                         <span>{score_text(series)}</span>
@@ -518,9 +530,13 @@ def render_live_match_centre(
     )
     status = str(match.get("status", ""))
     state = (
-        f"LIVE · {_minute_text(match)}"
+        _live_meta_text(match)
         if status in LIVE_STATUSES
         else ("FULL TIME" if status == "FINISHED" else status)
+    )
+    context = match_stage_label(match)
+    context_line = (
+        f'<div class="cm-match-meta">{context}</div>' if context else ""
     )
     st.markdown(
         f'''
@@ -531,7 +547,7 @@ def render_live_match_centre(
                 <span>{score_text(match)}</span>
                 <strong>{match.get('away_team', 'TBD')}</strong>
             </div>
-            <div class="cm-match-meta">{match.get('group', '')} · {match.get('stage', '')}</div>
+            {context_line}
         </div>
         ''',
         unsafe_allow_html=True,

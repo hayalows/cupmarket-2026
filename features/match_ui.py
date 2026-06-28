@@ -11,6 +11,65 @@ from features.qualification_ui import (
 )
 
 
+STAGE_LABELS = {
+    "LAST_32": "Round of 32",
+    "ROUND_OF_32": "Round of 32",
+    "R32": "Round of 32",
+    "LAST_16": "Round of 16",
+    "ROUND_OF_16": "Round of 16",
+    "R16": "Round of 16",
+    "QUARTER_FINALS": "Quarter-final",
+    "QUARTER_FINAL": "Quarter-final",
+    "QF": "Quarter-final",
+    "SEMI_FINALS": "Semi-final",
+    "SEMI_FINAL": "Semi-final",
+    "SF": "Semi-final",
+    "FINAL": "Final",
+}
+
+
+def clean_text(value) -> str:
+    if value is None:
+        return ""
+    try:
+        if pd.isna(value):
+            return ""
+    except (TypeError, ValueError):
+        pass
+    text = str(value).strip()
+    if text.lower() in {"", "nan", "none", "null", "nat"}:
+        return ""
+    return text
+
+
+def _group_label(value) -> str:
+    text = clean_text(value)
+    if not text:
+        return ""
+    normalized = text.upper().replace("GROUP_", "").replace("GROUP ", "")
+    if len(normalized) == 1 and normalized.isalpha():
+        return f"Group {normalized}"
+    return text.replace("GROUP_", "Group ").replace("_", " ").title()
+
+
+def _stage_label(value) -> str:
+    text = clean_text(value)
+    if not text:
+        return ""
+    key = text.upper()
+    return STAGE_LABELS.get(key, key.replace("_", " ").title())
+
+
+def match_stage_label(row) -> str:
+    if not hasattr(row, "get"):
+        return ""
+    stage = clean_text(row.get("stage")).upper()
+    group_label = _group_label(row.get("group"))
+    if stage in {"", "GROUP_STAGE"}:
+        return group_label
+    return _stage_label(stage) or group_label
+
+
 def format_number(value, digits: int = 2) -> str:
     if value is None or pd.isna(value):
         return "—"
@@ -126,6 +185,7 @@ def render_match_centre(
         "%Y-%m-%d %H:%M"
     )
     filtered["score"] = filtered.apply(score_text, axis=1)
+    filtered["match_stage_label"] = filtered.apply(match_stage_label, axis=1)
 
     prediction_columns = [
         column
@@ -161,8 +221,7 @@ def render_match_centre(
         "home_team",
         "score",
         "away_team",
-        "group",
-        "stage",
+        "match_stage_label",
     ]
     for optional in [
         "prob_home_win",
@@ -191,8 +250,7 @@ def render_match_centre(
             "home_team": "Home",
             "score": "Score",
             "away_team": "Away",
-            "group": "Group",
-            "stage": "Stage",
+            "match_stage_label": "Stage",
             "prob_home_win": "Home win",
             "prob_draw": "Draw",
             "prob_away_win": "Away win",
@@ -241,6 +299,10 @@ def render_match_centre(
         if pd.notna(kickoff)
         else "Kickoff pending"
     )
+    context = match_stage_label(match_row)
+    context_line = (
+        f'<div class="cm-match-meta">{context}</div>' if context else ""
+    )
     st.markdown(
         f'''
         <div class="cm-match-card">
@@ -250,7 +312,7 @@ def render_match_centre(
                 <span>{score_text(match_row)}</span>
                 <strong>{match_row.get("away_team", "TBD")}</strong>
             </div>
-            <div class="cm-match-meta">{match_row.get("group", "")} · {match_row.get("stage", "")}</div>
+            {context_line}
         </div>
         ''',
         unsafe_allow_html=True,

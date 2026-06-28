@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from features.market_movement import add_rank_movement, rank_movement_text
+from features.match_ui import match_stage_label
 from features.product_guidance import (
     render_country_snapshot,
     render_so_what,
@@ -188,7 +189,11 @@ def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: di
         for row in finished.head(3).itertuples(index=False):
             series = pd.Series(row._asdict())
             st.write(f"**{series.get('home_team')} {_score(series)} {series.get('away_team')}**")
-            st.caption(f"{str(series.get('group', '')).replace('GROUP_', 'Group ')} · {_kickoff(series.get('utc_date'))}")
+            context = match_stage_label(series)
+            caption = " · ".join(
+                part for part in [context, _kickoff(series.get("utc_date"))] if part
+            )
+            st.caption(caption)
         if not finished.empty and st.button("Open Results & Model Review", key="pulse_results_more", use_container_width=True):
             _go_to_matches("Results", int(finished.iloc[0]["match_id"]))
 
