@@ -7,6 +7,7 @@ import streamlit as st
 
 from features.market_movement import add_rank_movement, rank_movement_text
 from features.match_ui import match_stage_label
+from features.official_data import load_latest_csv
 from features.product_guidance import (
     render_country_snapshot,
     render_so_what,
@@ -17,6 +18,18 @@ from features.product_ui import render_official_data_caption
 from features.tournament_data import load_static_data
 
 ROOT = Path(__file__).resolve().parents[1]
+KNOCKOUT_PROGRESS_PATH = ROOT / "data" / "knockout_progress_latest.csv"
+LIVE_STATUSES = {"IN_PLAY", "LIVE", "PAUSED", "SUSPENDED"}
+UPCOMING_STATUSES = {"TIMED", "SCHEDULED"}
+FINISHED_STATUSES = {"FINISHED", "AWARDED"}
+EXIT_STAGE_COLUMNS = [
+    ("prob_group_exit", "Group stage"),
+    ("prob_round_32_exit", "Round of 32"),
+    ("prob_round_16_exit", "Round of 16"),
+    ("prob_quarter_final_exit", "Quarter-final"),
+    ("prob_semi_final_exit", "Semi-final"),
+    ("prob_runner_up", "Final"),
+]
 
 
 def _inject_styles() -> None:
@@ -60,6 +73,232 @@ def _go_to_bracket(team: str | None = None) -> None:
     st.switch_page("pages/8_Bracket_View.py")
 
 
+def _numeric(value, default: float = 0.0) -> float:
+    number = pd.to_numeric(value, errors="coerce")
+    if pd.isna(number):
+        return default
+    return float(number)
+
+
+def _stage_text(row: pd.Series) -> str:
+    label = match_stage_label(row)
+    return label if label else str(row.get("stage", "Tournament")).replace("_", " ").title()
+
+
+def _exit_stage(row: pd.Series) -> str:
+    for column, label in EXIT_STAGE_COLUMNS:
+        if _numeric(row.get(column)) >= 0.999:
+            return label
+    if _numeric(row.get("prob_champion")) <= 0.0:
+        values = [
+            (_numeric(row.get(column)), label)
+            for column, label in EXIT_STAGE_COLUMNS
+            if column in row.index
+        ]
+        if values:
+            return max(values, key=lambda item: item[0])[1]
+        return "Eliminated"
+    return "Still alive"
+
+
+def _eliminated_teams(prices: pd.DataFrame) -> pd.DataFrame:
+    if prices.empty or "team" not in prices.columns:
+        return pd.DataFrame()
+    rows = []
+    for _, row in prices.iterrows():
+        exit_stage = _exit_stage(row)
+        champion = _numeric(row.get("prob_champion"))
+        still_alive = exit_stage == "Still alive" or champion > 0.0
+        if still_alive:
+            continue
+        rows.append(
+            {
+                "Country": row.get("team"),
+                "Exit": exit_stage,
+                "Price": f"{_numeric(row.get('cupmarket_price')):.2f} CM",
+                "Champion": "0.0%",
+            }
+        )
+    if not rows:
+        return pd.DataFrame()
+    return pd.DataFrame(rows).sort_values(["Exit", "Country"]).reset_index(drop=True)
+
+
+def _alive_teams(prices: pd.DataFrame) -> pd.DataFrame:
+    if prices.empty or "team" not in prices.columns:
+        return pd.DataFrame()
+    rows = prices.copy()
+    rows["exit_stage"] = rows.apply(_exit_stage, axis=1)
+    rows = rows.loc[rows["exit_stage"].eq("Still alive")].copy()
+    if rows.empty:
+        return rows
+    rows["cupmarket_price"] = pd.to_numeric(rows["cupmarket_price"], errors="coerce")
+    return rows.sort_values("cupmarket_price", ascending=False).reset_index(drop=True)
+
+
+def _load_knockout_progress() -> pd.DataFrame:
+    return load_latest_csv(KNOCKOUT_PROGRESS_PATH)
+
+
+def _knockout_results(matches: pd.DataFrame, progress: pd.DataFrame) -> pd.DataFrame:
+    source = progress.copy() if isinstance(progress, pd.DataFrame) else pd.DataFrame()
+    if source.empty and not matches.empty:
+        source = matches.copy()
+        if "stage" in source.columns:
+            source = source.loc[source["stage"].astype(str).ne("GROUP_STAGE")].copy()
+    if source.empty or "status" not in source.columns:
+        return pd.DataFrame()
+    source = source.loc[source["status"].astype(str).isin(FINISHED_STATUSES)].copy()
+    if source.empty:
+        return source
+    if "utc_date" in source.columns:
+        source["utc_date"] = pd.to_datetime(source["utc_date"], errors="coerce", utc=True)
+        source = source.sort_values("utc_date", ascending=False, na_position="last")
+    rows = []
+    for _, row in source.iterrows():
+        home = row.get("home_team")
+        away = row.get("away_team")
+        home_score = row.get("home_score", row.get("home_score_full_time"))
+        away_score = row.get("away_score", row.get("away_score_full_time"))
+        home_goals = pd.to_numeric(home_score, errors="coerce")
+        away_goals = pd.to_numeric(away_score, errors="coerce")
+        score = "vs" if pd.isna(home_goals) or pd.isna(away_goals) else f"{int(home_goals)}-{int(away_goals)}"
+        advancing = row.get("advancing_team")
+        if not advancing or str(advancing).lower() == "nan":
+            winner = str(row.get("winner", "") or "").upper()
+            if winner == "HOME_TEAM":
+                advancing = home
+            elif winner == "AWAY_TEAM":
+                advancing = away
+            elif pd.notna(home_goals) and pd.notna(away_goals):
+                advancing = home if home_goals > away_goals else away if away_goals > home_goals else ""
+        eliminated = ""
+        if advancing == home:
+            eliminated = away
+        elif advancing == away:
+            eliminated = home
+        rows.append(
+            {
+                "Stage": _stage_text(row),
+                "Result": f"{home} {score} {away}",
+                "Advanced": advancing or "Pending",
+                "Eliminated": eliminated or "Pending",
+                "Kickoff": _kickoff(row.get("utc_date")),
+                "match_id": row.get("api_match_id", row.get("match_id")),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def _next_match_summary(matches: pd.DataFrame) -> pd.Series:
+    if matches.empty or "status" not in matches.columns:
+        return pd.Series(dtype=object)
+    active_or_next = matches.loc[
+        matches["status"].astype(str).isin(LIVE_STATUSES | UPCOMING_STATUSES)
+    ].copy()
+    if active_or_next.empty:
+        return pd.Series(dtype=object)
+    active_or_next["utc_date"] = pd.to_datetime(
+        active_or_next.get("utc_date"), errors="coerce", utc=True
+    )
+    live = active_or_next.loc[active_or_next["status"].astype(str).isin(LIVE_STATUSES)]
+    if not live.empty:
+        return live.sort_values("utc_date").iloc[0]
+    return active_or_next.sort_values("utc_date").iloc[0]
+
+
+def render_tournament_state(matches: pd.DataFrame, prices: pd.DataFrame) -> None:
+    progress = _load_knockout_progress()
+    results = _knockout_results(matches, progress)
+    eliminated = _eliminated_teams(prices)
+    alive = _alive_teams(prices)
+    next_match = _next_match_summary(matches)
+
+    st.markdown("### Tournament state")
+    metrics = st.columns(4)
+    metrics[0].metric("Still alive", len(alive) if not alive.empty else 0)
+    metrics[1].metric("Eliminated", len(eliminated) if not eliminated.empty else 0)
+    metrics[2].metric("Knockout results", len(results) if not results.empty else 0)
+    if next_match.empty:
+        metrics[3].metric("Next match", "None")
+    else:
+        metrics[3].metric("Next match", str(next_match.get("status", "Scheduled")).title())
+
+    if not results.empty:
+        latest = results.iloc[0]
+        st.success(
+            f"Latest knockout decision: {latest['Result']}. "
+            f"{latest['Advanced']} advanced; {latest['Eliminated']} is out."
+        )
+        action_cols = st.columns(3)
+        with action_cols[0]:
+            if st.button("Open match details", key="pulse_latest_match_detail", use_container_width=True):
+                match_id = pd.to_numeric(latest.get("match_id"), errors="coerce")
+                _go_to_matches("Results", int(match_id) if pd.notna(match_id) else None)
+        with action_cols[1]:
+            if st.button("Open advancing team", key="pulse_latest_advanced", use_container_width=True):
+                _go_to_path(str(latest["Advanced"]))
+        with action_cols[2]:
+            if st.button("Open eliminated team", key="pulse_latest_eliminated", use_container_width=True):
+                _go_to_path(str(latest["Eliminated"]))
+
+    table_cols = st.columns(2)
+    with table_cols[0]:
+        st.markdown("#### Latest knockout decisions")
+        if results.empty:
+            st.caption("No knockout result has been published yet.")
+        else:
+            st.dataframe(
+                results[["Stage", "Result", "Advanced", "Eliminated"]].head(6),
+                hide_index=True,
+                use_container_width=True,
+            )
+    with table_cols[1]:
+        st.markdown("#### Eliminated teams")
+        if eliminated.empty:
+            st.caption("No team has a locked elimination row yet.")
+        else:
+            st.dataframe(
+                eliminated.head(10),
+                hide_index=True,
+                use_container_width=True,
+            )
+
+    if not alive.empty:
+        st.markdown("#### Still alive, ranked by CupMarket")
+        display = alive.head(10).copy()
+        columns = [
+            column
+            for column in [
+                "market_rank",
+                "team",
+                "cupmarket_price",
+                "prob_reach_round_16",
+                "prob_reach_quarter_final",
+                "prob_reach_final",
+                "prob_champion",
+            ]
+            if column in display.columns
+        ]
+        display = display[columns].rename(
+            columns={
+                "market_rank": "Rank",
+                "team": "Country",
+                "cupmarket_price": "Price",
+                "prob_reach_round_16": "Reach R16",
+                "prob_reach_quarter_final": "Reach QF",
+                "prob_reach_final": "Reach final",
+                "prob_champion": "Champion",
+            }
+        )
+        for column in ["Reach R16", "Reach QF", "Reach final", "Champion"]:
+            if column in display.columns:
+                display[column] = display[column].map(lambda value: f"{100 * _numeric(value):.1f}%")
+        if "Price" in display.columns:
+            display["Price"] = display["Price"].map(lambda value: f"{_numeric(value):.2f} CM")
+        st.dataframe(display, hide_index=True, use_container_width=True)
+
+
 def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: dict) -> None:
     _inject_styles()
     prices = add_rank_movement(prices)
@@ -84,6 +323,7 @@ def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: di
 
     render_start_here_panel(default_team)
     render_todays_story(matches, prices)
+    render_tournament_state(matches, prices)
 
     top = st.columns(2)
     with top[0]:

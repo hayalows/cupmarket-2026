@@ -69,9 +69,9 @@ def render_start_here_panel(default_team: str | None = None) -> None:
     rows = [
         ("What changed?", "Latest results, movers and tournament story", "pages/11_Tournament_Insights.py"),
         ("Check one country", "Price, next match, likely path and journey", "pages/Country_Snapshot.py"),
-        ("See the bracket", "Confirmed and projected knockout view", "pages/8_Bracket_View.py"),
+        ("See the bracket", "Confirmed knockout results and next fixtures", "pages/8_Bracket_View.py"),
         ("Which match matters?", "Live and upcoming match context", "pages/4_Match_Hub.py"),
-        ("Who is in danger?", "Qualification pressure and group outlook", "pages/2_Qualification_Lab.py"),
+        ("Who is still alive?", "Current paths for teams left in the tournament", "pages/7_Tournament_Path.py"),
         ("Why did price move?", "Market story and rank movement", "pages/5_Market_Story.py"),
     ]
     for start in range(0, len(rows), 3):

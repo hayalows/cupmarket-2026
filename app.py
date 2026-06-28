@@ -685,6 +685,13 @@ with st.sidebar:
     )
 
     st.markdown(
+        '<div class="cm-side-label">Start here</div>',
+        unsafe_allow_html=True,
+    )
+    st.page_link("pages/Tournament_Pulse.py", label="Tournament Pulse")
+    st.page_link("pages/8_Bracket_View.py", label="Bracket View")
+
+    st.markdown(
         '<div class="cm-side-label">Live tools</div>',
         unsafe_allow_html=True,
     )
