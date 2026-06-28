@@ -273,6 +273,46 @@ class KnockoutStageTests(unittest.TestCase):
         settlements = probabilities[settlement_columns].sum(axis=1)
         self.assertTrue(np.allclose(settlements, 1.0))
 
+    def test_group_stage_metadata_counts_finished_active_and_latest(self):
+        matches = pd.DataFrame(
+            [
+                {
+                    "stage": "GROUP_STAGE",
+                    "status": "FINISHED",
+                    "utc_date": pd.Timestamp("2026-06-25T19:00:00Z"),
+                },
+                {
+                    "stage": "GROUP_STAGE",
+                    "status": "FINISHED",
+                    "utc_date": pd.Timestamp("2026-06-28T02:00:00Z"),
+                },
+                {
+                    "stage": "GROUP_STAGE",
+                    "status": "IN_PLAY",
+                    "utc_date": pd.Timestamp("2026-06-28T19:00:00Z"),
+                },
+                {
+                    "stage": "GROUP_STAGE",
+                    "status": "SUSPENDED",
+                    "utc_date": pd.Timestamp("2026-06-28T22:00:00Z"),
+                },
+                {
+                    "stage": "LAST_32",
+                    "status": "FINISHED",
+                    "utc_date": pd.Timestamp("2026-06-29T19:00:00Z"),
+                },
+            ]
+        )
+
+        metadata = ks.group_stage_metadata(matches)
+
+        self.assertEqual(metadata["finished_group_matches"], 2)
+        self.assertEqual(metadata["active_group_matches"], 2)
+        self.assertEqual(
+            metadata["latest_completed_group_match_utc"],
+            "2026-06-28T02:00:00+00:00",
+        )
+
     def test_advancement_probabilities_sum_to_one(self):
         home, away = ks.advancement_probabilities(
             1.5,

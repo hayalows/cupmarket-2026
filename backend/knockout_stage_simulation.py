@@ -29,6 +29,39 @@ except ImportError:
     )
 
 
+ACTIVE_GROUP_STATUSES = {"IN_PLAY", "LIVE", "PAUSED", "SUSPENDED"}
+
+
+def group_stage_metadata(matches: pd.DataFrame) -> dict:
+    if matches.empty or not {"stage", "status", "utc_date"}.issubset(
+        matches.columns
+    ):
+        return {
+            "finished_group_matches": 0,
+            "active_group_matches": 0,
+            "latest_completed_group_match_utc": None,
+        }
+
+    stage = matches["stage"].astype(str).str.upper()
+    status = matches["status"].astype(str).str.upper()
+    group_mask = stage.eq("GROUP_STAGE")
+    finished_mask = group_mask & status.eq("FINISHED")
+    active_mask = group_mask & status.isin(ACTIVE_GROUP_STATUSES)
+    completed_dates = pd.to_datetime(
+        matches.loc[finished_mask, "utc_date"],
+        errors="coerce",
+        utc=True,
+    ).dropna()
+    latest_completed = (
+        completed_dates.max().isoformat() if not completed_dates.empty else None
+    )
+    return {
+        "finished_group_matches": int(finished_mask.sum()),
+        "active_group_matches": int(active_mask.sum()),
+        "latest_completed_group_match_utc": latest_completed,
+    }
+
+
 def _team_maps(team_map, live_elo, live_team_state, pipeline):
     name_lookup = dict(
         zip(team_map["live_team_name"], team_map["historical_team_name"])
@@ -605,6 +638,7 @@ def run_progressive_simulation(
         "bracket_mode": BRACKET_MODE,
         "number_of_simulations": int(number_of_simulations),
         "random_seed": int(random_seed),
+        **group_stage_metadata(matches),
         "actual_knockout_results_used": int(len(actual_results)),
         "actual_resolution_count_across_simulations": int(
             actual_resolutions

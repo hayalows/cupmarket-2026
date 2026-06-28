@@ -10,7 +10,10 @@ class OfficialUpdateGuardSourceTests(unittest.TestCase):
         source = (ROOT / "backend" / "run_update_pipeline.py").read_text(
             encoding="utf-8"
         )
-        self.assertIn('ACTIVE_GROUP_MATCH_STATUSES = {"IN_PLAY", "PAUSED"}', source)
+        self.assertIn(
+            'ACTIVE_GROUP_MATCH_STATUSES = {"IN_PLAY", "LIVE", "PAUSED", "SUSPENDED"}',
+            source,
+        )
         self.assertIn("def active_group_matches", source)
         self.assertIn("def run_guarded_pipeline", source)
         self.assertIn('"status": "deferred_active_group_matches"', source)
