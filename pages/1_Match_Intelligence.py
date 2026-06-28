@@ -3,7 +3,9 @@ import time
 
 import streamlit as st
 
-from backend.live_qualification import LIVE_STATUSES
+from backend.live_knockout import LIVE_STATUSES as KNOCKOUT_LIVE_STATUSES
+from backend.live_knockout import is_live_knockout_match
+from backend.live_qualification import LIVE_STATUSES as GROUP_LIVE_STATUSES
 from features.live_match_data import (
     format_source_time,
     group_freshness,
@@ -33,6 +35,7 @@ st.set_page_config(
 root = Path(__file__).resolve().parents[1]
 data_dir = root / "data"
 state_dir = root / "backend" / "state"
+LIVE_STATUSES = GROUP_LIVE_STATUSES | KNOCKOUT_LIVE_STATUSES
 
 inject_styles(root)
 render_specialist_sidebar("match")
@@ -74,19 +77,38 @@ def render_match_room(data: dict, refresh_label: str) -> None:
         if not matches.empty and "status" in matches.columns
         else 0
     )
+    knockout_live_count = (
+        int(matches.apply(is_live_knockout_match, axis=1).sum())
+        if live_count and "stage" in matches.columns
+        else 0
+    )
+    group_live_count = max(0, live_count - knockout_live_count)
     live_status_text = (
         f"{live_count} live match{'es' if live_count != 1 else ''}"
         if live_count
         else "Forecast mode"
     )
     live_status_class = "updating" if live_count else "attention"
-    hero_description = (
-        "Live matches are active. Open one to follow the changing match outlook, "
-        "qualification picture, connected group effects and published-market context."
-        if live_count
-        else "No match is marked live right now. CupMarket will increase its check rate "
-        "automatically when a kickoff window begins."
-    )
+    if knockout_live_count and not group_live_count:
+        hero_description = (
+            "A knockout match is live. Open it to follow the changing match outlook, "
+            "chance to advance and published-market context."
+        )
+    elif knockout_live_count and group_live_count:
+        hero_description = (
+            "Live matches are active. Open one to get the right context: advancement "
+            "for knockouts, group pressure for group-stage matches."
+        )
+    elif live_count:
+        hero_description = (
+            "Live matches are active. Open one to follow the changing match outlook, "
+            "qualification picture, connected group effects and published-market context."
+        )
+    else:
+        hero_description = (
+            "No match is marked live right now. CupMarket will increase its check rate "
+            "automatically when a kickoff window begins."
+        )
 
     st.markdown(
         f'''
@@ -122,8 +144,11 @@ def render_match_room(data: dict, refresh_label: str) -> None:
         "Useful before, during and after the match",
         "Match Intelligence adapts to the real match state.",
         [
-            ("Before kickoff", "Read the forecast and test qualification outcomes."),
-            ("During play", "Follow live outlook, group effects and market pressure."),
+            ("Before kickoff", "Read the forecast and likely tournament consequences."),
+            (
+                "During play",
+                "Follow live outlook, group pressure or knockout advance chances.",
+            ),
             ("After full time", "Review the result and wait for official repricing."),
         ],
     )

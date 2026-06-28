@@ -157,7 +157,7 @@ def render_match_centre(
     st.markdown("### Fixtures and match intelligence")
     st.caption(
         "Open any matchup to inspect probabilities, expected goals, likely "
-        "scores and qualification impact."
+        "scores and tournament impact."
     )
 
     if st.button(

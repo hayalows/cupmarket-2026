@@ -48,6 +48,7 @@ def render_knockout_readiness(prices: pd.DataFrame, predictions: pd.DataFrame, p
 
     expected_goal_ready = not knockout_predictions.empty and {"expected_home_goals", "expected_away_goals"}.issubset(knockout_predictions.columns)
     likely_score_ready = not knockout_predictions.empty and "most_likely_score" in knockout_predictions.columns
+    advance_ready = not knockout_predictions.empty and {"prob_home_advance", "prob_away_advance"}.issubset(knockout_predictions.columns)
     adaptive_columns_ready = not predictions.empty and ADAPTIVE_COLUMNS.issubset(predictions.columns)
     adaptive_rows = (
         int(predictions[list(ADAPTIVE_COLUMNS)].dropna(how="all").shape[0])
@@ -74,6 +75,8 @@ def render_knockout_readiness(prices: pd.DataFrame, predictions: pd.DataFrame, p
         {"Check": "Knockout match predictions generated", "Status": _yes(not knockout_predictions.empty), "Evidence": f"{len(knockout_predictions)} knockout prediction rows"},
         {"Check": "Expected goals for knockout matches", "Status": _yes(expected_goal_ready), "Evidence": "Available" if expected_goal_ready else "Waiting for knockout prediction rows"},
         {"Check": "Likely scores for knockout matches", "Status": _yes(likely_score_ready), "Evidence": "Available" if likely_score_ready else "Waiting for knockout prediction rows"},
+        {"Check": "Chance to advance for knockout matches", "Status": _yes(advance_ready), "Evidence": "Available" if advance_ready else "Waiting for advancement probability columns"},
+        {"Check": "Live knockout advancement engine", "Status": "Ready", "Evidence": "Non-group live matches use backend/live_knockout.py"},
         {"Check": "Adaptive prediction columns", "Status": _yes(adaptive_columns_ready), "Evidence": f"{adaptive_rows} prediction rows with adaptive fields"},
         {"Check": "Market probabilities include later stages", "Status": _yes(price_ready), "Evidence": "R16/champion/price columns present" if price_ready else "Missing later-stage price columns"},
     ])

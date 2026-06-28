@@ -3,6 +3,10 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
+from backend.live_knockout import (
+    is_live_knockout_match,
+    run_live_knockout_projection,
+)
 from backend.live_qualification import LIVE_STATUSES, build_provisional_snapshot, next_goal_impacts, run_live_qualification_projection
 
 
@@ -19,6 +23,17 @@ def cached_projection(matches, predictions, strength_items, selected_team, simul
         predictions,
         strength=dict(strength_items),
         selected_team=selected_team,
+        n_simulations=simulations,
+        random_seed=2026,
+    )
+
+
+@st.cache_data(ttl=60, show_spinner=False)
+def cached_knockout_projection(matches, predictions, match_id, simulations=2600):
+    return run_live_knockout_projection(
+        matches,
+        predictions,
+        match_id=int(match_id),
         n_simulations=simulations,
         random_seed=2026,
     )
@@ -108,9 +123,53 @@ def render_live_group(matches, predictions, prices, selected_team: str) -> bool:
 
 def render_live_match(matches, predictions, prices, match_id: int) -> bool:
     rows = matches[matches["match_id"] == int(match_id)]
-    if rows.empty or rows.iloc[0].get("status") not in LIVE_STATUSES:
+    if rows.empty:
         return False
     match = rows.iloc[0]
+    if is_live_knockout_match(match):
+        result = cached_knockout_projection(matches, predictions, int(match_id), 2600)
+        live = result.get("matches", {}).get(int(match_id))
+        if not live:
+            st.info(
+                "This knockout match is live, but a saved pre-match knockout "
+                "forecast is needed before CupMarket can show live advance chances."
+            )
+            return True
+
+        st.markdown("#### Live chance to advance")
+        st.caption(
+            f"Current state: {live['current_score']} after about "
+            f"{live.get('minute', 0)} minutes."
+        )
+        cols = st.columns(2)
+        cols[0].metric(
+            f"{match.get('home_team')} chance to advance",
+            pct(live.get("home_advance_probability")),
+        )
+        cols[1].metric(
+            f"{match.get('away_team')} chance to advance",
+            pct(live.get("away_advance_probability")),
+        )
+        scores = pd.DataFrame(live.get("likely_final_scorelines", []))
+        if not scores.empty:
+            scores["probability"] = scores["probability"].map(pct)
+            st.dataframe(
+                scores.rename(
+                    columns={
+                        "score": "Likely final score",
+                        "probability": "Probability",
+                    }
+                ),
+                use_container_width=True,
+                hide_index=True,
+            )
+        st.caption(live["method_note"] + " The original pre-match forecast remains visible below.")
+        return True
+
+    if match.get("status") not in LIVE_STATUSES:
+        return False
+    if str(match.get("stage", "")).upper() != "GROUP_STAGE":
+        return False
     strength = dict(zip(prices["team"], prices["cupmarket_price"])) if not prices.empty else {}
     result = cached_projection(matches, predictions, tuple(sorted(strength.items())), str(match.get("home_team")), 1200)
     live = result.get("matches", {}).get(int(match_id))
