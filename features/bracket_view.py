@@ -3,6 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
+from features.tournament_path_data import round_of_16_build
 from features.tournament_path_data import stage_label, status_label
 
 
@@ -173,6 +174,17 @@ def _projected_round32(data: dict) -> pd.DataFrame:
 def _render_confirmed_cards(source: pd.DataFrame, stage_name: str, limit: int = 8) -> bool:
     if source.empty or "stage" not in source.columns:
         return False
+    if stage_name == "Round of 16":
+        slots = round_of_16_build(source)
+        if not slots.empty:
+            for _, row in slots.head(limit).iterrows():
+                _card(
+                    f"Round of 16 Â· Match {int(row['match_number'])}",
+                    str(row["fixture"]),
+                    f"{row['state']} Â· {_timestamp(row.get('kickoff_utc'))}",
+                    "Built from Round-of-32 winners",
+                )
+            return True
     aliases = STAGE_ALIASES.get(stage_name, [])
     rows = source.loc[source["stage"].astype(str).isin(aliases)].copy()
     if rows.empty:

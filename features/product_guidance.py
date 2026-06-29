@@ -67,12 +67,12 @@ def render_start_here_panel(default_team: str | None = None) -> None:
     st.markdown("### Quick routes")
     st.caption("Stay in the selected stage above, then jump to the page that answers your next question.")
     rows = [
-        ("What changed?", "Latest results, movers and the tournament story", "pages/11_Tournament_Insights.py"),
-        ("Check one country", "Price, next match, path and journey", "pages/Country_Snapshot.py"),
+        ("What changed?", "Latest results, movers and model audit", "pages/11_Tournament_Insights.py"),
+        ("Check one country", "Price, next match, path and journey", "pages/7_Tournament_Path.py"),
         ("See the bracket", "Confirmed knockout results and next fixtures", "pages/8_Bracket_View.py"),
         ("Find the match", "Live and upcoming match context", "pages/4_Match_Hub.py"),
-        ("Follow paths", "Current routes for teams left in the tournament", "pages/7_Tournament_Path.py"),
         ("Explain the price", "Market story and rank movement", "pages/5_Market_Story.py"),
+        ("Group archive", "Finished group tables and old scenarios", "pages/2_Qualification_Lab.py"),
     ]
     for start in range(0, len(rows), 3):
         cols = st.columns(3)

@@ -11,6 +11,7 @@ from features.tournament_path_data import (
     preferred_team,
     stage_label,
     status_label,
+    team_next_knockout_slot,
     team_summary,
     tournament_summary,
 )
@@ -110,6 +111,11 @@ def _score(row: pd.Series) -> str:
 
 
 def _clean_team(value) -> str:
+    try:
+        if pd.isna(value):
+            return "TBD"
+    except (TypeError, ValueError):
+        pass
     text = str(value or "").strip()
     if not text or text.lower() in {"nan", "none", "null", "tbd"}:
         return "TBD"
@@ -149,9 +155,9 @@ def _latest_finished_fixture(fixtures: pd.DataFrame) -> pd.Series:
 
 
 def _advancing_team(fixture: pd.Series) -> str:
-    advancing = fixture.get("advancing_team")
-    if advancing and str(advancing).lower() != "nan":
-        return str(advancing)
+    advancing = _clean_team(fixture.get("advancing_team"))
+    if advancing != "TBD":
+        return advancing
     home = _clean_team(fixture.get("home_team"))
     away = _clean_team(fixture.get("away_team"))
     winner = str(fixture.get("winner", "") or "").upper()
@@ -234,10 +240,13 @@ def _team_fixture_table(fixtures: pd.DataFrame, team: str) -> pd.DataFrame:
         away = _clean_team(values.get("away_team"))
         opponent = away if home == team else home
         series = pd.Series(values)
-        advancing = values.get("advancing_team")
+        advancing = _clean_team(values.get("advancing_team"))
+        status = str(values.get("status", "") or "").upper()
         outcome = "Pending"
-        if advancing:
+        if status in {"FINISHED", "AWARDED"} and advancing != "TBD":
             outcome = "Advanced" if str(advancing) == team else "Eliminated"
+        decision = values.get("decision_method")
+        decision_text = "—" if pd.isna(decision) else str(decision).replace("_", " ").title()
         rows.append(
             {
                 "Stage": stage_label(values.get("stage")),
@@ -247,7 +256,7 @@ def _team_fixture_table(fixtures: pd.DataFrame, team: str) -> pd.DataFrame:
                 "Opponent": opponent,
                 "Status": str(values.get("status", "Pending")).replace("_", " ").title(),
                 "Score": _score(series),
-                "Decision": str(values.get("decision_method") or "—").replace("_", " ").title(),
+                "Decision": decision_text,
                 "Team outcome": outcome,
             }
         )
@@ -257,6 +266,23 @@ def _team_fixture_table(fixtures: pd.DataFrame, team: str) -> pd.DataFrame:
         column for column in table.columns if column not in first_columns
     ]
     return table[ordered_columns]
+
+
+def _render_next_knockout_slot(progress: pd.DataFrame, team: str) -> None:
+    slot = team_next_knockout_slot(progress, team)
+    if slot.empty:
+        return
+    kickoff = pd.to_datetime(slot.get("kickoff_utc"), errors="coerce", utc=True)
+    kickoff_text = "Time pending" if pd.isna(kickoff) else kickoff.strftime("%d %b %Y Â· %H:%M UTC")
+    st.markdown("### Next knockout slot")
+    st.success(
+        f"**{team} is through.** Round of 16 match {int(slot['match_number'])} is building as "
+        f"**{slot['fixture']}**."
+    )
+    columns = st.columns(3)
+    columns[0].metric("Stage", slot.get("stage_label", "Round of 16"))
+    columns[1].metric("State", slot.get("state", "Building"))
+    columns[2].metric("Kickoff", kickoff_text)
 
 
 def _render_path_message(
@@ -646,9 +672,9 @@ def render_tournament_path_page() -> None:
     st.markdown(
         '''
         <div class="cm-hero">
-            <div class="cm-eyebrow">CupMarket 2026 · Tournament Path</div>
-            <h1>Know the route. See what changed it.</h1>
-            <p>Follow the tournament from group-stage uncertainty to confirmed knockout fixtures, likely opponents, market movement and the road to the final.</p>
+            <div class="cm-eyebrow">CupMarket 2026 · Country</div>
+            <h1>One country. The route, price and next match.</h1>
+            <p>Follow a team from confirmed fixtures to next-round slots, market movement, learning signal and the road to the final.</p>
         </div>
         ''',
         unsafe_allow_html=True,
@@ -710,6 +736,7 @@ def render_tournament_path_page() -> None:
     cards[3].metric("Become champion", _percent(price.get("prob_champion")) if not price.empty else "—")
 
     _render_path_message(path, selected["opponents"], latest_fixture_result, team)
+    _render_next_knockout_slot(data["progress"], team)
     _render_stage_probability_ladder(price, team)
 
     st.markdown("### Country fixture timeline")

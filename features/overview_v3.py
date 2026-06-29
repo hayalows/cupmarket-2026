@@ -9,13 +9,12 @@ from features.market_movement import add_rank_movement, rank_movement_text
 from features.match_ui import match_stage_label
 from features.official_data import load_latest_csv
 from features.product_guidance import (
-    render_country_snapshot,
-    render_so_what,
     render_start_here_panel,
     render_todays_story,
 )
 from features.product_ui import render_official_data_caption
 from features.tournament_data import load_static_data
+from features.tournament_path_data import round_of_16_build
 
 ROOT = Path(__file__).resolve().parents[1]
 KNOCKOUT_PROGRESS_PATH = ROOT / "data" / "knockout_progress_latest.csv"
@@ -69,8 +68,14 @@ def _inject_styles() -> None:
 
 
 def _score(row: pd.Series) -> str:
-    home = pd.to_numeric(row.get("home_score_full_time"), errors="coerce")
-    away = pd.to_numeric(row.get("away_score_full_time"), errors="coerce")
+    home = pd.to_numeric(
+        row.get("home_score", row.get("home_score_full_time")),
+        errors="coerce",
+    )
+    away = pd.to_numeric(
+        row.get("away_score", row.get("away_score_full_time")),
+        errors="coerce",
+    )
     return "vs" if pd.isna(home) or pd.isna(away) else f"{int(home)}–{int(away)}"
 
 
@@ -184,15 +189,6 @@ def _exit_stage(row: pd.Series) -> str:
     for column, label in EXIT_STAGE_COLUMNS:
         if _numeric(row.get(column)) >= 0.999:
             return label
-    if _numeric(row.get("prob_champion")) <= 0.0:
-        values = [
-            (_numeric(row.get(column)), label)
-            for column, label in EXIT_STAGE_COLUMNS
-            if column in row.index
-        ]
-        if values:
-            return max(values, key=lambda item: item[0])[1]
-        return "Eliminated"
     return "Still alive"
 
 
@@ -338,6 +334,55 @@ def _stage_fixture_table(fixtures: pd.DataFrame) -> pd.DataFrame:
             }
         )
     return pd.DataFrame(rows)
+
+
+def _stage_decision_tables(fixtures: pd.DataFrame) -> dict[str, pd.DataFrame]:
+    if fixtures.empty:
+        empty = pd.DataFrame()
+        return {"advanced": empty, "eliminated": empty, "pending": empty}
+
+    advanced_rows = []
+    eliminated_rows = []
+    pending_rows = []
+    for _, row in fixtures.iterrows():
+        home = _clean_team(row.get("home_team"))
+        away = _clean_team(row.get("away_team"))
+        status = str(row.get("status", "") or "").upper()
+        advancing = _clean_team(row.get("advancing_team"))
+        fixture = f"{home} vs {away}"
+        score = _score_or_live(row)
+        kickoff = _kickoff(row.get("utc_date"))
+
+        if status in FINISHED_STATUSES and advancing != "TBD":
+            advanced_rows.append(
+                {
+                    "Country": advancing,
+                    "Result": f"{home} {score} {away}",
+                    "Next": "Round of 16" if _normal_stage(row.get("stage")) == "LAST_32" else "Next round",
+                }
+            )
+            eliminated = away if advancing == home else home if advancing == away else "TBD"
+            if eliminated != "TBD":
+                eliminated_rows.append(
+                    {
+                        "Country": eliminated,
+                        "Result": f"{home} {score} {away}",
+                    }
+                )
+        elif home != "TBD" and away != "TBD":
+            pending_rows.append(
+                {
+                    "Fixture": fixture,
+                    "Kickoff": kickoff,
+                    "Status": str(row.get("status", "Pending")).replace("_", " ").title(),
+                }
+            )
+
+    return {
+        "advanced": pd.DataFrame(advanced_rows),
+        "eliminated": pd.DataFrame(eliminated_rows),
+        "pending": pd.DataFrame(pending_rows),
+    }
 
 
 def _stage_country_table(
@@ -502,6 +547,63 @@ def _stage_focus_match(fixtures: pd.DataFrame) -> tuple[str, int | None]:
     return "Live", None
 
 
+def _render_stage_decisions(selected_stage: str, fixtures: pd.DataFrame) -> None:
+    if _normal_stage(selected_stage) == "GROUP_STAGE":
+        return
+
+    decisions = _stage_decision_tables(fixtures)
+    advanced = decisions["advanced"]
+    eliminated = decisions["eliminated"]
+    pending = decisions["pending"]
+
+    st.markdown(f"#### {_stage_label_from_key(selected_stage)} decisions")
+    metrics = st.columns(3)
+    metrics[0].metric("Advanced", len(advanced))
+    metrics[1].metric("Eliminated this round", len(eliminated))
+    metrics[2].metric("Still to play", len(pending))
+
+    columns = st.columns(3)
+    with columns[0]:
+        st.caption("Through")
+        if advanced.empty:
+            st.write("No team has advanced from this round yet.")
+        else:
+            st.dataframe(advanced, hide_index=True, use_container_width=True)
+    with columns[1]:
+        st.caption("Out this round")
+        if eliminated.empty:
+            st.write("No team has been eliminated in this round yet.")
+        else:
+            st.dataframe(eliminated, hide_index=True, use_container_width=True)
+    with columns[2]:
+        st.caption("Still to play")
+        if pending.empty:
+            st.write("No pending fixture with two known teams.")
+        else:
+            st.dataframe(pending.head(8), hide_index=True, use_container_width=True)
+
+
+def _render_round_of_16_building(progress: pd.DataFrame) -> None:
+    slots = round_of_16_build(progress)
+    if slots.empty:
+        return
+    st.markdown("#### Round of 16 building")
+    st.caption(
+        "This is built from Round-of-32 winners. It updates before the official feed fills every future fixture row."
+    )
+    display = slots[["match_number", "fixture", "state", "kickoff_utc"]].copy()
+    display = display.rename(
+        columns={
+            "match_number": "Match",
+            "fixture": "Slot",
+            "state": "State",
+            "kickoff_utc": "Kickoff",
+        }
+    )
+    display["Kickoff"] = display["Kickoff"].map(_kickoff)
+    st.dataframe(display, hide_index=True, use_container_width=True)
+
+
 def render_stage_explorer(matches: pd.DataFrame, prices: pd.DataFrame) -> None:
     progress = _load_knockout_progress()
     default_stage = _default_stage(matches, progress)
@@ -531,12 +633,21 @@ def render_stage_explorer(matches: pd.DataFrame, prices: pd.DataFrame) -> None:
     country_table = _stage_country_table(prices, selected_stage, participants)
     story = _stage_story(selected_stage, fixtures, prices)
 
+    decisions = _stage_decision_tables(fixtures)
     metrics = st.columns(4)
     metrics[0].metric("Fixtures", counts["fixtures"])
-    metrics[1].metric("Live", counts["live"])
-    metrics[2].metric("Finished", counts["finished"])
-    metrics[3].metric("Teams shown", len(participants) if participants else len(country_table))
+    if _normal_stage(selected_stage) == "GROUP_STAGE":
+        metrics[1].metric("Live", counts["live"])
+        metrics[2].metric("Finished", counts["finished"])
+        metrics[3].metric("Teams shown", len(participants) if participants else len(country_table))
+    else:
+        metrics[1].metric("Advanced", len(decisions["advanced"]))
+        metrics[2].metric("Out this round", len(decisions["eliminated"]))
+        metrics[3].metric("Still to play", len(decisions["pending"]))
     st.info(story)
+    _render_stage_decisions(selected_stage, fixtures)
+    if _normal_stage(selected_stage) == "LAST_32":
+        _render_round_of_16_building(progress)
 
     focus_view, focus_match_id = _stage_focus_match(fixtures)
     default_team = None
@@ -730,9 +841,14 @@ def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: di
     default_team = str(leader.get("team")) if not leader.empty else "Ghana"
 
     render_stage_explorer(matches, prices)
-    render_tournament_state(matches, prices)
     render_todays_story(matches, prices)
     render_start_here_panel(default_team)
+    render_official_data_caption(prices)
+    st.caption(
+        f"Tournament feed: {len(finished)} finished Â· {len(live)} live Â· {len(upcoming)} upcoming. "
+        f"Model ledger records {len(processed)} processed results."
+    )
+    return
 
     top = st.columns(2)
     with top[0]:
@@ -827,7 +943,7 @@ def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: di
             render_so_what("country", "This turns the app from a dashboard into a tool people can use quickly.")
             if st.button("Open country snapshot", key="pulse_country", use_container_width=True):
                 st.session_state["cupmarket_snapshot_team"] = default_team
-                st.switch_page("pages/Country_Snapshot.py")
+                st.switch_page("pages/7_Tournament_Path.py")
 
     render_country_snapshot(matches, prices, default_team=default_team)
 

@@ -33,6 +33,25 @@ class TournamentPulseStateTests(unittest.TestCase):
         self.assertEqual(eliminated.iloc[0]["Exit"], "Round of 32")
         self.assertEqual(alive.iloc[0]["team"], "Canada")
 
+    def test_zero_champion_chance_does_not_mean_eliminated(self):
+        prices = pd.DataFrame(
+            [
+                {
+                    "team": "Cape Verde Islands",
+                    "cupmarket_price": 16.1,
+                    "prob_round_32_exit": 0.9457,
+                    "prob_reach_round_16": 0.0543,
+                    "prob_champion": 0.0,
+                }
+            ]
+        )
+
+        eliminated = overview_v3._eliminated_teams(prices)
+        alive = overview_v3._alive_teams(prices)
+
+        self.assertTrue(eliminated.empty)
+        self.assertEqual(alive.iloc[0]["team"], "Cape Verde Islands")
+
     def test_knockout_result_names_advanced_and_eliminated_teams(self):
         progress = pd.DataFrame(
             [
@@ -107,6 +126,34 @@ class TournamentPulseStateTests(unittest.TestCase):
         self.assertEqual(table.iloc[0]["Fixture"], "South Africa vs Canada")
         self.assertEqual(table.iloc[0]["Score"], "0-1")
         self.assertEqual(table.iloc[0]["Outcome"], "Canada advanced")
+
+    def test_stage_decisions_split_advanced_eliminated_and_pending(self):
+        fixtures = pd.DataFrame(
+            [
+                {
+                    "stage": "LAST_32",
+                    "status": "FINISHED",
+                    "home_team": "South Africa",
+                    "away_team": "Canada",
+                    "home_score": 0,
+                    "away_score": 1,
+                    "advancing_team": "Canada",
+                },
+                {
+                    "stage": "LAST_32",
+                    "status": "TIMED",
+                    "home_team": "Germany",
+                    "away_team": "Paraguay",
+                    "advancing_team": pd.NA,
+                },
+            ]
+        )
+
+        decisions = overview_v3._stage_decision_tables(fixtures)
+
+        self.assertEqual(decisions["advanced"].iloc[0]["Country"], "Canada")
+        self.assertEqual(decisions["eliminated"].iloc[0]["Country"], "South Africa")
+        self.assertEqual(decisions["pending"].iloc[0]["Fixture"], "Germany vs Paraguay")
 
     def test_tbd_knockout_rows_do_not_become_stage_participants(self):
         fixtures = pd.DataFrame(

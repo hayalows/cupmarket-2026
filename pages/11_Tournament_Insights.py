@@ -11,11 +11,11 @@ from features.tournament_insights import render_tournament_insights
 from features.tournament_path_data import load_tournament_path_data
 from features.tournament_timeline import render_tournament_timeline
 
-st.set_page_config(page_title="CupMarket Insights", page_icon="💡", layout="wide")
+st.set_page_config(page_title="CupMarket Analysis Lab", page_icon="💡", layout="wide")
 inject_styles(DATA_DIR.parent)
 render_specialist_sidebar("insights")
 
-st.markdown('''<div class="cm-hero"><div class="cm-eyebrow">CupMarket 2026 · Insights</div><h1>The tournament story, not just the tables.</h1><p>See what changed, how the model is performing, and what CupMarket has learned so far.</p></div>''', unsafe_allow_html=True)
+st.markdown('''<div class="cm-hero"><div class="cm-eyebrow">CupMarket 2026 · Analysis Lab</div><h1>The tournament story, model audit and archive.</h1><p>Review what changed, what the model learned, how prices moved, and what evidence will remain after the final.</p></div>''', unsafe_allow_html=True)
 st.info("Trust guide: official results are fixed, projected paths can still change, and adaptive ratings are an audit layer only for now.")
 
 static = load_static_data()

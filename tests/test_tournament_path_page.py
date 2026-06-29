@@ -58,6 +58,28 @@ class TournamentPathPageTests(unittest.TestCase):
         self.assertIn("South Africa", table.iloc[0]["Fixture"])
         self.assertIn("Canada", table.iloc[0]["Fixture"])
 
+    def test_pending_fixture_with_nan_advancing_team_stays_pending(self):
+        fixtures = pd.DataFrame(
+            [
+                {
+                    "stage": "LAST_32",
+                    "utc_date": pd.Timestamp("2026-07-04T01:30:00Z"),
+                    "status": "TIMED",
+                    "home_team": "Colombia",
+                    "away_team": "Ghana",
+                    "home_score": pd.NA,
+                    "away_score": pd.NA,
+                    "decision_method": pd.NA,
+                    "advancing_team": pd.NA,
+                }
+            ]
+        )
+
+        table = page._team_fixture_table(fixtures, "Ghana")
+
+        self.assertEqual(table.iloc[0]["Outcome"], "Pending")
+        self.assertEqual(table.iloc[0]["Opponent"], "Colombia")
+
 
 if __name__ == "__main__":
     unittest.main()

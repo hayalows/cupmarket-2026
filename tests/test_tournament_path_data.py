@@ -8,8 +8,10 @@ from features.tournament_path_data import (
     available_teams,
     opponent_options,
     preferred_team,
+    round_of_16_build,
     status_label,
     team_fixtures,
+    team_next_knockout_slot,
     tournament_summary,
 )
 
@@ -137,6 +139,47 @@ class TournamentPathDataTests(unittest.TestCase):
         self.assertEqual(status_label("confirmed"), "Fixture confirmed")
         self.assertEqual(status_label("slot_confirmed"), "Slot confirmed")
         self.assertEqual(status_label("custom_state"), "Custom State")
+
+    def test_round_of_16_build_uses_known_winner_and_pending_opponent(self):
+        progress = pd.DataFrame(
+            [
+                {
+                    "logical_match_number": 73,
+                    "stage": "LAST_32",
+                    "status": "FINISHED",
+                    "home_team": "South Africa",
+                    "away_team": "Canada",
+                    "home_score": 0,
+                    "away_score": 1,
+                    "advancing_team": "Canada",
+                },
+                {
+                    "logical_match_number": 75,
+                    "stage": "LAST_32",
+                    "status": "TIMED",
+                    "home_team": "Germany",
+                    "away_team": "Paraguay",
+                    "advancing_team": pd.NA,
+                },
+                {
+                    "logical_match_number": 90,
+                    "stage": "LAST_16",
+                    "status": "TIMED",
+                    "home_team": pd.NA,
+                    "away_team": pd.NA,
+                    "utc_date": "2026-07-04T21:00:00Z",
+                },
+            ]
+        )
+
+        slots = round_of_16_build(progress)
+        canada_slot = team_next_knockout_slot(progress, "Canada")
+
+        row = slots.loc[slots["match_number"].eq(90)].iloc[0]
+        self.assertEqual(row["fixture"], "Canada vs Germany/Paraguay winner")
+        self.assertEqual(row["state"], "One team through")
+        self.assertEqual(canada_slot["match_number"], 90)
+        self.assertEqual(canada_slot["fixture"], "Canada vs Germany/Paraguay winner")
 
 
 if __name__ == "__main__":

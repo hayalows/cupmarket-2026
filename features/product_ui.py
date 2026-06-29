@@ -52,23 +52,18 @@ def render_specialist_sidebar(active_page: str) -> None:
             unsafe_allow_html=True,
         )
         st.markdown('<div class="cm-side-label">Start</div>', unsafe_allow_html=True)
-        st.page_link("pages/Tournament_Pulse.py", label="Tournament Explorer", icon="🏠")
-        st.page_link("pages/Country_Snapshot.py", label="Country Search", icon="🔎")
+        st.page_link("pages/Tournament_Pulse.py", label="Tournament", icon="🏠")
+        st.page_link("pages/7_Tournament_Path.py", label="Country", icon="🔎")
+        st.page_link("pages/4_Match_Hub.py", label="Matches", icon="⚽")
         st.page_link("pages/8_Bracket_View.py", label="Bracket", icon="🏆")
-        st.page_link("pages/11_Tournament_Insights.py", label="What Changed", icon="💡")
 
-        st.markdown('<div class="cm-side-label">Live</div>', unsafe_allow_html=True)
-        st.page_link("pages/1_Match_Intelligence.py", label="Live Match Room", icon="🎯")
-        st.page_link("pages/4_Match_Hub.py", label="Match Hub", icon="⚽")
-
-        st.markdown('<div class="cm-side-label">Deep dives</div>', unsafe_allow_html=True)
-        st.page_link("pages/7_Tournament_Path.py", label="Country Paths", icon="🛣️")
-        st.page_link("pages/5_Market_Story.py", label="Market Story", icon="📈")
-        st.page_link("pages/6_Analytics_Dashboard.py", label="Analytics", icon="📊")
-        st.page_link("pages/2_Qualification_Lab.py", label="Group Scenarios", icon="🧭")
-        st.page_link("pages/3_Live_Group_Centre.py", label="Group Centre", icon="📋")
-        st.markdown('<div class="cm-side-label">About</div>', unsafe_allow_html=True)
-        st.page_link("pages/10_Glossary.py", label="Guide", icon="ℹ️")
+        with st.expander("More", expanded=False):
+            st.page_link("pages/11_Tournament_Insights.py", label="Analysis Lab", icon="💡")
+            st.page_link("pages/1_Match_Intelligence.py", label="Live Match Room", icon="🎯")
+            st.page_link("pages/5_Market_Story.py", label="Market Story", icon="📈")
+            st.page_link("pages/2_Qualification_Lab.py", label="Group Archive", icon="🧭")
+            st.page_link("pages/3_Live_Group_Centre.py", label="Group Centre", icon="📋")
+            st.page_link("pages/10_Glossary.py", label="Guide", icon="ℹ️")
         render_project_credit(compact=True)
         st.link_button("View the project on GitHub", PROJECT_REPOSITORY)
 

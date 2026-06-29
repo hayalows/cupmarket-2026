@@ -46,6 +46,164 @@ STAGE_LABELS = {
     "THIRD_PLACE": "Third-place match",
     "FINAL": "Final",
 }
+ROUND_OF_16_SOURCES = {
+    89: (74, 77),
+    90: (73, 75),
+    91: (76, 78),
+    92: (79, 80),
+    93: (83, 84),
+    94: (81, 82),
+    95: (86, 88),
+    96: (85, 87),
+}
+
+
+def clean_team(value: Any) -> str:
+    try:
+        if pd.isna(value):
+            return "TBD"
+    except (TypeError, ValueError):
+        pass
+    text = str(value or "").strip()
+    if not text or text.lower() in {"nan", "none", "null", "tbd"}:
+        return "TBD"
+    return text
+
+
+def _score_text(row: pd.Series) -> str:
+    home = pd.to_numeric(
+        row.get("home_score", row.get("home_score_full_time")),
+        errors="coerce",
+    )
+    away = pd.to_numeric(
+        row.get("away_score", row.get("away_score_full_time")),
+        errors="coerce",
+    )
+    return "vs" if pd.isna(home) or pd.isna(away) else f"{int(home)}-{int(away)}"
+
+
+def _progress_by_logical_number(progress: pd.DataFrame) -> dict[int, pd.Series]:
+    if progress.empty or "logical_match_number" not in progress.columns:
+        return {}
+    rows: dict[int, pd.Series] = {}
+    for _, row in progress.iterrows():
+        number = pd.to_numeric(row.get("logical_match_number"), errors="coerce")
+        if pd.notna(number):
+            rows[int(number)] = row
+    return rows
+
+
+def _winner_slot_text(rows: dict[int, pd.Series], source_number: int) -> dict[str, Any]:
+    row = rows.get(source_number)
+    if row is None:
+        return {
+            "source_match": source_number,
+            "label": f"Winner of match {source_number}",
+            "short_label": f"M{source_number} winner",
+            "state": "Waiting",
+            "known_team": "TBD",
+            "fixture": "TBD",
+        }
+
+    home = clean_team(row.get("home_team"))
+    away = clean_team(row.get("away_team"))
+    advancing = clean_team(row.get("advancing_team"))
+    fixture = f"{home} {_score_text(row)} {away}" if home != "TBD" and away != "TBD" else "TBD"
+    if advancing != "TBD":
+        return {
+            "source_match": source_number,
+            "label": advancing,
+            "short_label": advancing,
+            "state": "Advanced",
+            "known_team": advancing,
+            "fixture": fixture,
+        }
+    if home != "TBD" and away != "TBD":
+        return {
+            "source_match": source_number,
+            "label": f"Winner of match {source_number}: {home} vs {away}",
+            "short_label": f"{home}/{away} winner",
+            "state": str(row.get("status", "Pending")).replace("_", " ").title(),
+            "known_team": "TBD",
+            "fixture": f"{home} vs {away}",
+        }
+    return {
+        "source_match": source_number,
+        "label": f"Winner of match {source_number}",
+        "short_label": f"M{source_number} winner",
+        "state": "Waiting",
+        "known_team": "TBD",
+        "fixture": "TBD",
+    }
+
+
+def _slot_state(left: dict[str, Any], right: dict[str, Any]) -> str:
+    known = sum(1 for slot in [left, right] if slot["known_team"] != "TBD")
+    if known == 2:
+        return "Fixture confirmed"
+    if known == 1:
+        return "One team through"
+    return "Waiting for winners"
+
+
+def round_of_16_build(progress: pd.DataFrame) -> pd.DataFrame:
+    """Build Round-of-16 slots from known Round-of-32 winners and pending ties."""
+    if progress.empty:
+        return pd.DataFrame()
+    rows_by_number = _progress_by_logical_number(progress)
+    if not rows_by_number:
+        return pd.DataFrame()
+    output = []
+    for match_number, (left_source, right_source) in ROUND_OF_16_SOURCES.items():
+        left = _winner_slot_text(rows_by_number, left_source)
+        right = _winner_slot_text(rows_by_number, right_source)
+        fixture_row = rows_by_number.get(match_number, pd.Series(dtype=object))
+        kickoff = fixture_row.get("utc_date")
+        known_teams = [
+            slot["known_team"]
+            for slot in [left, right]
+            if slot["known_team"] != "TBD"
+        ]
+        output.append(
+            {
+                "match_number": match_number,
+                "stage": "LAST_16",
+                "stage_label": "Round of 16",
+                "fixture": f"{left['short_label']} vs {right['short_label']}",
+                "side_a": left["label"],
+                "side_b": right["label"],
+                "side_a_source_match": left_source,
+                "side_b_source_match": right_source,
+                "side_a_state": left["state"],
+                "side_b_state": right["state"],
+                "state": _slot_state(left, right),
+                "known_teams": ", ".join(known_teams),
+                "kickoff_utc": kickoff,
+            }
+        )
+    result = pd.DataFrame(output)
+    if not result.empty:
+        result["kickoff_utc"] = pd.to_datetime(
+            result["kickoff_utc"], errors="coerce", utc=True
+        )
+        result = result.sort_values("match_number").reset_index(drop=True)
+    return result
+
+
+def team_next_knockout_slot(progress: pd.DataFrame, team: str) -> pd.Series:
+    slots = round_of_16_build(progress)
+    if slots.empty:
+        return pd.Series(dtype=object)
+    team_text = str(team)
+    for _, row in slots.iterrows():
+        known = [
+            value.strip()
+            for value in str(row.get("known_teams", "")).split(",")
+            if value.strip()
+        ]
+        if team_text in known:
+            return row
+    return pd.Series(dtype=object)
 
 
 def load_tournament_path_data() -> dict[str, Any]:
