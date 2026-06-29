@@ -56,6 +56,100 @@ class TournamentPulseStateTests(unittest.TestCase):
         self.assertEqual(results.iloc[0]["Eliminated"], "South Africa")
         self.assertIn("South Africa 0-1 Canada", results.iloc[0]["Result"])
 
+    def test_default_stage_prefers_next_official_knockout_fixture(self):
+        matches = pd.DataFrame(
+            [
+                {
+                    "match_id": 1,
+                    "stage": "GROUP_STAGE",
+                    "status": "FINISHED",
+                    "utc_date": "2026-06-20T19:00:00Z",
+                    "home_team": "A",
+                    "away_team": "B",
+                }
+            ]
+        )
+        progress = pd.DataFrame(
+            [
+                {
+                    "api_match_id": 537423,
+                    "stage": "LAST_32",
+                    "status": "TIMED",
+                    "utc_date": "2026-06-29T17:00:00Z",
+                    "home_team": "Brazil",
+                    "away_team": "Japan",
+                }
+            ]
+        )
+
+        self.assertEqual(overview_v3._default_stage(matches, progress), "LAST_32")
+
+    def test_stage_fixture_table_uses_knockout_outcome_copy(self):
+        fixtures = pd.DataFrame(
+            [
+                {
+                    "api_match_id": 537417,
+                    "stage": "LAST_32",
+                    "status": "FINISHED",
+                    "utc_date": "2026-06-28T19:00:00Z",
+                    "home_team": "South Africa",
+                    "away_team": "Canada",
+                    "home_score": 0,
+                    "away_score": 1,
+                    "advancing_team": "Canada",
+                }
+            ]
+        )
+
+        table = overview_v3._stage_fixture_table(fixtures)
+
+        self.assertEqual(table.iloc[0]["Stage"], "Round of 32")
+        self.assertEqual(table.iloc[0]["Fixture"], "South Africa vs Canada")
+        self.assertEqual(table.iloc[0]["Score"], "0-1")
+        self.assertEqual(table.iloc[0]["Outcome"], "Canada advanced")
+
+    def test_tbd_knockout_rows_do_not_become_stage_participants(self):
+        fixtures = pd.DataFrame(
+            [
+                {
+                    "stage": "LAST_16",
+                    "status": "TIMED",
+                    "home_team": "TBD",
+                    "away_team": None,
+                },
+                {
+                    "stage": "LAST_16",
+                    "status": "TIMED",
+                    "home_team": "Canada",
+                    "away_team": "nan",
+                },
+            ]
+        )
+
+        participants = overview_v3._stage_participants(fixtures)
+
+        self.assertEqual(participants, ["Canada"])
+
+    def test_stage_story_says_chance_to_advance_for_live_knockout(self):
+        fixtures = pd.DataFrame(
+            [
+                {
+                    "stage": "LAST_32",
+                    "status": "LIVE",
+                    "utc_date": "2026-06-29T17:00:00Z",
+                    "home_team": "Brazil",
+                    "away_team": "Japan",
+                    "home_score": 1,
+                    "away_score": 1,
+                }
+            ]
+        )
+
+        story = overview_v3._stage_story("LAST_32", fixtures, pd.DataFrame())
+
+        self.assertIn("chance to advance", story)
+        self.assertNotIn("qualification", story.lower())
+
 
 if __name__ == "__main__":
     unittest.main()

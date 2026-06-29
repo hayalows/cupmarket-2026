@@ -688,16 +688,23 @@ with st.sidebar:
         '<div class="cm-side-label">Start here</div>',
         unsafe_allow_html=True,
     )
-    st.page_link("pages/Tournament_Pulse.py", label="Tournament Pulse")
-    st.page_link("pages/8_Bracket_View.py", label="Bracket View")
+    st.page_link("pages/Tournament_Pulse.py", label="Tournament Explorer")
+    st.page_link("pages/Country_Snapshot.py", label="Country Search")
+    st.page_link("pages/8_Bracket_View.py", label="Bracket")
 
     st.markdown(
         '<div class="cm-side-label">Live tools</div>',
         unsafe_allow_html=True,
     )
-    st.page_link("pages/1_Match_Intelligence.py", label="Match Intelligence", icon="⚽")
-    st.page_link("pages/2_Qualification_Lab.py", label="Qualification Lab", icon="🧭")
-    st.page_link("pages/3_Live_Group_Centre.py", label="Live Group Centre", icon="📊")
+    st.page_link("pages/1_Match_Intelligence.py", label="Live Match Room", icon="⚽")
+    st.page_link("pages/4_Match_Hub.py", label="Match Hub")
+
+    st.markdown(
+        '<div class="cm-side-label">Group tools</div>',
+        unsafe_allow_html=True,
+    )
+    st.page_link("pages/2_Qualification_Lab.py", label="Group Scenarios", icon="🧭")
+    st.page_link("pages/3_Live_Group_Centre.py", label="Group Centre", icon="📊")
 
     st.markdown(
         '<div class="cm-side-label">System status</div>',

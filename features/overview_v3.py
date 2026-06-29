@@ -30,6 +30,36 @@ EXIT_STAGE_COLUMNS = [
     ("prob_semi_final_exit", "Semi-final"),
     ("prob_runner_up", "Final"),
 ]
+STAGE_OPTIONS = [
+    ("GROUP_STAGE", "Group stage", {"GROUP_STAGE", "GROUP", "GROUPS"}),
+    ("LAST_32", "Round of 32", {"LAST_32", "ROUND_OF_32", "R32"}),
+    ("LAST_16", "Round of 16", {"LAST_16", "ROUND_OF_16", "R16"}),
+    ("QUARTER_FINALS", "Quarter-finals", {"QUARTER_FINALS", "QUARTER_FINAL", "QF"}),
+    ("SEMI_FINALS", "Semi-finals", {"SEMI_FINALS", "SEMI_FINAL", "SF"}),
+    ("FINAL", "Final", {"FINAL"}),
+]
+STAGE_LABELS = {key: label for key, label, _ in STAGE_OPTIONS}
+STAGE_ALIASES = {
+    alias: key
+    for key, _, aliases in STAGE_OPTIONS
+    for alias in aliases | {key}
+}
+STAGE_REACH_COLUMNS = {
+    "GROUP_STAGE": "prob_reach_round_32",
+    "LAST_32": "prob_reach_round_32",
+    "LAST_16": "prob_reach_round_16",
+    "QUARTER_FINALS": "prob_reach_quarter_final",
+    "SEMI_FINALS": "prob_reach_semi_final",
+    "FINAL": "prob_reach_final",
+}
+STAGE_EXIT_LABELS = {
+    "GROUP_STAGE": "Group stage",
+    "LAST_32": "Round of 32",
+    "LAST_16": "Round of 16",
+    "QUARTER_FINALS": "Quarter-final",
+    "SEMI_FINALS": "Semi-final",
+    "FINAL": "Final",
+}
 
 
 def _inject_styles() -> None:
@@ -78,6 +108,71 @@ def _numeric(value, default: float = 0.0) -> float:
     if pd.isna(number):
         return default
     return float(number)
+
+
+def _clean_team(value) -> str:
+    try:
+        if pd.isna(value):
+            return "TBD"
+    except (TypeError, ValueError):
+        pass
+    text = str(value or "").strip()
+    return "TBD" if text.lower() in {"", "nan", "none", "null", "tbd"} else text
+
+
+def _normal_stage(value) -> str:
+    try:
+        if pd.isna(value):
+            return ""
+    except (TypeError, ValueError):
+        pass
+    text = str(value or "").strip().upper()
+    if not text or text in {"NAN", "NONE", "NULL"}:
+        return ""
+    return STAGE_ALIASES.get(text, text)
+
+
+def _stage_label_from_key(stage_key: str) -> str:
+    return STAGE_LABELS.get(_normal_stage(stage_key), str(stage_key or "").replace("_", " ").title())
+
+
+def _stage_sort_index(stage_key: str) -> int:
+    key = _normal_stage(stage_key)
+    for index, (candidate, _, _) in enumerate(STAGE_OPTIONS):
+        if candidate == key:
+            return index
+    return len(STAGE_OPTIONS)
+
+
+def _sort_by_time(frame: pd.DataFrame, ascending: bool = True) -> pd.DataFrame:
+    if frame.empty:
+        return frame
+    if "utc_date" not in frame.columns:
+        return frame
+    sorted_frame = frame.copy()
+    sorted_frame["utc_date"] = pd.to_datetime(sorted_frame["utc_date"], errors="coerce", utc=True)
+    return sorted_frame.sort_values("utc_date", ascending=ascending, na_position="last")
+
+
+def _score_any(row: pd.Series) -> str:
+    home = pd.to_numeric(
+        row.get("home_score", row.get("home_score_full_time")),
+        errors="coerce",
+    )
+    away = pd.to_numeric(
+        row.get("away_score", row.get("away_score_full_time")),
+        errors="coerce",
+    )
+    return "vs" if pd.isna(home) or pd.isna(away) else f"{int(home)}-{int(away)}"
+
+
+def _score_or_live(row: pd.Series) -> str:
+    score = _score_any(row)
+    if score != "vs":
+        return score
+    home = pd.to_numeric(row.get("home_score_full_time"), errors="coerce")
+    away = pd.to_numeric(row.get("away_score_full_time"), errors="coerce")
+    return "vs" if pd.isna(home) or pd.isna(away) else f"{int(home)}-{int(away)}"
 
 
 def _stage_text(row: pd.Series) -> str:
@@ -140,6 +235,206 @@ def _load_knockout_progress() -> pd.DataFrame:
     return load_latest_csv(KNOCKOUT_PROGRESS_PATH)
 
 
+def _source_for_stage(matches: pd.DataFrame, progress: pd.DataFrame, stage_key: str) -> pd.DataFrame:
+    key = _normal_stage(stage_key)
+    if key == "GROUP_STAGE":
+        source = matches.copy() if isinstance(matches, pd.DataFrame) else pd.DataFrame()
+    elif isinstance(progress, pd.DataFrame) and not progress.empty:
+        source = progress.copy()
+    else:
+        source = matches.copy() if isinstance(matches, pd.DataFrame) else pd.DataFrame()
+    if source.empty or "stage" not in source.columns:
+        return pd.DataFrame()
+    source["stage_key"] = source["stage"].map(_normal_stage)
+    filtered = source.loc[source["stage_key"].eq(key)].copy()
+    if "utc_date" in filtered.columns:
+        filtered["utc_date"] = pd.to_datetime(filtered["utc_date"], errors="coerce", utc=True)
+        filtered = filtered.sort_values("utc_date", na_position="last")
+    return filtered
+
+
+def _default_stage(matches: pd.DataFrame, progress: pd.DataFrame) -> str:
+    frames = []
+    for frame in [progress, matches]:
+        if isinstance(frame, pd.DataFrame) and not frame.empty and {"stage", "status"}.issubset(frame.columns):
+            frames.append(frame.copy())
+    if not frames:
+        return "GROUP_STAGE"
+
+    source = pd.concat(frames, ignore_index=True, sort=False)
+    source["stage_key"] = source["stage"].map(_normal_stage)
+    source = source.loc[source["stage_key"].isin(STAGE_LABELS)].copy()
+    if source.empty:
+        return "GROUP_STAGE"
+    if "utc_date" in source.columns:
+        source["utc_date"] = pd.to_datetime(source["utc_date"], errors="coerce", utc=True)
+
+    for statuses, ascending in [
+        (LIVE_STATUSES, True),
+        (UPCOMING_STATUSES, True),
+        (FINISHED_STATUSES, False),
+    ]:
+        rows = source.loc[source["status"].astype(str).isin(statuses)].copy()
+        if rows.empty:
+            continue
+        rows = _sort_by_time(rows, ascending=ascending)
+        return str(rows.iloc[0]["stage_key"])
+    return "GROUP_STAGE"
+
+
+def _stage_status_counts(fixtures: pd.DataFrame) -> dict[str, int]:
+    if fixtures.empty or "status" not in fixtures.columns:
+        return {"fixtures": 0, "finished": 0, "live": 0, "upcoming": 0}
+    statuses = fixtures["status"].astype(str)
+    return {
+        "fixtures": len(fixtures),
+        "finished": int(statuses.isin(FINISHED_STATUSES).sum()),
+        "live": int(statuses.isin(LIVE_STATUSES).sum()),
+        "upcoming": int(statuses.isin(UPCOMING_STATUSES).sum()),
+    }
+
+
+def _stage_participants(fixtures: pd.DataFrame) -> list[str]:
+    if fixtures.empty:
+        return []
+    teams = []
+    for column in ["home_team", "away_team"]:
+        if column not in fixtures.columns:
+            continue
+        for value in fixtures[column].tolist():
+            team = _clean_team(value)
+            if team != "TBD":
+                teams.append(team)
+    return sorted(set(teams))
+
+
+def _stage_fixture_table(fixtures: pd.DataFrame) -> pd.DataFrame:
+    if fixtures.empty:
+        return pd.DataFrame()
+    rows = []
+    for _, row in fixtures.iterrows():
+        home = _clean_team(row.get("home_team"))
+        away = _clean_team(row.get("away_team"))
+        status = str(row.get("status", "") or "").replace("_", " ").title()
+        score = _score_or_live(row)
+        advanced = _clean_team(row.get("advancing_team"))
+        if advanced != "TBD":
+            outcome = f"{advanced} advanced"
+        elif str(row.get("status", "")).upper() in FINISHED_STATUSES:
+            outcome = "Result published"
+        elif str(row.get("status", "")).upper() in LIVE_STATUSES:
+            minute = pd.to_numeric(row.get("minute"), errors="coerce")
+            outcome = f"Live at {int(minute)} min" if pd.notna(minute) else "Live now"
+        else:
+            outcome = _kickoff(row.get("utc_date"))
+        rows.append(
+            {
+                "Stage": _stage_text(row),
+                "Status": status,
+                "Fixture": f"{home} vs {away}",
+                "Score": score,
+                "Outcome": outcome,
+                "Kickoff": _kickoff(row.get("utc_date")),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def _stage_country_table(
+    prices: pd.DataFrame,
+    stage_key: str,
+    participants: list[str] | None = None,
+    limit: int = 12,
+) -> pd.DataFrame:
+    if prices.empty or "team" not in prices.columns:
+        return pd.DataFrame()
+    frame = prices.copy()
+    if participants:
+        frame = frame.loc[frame["team"].astype(str).isin(participants)].copy()
+    if frame.empty:
+        frame = prices.copy()
+
+    chance_column = STAGE_REACH_COLUMNS.get(_normal_stage(stage_key))
+    if chance_column in frame.columns:
+        frame["stage_chance_sort"] = pd.to_numeric(frame[chance_column], errors="coerce").fillna(0.0)
+    else:
+        frame["stage_chance_sort"] = 0.0
+    if "cupmarket_price" in frame.columns:
+        frame["price_sort"] = pd.to_numeric(frame["cupmarket_price"], errors="coerce").fillna(0.0)
+    else:
+        frame["price_sort"] = 0.0
+    frame["Exit"] = frame.apply(_exit_stage, axis=1)
+    frame = frame.sort_values(["stage_chance_sort", "price_sort"], ascending=False).head(limit)
+
+    rows = []
+    for _, row in frame.iterrows():
+        chance = row.get(chance_column) if chance_column in row.index else None
+        champion = row.get("prob_champion")
+        rows.append(
+            {
+                "Country": row.get("team"),
+                "Price": f"{_numeric(row.get('cupmarket_price')):.2f} CM",
+                "Stage chance": f"{100 * _numeric(chance):.1f}%" if chance_column else "-",
+                "Champion": f"{100 * _numeric(champion):.1f}%",
+                "Status": "Alive" if row["Exit"] == "Still alive" else f"Out: {row['Exit']}",
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def _stage_eliminated_for_key(prices: pd.DataFrame, stage_key: str) -> pd.DataFrame:
+    eliminated = _eliminated_teams(prices)
+    if eliminated.empty:
+        return eliminated
+    exit_label = STAGE_EXIT_LABELS.get(_normal_stage(stage_key), "")
+    return eliminated.loc[eliminated["Exit"].eq(exit_label)].reset_index(drop=True)
+
+
+def _stage_story(stage_key: str, fixtures: pd.DataFrame, prices: pd.DataFrame) -> str:
+    label = _stage_label_from_key(stage_key)
+    counts = _stage_status_counts(fixtures)
+    alive_count = len(_alive_teams(prices))
+    eliminated_count = len(_eliminated_teams(prices))
+
+    if _normal_stage(stage_key) == "GROUP_STAGE":
+        if counts["live"]:
+            return "The group stage is live. Watch tables, pressure and match context move together before the bracket locks."
+        if counts["upcoming"]:
+            return "The group stage is still shaping the bracket. Use this round to understand who can reach the knockouts."
+        return "The group stage has done its job: it built the knockout bracket and set the first market shock points."
+
+    if fixtures.empty:
+        return f"{label} is waiting for official fixture data. CupMarket can still show projected paths and market leaders."
+
+    live = fixtures.loc[fixtures["status"].astype(str).isin(LIVE_STATUSES)] if "status" in fixtures.columns else pd.DataFrame()
+    if not live.empty:
+        row = _sort_by_time(live).iloc[0]
+        return (
+            f"{label} is live: {_clean_team(row.get('home_team'))} {_score_or_live(row)} "
+            f"{_clean_team(row.get('away_team'))}. Follow chance to advance as the score changes."
+        )
+
+    finished = fixtures.loc[fixtures["status"].astype(str).isin(FINISHED_STATUSES)] if "status" in fixtures.columns else pd.DataFrame()
+    if not finished.empty:
+        latest = _sort_by_time(finished, ascending=False).iloc[0]
+        advanced = _clean_team(latest.get("advancing_team"))
+        result = f"{_clean_team(latest.get('home_team'))} {_score_or_live(latest)} {_clean_team(latest.get('away_team'))}"
+        if advanced != "TBD":
+            return f"{advanced} advanced from {label} after {result}. {alive_count} teams remain alive; {eliminated_count} are out."
+        return f"{label} has published a result: {result}. Prices re-rank after the model settles the match."
+
+    upcoming = fixtures.loc[fixtures["status"].astype(str).isin(UPCOMING_STATUSES)] if "status" in fixtures.columns else pd.DataFrame()
+    if not upcoming.empty:
+        row = _sort_by_time(upcoming).iloc[0]
+        return (
+            f"Next in {label}: {_clean_team(row.get('home_team'))} vs "
+            f"{_clean_team(row.get('away_team'))} at {_kickoff(row.get('utc_date'))}. "
+            "Open the match to see xG, likely scores and chance to advance."
+        )
+
+    return f"{label} has {counts['fixtures']} fixture rows ready. Open the bracket or a country path for the cleaner story."
+
+
 def _knockout_results(matches: pd.DataFrame, progress: pd.DataFrame) -> pd.DataFrame:
     source = progress.copy() if isinstance(progress, pd.DataFrame) else pd.DataFrame()
     if source.empty and not matches.empty:
@@ -188,6 +483,119 @@ def _knockout_results(matches: pd.DataFrame, progress: pd.DataFrame) -> pd.DataF
             }
         )
     return pd.DataFrame(rows)
+
+
+def _stage_focus_match(fixtures: pd.DataFrame) -> tuple[str, int | None]:
+    if fixtures.empty or "status" not in fixtures.columns:
+        return "Live", None
+    for statuses, view, ascending in [
+        (LIVE_STATUSES, "Live", True),
+        (UPCOMING_STATUSES, "Upcoming", True),
+        (FINISHED_STATUSES, "Results", False),
+    ]:
+        rows = fixtures.loc[fixtures["status"].astype(str).isin(statuses)].copy()
+        if rows.empty:
+            continue
+        row = _sort_by_time(rows, ascending=ascending).iloc[0]
+        match_id = pd.to_numeric(row.get("match_id", row.get("api_match_id")), errors="coerce")
+        return view, int(match_id) if pd.notna(match_id) else None
+    return "Live", None
+
+
+def render_stage_explorer(matches: pd.DataFrame, prices: pd.DataFrame) -> None:
+    progress = _load_knockout_progress()
+    default_stage = _default_stage(matches, progress)
+    labels = [_stage_label_from_key(stage_key) for stage_key, _, _ in STAGE_OPTIONS]
+    default_index = min(_stage_sort_index(default_stage), len(labels) - 1)
+
+    st.markdown("### Tournament explorer")
+    st.caption(
+        "Pick a round first. CupMarket will bring forward the fixtures, countries, paths and market signals that matter for that stage."
+    )
+    selected_label = st.selectbox(
+        "Stage",
+        labels,
+        index=default_index,
+        key="cupmarket_pulse_stage_explorer",
+    )
+    selected_stage = next(
+        stage_key
+        for stage_key, label, _ in STAGE_OPTIONS
+        if label == selected_label
+    )
+
+    fixtures = _source_for_stage(matches, progress, selected_stage)
+    participants = _stage_participants(fixtures)
+    counts = _stage_status_counts(fixtures)
+    eliminated_here = _stage_eliminated_for_key(prices, selected_stage)
+    country_table = _stage_country_table(prices, selected_stage, participants)
+    story = _stage_story(selected_stage, fixtures, prices)
+
+    metrics = st.columns(4)
+    metrics[0].metric("Fixtures", counts["fixtures"])
+    metrics[1].metric("Live", counts["live"])
+    metrics[2].metric("Finished", counts["finished"])
+    metrics[3].metric("Teams shown", len(participants) if participants else len(country_table))
+    st.info(story)
+
+    focus_view, focus_match_id = _stage_focus_match(fixtures)
+    default_team = None
+    if participants:
+        default_team = participants[0]
+    elif not country_table.empty:
+        default_team = str(country_table.iloc[0]["Country"])
+
+    action_cols = st.columns(4)
+    with action_cols[0]:
+        if st.button("Open stage matches", key=f"stage_explorer_matches_{selected_stage}", use_container_width=True):
+            _go_to_matches(focus_view, focus_match_id)
+    with action_cols[1]:
+        if st.button("Open bracket", key=f"stage_explorer_bracket_{selected_stage}", use_container_width=True):
+            _go_to_bracket(default_team)
+    with action_cols[2]:
+        if st.button("Open country paths", key=f"stage_explorer_paths_{selected_stage}", use_container_width=True):
+            _go_to_path(default_team)
+    with action_cols[3]:
+        if st.button("Open market", key=f"stage_explorer_market_{selected_stage}", use_container_width=True):
+            if default_team:
+                _go_to_market(default_team)
+            else:
+                st.switch_page("pages/5_Market_Story.py")
+
+    fixture_tab, country_tab, market_tab = st.tabs(["Fixtures", "Countries", "Market signals"])
+    with fixture_tab:
+        fixture_table = _stage_fixture_table(fixtures)
+        if fixture_table.empty:
+            st.caption("Official fixtures for this stage are not available yet.")
+        else:
+            st.dataframe(
+                fixture_table[["Status", "Fixture", "Score", "Outcome", "Kickoff"]],
+                hide_index=True,
+                use_container_width=True,
+            )
+    with country_tab:
+        if country_table.empty:
+            st.caption("Country price data is not available yet.")
+        else:
+            st.dataframe(country_table, hide_index=True, use_container_width=True)
+    with market_tab:
+        left, right = st.columns(2)
+        with left:
+            st.markdown("#### Best positioned")
+            if country_table.empty:
+                st.caption("Market leaders appear after the next model publication.")
+            else:
+                st.dataframe(
+                    country_table[["Country", "Price", "Stage chance", "Champion"]].head(8),
+                    hide_index=True,
+                    use_container_width=True,
+                )
+        with right:
+            st.markdown("#### Exited here")
+            if eliminated_here.empty:
+                st.caption("No team has a locked exit at this stage yet.")
+            else:
+                st.dataframe(eliminated_here.head(8), hide_index=True, use_container_width=True)
 
 
 def _next_match_summary(matches: pd.DataFrame) -> pd.Series:
@@ -321,9 +729,10 @@ def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: di
     next_match = upcoming.iloc[0] if not upcoming.empty else pd.Series(dtype=object)
     default_team = str(leader.get("team")) if not leader.empty else "Ghana"
 
-    render_start_here_panel(default_team)
-    render_todays_story(matches, prices)
+    render_stage_explorer(matches, prices)
     render_tournament_state(matches, prices)
+    render_todays_story(matches, prices)
+    render_start_here_panel(default_team)
 
     top = st.columns(2)
     with top[0]:
