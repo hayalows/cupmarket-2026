@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from features.market_movement import add_rank_movement, rank_movement_text
+from features.market_board import render_market_board
 from features.match_ui import match_stage_label
 from features.official_data import load_latest_csv
 from features.product_guidance import (
@@ -839,8 +840,15 @@ def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: di
     latest_result = finished.iloc[0] if not finished.empty else pd.Series(dtype=object)
     next_match = upcoming.iloc[0] if not upcoming.empty else pd.Series(dtype=object)
     default_team = str(leader.get("team")) if not leader.empty else "Ghana"
+    predictions = metadata.get("predictions") if isinstance(metadata, dict) else pd.DataFrame()
+    adaptive_ratings = metadata.get("adaptive_ratings") if isinstance(metadata, dict) else pd.DataFrame()
 
     render_stage_explorer(matches, prices)
+    render_market_board(
+        prices,
+        predictions=predictions,
+        adaptive_ratings=adaptive_ratings,
+    )
     render_todays_story(matches, prices)
     render_start_here_panel(default_team)
     render_official_data_caption(prices)

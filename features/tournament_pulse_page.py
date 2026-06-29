@@ -9,17 +9,20 @@ from features.live_match_data import (
 )
 from features.overview_v3 import render_overview_v3
 from features.product_ui import render_live_feed_notice
-from features.tournament_data_v2 import DATA_DIR, load_static_data
+from features.tournament_data_v2 import DATA_DIR, load_csv, load_static_data
 
 
 def load_pulse_data() -> dict:
     matches, score_metadata = load_matches(
         DATA_DIR / "world_cup_2026_matches_latest.csv"
     )
+    static = load_static_data()
     return {
         "matches": matches,
         "score_metadata": score_metadata,
-        "prices": load_static_data()["prices"],
+        "prices": static["prices"],
+        "predictions": static.get("latest_predictions"),
+        "adaptive_ratings": load_csv(DATA_DIR / "adaptive_ratings_latest.csv"),
     }
 
 
@@ -39,7 +42,14 @@ def render_pulse(data: dict, refresh_label: str) -> None:
     )
 
     render_live_feed_notice(score_metadata)
-    render_overview_v3(matches=matches, prices=data["prices"], metadata={})
+    render_overview_v3(
+        matches=matches,
+        prices=data["prices"],
+        metadata={
+            "predictions": data.get("predictions"),
+            "adaptive_ratings": data.get("adaptive_ratings"),
+        },
+    )
     st.caption(
         f"Score source: {score_metadata.get('source', 'Unknown')} · refreshed "
         f"{format_source_time(score_metadata.get('fetched_at_utc'))} · "

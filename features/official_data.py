@@ -40,6 +40,7 @@ REMOTE_DATA_FILES = {
     ),
     "knockout_progress_latest.csv": "data/knockout_progress_latest.csv",
     "market_movements_latest.csv": "data/market_movements_latest.csv",
+    "adaptive_ratings_latest.csv": "data/adaptive_ratings_latest.csv",
     "team_snapshots.csv": "data/history/team_snapshots.csv",
     "world_cup_prediction_ledger.csv": (
         "backend/state/world_cup_prediction_ledger.csv"
