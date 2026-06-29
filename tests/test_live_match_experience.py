@@ -6,7 +6,11 @@ import numpy as np
 import pandas as pd
 
 from features import live_match_experience as experience
-from features.live_match_room import _live_meta_text
+from features.live_match_room import (
+    _advance_consequence,
+    _current_score_caption,
+    _live_meta_text,
+)
 from features.match_ui import clean_text, match_stage_label
 
 
@@ -58,6 +62,81 @@ class LiveMatchExperienceTests(unittest.TestCase):
         )
 
         self.assertEqual(_live_meta_text(match), "LIVE · Round of 32")
+
+
+    def test_current_score_caption_uses_clock_source(self):
+        self.assertEqual(
+            _current_score_caption(
+                {
+                    "current_score": "0-0",
+                    "minute": 20,
+                    "minute_source": "kickoff_inferred",
+                }
+            ),
+            "Current score: 0-0 after about 20 minutes.",
+        )
+        self.assertEqual(
+            _current_score_caption(
+                {
+                    "current_score": "0-0",
+                    "minute": 20,
+                    "minute_source": "api",
+                }
+            ),
+            "Current score: 0-0 after 20 minutes.",
+        )
+        unavailable = _current_score_caption(
+            {
+                "current_score": "0-0",
+                "minute": 0,
+                "minute_source": "unavailable",
+            }
+        )
+        self.assertNotIn("0 minutes", unavailable)
+        self.assertIn("minute unavailable", unavailable)
+
+    def test_knockout_consequence_uses_connected_bracket_slot(self):
+        progress = pd.DataFrame(
+            [
+                {
+                    "logical_match_number": 73,
+                    "api_match_id": 537417,
+                    "stage": "LAST_32",
+                    "home_team": "South Africa",
+                    "away_team": "Canada",
+                    "advancing_team": np.nan,
+                },
+                {
+                    "logical_match_number": 75,
+                    "api_match_id": 537415,
+                    "stage": "LAST_32",
+                    "home_team": "Germany",
+                    "away_team": "Paraguay",
+                    "advancing_team": np.nan,
+                },
+                {
+                    "logical_match_number": 90,
+                    "api_match_id": 537375,
+                    "stage": "LAST_16",
+                    "home_team": np.nan,
+                    "away_team": np.nan,
+                    "advancing_team": np.nan,
+                },
+            ]
+        )
+        consequence = _advance_consequence(
+            pd.Series(
+                {
+                    "match_id": 537417,
+                    "stage": "LAST_32",
+                }
+            ),
+            progress,
+        )
+
+        self.assertEqual(consequence["destination"], "Round of 16")
+        self.assertEqual(consequence["target_match"], 90)
+        self.assertEqual(consequence["opponent_label"], "Germany/Paraguay winner")
 
 
 if __name__ == "__main__":

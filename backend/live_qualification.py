@@ -6,6 +6,11 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+try:
+    from .live_clock import resolve_match_minute_detail as _resolve_minute_detail
+except ImportError:
+    from live_clock import resolve_match_minute_detail as _resolve_minute_detail
+
 from backend.group_scenarios import (
     FINISHED_STATUSES,
     UPCOMING_STATUSES,
@@ -18,27 +23,7 @@ THIRD_PLACE_SLOTS = 8
 
 
 def resolve_match_minute(row: pd.Series | dict[str, Any]) -> int:
-    minute = row.get("minute") if hasattr(row, "get") else None
-    status = str(row.get("status", "")) if hasattr(row, "get") else ""
-    kickoff = pd.to_datetime(
-        row.get("utc_date") if hasattr(row, "get") else None,
-        errors="coerce",
-        utc=True,
-    )
-
-    if minute is not None and not pd.isna(minute):
-        return int(np.clip(float(minute), 0, 90))
-    if status == "PAUSED":
-        return 45
-    if status == "IN_PLAY" and pd.notna(kickoff):
-        elapsed = max(
-            0.0,
-            (pd.Timestamp.now(tz="UTC") - kickoff).total_seconds() / 60.0,
-        )
-        if elapsed <= 50:
-            return int(np.clip(elapsed, 1, 45))
-        return int(np.clip(elapsed - 15, 46, 90))
-    return 0
+    return _resolve_minute_detail(row, allow_extra_time=False).minute
 
 
 def _prediction_lookup(predictions: pd.DataFrame) -> dict[int, tuple[float, float]]:
@@ -69,14 +54,24 @@ def _enriched_rows(
 ) -> tuple[list[dict[str, Any]], dict[str, list[str]]]:
     base_rows, group_teams = _prepare(matches, predictions)
     minute_lookup = {}
+    minute_detail_lookup = {}
     matchday_lookup = {}
     for row in matches.itertuples(index=False):
         match_id = int(row.match_id)
-        minute_lookup[match_id] = resolve_match_minute(pd.Series(row._asdict()))
+        detail = _resolve_minute_detail(
+            pd.Series(row._asdict()),
+            allow_extra_time=False,
+        )
+        minute_lookup[match_id] = detail.minute
+        minute_detail_lookup[match_id] = detail
         matchday_lookup[match_id] = getattr(row, "matchday", None)
 
     for row in base_rows:
         row["minute"] = minute_lookup.get(row["match_id"], 0)
+        detail = minute_detail_lookup.get(row["match_id"])
+        row["minute_source"] = detail.source if detail else "unavailable"
+        row["raw_status"] = detail.raw_status if detail else str(row.get("status", ""))
+        row["kickoff_utc"] = detail.kickoff_utc if detail else None
         row["matchday"] = matchday_lookup.get(row["match_id"])
     return base_rows, group_teams
 
@@ -351,6 +346,9 @@ def run_live_qualification_projection(
                 for (home, away), count in likely_scores
             ],
             "minute": match["minute"],
+            "minute_source": match.get("minute_source", "unavailable"),
+            "raw_status": match.get("raw_status"),
+            "kickoff_utc": match.get("kickoff_utc"),
             "current_score": f'{int(match["home_score"] or 0)}-{int(match["away_score"] or 0)}',
         }
 

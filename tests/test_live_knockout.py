@@ -7,6 +7,7 @@ import pandas as pd
 from backend.live_knockout import (
     is_live_knockout_match,
     penalty_home_probability,
+    resolve_match_minute,
     run_live_knockout_projection,
 )
 
@@ -58,6 +59,56 @@ class LiveKnockoutTests(unittest.TestCase):
         result = run_live_knockout_projection(matches, predictions, match_id=9001)
 
         self.assertFalse(result["available"])
+
+    def test_match_minute_uses_api_value_when_present(self):
+        self.assertEqual(resolve_match_minute(pd.Series(_match_row(minute=37))), 37)
+
+    def test_match_minute_infers_from_kickoff_when_missing(self):
+        kickoff = pd.Timestamp.now(tz="UTC") - pd.Timedelta(minutes=20)
+        matches = pd.DataFrame([_match_row(utc_date=kickoff, minute=pd.NA)])
+        predictions = pd.DataFrame([_prediction_row()])
+
+        result = run_live_knockout_projection(
+            matches,
+            predictions,
+            match_id=9001,
+            n_simulations=1200,
+            random_seed=7,
+        )
+        live = result["matches"][9001]
+
+        self.assertTrue(result["available"])
+        self.assertIn(live["minute"], {19, 20})
+        self.assertEqual(live["minute_source"], "kickoff_inferred")
+
+    def test_match_minute_returns_half_time_for_paused_without_api_minute(self):
+        self.assertEqual(
+            resolve_match_minute(pd.Series(_match_row(status="PAUSED", minute=pd.NA))),
+            45,
+        )
+
+    def test_projection_at_minute_20_differs_from_minute_zero(self):
+        predictions = pd.DataFrame([_prediction_row()])
+        kickoff = run_live_knockout_projection(
+            pd.DataFrame([_match_row(minute=0)]),
+            predictions,
+            match_id=9001,
+            n_simulations=1800,
+            random_seed=13,
+        )["matches"][9001]
+        minute_20 = run_live_knockout_projection(
+            pd.DataFrame([_match_row(minute=20)]),
+            predictions,
+            match_id=9001,
+            n_simulations=1800,
+            random_seed=13,
+        )["matches"][9001]
+
+        self.assertNotEqual(
+            kickoff["home_advance_probability"],
+            minute_20["home_advance_probability"],
+        )
+        self.assertEqual(minute_20["minute"], 20)
 
     def test_current_lead_and_minute_shift_advance_probability(self):
         matches = pd.DataFrame(

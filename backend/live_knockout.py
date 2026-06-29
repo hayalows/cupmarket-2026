@@ -6,6 +6,11 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+try:
+    from .live_clock import resolve_match_minute_detail as _resolve_minute_detail
+except ImportError:
+    from live_clock import resolve_match_minute_detail as _resolve_minute_detail
+
 
 LIVE_STATUSES = {"IN_PLAY", "LIVE", "PAUSED", "SUSPENDED"}
 EXTRA_TIME_GOAL_FACTOR = 0.30
@@ -45,13 +50,7 @@ def is_live_knockout_match(row: pd.Series | dict[str, Any]) -> bool:
 
 
 def resolve_match_minute(row: pd.Series | dict[str, Any]) -> int:
-    minute = row.get("minute") if hasattr(row, "get") else None
-    status = str(row.get("status", "")).upper() if hasattr(row, "get") else ""
-    if minute is not None and not pd.isna(minute):
-        return int(np.clip(float(minute), 0, 120))
-    if status == "PAUSED":
-        return 45
-    return 0
+    return _resolve_minute_detail(row, allow_extra_time=True).minute
 
 
 def _score_value(row: pd.Series | dict[str, Any], side: str) -> int:
@@ -253,7 +252,8 @@ def _project_match(
     match_id = int(match.get("match_id"))
     current_home = _score_value(match, "home")
     current_away = _score_value(match, "away")
-    minute = resolve_match_minute(match)
+    minute_detail = _resolve_minute_detail(match, allow_extra_time=True)
+    minute = minute_detail.minute
     rng = np.random.default_rng(random_seed + match_id)
 
     advances = Counter()
@@ -293,6 +293,9 @@ def _project_match(
         "away_team": clean_text(match.get("away_team")),
         "current_score": f"{current_home}-{current_away}",
         "minute": minute,
+        "minute_source": minute_detail.source,
+        "raw_status": minute_detail.raw_status,
+        "kickoff_utc": minute_detail.kickoff_utc,
         "expected_home_goals": inputs["home_xg"],
         "expected_away_goals": inputs["away_xg"],
         "home_advance_probability": advances["HOME"] / n_simulations,

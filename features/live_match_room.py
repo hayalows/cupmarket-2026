@@ -18,6 +18,7 @@ from backend.live_qualification import (
 )
 from features.live_qualification_ui import cached_projection, pct
 from features.match_ui import (
+    clean_text,
     format_number,
     match_stage_label,
     match_option_label,
@@ -29,9 +30,42 @@ from features.qualification_ui import (
     format_percent,
     render_qualification_result,
 )
+from features.tournament_path_data import KNOCKOUT_PROGRESS_PATH
 
 
 LIVE_STATUSES = GROUP_LIVE_STATUSES | KNOCKOUT_LIVE_STATUSES
+NEXT_ROUND_SOURCES = {
+    89: (74, 77),
+    90: (73, 75),
+    91: (76, 78),
+    92: (79, 80),
+    93: (83, 84),
+    94: (81, 82),
+    95: (86, 88),
+    96: (85, 87),
+    97: (89, 90),
+    98: (93, 94),
+    99: (91, 92),
+    100: (95, 96),
+    101: (97, 98),
+    102: (99, 100),
+    104: (101, 102),
+}
+DESTINATION_LABELS = {
+    "LAST_32": "Round of 16",
+    "ROUND_OF_32": "Round of 16",
+    "R32": "Round of 16",
+    "LAST_16": "Quarter-final",
+    "ROUND_OF_16": "Quarter-final",
+    "R16": "Quarter-final",
+    "QUARTER_FINALS": "Semi-final",
+    "QUARTER_FINAL": "Semi-final",
+    "QF": "Semi-final",
+    "SEMI_FINALS": "Final",
+    "SEMI_FINAL": "Final",
+    "SF": "Final",
+    "FINAL": "Champion",
+}
 
 
 @st.cache_data(ttl=60, show_spinner=False)
@@ -48,6 +82,14 @@ def cached_knockout_projection(
         n_simulations=simulations,
         random_seed=2026,
     )
+
+
+@st.cache_data(ttl=60, show_spinner=False)
+def cached_knockout_progress() -> pd.DataFrame:
+    try:
+        return pd.read_csv(KNOCKOUT_PROGRESS_PATH)
+    except (OSError, pd.errors.ParserError):
+        return pd.DataFrame()
 
 
 def _minute_text(row: pd.Series) -> str:
@@ -72,6 +114,160 @@ def _pp_delta(current, baseline) -> str | None:
     if current is None or baseline is None or pd.isna(current) or pd.isna(baseline):
         return None
     return f"{100 * (float(current) - float(baseline)):+.1f} pp vs published model"
+
+
+def _current_score_caption(live: dict[str, Any]) -> str:
+    score = live.get("current_score", "0-0")
+    minute = pd.to_numeric(live.get("minute"), errors="coerce")
+    source = str(live.get("minute_source") or "").lower()
+    if source == "unavailable" or pd.isna(minute) or (not source and minute <= 0):
+        return f"Current score: {score}. Match minute unavailable from feed."
+    minute_text = int(minute)
+    if source == "api":
+        return f"Current score: {score} after {minute_text} minutes."
+    return f"Current score: {score} after about {minute_text} minutes."
+
+
+def _progress_rows_by_number(progress: pd.DataFrame) -> dict[int, pd.Series]:
+    if progress.empty or "logical_match_number" not in progress.columns:
+        return {}
+    rows = {}
+    for _, row in progress.iterrows():
+        number = pd.to_numeric(row.get("logical_match_number"), errors="coerce")
+        if pd.notna(number):
+            rows[int(number)] = row
+    return rows
+
+
+def _clean_team(value) -> str:
+    return clean_text(value)
+
+
+def _source_winner_label(rows: dict[int, pd.Series], source_number: int) -> dict[str, Any]:
+    source = rows.get(source_number)
+    if source is None:
+        return {
+            "label": "",
+            "locked": False,
+            "note": "Next opponent not locked yet. CupMarket will update after the connected fixture is decided.",
+        }
+    advancing = _clean_team(source.get("advancing_team"))
+    if advancing:
+        return {"label": advancing, "locked": True, "note": ""}
+    home = _clean_team(source.get("home_team"))
+    away = _clean_team(source.get("away_team"))
+    if home and away:
+        return {
+            "label": f"{home}/{away} winner",
+            "locked": False,
+            "note": "Opponent comes from the connected fixture and locks after that result.",
+        }
+    return {
+        "label": "",
+        "locked": False,
+        "note": "Next opponent not locked yet. CupMarket will update after the connected fixture is decided.",
+    }
+
+
+def _advance_consequence(match: pd.Series, progress: pd.DataFrame) -> dict[str, Any]:
+    stage = clean_text(match.get("stage")).upper()
+    destination = DESTINATION_LABELS.get(stage, "next round")
+    if destination == "Champion":
+        return {
+            "destination": destination,
+            "target_match": None,
+            "opponent_label": "",
+            "opponent_locked": True,
+            "note": "",
+        }
+
+    if progress.empty or "api_match_id" not in progress.columns:
+        return {
+            "destination": destination,
+            "target_match": None,
+            "opponent_label": "",
+            "opponent_locked": False,
+            "note": "Next opponent not locked yet. CupMarket will update after the connected fixture is decided.",
+        }
+
+    match_id = pd.to_numeric(match.get("match_id"), errors="coerce")
+    if pd.isna(match_id):
+        return {
+            "destination": destination,
+            "target_match": None,
+            "opponent_label": "",
+            "opponent_locked": False,
+            "note": "Next opponent not locked yet. CupMarket will update after the connected fixture is decided.",
+        }
+
+    working = progress.copy()
+    working["api_match_id"] = pd.to_numeric(
+        working["api_match_id"], errors="coerce"
+    )
+    current_rows = working.loc[working["api_match_id"] == int(match_id)]
+    if current_rows.empty:
+        return {
+            "destination": destination,
+            "target_match": None,
+            "opponent_label": "",
+            "opponent_locked": False,
+            "note": "Next opponent not locked yet. CupMarket will update after the connected fixture is decided.",
+        }
+
+    source_number = pd.to_numeric(
+        current_rows.iloc[0].get("logical_match_number"),
+        errors="coerce",
+    )
+    if pd.isna(source_number):
+        return {
+            "destination": destination,
+            "target_match": None,
+            "opponent_label": "",
+            "opponent_locked": False,
+            "note": "Next opponent not locked yet. CupMarket will update after the connected fixture is decided.",
+        }
+
+    source_number = int(source_number)
+    for target_match, (left_source, right_source) in NEXT_ROUND_SOURCES.items():
+        if source_number not in {left_source, right_source}:
+            continue
+        opponent_source = right_source if source_number == left_source else left_source
+        opponent = _source_winner_label(
+            _progress_rows_by_number(progress),
+            opponent_source,
+        )
+        return {
+            "destination": destination,
+            "target_match": target_match,
+            "opponent_label": opponent["label"],
+            "opponent_locked": opponent["locked"],
+            "note": opponent["note"],
+        }
+
+    return {
+        "destination": destination,
+        "target_match": None,
+        "opponent_label": "",
+        "opponent_locked": False,
+        "note": "Next opponent not locked yet. CupMarket will update after the connected fixture is decided.",
+    }
+
+
+def _render_clock_debug(live: dict[str, Any]) -> None:
+    source = str(live.get("minute_source") or "unavailable")
+    if source == "api":
+        return
+    with st.expander("Live feed clock details", expanded=False):
+        rows = pd.DataFrame(
+            [
+                {
+                    "Minute source": source,
+                    "Provider status": live.get("raw_status", ""),
+                    "Kickoff UTC": live.get("kickoff_utc") or "Unavailable",
+                }
+            ]
+        )
+        st.dataframe(rows, use_container_width=True, hide_index=True)
 
 
 def _market_row(prices: pd.DataFrame, team: str) -> pd.Series:
@@ -224,6 +420,48 @@ def _price_column_label(column: str | None) -> str:
     return labels.get(column or "", "Published next-stage chance")
 
 
+def _render_knockout_consequence_view(
+    match: pd.Series,
+    prices: pd.DataFrame,
+    home_team: str,
+    away_team: str,
+) -> None:
+    progress = cached_knockout_progress()
+    consequence = _advance_consequence(match, progress)
+    destination = consequence["destination"]
+    price_column = next_stage_probability_column(match.get("stage"))
+    label = _price_column_label(price_column)
+
+    st.markdown("#### What advancing unlocks next")
+    columns = st.columns(2)
+    for column, team in zip(columns, [home_team, away_team]):
+        row = _market_row(prices, team)
+        published_probability = (
+            row.get(price_column)
+            if price_column and not row.empty and price_column in row.index
+            else None
+        )
+        champion_probability = row.get("prob_champion") if not row.empty else None
+        opponent = consequence.get("opponent_label")
+        if destination == "Champion":
+            next_line = f"If {team} advance, they become champion."
+        elif opponent:
+            next_line = f"If {team} advance, they enter the {destination} against {opponent}."
+        else:
+            next_line = (
+                f"If {team} advance, their {destination} opponent is not locked yet."
+            )
+        with column:
+            st.markdown(f"##### {team}")
+            st.write(next_line)
+            if consequence.get("target_match"):
+                st.caption(f"Connected bracket slot: match {consequence['target_match']}.")
+            if consequence.get("note"):
+                st.caption(consequence["note"])
+            st.metric(label, pct(published_probability))
+            st.metric("Published champion chance", pct(champion_probability))
+
+
 def _render_knockout_live_room(
     matches: pd.DataFrame,
     predictions: pd.DataFrame,
@@ -266,10 +504,7 @@ def _render_knockout_live_room(
 
     with outlook_tab:
         st.markdown("#### Who is most likely to advance from here?")
-        st.caption(
-            f"Current score: {live['current_score']} after about "
-            f"{live.get('minute', 0)} minutes."
-        )
+        st.caption(_current_score_caption(live))
         columns = st.columns(2)
         columns[0].metric(
             f"{home_team} chance to advance",
@@ -300,9 +535,20 @@ def _render_knockout_live_room(
                 hide_index=True,
             )
         st.caption(live["method_note"] + " These are estimates, not guarantees.")
+        _render_clock_debug(live)
 
     with advance_tab:
+        _render_knockout_consequence_view(
+            match,
+            prices,
+            home_team,
+            away_team,
+        )
         st.markdown("#### How the match is likely to be decided")
+        st.caption(
+            "The decision path starts from the current score and the match clock, "
+            "then follows normal time, extra time and penalties if needed."
+        )
         method_rows = _method_probability_rows(live)
         st.dataframe(method_rows, use_container_width=True, hide_index=True)
         st.metric(
@@ -464,10 +710,7 @@ def _render_live_room(
 
     with outlook_tab:
         st.markdown("#### What is most likely from here?")
-        st.caption(
-            f"Current score: {live['current_score']} after about "
-            f"{live.get('minute', 0)} minutes."
-        )
+        st.caption(_current_score_caption(live))
         columns = st.columns(3)
         columns[0].metric(f"{home_team} win", pct(live["home_win_probability"]))
         columns[1].metric("Draw", pct(live["draw_probability"]))
