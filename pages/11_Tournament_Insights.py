@@ -39,6 +39,12 @@ predictions = static.get("latest_predictions", pd.DataFrame())
 tables = pd.read_csv(DATA_DIR / "current_group_tables.csv")
 movements_path = DATA_DIR / "market_movements_latest.csv"
 movements = pd.read_csv(movements_path) if movements_path.exists() else pd.DataFrame()
+movement_history_path = DATA_DIR / "history" / "market_movements.csv"
+movement_history = (
+    pd.read_csv(movement_history_path)
+    if movement_history_path.exists()
+    else movements
+)
 path_status = path_data.get("path_status", pd.DataFrame())
 snapshots = path_data.get("snapshots", pd.DataFrame())
 history = static.get("history", pd.DataFrame())
@@ -53,9 +59,9 @@ tabs = st.tabs(["Tournament insights", "Match story", "Timeline", "Model perform
 with tabs[0]:
     render_tournament_insights(prices, tables, movements, path_status, snapshots=snapshots, prediction_ledger=prediction_ledger)
 with tabs[1]:
-    render_match_story(prediction_ledger, movements, processed_ledger)
+    render_match_story(prediction_ledger, movement_history, processed_ledger)
 with tabs[2]:
-    render_tournament_timeline(processed_ledger, movements)
+    render_tournament_timeline(processed_ledger, movement_history)
 with tabs[3]:
     render_model_performance()
 with tabs[4]:

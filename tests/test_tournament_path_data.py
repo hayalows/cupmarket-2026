@@ -12,6 +12,7 @@ from features.tournament_path_data import (
     status_label,
     team_fixtures,
     team_next_knockout_slot,
+    team_summary,
     tournament_summary,
 )
 
@@ -180,6 +181,60 @@ class TournamentPathDataTests(unittest.TestCase):
         self.assertEqual(row["state"], "One team through")
         self.assertEqual(canada_slot["match_number"], 90)
         self.assertEqual(canada_slot["fixture"], "Canada vs Germany/Paraguay winner")
+
+    def test_team_summary_prefers_played_event_and_keeps_latest_refresh(self):
+        movements = pd.DataFrame(
+            [
+                {
+                    "team": "Canada",
+                    "snapshot_id": "2026-06-28T21:42:00Z",
+                    "price_before": 32.09,
+                    "price_after": 38.00,
+                    "price_change": 5.91,
+                    "movement_type": "match_event",
+                    "relationship_to_event": "played",
+                    "trigger_matches": "South Africa 0-1 Canada",
+                },
+                {
+                    "team": "Canada",
+                    "snapshot_id": "2026-06-29T04:42:00Z",
+                    "price_before": 43.65,
+                    "price_after": 43.57,
+                    "price_change": -0.08,
+                    "movement_type": "publication_refresh",
+                    "relationship_to_event": "publication_refresh",
+                    "trigger_matches": "Official knockout model refresh",
+                },
+                {
+                    "team": "Brazil",
+                    "snapshot_id": "2026-06-28T21:42:00Z",
+                    "price_before": 38.00,
+                    "price_after": 37.05,
+                    "movement_type": "match_event",
+                    "relationship_to_event": "other",
+                    "trigger_matches": "South Africa 0-1 Canada",
+                },
+            ]
+        )
+        data = {
+            "prices": pd.DataFrame(
+                {"team": ["Canada", "Brazil"], "cupmarket_price": [43.57, 39.07]}
+            ),
+            "path_status": pd.DataFrame(),
+            "movement_history": movements,
+            "movements": pd.DataFrame(),
+            "opponents": pd.DataFrame(),
+            "progress": pd.DataFrame(),
+            "bracket": pd.DataFrame(),
+        }
+
+        canada = team_summary(data, "Canada")
+        brazil = team_summary(data, "Brazil")
+
+        self.assertEqual(canada["movement"]["trigger_matches"], "South Africa 0-1 Canada")
+        self.assertEqual(canada["movement"]["movement_type"], "match_event")
+        self.assertEqual(canada["latest_movement"]["movement_type"], "publication_refresh")
+        self.assertTrue(brazil["movement"].empty)
 
 
 if __name__ == "__main__":

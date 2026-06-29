@@ -406,33 +406,74 @@ def _render_market_reaction(
     movement: pd.Series,
     history: pd.DataFrame,
     team: str,
+    price: pd.Series | None = None,
+    latest_movement: pd.Series | None = None,
 ) -> None:
     st.markdown("### Market reaction")
     if movement.empty:
         st.info(
-            "Event-level market movement will appear after a completed result is archived."
+            "A direct country market reaction will appear after this country has a completed result or a model refresh changes its price."
         )
     else:
+        movement_type = str(movement.get("movement_type") or "match_event")
+        is_match_event = movement_type == "match_event"
+        current_price = pd.to_numeric(
+            price.get("cupmarket_price") if isinstance(price, pd.Series) else None,
+            errors="coerce",
+        )
+        after_price = pd.to_numeric(movement.get("price_after"), errors="coerce")
         columns = st.columns(4)
-        columns[0].metric("Before this event", _number(movement.get("price_before"), suffix=" CM"))
-        columns[1].metric("After this event", _number(movement.get("price_after"), suffix=" CM"))
+        columns[0].metric(
+            "Before result" if is_match_event else "Before refresh",
+            _number(movement.get("price_before"), suffix=" CM"),
+        )
+        columns[1].metric(
+            "First post-result price" if is_match_event else "Refresh price",
+            _number(movement.get("price_after"), suffix=" CM"),
+        )
         change = pd.to_numeric(movement.get("price_change"), errors="coerce")
         percent = pd.to_numeric(movement.get("price_change_percent"), errors="coerce")
         delta = "—" if pd.isna(change) else f"{float(change):+.2f} CM"
         if pd.notna(percent):
             delta += f" · {float(percent):+.2f}%"
-        columns[2].metric("Event movement", delta)
-        relationship = str(movement.get("relationship_to_event") or "other").replace("_", " ").title()
-        columns[3].metric("Relationship", relationship)
+        columns[2].metric("Result move" if is_match_event else "Refresh move", delta)
+        columns[3].metric(
+            "Current price now",
+            f"{float(current_price):.2f} CM" if pd.notna(current_price) else "—",
+        )
+        if pd.notna(current_price) and pd.notna(after_price):
+            since_event = float(current_price) - float(after_price)
+            if abs(since_event) > 0.005:
+                st.info(
+                    f"{team}'s current price is {since_event:+.2f} CM from the "
+                    f"{'first post-result' if is_match_event else 'refresh'} price shown here. "
+                    "That gap comes from later official model publications."
+                )
         trigger = movement.get("trigger_matches")
         if trigger:
-            st.caption(f"Trigger: {trigger}")
+            st.caption(f"{'Trigger' if is_match_event else 'Publication'}: {trigger}")
+        snapshot_time = movement.get("snapshot_id")
+        if snapshot_time:
+            st.caption(f"Movement snapshot: {_timestamp(snapshot_time)}.")
         source = str(movement.get("before_source") or "").replace("_", " ")
         if source:
             st.caption(f"Before value source: {source}.")
+        if (
+            isinstance(latest_movement, pd.Series)
+            and not latest_movement.empty
+            and str(latest_movement.get("snapshot_id")) != str(movement.get("snapshot_id"))
+        ):
+            latest_type = str(latest_movement.get("movement_type") or "").replace("_", " ")
+            st.caption(
+                "Latest price-publication movement: "
+                f"{_number(latest_movement.get('price_before'), suffix=' CM')} -> "
+                f"{_number(latest_movement.get('price_after'), suffix=' CM')} "
+                f"({_number(latest_movement.get('price_change'), suffix=' CM')})"
+                f" from {latest_type or 'model refresh'}."
+            )
         st.caption(
-            "This is the movement from the model update linked to the result above. "
-            "The current price card can be newer if later official updates have run."
+            "Match-result movement and current price are separate timestamps. "
+            "Use current price for where the market stands now."
         )
 
     if history.empty or "team" not in history.columns:
@@ -749,7 +790,13 @@ def render_tournament_path_page() -> None:
     else:
         st.dataframe(fixture_display, hide_index=True, use_container_width=True)
 
-    _render_market_reaction(selected["movement"], data["history"], team)
+    _render_market_reaction(
+        selected["movement"],
+        data["history"],
+        team,
+        price,
+        selected.get("latest_movement", pd.Series(dtype=object)),
+    )
     _render_tournament_fixtures(data)
 
     render_official_data_caption(data["prices"], label="Country market")

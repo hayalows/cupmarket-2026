@@ -39,7 +39,14 @@ def _read_summary(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _event_details(summary: dict) -> tuple[str, str, str, str]:
+def _publication_label(summary: dict) -> str:
+    phase = str(summary.get("pipeline_phase") or "").strip()
+    if phase == "knockout_stage":
+        return "Official knockout model refresh"
+    return "Official model refresh"
+
+
+def _movement_details(summary: dict) -> tuple[str, str, str, str, str]:
     matches = summary.get("new_matches") or []
     ids = sorted(
         str(int(match["match_id"]))
@@ -47,7 +54,16 @@ def _event_details(summary: dict) -> tuple[str, str, str, str]:
         if match.get("match_id") is not None
     )
     if not ids:
-        raise ValueError("Updated run has no triggering match IDs")
+        completed_at = str(summary.get("completed_at_utc", "")).strip()
+        if not completed_at:
+            raise ValueError("Updated run has no completed_at_utc value")
+        return (
+            "publication:" + completed_at,
+            "",
+            _publication_label(summary),
+            "publication_refresh",
+            "publication_refresh",
+        )
     labels = [
         f"{match.get('home_team')} {match.get('home_score')}-"
         f"{match.get('away_score')} {match.get('away_team')}"
@@ -55,7 +71,7 @@ def _event_details(summary: dict) -> tuple[str, str, str, str]:
     ]
     scope = "single_match" if len(ids) == 1 else "match_batch"
     event_id = "matches:" + "|".join(ids)
-    return event_id, "|".join(ids), " | ".join(labels), scope
+    return event_id, "|".join(ids), " | ".join(labels), scope, "match_event"
 
 
 def _latest_prior_snapshot(
@@ -68,15 +84,20 @@ def _latest_prior_snapshot(
     if not required.issubset(snapshots.columns):
         return pd.DataFrame()
 
-    candidates = snapshots.loc[
-        snapshots["snapshot_id"].astype(str) != str(current_snapshot_id)
-    ].copy()
-    if candidates.empty:
-        return pd.DataFrame()
-
+    current_time = pd.to_datetime(current_snapshot_id, errors="coerce", utc=True)
+    candidates = snapshots.copy()
     candidates["_snapshot_time"] = pd.to_datetime(
         candidates["snapshot_id"], errors="coerce", utc=True
     )
+    if pd.notna(current_time):
+        candidates = candidates.loc[candidates["_snapshot_time"] < current_time]
+    else:
+        candidates = candidates.loc[
+            candidates["snapshot_id"].astype(str) != str(current_snapshot_id)
+        ]
+    if candidates.empty:
+        return pd.DataFrame()
+
     candidates = candidates.loc[candidates["_snapshot_time"].notna()]
     if candidates.empty:
         return pd.DataFrame()
@@ -113,7 +134,9 @@ def build_market_movements(
     if not completed_at:
         raise ValueError("Updated run summary has no completed_at_utc value")
 
-    event_id, trigger_ids, trigger_matches, scope = _event_details(summary)
+    event_id, trigger_ids, trigger_matches, scope, movement_type = (
+        _movement_details(summary)
+    )
     prior = _latest_prior_snapshot(prior_snapshots, completed_at)
     prior_price = _prior_lookup(prior, "cupmarket_price")
     prior_elo = _prior_lookup(prior, "live_elo")
@@ -173,13 +196,15 @@ def build_market_movements(
     result["trigger_match_ids"] = trigger_ids
     result["trigger_matches"] = trigger_matches
     result["attribution_scope"] = scope
-    result["movement_type"] = "match_event"
+    result["movement_type"] = movement_type
     result["before_source"] = np.where(
         archived_before.notna(),
         "previous_archived_snapshot",
         "prices_previous_price_fallback",
     )
-    result["individual_match_attribution_available"] = scope == "single_match"
+    result["individual_match_attribution_available"] = (
+        movement_type == "match_event" and scope == "single_match"
+    )
 
     played = {
         str(team)
@@ -189,14 +214,17 @@ def build_market_movements(
     }
     team_group = dict(zip(result["team"].astype(str), result["group"].astype(str)))
     played_groups = {team_group[team] for team in played if team in team_group}
-    result["relationship_to_event"] = [
-        "played"
-        if str(team) in played
-        else "same_group"
-        if str(group) in played_groups
-        else "other"
-        for team, group in zip(result["team"], result["group"])
-    ]
+    if movement_type == "match_event":
+        result["relationship_to_event"] = [
+            "played"
+            if str(team) in played
+            else "same_group"
+            if str(group) in played_groups
+            else "other"
+            for team, group in zip(result["team"], result["group"])
+        ]
+    else:
+        result["relationship_to_event"] = "publication_refresh"
 
     drop_columns = [
         "cupmarket_price",
@@ -221,6 +249,21 @@ def _append_unique(path: Path, rows: pd.DataFrame) -> int:
     return int(added)
 
 
+def _has_meaningful_movement(rows: pd.DataFrame) -> bool:
+    for column in [
+        "price_change",
+        "elo_change",
+        "round_32_probability_change",
+        "champion_probability_change",
+    ]:
+        if column not in rows.columns:
+            continue
+        values = pd.to_numeric(rows[column], errors="coerce").abs()
+        if values.gt(1e-9).any():
+            return True
+    return False
+
+
 def archive_market_movements(repo_root: Path) -> dict:
     if not market_impact_is_enabled():
         return {"status": "disabled"}
@@ -230,8 +273,6 @@ def archive_market_movements(repo_root: Path) -> dict:
     summary = _read_summary(state_dir / "last_automation_run.json")
     if summary.get("status") != "updated":
         return {"status": "skipped", "reason": str(summary.get("status"))}
-    if int(summary.get("new_finished_matches", 0) or 0) <= 0:
-        return {"status": "skipped", "reason": "no_new_finished_matches"}
 
     prices_path = data_dir / "cupmarket_prices_latest.csv"
     if not prices_path.exists():
@@ -246,6 +287,9 @@ def archive_market_movements(repo_root: Path) -> dict:
         else pd.DataFrame()
     )
     movements = build_market_movements(prices, summary, snapshots)
+    movement_type = str(movements["movement_type"].iloc[0])
+    if movement_type != "match_event" and not _has_meaningful_movement(movements):
+        return {"status": "skipped", "reason": "no_meaningful_price_movement"}
 
     archive_path = history_dir / "market_movements.csv"
     latest_path = data_dir / "market_movements_latest.csv"

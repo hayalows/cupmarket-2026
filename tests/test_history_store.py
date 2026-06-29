@@ -56,6 +56,28 @@ class TournamentHistoryStoreTests(unittest.TestCase):
             self.assertEqual(result["reason"], "no_new_finished_match")
             self.assertFalse((root / "data" / "history").exists())
 
+    def test_archives_publication_refresh_without_match_impacts(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._write_repository_fixture(root)
+            summary_path = root / "backend" / "state" / "last_automation_run.json"
+            summary = json.loads(summary_path.read_text(encoding="utf-8"))
+            summary["new_finished_matches"] = 0
+            summary["new_matches"] = []
+            summary_path.write_text(json.dumps(summary), encoding="utf-8")
+
+            result = archive_latest_outputs(root)
+            snapshots = pd.read_csv(root / "data" / "history" / "team_snapshots.csv")
+            bracket = pd.read_csv(root / "data" / "history" / "bracket_snapshots.csv")
+
+            self.assertEqual(result["status"], "archived")
+            self.assertEqual(result["rows_added"]["team_snapshots"], 2)
+            self.assertEqual(result["rows_added"]["bracket_snapshots"], 2)
+            self.assertEqual(result["rows_added"]["elo_events"], 0)
+            self.assertEqual(result["rows_added"]["match_impacts"], 0)
+            self.assertEqual(set(snapshots["snapshot_type"]), {"publication_refresh"})
+            self.assertEqual(len(bracket), 2)
+
     def test_elo_event_reconstructs_before_and_after_values(self):
         with TemporaryDirectory() as directory:
             root = Path(directory)

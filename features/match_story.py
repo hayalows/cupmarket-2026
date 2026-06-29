@@ -142,10 +142,40 @@ def render_match_story(prediction_ledger: pd.DataFrame, market_movements: pd.Dat
         )
 
     if isinstance(market_movements, pd.DataFrame) and not market_movements.empty and "team" in market_movements.columns:
-        focus = market_movements.loc[market_movements["team"].astype(str).isin([str(row.get("home_team")), str(row.get("away_team"))])].copy()
+        teams = [str(row.get("home_team")), str(row.get("away_team"))]
+        focus = market_movements.loc[market_movements["team"].astype(str).isin(teams)].copy()
+        if not focus.empty and "trigger_matches" in focus.columns:
+            trigger_text = focus["trigger_matches"].astype(str)
+            related = focus.loc[
+                trigger_text.str.contains(teams[0], regex=False, na=False)
+                | trigger_text.str.contains(teams[1], regex=False, na=False)
+            ].copy()
+            if not related.empty:
+                focus = related
+            elif "relationship_to_event" in focus.columns:
+                focus = focus.loc[
+                    ~focus["relationship_to_event"].astype(str).eq("other")
+                ].copy()
+        if not focus.empty and "snapshot_id" in focus.columns:
+            focus["snapshot_id"] = pd.to_datetime(
+                focus["snapshot_id"], errors="coerce", utc=True
+            )
+            focus = focus.sort_values("snapshot_id").groupby("team", as_index=False).tail(1)
         if not focus.empty:
             st.markdown("### Market impact for the teams involved")
-            keep = [c for c in ["team", "price_before", "price_after", "price_change", "price_change_percent", "trigger_matches"] if c in focus.columns]
+            keep = [
+                c
+                for c in [
+                    "team",
+                    "movement_type",
+                    "price_before",
+                    "price_after",
+                    "price_change",
+                    "price_change_percent",
+                    "trigger_matches",
+                ]
+                if c in focus.columns
+            ]
             st.dataframe(focus[keep], hide_index=True, use_container_width=True)
         else:
-            st.caption("No direct market movement row found for these teams in the latest movement file.")
+            st.caption("No direct market movement row found for these teams in the movement archive.")

@@ -94,7 +94,15 @@ def _latest_event(movements: pd.DataFrame) -> str:
     value = movements["trigger_matches"].dropna()
     if value.empty:
         return "No recent match batch found."
-    return str(value.iloc[0]).replace(" | ", " · ")
+    label = str(value.iloc[0]).replace(" | ", " · ")
+    movement_type = ""
+    if "movement_type" in movements.columns:
+        movement_values = movements["movement_type"].dropna()
+        if not movement_values.empty:
+            movement_type = str(movement_values.iloc[0])
+    if movement_type == "publication_refresh":
+        return f"Latest market publication: {label}."
+    return f"Latest match event: {label}."
 
 
 def _qualifying_frame(prices: pd.DataFrame, threshold: float = 0.999) -> pd.DataFrame:

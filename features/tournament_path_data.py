@@ -18,6 +18,7 @@ BRACKET_STATE_PATH = DATA_DIR / "official_round_32_bracket_lock.json"
 OPPONENT_METADATA_PATH = DATA_DIR / "round_32_opponent_probabilities_metadata.json"
 KNOCKOUT_PROGRESS_PATH = DATA_DIR / "knockout_progress_latest.csv"
 MARKET_MOVEMENT_PATH = DATA_DIR / "market_movements_latest.csv"
+MARKET_MOVEMENT_HISTORY_PATH = HISTORY_DIR / "market_movements.csv"
 TEAM_SNAPSHOTS_PATH = HISTORY_DIR / "team_snapshots.csv"
 
 ACTIVE_STATUSES = {"IN_PLAY", "PAUSED"}
@@ -219,6 +220,7 @@ def load_tournament_path_data() -> dict[str, Any]:
         "opponent_metadata": load_latest_json(OPPONENT_METADATA_PATH),
         "progress": load_latest_csv(KNOCKOUT_PROGRESS_PATH),
         "movements": load_latest_csv(MARKET_MOVEMENT_PATH),
+        "movement_history": load_latest_csv(MARKET_MOVEMENT_HISTORY_PATH),
         "snapshots": load_latest_csv(TEAM_SNAPSHOTS_PATH),
     }
 
@@ -230,6 +232,7 @@ def available_teams(data: dict[str, Any]) -> list[str]:
         ("path_status", "team"),
         ("opponents", "team"),
         ("movements", "team"),
+        ("movement_history", "team"),
         ("snapshots", "team"),
     ):
         frame = data.get(key)
@@ -289,6 +292,34 @@ def latest_team_row(
             rows = rows.sort_values(timestamp_column, na_position="first")
             break
     return rows.iloc[-1]
+
+
+def latest_direct_event_movement(frame: pd.DataFrame, team: str) -> pd.Series:
+    if frame.empty or "team" not in frame.columns:
+        return pd.Series(dtype=object)
+    rows = frame.loc[frame["team"].astype(str) == str(team)].copy()
+    if rows.empty:
+        return pd.Series(dtype=object)
+    if "movement_type" in rows.columns:
+        rows = rows.loc[rows["movement_type"].astype(str).eq("match_event")]
+    if "relationship_to_event" in rows.columns:
+        rows = rows.loc[rows["relationship_to_event"].astype(str).eq("played")]
+    if rows.empty:
+        return pd.Series(dtype=object)
+    return latest_team_row(rows, team)
+
+
+def latest_relevant_movement(frame: pd.DataFrame, team: str) -> pd.Series:
+    if frame.empty or "team" not in frame.columns:
+        return pd.Series(dtype=object)
+    rows = frame.loc[frame["team"].astype(str) == str(team)].copy()
+    if rows.empty:
+        return pd.Series(dtype=object)
+    if "relationship_to_event" in rows.columns:
+        rows = rows.loc[~rows["relationship_to_event"].astype(str).eq("other")]
+    if rows.empty:
+        return pd.Series(dtype=object)
+    return latest_team_row(rows, team)
 
 
 def opponent_options(
@@ -390,7 +421,12 @@ def tournament_summary(data: dict[str, Any]) -> dict[str, Any]:
 def team_summary(data: dict[str, Any], team: str) -> dict[str, Any]:
     price = latest_team_row(data.get("prices", pd.DataFrame()), team)
     path = latest_team_row(data.get("path_status", pd.DataFrame()), team)
-    movement = latest_team_row(data.get("movements", pd.DataFrame()), team)
+    movement_source = data.get("movement_history", pd.DataFrame())
+    if not isinstance(movement_source, pd.DataFrame) or movement_source.empty:
+        movement_source = data.get("movements", pd.DataFrame())
+    event_movement = latest_direct_event_movement(movement_source, team)
+    latest_movement = latest_relevant_movement(movement_source, team)
+    movement = event_movement if not event_movement.empty else latest_movement
     opponents = opponent_options(data.get("opponents", pd.DataFrame()), team)
     fixtures = team_fixtures(
         data.get("progress", pd.DataFrame()),
@@ -402,6 +438,8 @@ def team_summary(data: dict[str, Any], team: str) -> dict[str, Any]:
         "price": price,
         "path": path,
         "movement": movement,
+        "event_movement": event_movement,
+        "latest_movement": latest_movement,
         "opponents": opponents,
         "fixtures": fixtures,
     }

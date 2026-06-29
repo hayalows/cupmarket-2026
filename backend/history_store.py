@@ -124,7 +124,11 @@ def build_team_snapshots(prices: pd.DataFrame, summary: dict) -> pd.DataFrame:
     result.insert(0, "snapshot_id", snapshot_id)
     result["trigger_match_ids"] = trigger_ids
     result["trigger_matches"] = trigger_matches
-    result["snapshot_type"] = "post_match_update"
+    result["snapshot_type"] = (
+        "post_match_update"
+        if int(summary.get("new_finished_matches", 0) or 0) > 0
+        else "publication_refresh"
+    )
     return result
 
 
@@ -325,8 +329,7 @@ def archive_latest_outputs(repo_root: Path) -> dict:
 
     if summary.get("status") != "updated":
         return {"status": "skipped", "reason": str(summary.get("status"))}
-    if int(summary.get("new_finished_matches", 0) or 0) <= 0:
-        return {"status": "skipped", "reason": "no_new_finished_matches"}
+    new_finished_matches = int(summary.get("new_finished_matches", 0) or 0)
 
     prices = _read_csv(
         data_dir / "cupmarket_prices_latest.csv",
@@ -352,22 +355,26 @@ def archive_latest_outputs(repo_root: Path) -> dict:
             build_team_snapshots(prices, summary),
             TEAM_SNAPSHOT_KEYS,
         ),
-        "elo_events": _append_unique(
-            paths.elo_events,
-            build_elo_events(prices, summary),
-            ELO_EVENT_KEYS,
-        ),
-        "match_impacts": _append_unique(
-            paths.match_impacts,
-            build_match_impacts(prices, summary),
-            MATCH_IMPACT_KEYS,
-        ),
         "bracket_snapshots": _append_unique(
             paths.bracket_snapshots,
             build_bracket_snapshots(probabilities, group_tables, summary),
             BRACKET_SNAPSHOT_KEYS,
         ),
     }
+    if new_finished_matches > 0:
+        added["elo_events"] = _append_unique(
+            paths.elo_events,
+            build_elo_events(prices, summary),
+            ELO_EVENT_KEYS,
+        )
+        added["match_impacts"] = _append_unique(
+            paths.match_impacts,
+            build_match_impacts(prices, summary),
+            MATCH_IMPACT_KEYS,
+        )
+    else:
+        added["elo_events"] = 0
+        added["match_impacts"] = 0
     return {
         "status": "archived",
         "baseline_created": baseline_created,

@@ -81,6 +81,24 @@ class MarketImpactStoreTests(unittest.TestCase):
             self.assertEqual(second["rows_added"], 0)
             self.assertEqual(len(archive), 2)
 
+    def test_no_new_match_publication_is_archived_as_refresh(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._write_fixture(root, match_count=0)
+
+            result = archive_market_movements(root)
+            latest = pd.read_csv(root / "data" / "market_movements_latest.csv")
+            ghana = latest.loc[latest["team"] == "Ghana"].iloc[0]
+
+            self.assertEqual(result["status"], "archived")
+            self.assertEqual(result["attribution_scope"], "publication_refresh")
+            self.assertEqual(ghana["movement_type"], "publication_refresh")
+            self.assertEqual(ghana["relationship_to_event"], "publication_refresh")
+            self.assertFalse(bool(ghana["individual_match_attribution_available"]))
+            self.assertEqual(ghana["trigger_matches"], "Official model refresh")
+            self.assertAlmostEqual(float(ghana["price_before"]), 7.10)
+            self.assertAlmostEqual(float(ghana["price_after"]), 13.69)
+
     @staticmethod
     def _write_fixture(
         root: Path,
@@ -169,15 +187,17 @@ class MarketImpactStoreTests(unittest.TestCase):
             history / "team_snapshots.csv", index=False
         )
 
-        matches = [
-            {
-                "match_id": 9001,
-                "home_team": "Ghana",
-                "away_team": "Panama",
-                "home_score": 1,
-                "away_score": 0,
-            }
-        ]
+        matches = []
+        if match_count:
+            matches.append(
+                {
+                    "match_id": 9001,
+                    "home_team": "Ghana",
+                    "away_team": "Panama",
+                    "home_score": 1,
+                    "away_score": 0,
+                }
+            )
         if match_count == 2:
             matches.append(
                 {
