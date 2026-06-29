@@ -23,7 +23,7 @@ st.set_page_config(
     page_title="CupMarket 2026",
     page_icon="⚽",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",
 )
 
 APP_ROOT = Path(__file__).resolve().parent
@@ -653,9 +653,7 @@ production_health = build_production_health(
 
 inject_product_styles()
 
-NAV_LABELS = {
-    "Overview": "Tournament",
-}
+page = "Overview"
 
 with st.sidebar:
     st.markdown(
@@ -671,13 +669,6 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
 
-    page = st.radio(
-        "Choose a page",
-        list(NAV_LABELS),
-        format_func=lambda item: NAV_LABELS[item],
-        label_visibility="collapsed",
-    )
-
     st.markdown(
         '<div class="cm-side-label">Start here</div>',
         unsafe_allow_html=True,
@@ -689,16 +680,6 @@ with st.sidebar:
 
     with st.expander("More", expanded=False):
         st.page_link("pages/11_Tournament_Insights.py", label="Analysis Lab")
-        st.page_link("pages/1_Match_Intelligence.py", label="Live Match Room", icon="⚽")
-        st.page_link("pages/5_Market_Story.py", label="Market Story")
-        st.page_link("pages/2_Qualification_Lab.py", label="Group Archive", icon="🧭")
-        st.page_link("pages/3_Live_Group_Centre.py", label="Group Centre", icon="📊")
-        st.page_link("pages/10_Glossary.py", label="Guide")
-
-    st.markdown(
-        '<div class="cm-side-label">System status</div>',
-        unsafe_allow_html=True,
-    )
 
     source = match_metadata.get("source", "Unknown")
     score_time = "Waiting for data"
@@ -715,22 +696,25 @@ with st.sidebar:
             utc=True,
         ).strftime("%H:%M UTC")
 
-    st.markdown(
-        f'''
-        <div class="cm-side-row">
-            <b>{production_health.get("status", "Unknown")}</b><br>
-            Scores · {source} · {score_time}<br>
-            Model · {simulation_time}
-        </div>
-        ''',
-        unsafe_allow_html=True,
-    )
+    with st.expander("System status", expanded=False):
+        st.markdown(
+            f'''
+            <div class="cm-side-row">
+                <b>{production_health.get("status", "Unknown")}</b><br>
+                Scores · {source} · {score_time}<br>
+                Model · {simulation_time}
+            </div>
+            ''',
+            unsafe_allow_html=True,
+        )
 
-    if match_metadata.get("warning"):
-        st.caption(match_metadata["warning"])
+        if match_metadata.get("warning"):
+            st.caption(match_metadata["warning"])
 
-    st.caption("Match data provided by football-data.org")
-    render_project_credit(compact=True)
+        st.caption("Match data provided by football-data.org")
+
+    with st.expander("About", expanded=False):
+        render_project_credit(compact=True)
 
 render_page_header(page, production_health, phase5_meta)
 

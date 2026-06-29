@@ -59,13 +59,10 @@ def render_specialist_sidebar(active_page: str) -> None:
 
         with st.expander("More", expanded=False):
             st.page_link("pages/11_Tournament_Insights.py", label="Analysis Lab", icon="💡")
-            st.page_link("pages/1_Match_Intelligence.py", label="Live Match Room", icon="🎯")
-            st.page_link("pages/5_Market_Story.py", label="Market Story", icon="📈")
-            st.page_link("pages/2_Qualification_Lab.py", label="Group Archive", icon="🧭")
-            st.page_link("pages/3_Live_Group_Centre.py", label="Group Centre", icon="📋")
-            st.page_link("pages/10_Glossary.py", label="Guide", icon="ℹ️")
-        render_project_credit(compact=True)
-        st.link_button("View the project on GitHub", PROJECT_REPOSITORY)
+
+        with st.expander("About", expanded=False):
+            render_project_credit(compact=True)
+            st.link_button("View the project on GitHub", PROJECT_REPOSITORY)
 
 
 def render_page_guide(title: str, description: str, steps: list[tuple[str, str]]) -> None:

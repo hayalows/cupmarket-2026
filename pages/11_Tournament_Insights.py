@@ -18,6 +18,20 @@ render_specialist_sidebar("insights")
 st.markdown('''<div class="cm-hero"><div class="cm-eyebrow">CupMarket 2026 · Analysis Lab</div><h1>The tournament story, model audit and archive.</h1><p>Review what changed, what the model learned, how prices moved, and what evidence will remain after the final.</p></div>''', unsafe_allow_html=True)
 st.info("Trust guide: official results are fixed, projected paths can still change, and adaptive ratings are an audit layer only for now.")
 
+st.markdown("### Specialist tools")
+st.caption("Use these when you want a deeper drawer. The main journey stays in Tournament, Country, Matches and Bracket.")
+tool_cols = st.columns(5)
+with tool_cols[0]:
+    st.page_link("pages/1_Match_Intelligence.py", label="Live Match Room")
+with tool_cols[1]:
+    st.page_link("pages/5_Market_Story.py", label="Market Story")
+with tool_cols[2]:
+    st.page_link("pages/2_Qualification_Lab.py", label="Group Archive")
+with tool_cols[3]:
+    st.page_link("pages/3_Live_Group_Centre.py", label="Group Centre")
+with tool_cols[4]:
+    st.page_link("pages/10_Glossary.py", label="Guide")
+
 static = load_static_data()
 path_data = load_tournament_path_data()
 prices = static.get("prices", pd.DataFrame())
