@@ -34,6 +34,39 @@ STAGE_ORDER = {
 }
 
 
+NEXT_STAGE_LABELS = {
+    "LAST_32": "Round of 16",
+    "ROUND_OF_32": "Round of 16",
+    "R32": "Round of 16",
+    "LAST_16": "Quarter-final",
+    "ROUND_OF_16": "Quarter-final",
+    "R16": "Quarter-final",
+    "QUARTER_FINALS": "Semi-final",
+    "QUARTER_FINAL": "Semi-final",
+    "QF": "Semi-final",
+    "SEMI_FINALS": "Final",
+    "SEMI_FINAL": "Final",
+    "SF": "Final",
+    "FINAL": "Champion",
+}
+
+NEXT_STAGE_PROBABILITY_COLUMNS = {
+    "LAST_32": ("Reach Round of 16", "prob_reach_round_16"),
+    "ROUND_OF_32": ("Reach Round of 16", "prob_reach_round_16"),
+    "R32": ("Reach Round of 16", "prob_reach_round_16"),
+    "LAST_16": ("Reach Quarter-final", "prob_reach_quarter_final"),
+    "ROUND_OF_16": ("Reach Quarter-final", "prob_reach_quarter_final"),
+    "R16": ("Reach Quarter-final", "prob_reach_quarter_final"),
+    "QUARTER_FINALS": ("Reach Semi-final", "prob_reach_semi_final"),
+    "QUARTER_FINAL": ("Reach Semi-final", "prob_reach_semi_final"),
+    "QF": ("Reach Semi-final", "prob_reach_semi_final"),
+    "SEMI_FINALS": ("Reach Final", "prob_reach_final"),
+    "SEMI_FINAL": ("Reach Final", "prob_reach_final"),
+    "SF": ("Reach Final", "prob_reach_final"),
+    "FINAL": ("Become champion", "prob_champion"),
+}
+
+
 PREDICTION_EXPLAINER = (
     "Future knockout fixtures can be missing match-level predictions when one or both teams "
     "are still placeholders. The model needs real teams to calculate expected goals, win "
@@ -101,6 +134,96 @@ def _fixture_readiness(row: pd.Series) -> str:
     return "Waiting for teams"
 
 
+def _latest_finished_fixture(fixtures: pd.DataFrame) -> pd.Series:
+    if fixtures.empty or "status" not in fixtures.columns:
+        return pd.Series(dtype=object)
+    rows = fixtures.loc[
+        fixtures["status"].astype(str).str.upper().isin({"FINISHED", "AWARDED"})
+    ].copy()
+    if rows.empty:
+        return pd.Series(dtype=object)
+    if "utc_date" in rows.columns:
+        rows["utc_date"] = pd.to_datetime(rows["utc_date"], errors="coerce", utc=True)
+        rows = rows.sort_values("utc_date", ascending=False, na_position="last")
+    return rows.iloc[0]
+
+
+def _advancing_team(fixture: pd.Series) -> str:
+    advancing = fixture.get("advancing_team")
+    if advancing and str(advancing).lower() != "nan":
+        return str(advancing)
+    home = _clean_team(fixture.get("home_team"))
+    away = _clean_team(fixture.get("away_team"))
+    winner = str(fixture.get("winner", "") or "").upper()
+    if winner == "HOME_TEAM":
+        return home
+    if winner == "AWAY_TEAM":
+        return away
+    home_score = pd.to_numeric(
+        fixture.get("home_score", fixture.get("home_score_full_time")),
+        errors="coerce",
+    )
+    away_score = pd.to_numeric(
+        fixture.get("away_score", fixture.get("away_score_full_time")),
+        errors="coerce",
+    )
+    if pd.notna(home_score) and pd.notna(away_score):
+        if home_score > away_score:
+            return home
+        if away_score > home_score:
+            return away
+    return ""
+
+
+def _team_result_state(fixture: pd.Series, team: str) -> dict[str, str]:
+    if fixture.empty:
+        return {}
+    home = _clean_team(fixture.get("home_team"))
+    away = _clean_team(fixture.get("away_team"))
+    opponent = away if home == team else home
+    advancing = _advancing_team(fixture)
+    stage = str(fixture.get("stage") or "")
+    score = _score(fixture)
+    result = f"{home} {score} {away}"
+    if advancing == team:
+        next_stage = NEXT_STAGE_LABELS.get(stage, "next round")
+        status = "Champion" if next_stage == "Champion" else f"Advanced to {next_stage}"
+        message = f"Result fixed: **{team} advanced** after {result}."
+        outcome = "Advanced"
+    else:
+        status = f"Eliminated in {stage_label(stage)}"
+        message = f"Result fixed: **{team} is out** after {result}."
+        outcome = "Eliminated"
+    return {
+        "status": status,
+        "message": message,
+        "outcome": outcome,
+        "opponent": opponent,
+        "result": result,
+        "stage": stage,
+    }
+
+
+def _reach_metric_for_state(
+    price: pd.Series,
+    path: pd.Series,
+    fixture: pd.Series,
+) -> tuple[str, object]:
+    if not fixture.empty:
+        stage = str(fixture.get("stage") or "")
+        label, column = NEXT_STAGE_PROBABILITY_COLUMNS.get(
+            stage,
+            ("Reach Round of 16", "prob_reach_round_16"),
+        )
+        return label, price.get(column)
+    return (
+        "Reach Round of 32",
+        path.get("prob_reach_round_32")
+        if not path.empty
+        else price.get("prob_reach_round_32"),
+    )
+
+
 def _team_fixture_table(fixtures: pd.DataFrame, team: str) -> pd.DataFrame:
     if fixtures.empty:
         return fixtures
@@ -118,6 +241,8 @@ def _team_fixture_table(fixtures: pd.DataFrame, team: str) -> pd.DataFrame:
         rows.append(
             {
                 "Stage": stage_label(values.get("stage")),
+                "Outcome": outcome,
+                "Fixture": f"{home} {_score(series)} {away}",
                 "Kickoff · UTC": _timestamp(values.get("utc_date")),
                 "Opponent": opponent,
                 "Status": str(values.get("status", "Pending")).replace("_", " ").title(),
@@ -126,10 +251,32 @@ def _team_fixture_table(fixtures: pd.DataFrame, team: str) -> pd.DataFrame:
                 "Team outcome": outcome,
             }
         )
-    return pd.DataFrame(rows)
+    table = pd.DataFrame(rows)
+    first_columns = ["Stage", "Outcome", "Fixture", "Opponent"]
+    ordered_columns = first_columns + [
+        column for column in table.columns if column not in first_columns
+    ]
+    return table[ordered_columns]
 
 
-def _render_path_message(path: pd.Series, opponents: pd.DataFrame) -> None:
+def _render_path_message(
+    path: pd.Series,
+    opponents: pd.DataFrame,
+    fixture_result: pd.Series,
+    team: str,
+) -> None:
+    result_state = _team_result_state(fixture_result, team)
+    if result_state:
+        if result_state["outcome"] == "Advanced":
+            st.success(result_state["message"])
+        else:
+            st.error(result_state["message"])
+        st.caption(
+            "This is based on the completed knockout fixture, so projected opponent "
+            "tables are hidden for this completed round."
+        )
+        return
+
     if path.empty:
         st.info(
             "A projected opponent path has not been published yet. The current price and "
@@ -241,8 +388,8 @@ def _render_market_reaction(
         )
     else:
         columns = st.columns(4)
-        columns[0].metric("Before event", _number(movement.get("price_before"), suffix=" CM"))
-        columns[1].metric("After event", _number(movement.get("price_after"), suffix=" CM"))
+        columns[0].metric("Before this event", _number(movement.get("price_before"), suffix=" CM"))
+        columns[1].metric("After this event", _number(movement.get("price_after"), suffix=" CM"))
         change = pd.to_numeric(movement.get("price_change"), errors="coerce")
         percent = pd.to_numeric(movement.get("price_change_percent"), errors="coerce")
         delta = "—" if pd.isna(change) else f"{float(change):+.2f} CM"
@@ -257,6 +404,10 @@ def _render_market_reaction(
         source = str(movement.get("before_source") or "").replace("_", " ")
         if source:
             st.caption(f"Before value source: {source}.")
+        st.caption(
+            "This is the movement from the model update linked to the result above. "
+            "The current price card can be newer if later official updates have run."
+        )
 
     if history.empty or "team" not in history.columns:
         return
@@ -532,6 +683,13 @@ def render_tournament_path_page() -> None:
     selected = team_summary(data, team)
     price = selected["price"]
     path = selected["path"]
+    latest_fixture_result = _latest_finished_fixture(selected["fixtures"])
+    result_state = _team_result_state(latest_fixture_result, team)
+    reach_label, reach_value = _reach_metric_for_state(
+        price,
+        path,
+        latest_fixture_result,
+    )
 
     st.markdown(f"## {team}")
     cards = st.columns(4)
@@ -541,13 +699,17 @@ def render_tournament_path_page() -> None:
     )
     cards[1].metric(
         "Path status",
-        status_label(path.get("fixture_status")) if not path.empty else "Awaiting path data",
+        result_state.get("status")
+        or (
+            status_label(path.get("fixture_status"))
+            if not path.empty
+            else "Awaiting path data"
+        ),
     )
-    reach_value = path.get("prob_reach_round_32") if not path.empty else price.get("prob_reach_round_32")
-    cards[2].metric("Reach Round of 32", _percent(reach_value))
+    cards[2].metric(reach_label, _percent(reach_value))
     cards[3].metric("Become champion", _percent(price.get("prob_champion")) if not price.empty else "—")
 
-    _render_path_message(path, selected["opponents"])
+    _render_path_message(path, selected["opponents"], latest_fixture_result, team)
     _render_stage_probability_ladder(price, team)
 
     st.markdown("### Country fixture timeline")
@@ -570,6 +732,7 @@ def render_tournament_path_page() -> None:
             "**Slot confirmed** means the country has secured a knockout position, but the "
             "other side of the fixture is not final.\n\n"
             "**Fixture confirmed** means the official bracket contains both countries.\n\n"
+            "**Advanced** or **Eliminated** appears after a knockout result is processed.\n\n"
             "**Prediction unavailable** does not always mean the model failed. It usually "
             "means the fixture still contains unknown teams, so the app should show path "
             "probabilities instead of fake match odds.\n\n"
