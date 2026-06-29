@@ -30,7 +30,7 @@ def render_project_credit(compact: bool = False) -> None:
             <div class="cm-project-label">Independent project</div>
             <strong>CupMarket 2026</strong>
             <p>Designed and built by {PROJECT_OWNER}.</p>
-            <span>Working prototype · Testing and feedback are welcome</span>
+            <span>Working prototype - testing and feedback are welcome</span>
         </div>
         ''',
         unsafe_allow_html=True,
@@ -52,13 +52,13 @@ def render_specialist_sidebar(active_page: str) -> None:
             unsafe_allow_html=True,
         )
         st.markdown('<div class="cm-side-label">Start</div>', unsafe_allow_html=True)
-        st.page_link("pages/Tournament_Pulse.py", label="Tournament", icon="🏠")
-        st.page_link("pages/7_Tournament_Path.py", label="Country", icon="🔎")
-        st.page_link("pages/4_Match_Hub.py", label="Matches", icon="⚽")
-        st.page_link("pages/8_Bracket_View.py", label="Bracket", icon="🏆")
+        st.page_link("pages/Tournament_Pulse.py", label="Tournament")
+        st.page_link("pages/7_Tournament_Path.py", label="Country")
+        st.page_link("pages/4_Match_Hub.py", label="Matches")
+        st.page_link("pages/8_Bracket_View.py", label="Bracket")
 
         with st.expander("More", expanded=False):
-            st.page_link("pages/11_Tournament_Insights.py", label="Analysis Lab", icon="💡")
+            st.page_link("pages/11_Tournament_Insights.py", label="Analysis Lab")
 
         with st.expander("About", expanded=False):
             render_project_credit(compact=True)
@@ -66,7 +66,7 @@ def render_specialist_sidebar(active_page: str) -> None:
 
 
 def render_page_guide(title: str, description: str, steps: list[tuple[str, str]]) -> None:
-    with st.expander(f"How to use this page · {title}", expanded=False):
+    with st.expander(f"How to use this page - {title}", expanded=False):
         st.caption(description)
         columns = st.columns(len(steps))
         for index, (column, step) in enumerate(zip(columns, steps), start=1):
@@ -104,7 +104,7 @@ def render_official_data_caption(frame: pd.DataFrame, *, label: str = "Official 
     fallback_reason = frame.attrs.get("cupmarket_fallback_reason")
     if not source:
         return
-    commit_text = f" · snapshot {str(commit_sha)[:7]}" if commit_sha else ""
+    commit_text = f" - snapshot {str(commit_sha)[:7]}" if commit_sha else ""
     st.caption(f"{label} source: {source}{commit_text}")
     if source == "Deployed fallback" and fallback_reason:
         with st.expander("Why saved official data is being shown", expanded=False):
@@ -130,11 +130,11 @@ def render_data_diagnostics(
     requests_remaining: str | None = None,
 ) -> None:
     pending_text = (
-        f" · {pending_updates} result{'s' if pending_updates != 1 else ''} awaiting model"
+        f" - {pending_updates} result{'s' if pending_updates != 1 else ''} awaiting model"
         if pending_updates is not None
         else ""
     )
-    st.caption(f"Scores refreshed {score_refreshed} · Published model {model_generated}{pending_text}")
+    st.caption(f"Scores refreshed {score_refreshed} - Published model {model_generated}{pending_text}")
     with st.expander("Data freshness and system details", expanded=False):
         columns = st.columns(4 if pending_updates is not None else 3)
         columns[0].metric("Score source", score_source)
@@ -150,13 +150,14 @@ def render_data_diagnostics(
         if requests_remaining is not None:
             detail_parts.append(f"Provider requests remaining: {requests_remaining}")
         if detail_parts:
-            st.caption(" · ".join(detail_parts))
+            st.caption(" - ".join(detail_parts))
         if technical_details:
             st.caption(f"Technical detail: {technical_details}")
         if load_time_ms is not None:
             st.caption(f"Page data prepared in {load_time_ms:.0f} ms on this rerun.")
         if refresh_key and st.button("Refresh live scores", key=refresh_key):
             from features.live_match_data import clear_live_match_cache
+
             clear_live_match_cache()
             st.rerun()
         if warning:
@@ -175,7 +176,7 @@ def render_project_footer() -> None:
                 <strong>CupMarket 2026</strong>
                 <span>An independent World Cup analytics project by {PROJECT_OWNER}.</span>
             </div>
-            <div class="cm-footer-meta">Working prototype · Virtual market · No real-money wagering</div>
+            <div class="cm-footer-meta">Working prototype - virtual market - no real-money wagering</div>
         </div>
         ''',
         unsafe_allow_html=True,

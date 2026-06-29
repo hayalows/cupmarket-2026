@@ -843,17 +843,21 @@ def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: di
     predictions = metadata.get("predictions") if isinstance(metadata, dict) else pd.DataFrame()
     adaptive_ratings = metadata.get("adaptive_ratings") if isinstance(metadata, dict) else pd.DataFrame()
 
-    render_stage_explorer(matches, prices)
-    render_market_board(
-        prices,
-        predictions=predictions,
-        adaptive_ratings=adaptive_ratings,
-    )
-    render_todays_story(matches, prices)
-    render_start_here_panel(default_team)
+    stage_tab, market_tab, today_tab = st.tabs(["Stage", "Market", "Today"])
+    with stage_tab:
+        render_stage_explorer(matches, prices)
+    with market_tab:
+        render_market_board(
+            prices,
+            predictions=predictions,
+            adaptive_ratings=adaptive_ratings,
+        )
+    with today_tab:
+        render_todays_story(matches, prices)
+        render_start_here_panel(default_team)
     render_official_data_caption(prices)
     st.caption(
-        f"Tournament feed: {len(finished)} finished Â· {len(live)} live Â· {len(upcoming)} upcoming. "
+        f"Tournament feed: {len(finished)} finished - {len(live)} live - {len(upcoming)} upcoming. "
         f"Model ledger records {len(processed)} processed results."
     )
     return

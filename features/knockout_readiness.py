@@ -90,8 +90,8 @@ def render_knockout_readiness(prices: pd.DataFrame, predictions: pd.DataFrame, p
     st.caption(f"Latest prediction run: {generated}")
     st.caption(
         "Adaptive prediction enabled: "
-        f"{'yes' if adaptive_enabled else 'no'} Â· "
-        f"{adaptive_model} Â· {adaptive_rows} rows with adaptive columns"
+        f"{'yes' if adaptive_enabled else 'no'} - "
+        f"{adaptive_model} - {adaptive_rows} rows with adaptive columns"
     )
     st.dataframe(checks, hide_index=True, use_container_width=True)
 

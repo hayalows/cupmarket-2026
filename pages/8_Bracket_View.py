@@ -19,9 +19,9 @@ render_specialist_sidebar("bracket")
 st.markdown(
     '''
     <div class="cm-hero">
-        <div class="cm-eyebrow">CupMarket 2026 · Bracket</div>
+        <div class="cm-eyebrow">CupMarket 2026 - Bracket</div>
         <h1>See the bracket as it stands now.</h1>
-        <p>Confirmed fixtures appear when the official bracket locks. Until then, CupMarket fills uncertain slots with the model's most likely projected teams and opponents.</p>
+        <p>Confirmed fixtures appear when the official bracket locks. Projected fixtures show the latest model view until both teams are known.</p>
     </div>
     ''',
     unsafe_allow_html=True,

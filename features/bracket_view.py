@@ -179,9 +179,9 @@ def _render_confirmed_cards(source: pd.DataFrame, stage_name: str, limit: int = 
         if not slots.empty:
             for _, row in slots.head(limit).iterrows():
                 _card(
-                    f"Round of 16 Â· Match {int(row['match_number'])}",
+                    f"Round of 16 - Match {int(row['match_number'])}",
                     str(row["fixture"]),
-                    f"{row['state']} Â· {_timestamp(row.get('kickoff_utc'))}",
+                    f"{row['state']} - {_timestamp(row.get('kickoff_utc'))}",
                     "Built from Round-of-32 winners",
                 )
             return True

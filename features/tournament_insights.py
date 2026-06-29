@@ -395,7 +395,7 @@ def render_tournament_insights(prices: pd.DataFrame, tables: pd.DataFrame, movem
 
     top_cards = st.columns(4)
     qualified = _qualifying_frame(prices)
-    top_cards[0].metric("Round of 32 safe", len(qualified) if not qualified.empty else 0)
+    top_cards[0].metric("Reached Round of 32", len(qualified) if not qualified.empty else 0)
     top_cards[1].metric("Continents represented", qualified["continent"].nunique() if not qualified.empty else 0)
     if not tables.empty:
         top_cards[2].metric("Most goals by a team", int(tables["goals_for"].max()))
@@ -475,7 +475,7 @@ def render_tournament_insights(prices: pd.DataFrame, tables: pd.DataFrame, movem
         st.dataframe(continent_counts, hide_index=True, use_container_width=True)
         st.caption("This uses teams with at least 99.9% Round-of-32 probability in the latest CupMarket model.")
 
-    st.markdown("### Teams still on the edge")
+    st.markdown("### Teams that were on the group-stage edge")
     if not prices.empty and "prob_reach_round_32" in prices.columns:
         edge = prices.loc[(prices["prob_reach_round_32"] > 0.0) & (prices["prob_reach_round_32"] < 0.999)].sort_values("prob_reach_round_32", ascending=False)
         _render_table(
@@ -491,7 +491,7 @@ def render_tournament_insights(prices: pd.DataFrame, tables: pd.DataFrame, movem
             percent_columns=["prob_reach_round_32", "prob_group_exit"],
         )
 
-    st.markdown("### Likely bracket stories")
+    st.markdown("### Bracket path stories")
     if isinstance(path_status, pd.DataFrame) and not path_status.empty:
         cols = ["team", "fixture_status", "current_group_position", "prob_reach_round_32", "most_likely_opponent", "most_likely_opponent_probability_given_qualification"]
         display = path_status[[column for column in cols if column in path_status.columns]].copy()
