@@ -7,6 +7,7 @@ import pandas as pd
 from features.tournament_simulator import (
     _advance_probabilities,
     _knockout_fixtures,
+    _match_label,
     _scenario_rows,
 )
 
@@ -35,6 +36,26 @@ class TournamentSimulatorTests(unittest.TestCase):
         result = _knockout_fixtures(matches)
 
         self.assertEqual(result["match_id"].astype(int).tolist(), [1])
+
+    def test_match_label_accepts_itertuples_row(self):
+        fixtures = pd.DataFrame(
+            [
+                {
+                    "match_id": 1,
+                    "status": "TIMED",
+                    "stage": "LAST_32",
+                    "home_team": "Ghana",
+                    "away_team": "Norway",
+                    "utc_date": "2026-06-30T17:00:00Z",
+                }
+            ]
+        )
+        row = next(fixtures.itertuples(index=False))
+
+        label = _match_label(row)
+
+        self.assertIn("Ghana vs Norway", label)
+        self.assertIn("Round of 32", label)
 
     def test_advance_probabilities_use_saved_knockout_columns(self):
         match = pd.Series({"match_id": 10})

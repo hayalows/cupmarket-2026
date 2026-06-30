@@ -238,12 +238,18 @@ def _display_scenario_table(frame: pd.DataFrame) -> None:
     st.dataframe(display, hide_index=True, use_container_width=True)
 
 
-def _match_label(row: pd.Series) -> str:
-    stage_label, _, _, _ = _stage_config(row.get("stage"))
-    kickoff = pd.to_datetime(row.get("utc_date"), errors="coerce", utc=True)
+def _row_value(row: Any, key: str) -> Any:
+    if hasattr(row, "get"):
+        return row.get(key)
+    return getattr(row, key, None)
+
+
+def _match_label(row: Any) -> str:
+    stage_label, _, _, _ = _stage_config(_row_value(row, "stage"))
+    kickoff = pd.to_datetime(_row_value(row, "utc_date"), errors="coerce", utc=True)
     time_text = "" if pd.isna(kickoff) else kickoff.strftime("%d %b %H:%M UTC")
     return (
-        f"{_clean_text(row.get('home_team'))} vs {_clean_text(row.get('away_team'))}"
+        f"{_clean_text(_row_value(row, 'home_team'))} vs {_clean_text(_row_value(row, 'away_team'))}"
         f" - {stage_label}"
         + (f" - {time_text}" if time_text else "")
     )
