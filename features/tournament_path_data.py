@@ -21,7 +21,7 @@ MARKET_MOVEMENT_PATH = DATA_DIR / "market_movements_latest.csv"
 MARKET_MOVEMENT_HISTORY_PATH = HISTORY_DIR / "market_movements.csv"
 TEAM_SNAPSHOTS_PATH = HISTORY_DIR / "team_snapshots.csv"
 
-ACTIVE_STATUSES = {"IN_PLAY", "PAUSED"}
+ACTIVE_STATUSES = {"IN_PLAY", "LIVE", "PAUSED", "SUSPENDED"}
 UPCOMING_STATUSES = {"TIMED", "SCHEDULED"}
 STATUS_LABELS = {
     "projected": "Projected path",

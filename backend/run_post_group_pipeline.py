@@ -136,8 +136,12 @@ def run() -> dict:
             "checked_at_utc": started_at.isoformat(),
         }
 
+    locked_path = update_pipeline.DATA_DIR / "official_round_32_bracket_locked.csv"
+    locked_bracket = pd.read_csv(locked_path)
+
     active = knockout_stage.active_knockout_matches(matches)
     if not active.empty:
+        progress = knockout_stage.build_knockout_progress(matches, locked_bracket)
         result = {
             "status": "deferred_active_knockout_matches",
             "pipeline_phase": "knockout_stage",
@@ -150,12 +154,11 @@ def run() -> dict:
             ),
         }
         knockout_stage.atomic_csv(matches, update_pipeline.MATCHES_OUTPUT_PATH)
+        knockout_stage.atomic_csv(progress, PROGRESS_PATH)
         knockout_stage.atomic_json(result, update_pipeline.RUN_SUMMARY_PATH)
         print(result["message"])
         return result
 
-    locked_path = update_pipeline.DATA_DIR / "official_round_32_bracket_locked.csv"
-    locked_bracket = pd.read_csv(locked_path)
     (
         home_model,
         away_model,
