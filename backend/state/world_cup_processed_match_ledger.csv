@@ -47,8 +47,8 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537411,2026-06-23 20:00:00+00:00,GROUP_STAGE,England,Ghana,0,0,2026-06-23 22:18:24.485421+00:00,phase7_automated_group_stage_v1
 537412,2026-06-23 23:00:00+00:00,GROUP_STAGE,Panama,Croatia,0,1,2026-06-24 01:26:55.857688+00:00,phase7_automated_group_stage_v1
 537406,2026-06-24 02:00:00+00:00,GROUP_STAGE,Colombia,Congo DR,1,0,2026-06-24 05:46:07.004463+00:00,phase7_automated_group_stage_v1
-537338,2026-06-24 19:00:00+00:00,GROUP_STAGE,Bosnia-Herzegovina,Qatar,3,1,2026-06-24 21:55:21.112464+00:00,phase7_automated_group_stage_v1
 537337,2026-06-24 19:00:00+00:00,GROUP_STAGE,Switzerland,Canada,2,1,2026-06-24 21:55:21.112438+00:00,phase7_automated_group_stage_v1
+537338,2026-06-24 19:00:00+00:00,GROUP_STAGE,Bosnia-Herzegovina,Qatar,3,1,2026-06-24 21:55:21.112464+00:00,phase7_automated_group_stage_v1
 537344,2026-06-24 22:00:00+00:00,GROUP_STAGE,Morocco,Haiti,4,2,2026-06-25 04:07:44.949564+00:00,phase7_automated_group_stage_v1
 537343,2026-06-24 22:00:00+00:00,GROUP_STAGE,Scotland,Brazil,0,3,2026-06-25 04:07:44.949538+00:00,phase7_automated_group_stage_v1
 537332,2026-06-25 01:00:00+00:00,GROUP_STAGE,South Africa,South Korea,1,0,2026-06-25 04:07:44.949621+00:00,phase7_automated_group_stage_v1
@@ -57,8 +57,8 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537356,2026-06-25 20:00:00+00:00,GROUP_STAGE,Curaçao,Ivory Coast,0,2,2026-06-25 22:11:35.054412+00:00,phase7_automated_group_stage_v1
 537361,2026-06-25 23:00:00+00:00,GROUP_STAGE,Tunisia,Netherlands,1,3,2026-06-26 06:59:14.818256+00:00,phase7_automated_group_stage_v1
 537362,2026-06-25 23:00:00+00:00,GROUP_STAGE,Japan,Sweden,1,1,2026-06-26 06:59:14.818286+00:00,phase7_automated_group_stage_v1
-537349,2026-06-26 02:00:00+00:00,GROUP_STAGE,Turkey,United States,3,2,2026-06-26 06:59:14.818302+00:00,phase7_automated_group_stage_v1
 537350,2026-06-26 02:00:00+00:00,GROUP_STAGE,Paraguay,Australia,0,0,2026-06-26 06:59:14.818312+00:00,phase7_automated_group_stage_v1
+537349,2026-06-26 02:00:00+00:00,GROUP_STAGE,Turkey,United States,3,2,2026-06-26 06:59:14.818302+00:00,phase7_automated_group_stage_v1
 537396,2026-06-26 19:00:00+00:00,GROUP_STAGE,Senegal,Iraq,5,0,2026-06-26 21:42:53.113270+00:00,phase7_automated_group_stage_v1
 537395,2026-06-26 19:00:00+00:00,GROUP_STAGE,Norway,France,1,4,2026-06-26 21:42:53.113241+00:00,phase7_automated_group_stage_v1
 537373,2026-06-27 00:00:00+00:00,GROUP_STAGE,Uruguay,Spain,0,1,2026-06-27 05:30:17.771770+00:00,phase7_automated_group_stage_v1
@@ -67,8 +67,8 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537367,2026-06-27 03:00:00+00:00,GROUP_STAGE,New Zealand,Belgium,1,5,2026-06-27 05:30:17.771811+00:00,phase7_automated_group_stage_v1
 537414,2026-06-27 21:00:00+00:00,GROUP_STAGE,Croatia,Ghana,2,1,2026-06-27 23:05:38.932218+00:00,phase9b_adaptive_prediction_v1
 537413,2026-06-27 21:00:00+00:00,GROUP_STAGE,Panama,England,0,2,2026-06-27 23:05:38.932196+00:00,phase9b_adaptive_prediction_v1
-537407,2026-06-27 23:30:00+00:00,GROUP_STAGE,Colombia,Portugal,0,0,2026-06-28 04:22:54.329745+00:00,phase9b_adaptive_prediction_v1
 537408,2026-06-27 23:30:00+00:00,GROUP_STAGE,Congo DR,Uzbekistan,3,1,2026-06-28 04:22:54.329773+00:00,phase9b_adaptive_prediction_v1
+537407,2026-06-27 23:30:00+00:00,GROUP_STAGE,Colombia,Portugal,0,0,2026-06-28 04:22:54.329745+00:00,phase9b_adaptive_prediction_v1
 537401,2026-06-28 02:00:00+00:00,GROUP_STAGE,Jordan,Argentina,1,3,2026-06-28 04:22:54.329787+00:00,phase9b_adaptive_prediction_v1
 537402,2026-06-28 02:00:00+00:00,GROUP_STAGE,Algeria,Austria,3,3,2026-06-28 04:22:54.329797+00:00,phase9b_adaptive_prediction_v1
 537417,2026-06-28 19:00:00+00:00,LAST_32,South Africa,Canada,0,1,2026-06-28 21:40:43.122383+00:00,phase9b_adaptive_prediction_v1
@@ -76,3 +76,4 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537415,2026-06-29 20:30:00+00:00,LAST_32,Germany,Paraguay,5,6,2026-06-29 23:43:34.059353+00:00,phase9b_adaptive_prediction_v1
 537418,2026-06-30 01:00:00+00:00,LAST_32,Netherlands,Morocco,3,4,2026-06-30 06:19:02.089436+00:00,phase9b_adaptive_prediction_v1
 537424,2026-06-30 17:00:00+00:00,LAST_32,Ivory Coast,Norway,1,2,2026-06-30 19:06:42.916807+00:00,phase9b_adaptive_prediction_v1
+537416,2026-06-30 21:00:00+00:00,LAST_32,France,Sweden,3,0,2026-06-30 23:05:31.002196+00:00,phase9b_adaptive_prediction_v1
