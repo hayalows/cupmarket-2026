@@ -1,8 +1,8 @@
 logical_match_number,api_match_id,stage,utc_date,status,home_team,away_team,home_score,away_score,duration,decision_method,advancing_team,home_penalties,away_penalties
 73,537417,LAST_32,2026-06-28 19:00:00+00:00,FINISHED,South Africa,Canada,0.0,1.0,REGULAR,regular_time,Canada,,
 74,537423,LAST_32,2026-06-29 17:00:00+00:00,FINISHED,Brazil,Japan,2.0,1.0,REGULAR,regular_time,Brazil,,
-75,537415,LAST_32,2026-06-29 20:30:00+00:00,FINISHED,Germany,Paraguay,5.0,6.0,PENALTY_SHOOTOUT,penalties,Paraguay,5.0,5.0
-76,537418,LAST_32,2026-06-30 01:00:00+00:00,TIMED,Netherlands,Morocco,,,REGULAR,,,,
+75,537415,LAST_32,2026-06-29 20:30:00+00:00,FINISHED,Germany,Paraguay,4.0,5.0,PENALTY_SHOOTOUT,penalties,Paraguay,3.0,4.0
+76,537418,LAST_32,2026-06-30 01:00:00+00:00,FINISHED,Netherlands,Morocco,3.0,4.0,PENALTY_SHOOTOUT,penalties,Morocco,2.0,3.0
 77,537424,LAST_32,2026-06-30 17:00:00+00:00,TIMED,Ivory Coast,Norway,,,REGULAR,,,,
 78,537416,LAST_32,2026-06-30 21:00:00+00:00,TIMED,France,Sweden,,,REGULAR,,,,
 79,537425,LAST_32,2026-07-01 01:00:00+00:00,TIMED,Mexico,Ecuador,,,REGULAR,,,,
@@ -15,9 +15,9 @@ logical_match_number,api_match_id,stage,utc_date,status,home_team,away_team,home
 86,537428,LAST_32,2026-07-03 18:00:00+00:00,TIMED,Australia,Egypt,,,REGULAR,,,,
 87,537427,LAST_32,2026-07-03 22:00:00+00:00,TIMED,Argentina,Cape Verde Islands,,,REGULAR,,,,
 88,537430,LAST_32,2026-07-04 01:30:00+00:00,TIMED,Colombia,Ghana,,,REGULAR,,,,
-89,537376,LAST_16,2026-07-04 17:00:00+00:00,TIMED,Canada,,,,REGULAR,,,,
-90,537375,LAST_16,2026-07-04 21:00:00+00:00,TIMED,,,,,REGULAR,,,,
-91,537377,LAST_16,2026-07-05 20:00:00+00:00,TIMED,,,,,REGULAR,,,,
+89,537376,LAST_16,2026-07-04 17:00:00+00:00,TIMED,Canada,Morocco,,,REGULAR,,,,
+90,537375,LAST_16,2026-07-04 21:00:00+00:00,TIMED,Paraguay,,,,REGULAR,,,,
+91,537377,LAST_16,2026-07-05 20:00:00+00:00,TIMED,Brazil,,,,REGULAR,,,,
 92,537378,LAST_16,2026-07-06 00:00:00+00:00,TIMED,,,,,REGULAR,,,,
 93,537379,LAST_16,2026-07-06 19:00:00+00:00,TIMED,,,,,REGULAR,,,,
 94,537380,LAST_16,2026-07-07 00:00:00+00:00,TIMED,,,,,REGULAR,,,,
