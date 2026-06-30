@@ -41,6 +41,7 @@ with st.sidebar:
     st.page_link("pages/8_Bracket_View.py", label="Bracket")
 
     with st.expander("More", expanded=False):
+        st.page_link("pages/12_Tournament_Simulator.py", label="Simulator")
         st.page_link("pages/11_Tournament_Insights.py", label="Analysis Lab")
 
     with st.expander("About", expanded=False):
