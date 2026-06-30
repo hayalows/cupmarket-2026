@@ -142,12 +142,12 @@ def _render_market_reaction(match: pd.Series, processed: pd.DataFrame, history: 
                     pct_text = f" · {float(percent):+.2f}%" if pd.notna(percent) else ""
                     delta = f"{sign}{float(change):.2f} CM{pct_text}"
                 st.metric(
-                    "Published price after update",
+                    "After settlement",
                     f"{float(price):.2f} CM" if pd.notna(price) else "—",
                     delta=delta,
                 )
                 st.caption(
-                    f"Previous: {float(previous):.2f} CM"
+                    f"Before result: {float(previous):.2f} CM"
                     if pd.notna(previous)
                     else "Previous official value unavailable"
                 )

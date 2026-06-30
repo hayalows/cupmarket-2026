@@ -426,7 +426,7 @@ def team_summary(data: dict[str, Any], team: str) -> dict[str, Any]:
         movement_source = data.get("movements", pd.DataFrame())
     event_movement = latest_direct_event_movement(movement_source, team)
     latest_movement = latest_relevant_movement(movement_source, team)
-    movement = event_movement if not event_movement.empty else latest_movement
+    movement = latest_movement if not latest_movement.empty else event_movement
     opponents = opponent_options(data.get("opponents", pd.DataFrame()), team)
     fixtures = team_fixtures(
         data.get("progress", pd.DataFrame()),

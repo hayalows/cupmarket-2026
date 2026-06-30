@@ -15,6 +15,8 @@ import pandas as pd
 
 
 MOVEMENT_KEYS = ["event_id", "team"]
+OFFICIAL_KNOCKOUT_MODEL_VERSION = "phase6_knockout_progression_v1"
+OFFICIAL_KNOCKOUT_BRACKET_MODE = "official_api_locked_knockout_progression"
 
 
 def market_impact_is_enabled() -> bool:
@@ -74,9 +76,27 @@ def _movement_details(summary: dict) -> tuple[str, str, str, str, str]:
     return event_id, "|".join(ids), " | ".join(labels), scope, "match_event"
 
 
+def _official_knockout_candidates(candidates: pd.DataFrame) -> pd.DataFrame:
+    if candidates.empty:
+        return candidates
+
+    mask = pd.Series(False, index=candidates.index)
+    if "model_version" in candidates.columns:
+        mask = mask | candidates["model_version"].astype(str).eq(
+            OFFICIAL_KNOCKOUT_MODEL_VERSION
+        )
+    if "bracket_mode" in candidates.columns:
+        mask = mask | candidates["bracket_mode"].astype(str).eq(
+            OFFICIAL_KNOCKOUT_BRACKET_MODE
+        )
+    return candidates.loc[mask].copy()
+
+
 def _latest_prior_snapshot(
     snapshots: pd.DataFrame,
     current_snapshot_id: str,
+    *,
+    prefer_official_knockout: bool = False,
 ) -> pd.DataFrame:
     if snapshots.empty:
         return pd.DataFrame()
@@ -101,6 +121,11 @@ def _latest_prior_snapshot(
     candidates = candidates.loc[candidates["_snapshot_time"].notna()]
     if candidates.empty:
         return pd.DataFrame()
+
+    if prefer_official_knockout:
+        official = _official_knockout_candidates(candidates)
+        if not official.empty:
+            candidates = official
 
     latest_time = candidates["_snapshot_time"].max()
     return candidates.loc[candidates["_snapshot_time"] == latest_time].copy()
@@ -137,7 +162,14 @@ def build_market_movements(
     event_id, trigger_ids, trigger_matches, scope, movement_type = (
         _movement_details(summary)
     )
-    prior = _latest_prior_snapshot(prior_snapshots, completed_at)
+    prefer_official_knockout = (
+        str(summary.get("pipeline_phase") or "").strip() == "knockout_stage"
+    )
+    prior = _latest_prior_snapshot(
+        prior_snapshots,
+        completed_at,
+        prefer_official_knockout=prefer_official_knockout,
+    )
     prior_price = _prior_lookup(prior, "cupmarket_price")
     prior_elo = _prior_lookup(prior, "live_elo")
     prior_r32 = _prior_lookup(prior, "prob_reach_round_32")
@@ -243,7 +275,7 @@ def _append_unique(path: Path, rows: pd.DataFrame) -> int:
     else:
         combined = rows.copy()
     old_count = len(combined) - len(rows)
-    combined = combined.drop_duplicates(subset=MOVEMENT_KEYS, keep="first")
+    combined = combined.drop_duplicates(subset=MOVEMENT_KEYS, keep="last")
     added = max(0, len(combined) - old_count)
     _atomic_csv(combined, path)
     return int(added)

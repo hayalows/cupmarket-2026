@@ -182,7 +182,7 @@ class TournamentPathDataTests(unittest.TestCase):
         self.assertEqual(canada_slot["match_number"], 90)
         self.assertEqual(canada_slot["fixture"], "Canada vs Germany/Paraguay winner")
 
-    def test_team_summary_prefers_played_event_and_keeps_latest_refresh(self):
+    def test_team_summary_uses_latest_official_movement_and_keeps_played_event(self):
         movements = pd.DataFrame(
             [
                 {
@@ -231,8 +231,10 @@ class TournamentPathDataTests(unittest.TestCase):
         canada = team_summary(data, "Canada")
         brazil = team_summary(data, "Brazil")
 
-        self.assertEqual(canada["movement"]["trigger_matches"], "South Africa 0-1 Canada")
-        self.assertEqual(canada["movement"]["movement_type"], "match_event")
+        self.assertEqual(canada["movement"]["trigger_matches"], "Official knockout model refresh")
+        self.assertEqual(canada["movement"]["movement_type"], "publication_refresh")
+        self.assertEqual(canada["event_movement"]["trigger_matches"], "South Africa 0-1 Canada")
+        self.assertEqual(canada["event_movement"]["movement_type"], "match_event")
         self.assertEqual(canada["latest_movement"]["movement_type"], "publication_refresh")
         self.assertTrue(brazil["movement"].empty)
 

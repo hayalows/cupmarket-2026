@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import json
 import os
+import re
 
 import pandas as pd
 
@@ -27,12 +28,84 @@ except ImportError:
 
 STATE_PATH = update_pipeline.STATE_DIR / "knockout_pipeline_state.json"
 PROGRESS_PATH = update_pipeline.DATA_DIR / "knockout_progress_latest.csv"
+OFFICIAL_KNOCKOUT_MODEL_VERSION = "phase6_knockout_progression_v1"
+OFFICIAL_KNOCKOUT_BRACKET_MODE = "official_api_locked_knockout_progression"
 
 
 def _load_json(path: Path) -> dict:
     if not path.exists():
         return {}
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _read_csv_safely(path: Path) -> pd.DataFrame:
+    if not path.exists():
+        return pd.DataFrame()
+    try:
+        return pd.read_csv(path)
+    except (OSError, pd.errors.ParserError):
+        return pd.DataFrame()
+
+
+def _is_official_knockout_frame(frame: pd.DataFrame) -> bool:
+    if frame.empty:
+        return False
+    if "model_version" in frame.columns and frame["model_version"].astype(str).eq(
+        OFFICIAL_KNOCKOUT_MODEL_VERSION
+    ).any():
+        return True
+    if "bracket_mode" in frame.columns and frame["bracket_mode"].astype(str).eq(
+        OFFICIAL_KNOCKOUT_BRACKET_MODE
+    ).any():
+        return True
+    return False
+
+
+def _history_timestamp(path: Path, frame: pd.DataFrame) -> pd.Timestamp:
+    if "generated_at_utc" in frame.columns:
+        values = pd.to_datetime(
+            frame["generated_at_utc"], errors="coerce", utc=True
+        ).dropna()
+        if not values.empty:
+            return values.max()
+
+    match = re.search(r"(\d{8}T\d{6}Z)", path.name)
+    if match:
+        return pd.to_datetime(
+            match.group(1),
+            format="%Y%m%dT%H%M%SZ",
+            utc=True,
+            errors="coerce",
+        )
+    return pd.NaT
+
+
+def _load_previous_official_knockout_prices() -> pd.DataFrame | None:
+    """Return the last public knockout price sheet before this settlement run."""
+    frames = []
+    for path in sorted(update_pipeline.HISTORY_DIR.glob("cupmarket_prices_*.csv")):
+        frame = _read_csv_safely(path)
+        if not _is_official_knockout_frame(frame):
+            continue
+        timestamp = _history_timestamp(path, frame)
+        if pd.isna(timestamp):
+            continue
+        frame = frame.copy()
+        frame["_publication_time"] = timestamp
+        frames.append(frame)
+
+    if frames:
+        history = pd.concat(frames, ignore_index=True, sort=False)
+        latest_time = history["_publication_time"].max()
+        latest = history.loc[history["_publication_time"].eq(latest_time)].copy()
+        return latest.drop(columns=["_publication_time"], errors="ignore")
+
+    current = _read_csv_safely(update_pipeline.PRICES_OUTPUT_PATH)
+    if _is_official_knockout_frame(current):
+        return current
+    if current.empty:
+        return None
+    return current
 
 
 def _archive_history_safely() -> None:
@@ -156,11 +229,7 @@ def run() -> dict:
         )
     )
     current_tables = pd.read_csv(update_pipeline.CURRENT_TABLES_OUTPUT_PATH)
-    previous_prices = (
-        pd.read_csv(update_pipeline.PRICES_OUTPUT_PATH)
-        if update_pipeline.PRICES_OUTPUT_PATH.exists()
-        else None
-    )
+    previous_prices = _load_previous_official_knockout_prices()
     simulations = int(
         os.environ.get("KNOCKOUT_SIMULATIONS", str(update_pipeline.N_SIMULATIONS))
     )

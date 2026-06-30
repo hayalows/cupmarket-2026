@@ -4,6 +4,9 @@ from typing import Any
 
 import pandas as pd
 
+OFFICIAL_KNOCKOUT_MODEL_VERSION = "phase6_knockout_progression_v1"
+OFFICIAL_KNOCKOUT_BRACKET_MODE = "official_api_locked_knockout_progression"
+
 
 def _as_bool(value: Any) -> bool:
     if isinstance(value, bool):
@@ -136,15 +139,21 @@ def batch_context_for_match(
     snapshot_time = pd.NaT
     snapshot = pd.DataFrame()
     if not history.empty and "generated_at_utc" in history.columns:
-        times = (
-            history.loc[
-                history["generated_at_utc"] >= processed_at,
-                "generated_at_utc",
-            ]
-            .dropna()
-            .sort_values()
-            .unique()
-        )
+        candidates = history.loc[history["generated_at_utc"] >= processed_at].copy()
+        if not candidates.empty:
+            official_mask = pd.Series(False, index=candidates.index)
+            if "model_version" in candidates.columns:
+                official_mask = official_mask | candidates["model_version"].astype(
+                    str
+                ).eq(OFFICIAL_KNOCKOUT_MODEL_VERSION)
+            if "bracket_mode" in candidates.columns:
+                official_mask = official_mask | candidates["bracket_mode"].astype(
+                    str
+                ).eq(OFFICIAL_KNOCKOUT_BRACKET_MODE)
+            official_candidates = candidates.loc[official_mask].copy()
+            if not official_candidates.empty:
+                candidates = official_candidates
+        times = candidates["generated_at_utc"].dropna().sort_values().unique()
         if len(times):
             snapshot_time = pd.Timestamp(times[0])
             if snapshot_time - processed_at <= pd.Timedelta(hours=2):

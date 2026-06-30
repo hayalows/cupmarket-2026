@@ -417,18 +417,48 @@ def _render_market_reaction(
     else:
         movement_type = str(movement.get("movement_type") or "match_event")
         is_match_event = movement_type == "match_event"
+        trigger = str(movement.get("trigger_matches") or "")
+        model_version = str(movement.get("model_version") or "")
+        is_settlement = (
+            not is_match_event
+            and (
+                "knockout" in trigger.lower()
+                or "knockout" in model_version.lower()
+            )
+        )
         current_price = pd.to_numeric(
             price.get("cupmarket_price") if isinstance(price, pd.Series) else None,
             errors="coerce",
         )
         after_price = pd.to_numeric(movement.get("price_after"), errors="coerce")
+        before_label = (
+            "Before result"
+            if is_match_event
+            else "Before settlement"
+            if is_settlement
+            else "Before refresh"
+        )
+        after_label = (
+            "After result"
+            if is_match_event
+            else "After settlement"
+            if is_settlement
+            else "After refresh"
+        )
+        move_label = (
+            "Result move"
+            if is_match_event
+            else "Settlement move"
+            if is_settlement
+            else "Refresh move"
+        )
         columns = st.columns(4)
         columns[0].metric(
-            "Before result" if is_match_event else "Before refresh",
+            before_label,
             _number(movement.get("price_before"), suffix=" CM"),
         )
         columns[1].metric(
-            "First post-result price" if is_match_event else "Refresh price",
+            after_label,
             _number(movement.get("price_after"), suffix=" CM"),
         )
         change = pd.to_numeric(movement.get("price_change"), errors="coerce")
@@ -436,7 +466,7 @@ def _render_market_reaction(
         delta = "—" if pd.isna(change) else f"{float(change):+.2f} CM"
         if pd.notna(percent):
             delta += f" · {float(percent):+.2f}%"
-        columns[2].metric("Result move" if is_match_event else "Refresh move", delta)
+        columns[2].metric(move_label, delta)
         columns[3].metric(
             "Current price now",
             f"{float(current_price):.2f} CM" if pd.notna(current_price) else "—",
@@ -446,10 +476,9 @@ def _render_market_reaction(
             if abs(since_event) > 0.005:
                 st.info(
                     f"{team}'s current price is {since_event:+.2f} CM from the "
-                    f"{'first post-result' if is_match_event else 'refresh'} price shown here. "
+                    f"{'result' if is_match_event else 'settlement' if is_settlement else 'refresh'} price shown here. "
                     "That gap comes from later official model publications."
                 )
-        trigger = movement.get("trigger_matches")
         if trigger:
             st.caption(f"{'Trigger' if is_match_event else 'Publication'}: {trigger}")
         snapshot_time = movement.get("snapshot_id")
@@ -465,15 +494,15 @@ def _render_market_reaction(
         ):
             latest_type = str(latest_movement.get("movement_type") or "").replace("_", " ")
             st.caption(
-                "Latest price-publication movement: "
+                "Latest official price movement: "
                 f"{_number(latest_movement.get('price_before'), suffix=' CM')} -> "
                 f"{_number(latest_movement.get('price_after'), suffix=' CM')} "
                 f"({_number(latest_movement.get('price_change'), suffix=' CM')})"
                 f" from {latest_type or 'model refresh'}."
             )
         st.caption(
-            "Match-result movement and current price are separate timestamps. "
-            "Use current price for where the market stands now."
+            "Use current price for where the market stands now. Older matches can still "
+            "move a country later when other results change its projected path."
         )
 
     if history.empty or "team" not in history.columns:
