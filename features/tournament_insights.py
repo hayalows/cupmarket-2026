@@ -3,6 +3,8 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
+from features import tournament_stage
+
 CONTINENT_MAP = {
     "Algeria": "Africa",
     "Argentina": "South America",
@@ -101,30 +103,11 @@ def _probability(value, default: float = 0.0) -> float:
 
 
 def next_meaningful_target(row: pd.Series) -> tuple[str, str, str]:
-    for column, stage in EXIT_STAGE_COLUMNS:
-        if _probability(row.get(column)) >= 0.999:
-            return "Eliminated", f"Out at {stage}", "—"
-
-    for column, status, target in NEXT_TARGET_COLUMNS:
-        probability = _probability(row.get(column))
-        if probability < 0.999:
-            return status, target, _percent(probability)
-
-    champion = _probability(row.get("prob_champion"))
-    if champion >= 0.999:
-        return "Champion", "Champion", "100.0%"
-    return "Final", "Win tournament", _percent(champion)
+    return tournament_stage.next_meaningful_target(row)
 
 
 def add_next_target_columns(frame: pd.DataFrame) -> pd.DataFrame:
-    if frame.empty:
-        return frame.copy()
-    result = frame.copy()
-    targets = result.apply(next_meaningful_target, axis=1)
-    result["stage_status"] = [status for status, _, _ in targets]
-    result["next_target"] = [target for _, target, _ in targets]
-    result["next_target_chance"] = [chance for _, _, chance in targets]
-    return result
+    return tournament_stage.add_next_target_columns(frame)
 
 
 def _timestamp(frame: pd.DataFrame) -> str:
@@ -187,11 +170,80 @@ def _render_table(frame: pd.DataFrame, columns: list[str], labels: dict[str, str
     st.dataframe(display, hide_index=True, use_container_width=True)
 
 
+def _render_stage_ladders(prices: pd.DataFrame) -> None:
+    st.markdown("## Tournament Ladder")
+    st.caption(
+        "This grows with the tournament: confirmed countries are locked by results, "
+        "while still-possible and leading countries come from the latest model."
+    )
+    ladder_tab, continent_tab = st.tabs(["Stage ladder", "Continent ladder"])
+    with ladder_tab:
+        ladder = tournament_stage.stage_ladder(prices)
+        if ladder.empty:
+            st.caption("Stage ladder data is not available yet.")
+        else:
+            st.dataframe(ladder, hide_index=True, use_container_width=True)
+    with continent_tab:
+        continents = tournament_stage.continent_ladder(prices)
+        if continents.empty:
+            st.caption("Continent ladder data is not available yet.")
+        else:
+            st.dataframe(continents, hide_index=True, use_container_width=True)
+
+
+def _render_focus_movers(
+    changes: pd.DataFrame,
+    focus: tournament_stage.StageTarget,
+    *,
+    ascending: bool,
+) -> None:
+    current_column = f"current_{focus.reach_column}"
+    opening_column = f"opening_{focus.reach_column}"
+    change_column = f"change_{focus.reach_column}"
+    if change_column not in changes.columns:
+        st.caption("Stage movement history is not available yet.")
+        return
+    rows = (
+        add_next_target_columns(changes.dropna(subset=[change_column]))
+        .sort_values(change_column, ascending=ascending)
+        .head(10)
+    )
+    _render_table(
+        rows,
+        [
+            "team",
+            "continent",
+            opening_column,
+            current_column,
+            change_column,
+            "current_price",
+            "price_gain",
+            "stage_status",
+            "next_target",
+            "next_target_chance",
+        ],
+        {
+            "team": "Country",
+            "continent": "Continent",
+            opening_column: "Opening chance",
+            current_column: "Current chance",
+            change_column: "Chance move",
+            "current_price": "Current price",
+            "price_gain": "Price move",
+            "stage_status": "Status",
+            "next_target": "Next target",
+            "next_target_chance": "Chance",
+        },
+        percent_columns=[opening_column, current_column],
+        pp_columns=[change_column],
+    )
+
+
 def _prepare_prices(prices: pd.DataFrame) -> pd.DataFrame:
     if prices.empty:
         return pd.DataFrame()
     frame = prices.copy()
-    frame["continent"] = frame["team"].map(CONTINENT_MAP).fillna("Other") if "team" in frame.columns else "Other"
+    frame["continent"] = frame["team"].map(tournament_stage.CONTINENT_MAP).fillna("Other") if "team" in frame.columns else "Other"
     numeric_columns = [
         "prob_reach_round_32",
         "prob_reach_round_16",
@@ -234,7 +286,12 @@ def _snapshot_change_frame(snapshots: pd.DataFrame, prices: pd.DataFrame) -> pd.
         return pd.DataFrame()
     frame["generated_at_utc"] = pd.to_datetime(frame["generated_at_utc"], errors="coerce", utc=True)
     frame = frame.dropna(subset=["generated_at_utc", "team"])
-    for column in ["cupmarket_price", "prob_reach_round_32", "prob_champion", "market_rank"]:
+    snapshot_numeric_columns = [
+        "cupmarket_price",
+        "market_rank",
+        *tournament_stage.PROBABILITY_COLUMNS,
+    ]
+    for column in snapshot_numeric_columns:
         if column in frame.columns:
             frame[column] = pd.to_numeric(frame[column], errors="coerce")
     if frame.empty:
@@ -246,7 +303,7 @@ def _snapshot_change_frame(snapshots: pd.DataFrame, prices: pd.DataFrame) -> pd.
     latest = latest_from_snapshots
     if not prices.empty and "team" in prices.columns:
         latest_prices = prices.copy()
-        for column in ["cupmarket_price", "prob_reach_round_32", "prob_champion", "market_rank"]:
+        for column in snapshot_numeric_columns:
             if column in latest_prices.columns:
                 latest_prices[column] = pd.to_numeric(latest_prices[column], errors="coerce")
         latest_prices["generated_at_utc"] = pd.to_datetime(latest_prices.get("generated_at_utc"), errors="coerce", utc=True) if "generated_at_utc" in latest_prices.columns else pd.NaT
@@ -255,7 +312,7 @@ def _snapshot_change_frame(snapshots: pd.DataFrame, prices: pd.DataFrame) -> pd.
     merged = earliest.merge(latest, on="team", suffixes=("_opening", "_current"))
     if merged.empty:
         return merged
-    merged["continent"] = merged["team"].map(CONTINENT_MAP).fillna("Other")
+    merged["continent"] = merged["team"].map(tournament_stage.CONTINENT_MAP).fillna("Other")
     merged["opening_time"] = merged.get("generated_at_utc_opening")
     merged["current_time"] = merged.get("generated_at_utc_current")
     merged["opening_price"] = merged.get("cupmarket_price_opening")
@@ -267,6 +324,15 @@ def _snapshot_change_frame(snapshots: pd.DataFrame, prices: pd.DataFrame) -> pd.
     merged["opening_champion"] = merged.get("prob_champion_opening")
     merged["current_champion"] = merged.get("prob_champion_current")
     merged["champion_change"] = merged["current_champion"] - merged["opening_champion"]
+    for column in tournament_stage.PROBABILITY_COLUMNS:
+        opening_column = f"{column}_opening"
+        current_column = f"{column}_current"
+        merged[f"opening_{column}"] = merged.get(opening_column)
+        merged[f"current_{column}"] = merged.get(current_column)
+        merged[f"change_{column}"] = (
+            merged[f"current_{column}"] - merged[f"opening_{column}"]
+        )
+        merged[column] = merged[f"current_{column}"]
     return merged
 
 
@@ -307,11 +373,17 @@ def _prediction_review(prediction_ledger: pd.DataFrame) -> pd.DataFrame:
     return frame
 
 
-def _render_tournament_so_far(prices: pd.DataFrame, snapshots: pd.DataFrame, prediction_ledger: pd.DataFrame) -> None:
+def _render_tournament_so_far(
+    prices: pd.DataFrame,
+    snapshots: pd.DataFrame,
+    prediction_ledger: pd.DataFrame,
+    progress: pd.DataFrame,
+) -> None:
     st.markdown("## Tournament So Far")
     st.caption("This section compares the earliest stored CupMarket snapshot with the latest model output. If the first snapshot is not pre-tournament, the label stays honest: earliest stored snapshot.")
     changes = _snapshot_change_frame(snapshots, prices)
     reviews = _prediction_review(prediction_ledger)
+    focus = tournament_stage.current_stage_target(prices, progress)
 
     if changes.empty:
         st.info("No team snapshot history found yet. Once snapshots exist, this section will show full tournament movement.")
@@ -329,49 +401,23 @@ def _render_tournament_so_far(prices: pd.DataFrame, snapshots: pd.DataFrame, pre
     else:
         cols[3].metric("Pre-match calls", "—")
 
-    tab1, tab2, tab3, tab4 = st.tabs(["Overperformers", "Underperformers", "Market journey", "Model calls"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(
+        ["Target gainers", "Target fallers", "Market journey", "Model calls", "Group/R32 archive"]
+    )
 
     with tab1:
-        st.markdown("### Biggest Round-of-32 probability gainers")
-        gainers = changes.dropna(subset=["r32_change"]).sort_values("r32_change", ascending=False).head(10)
-        _render_table(
-            gainers,
-            ["team", "continent", "opening_r32", "current_r32", "r32_change", "opening_price", "current_price", "price_gain"],
-            {
-                "team": "Country",
-                "continent": "Continent",
-                "opening_r32": "Opening R32",
-                "current_r32": "Current R32",
-                "r32_change": "R32 change",
-                "opening_price": "Opening price",
-                "current_price": "Current price",
-                "price_gain": "Price gain",
-            },
-            percent_columns=["opening_r32", "current_r32"],
-            pp_columns=["r32_change"],
+        st.markdown(f"### Biggest {focus.label} chance gainers")
+        _render_focus_movers(changes, focus, ascending=False)
+        st.caption(
+            f"These are the countries whose chance to make {focus.label} has improved most since the earliest stored snapshot."
         )
-        st.caption("Use this to spot teams that moved from doubt to safety.")
 
     with tab2:
-        st.markdown("### Biggest Round-of-32 probability fallers")
-        fallers = changes.dropna(subset=["r32_change"]).sort_values("r32_change", ascending=True).head(10)
-        _render_table(
-            fallers,
-            ["team", "continent", "opening_r32", "current_r32", "r32_change", "opening_price", "current_price", "price_gain"],
-            {
-                "team": "Country",
-                "continent": "Continent",
-                "opening_r32": "Opening R32",
-                "current_r32": "Current R32",
-                "r32_change": "R32 change",
-                "opening_price": "Opening price",
-                "current_price": "Current price",
-                "price_gain": "Price gain",
-            },
-            percent_columns=["opening_r32", "current_r32"],
-            pp_columns=["r32_change"],
+        st.markdown(f"### Biggest {focus.label} chance fallers")
+        _render_focus_movers(changes, focus, ascending=True)
+        st.caption(
+            f"These are the countries whose path to {focus.label} has weakened most since the earliest stored snapshot."
         )
-        st.caption("Use this to spot teams that lost control of their tournament path.")
 
     with tab3:
         st.markdown("### Biggest price risers since earliest stored snapshot")
@@ -396,19 +442,19 @@ def _render_tournament_so_far(prices: pd.DataFrame, snapshots: pd.DataFrame, pre
         price_fallers = changes.dropna(subset=["price_gain"]).sort_values("price_gain", ascending=True).head(8)
         _render_table(
             price_fallers,
-            ["team", "continent", "opening_price", "current_price", "price_gain", "opening_r32", "current_r32", "r32_change"],
+            ["team", "continent", "opening_price", "current_price", "price_gain", "opening_champion", "current_champion", "champion_change"],
             {
                 "team": "Country",
                 "continent": "Continent",
                 "opening_price": "Opening price",
                 "current_price": "Current price",
                 "price_gain": "Price gain",
-                "opening_r32": "Opening R32",
-                "current_r32": "Current R32",
-                "r32_change": "R32 change",
+                "opening_champion": "Opening champion",
+                "current_champion": "Current champion",
+                "champion_change": "Champion change",
             },
-            percent_columns=["opening_r32", "current_r32"],
-            pp_columns=["r32_change"],
+            percent_columns=["opening_champion", "current_champion"],
+            pp_columns=["champion_change"],
         )
 
     with tab4:
@@ -442,12 +488,43 @@ def _render_tournament_so_far(prices: pd.DataFrame, snapshots: pd.DataFrame, pre
                 percent_columns=["actual_result_probability"],
             )
 
+    with tab5:
+        st.markdown("### Round-of-32 archive")
+        gainers = changes.dropna(subset=["r32_change"]).sort_values("r32_change", ascending=False).head(8)
+        _render_table(
+            gainers,
+            ["team", "continent", "opening_r32", "current_r32", "r32_change", "opening_price", "current_price", "price_gain"],
+            {
+                "team": "Country",
+                "continent": "Continent",
+                "opening_r32": "Opening R32",
+                "current_r32": "Current R32",
+                "r32_change": "R32 change",
+                "opening_price": "Opening price",
+                "current_price": "Current price",
+                "price_gain": "Price gain",
+            },
+            percent_columns=["opening_r32", "current_r32"],
+            pp_columns=["r32_change"],
+        )
+        st.caption("Archived group-stage movement remains here, but the main page now follows the active tournament target.")
 
-def render_tournament_insights(prices: pd.DataFrame, tables: pd.DataFrame, movements: pd.DataFrame, path_status: pd.DataFrame, snapshots: pd.DataFrame | None = None, prediction_ledger: pd.DataFrame | None = None) -> None:
+
+def render_tournament_insights(
+    prices: pd.DataFrame,
+    tables: pd.DataFrame,
+    movements: pd.DataFrame,
+    path_status: pd.DataFrame,
+    snapshots: pd.DataFrame | None = None,
+    prediction_ledger: pd.DataFrame | None = None,
+    progress: pd.DataFrame | None = None,
+) -> None:
     prices = _prepare_prices(prices)
     tables = _prepare_tables(tables)
     snapshots = snapshots if isinstance(snapshots, pd.DataFrame) else pd.DataFrame()
     prediction_ledger = prediction_ledger if isinstance(prediction_ledger, pd.DataFrame) else pd.DataFrame()
+    progress = progress if isinstance(progress, pd.DataFrame) else pd.DataFrame()
+    focus = tournament_stage.current_stage_target(prices, progress)
 
     st.markdown("### What changed after the latest model run?")
     st.caption(f"Published model: {_timestamp(prices)}")
@@ -455,16 +532,32 @@ def render_tournament_insights(prices: pd.DataFrame, tables: pd.DataFrame, movem
 
     top_cards = st.columns(4)
     qualified = _qualifying_frame(prices)
-    top_cards[0].metric("Reached Round of 32", len(qualified) if not qualified.empty else 0)
-    top_cards[1].metric("Continents represented", qualified["continent"].nunique() if not qualified.empty else 0)
-    if not tables.empty:
-        top_cards[2].metric("Most goals by a team", int(tables["goals_for"].max()))
-        top_cards[3].metric("Worst goals against", int(tables["goals_against"].max()))
+    focus_values = (
+        pd.to_numeric(prices.get(focus.reach_column), errors="coerce").fillna(0.0)
+        if not prices.empty
+        else pd.Series(dtype=float)
+    )
+    confirmed_focus = int((focus_values >= 0.999).sum()) if not focus_values.empty else 0
+    live_knockouts = 0
+    if not progress.empty and "status" in progress.columns:
+        live_knockouts = int(
+            progress["status"].astype(str).str.upper().isin(tournament_stage.LIVE_STATUSES).sum()
+        )
+    top_cards[0].metric("Current target", focus.label)
+    top_cards[1].metric(f"Confirmed {focus.label}", confirmed_focus)
+    top_cards[2].metric("Live knockouts", live_knockouts)
+    if not prices.empty and "cupmarket_price" in prices.columns:
+        leader = prices.sort_values("cupmarket_price", ascending=False).iloc[0]
+        top_cards[3].metric(
+            "Market leader",
+            str(leader.get("team", "â€”")),
+            f"{leader.get('cupmarket_price', 0):.2f} CM",
+        )
     else:
-        top_cards[2].metric("Most goals by a team", "—")
-        top_cards[3].metric("Worst goals against", "—")
+        top_cards[3].metric("Market leader", "â€”")
 
-    _render_tournament_so_far(prices, snapshots, prediction_ledger)
+    _render_stage_ladders(prices)
+    _render_tournament_so_far(prices, snapshots, prediction_ledger, progress)
 
     st.markdown("## Latest Model Run")
     st.caption(
@@ -529,8 +622,8 @@ def render_tournament_insights(prices: pd.DataFrame, tables: pd.DataFrame, movem
             },
         )
 
-    st.markdown("### Non-obvious tournament facts")
-    facts = []
+    st.markdown("### Current tournament facts")
+    facts = tournament_stage.stage_probability_facts(prices, progress)
     if not tables.empty:
         no_goals = tables.loc[tables["goals_for"] == 0, "team"].astype(str).tolist()
         if no_goals:
@@ -551,7 +644,7 @@ def render_tournament_insights(prices: pd.DataFrame, tables: pd.DataFrame, movem
     for fact in facts:
         st.write(f"- {fact}")
 
-    st.markdown("### Continents in the Round of 32 picture")
+    st.markdown("### Group/R32 archive: continent picture")
     if not qualified.empty:
         continent_counts = (
             qualified.groupby("continent")["team"]
@@ -561,9 +654,9 @@ def render_tournament_insights(prices: pd.DataFrame, tables: pd.DataFrame, movem
         )
         continent_counts = continent_counts.rename(columns={"continent": "Continent"})
         st.dataframe(continent_counts, hide_index=True, use_container_width=True)
-        st.caption("This uses teams with at least 99.9% Round-of-32 probability in the latest CupMarket model.")
+        st.caption("Archived group-to-Round-of-32 view. The stage ladder above follows the active tournament phase.")
 
-    st.markdown("### Teams that were on the group-stage edge")
+    st.markdown("### Group-stage edge archive")
     if not prices.empty and "prob_reach_round_32" in prices.columns:
         edge = prices.loc[(prices["prob_reach_round_32"] > 0.0) & (prices["prob_reach_round_32"] < 0.999)].sort_values("prob_reach_round_32", ascending=False)
         _render_table(
@@ -579,7 +672,7 @@ def render_tournament_insights(prices: pd.DataFrame, tables: pd.DataFrame, movem
             percent_columns=["prob_reach_round_32", "prob_group_exit"],
         )
 
-    st.markdown("### Bracket path stories")
+    st.markdown("### Group/R32 path archive")
     if isinstance(path_status, pd.DataFrame) and not path_status.empty:
         cols = ["team", "fixture_status", "current_group_position", "prob_reach_round_32", "most_likely_opponent", "most_likely_opponent_probability_given_qualification"]
         display = path_status[[column for column in cols if column in path_status.columns]].copy()

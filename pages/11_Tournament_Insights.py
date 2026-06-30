@@ -33,13 +33,14 @@ def _alive_count(prices: pd.DataFrame) -> int:
     return int((~locked_out | (champion > 0.0)).sum())
 
 
-def _knockout_counts(progress: pd.DataFrame) -> tuple[int, int]:
+def _knockout_counts(progress: pd.DataFrame) -> tuple[int, int, int]:
     if not isinstance(progress, pd.DataFrame) or progress.empty or "status" not in progress.columns:
-        return 0, 0
+        return 0, 0, 0
     statuses = progress["status"].astype(str)
     finished = int(statuses.isin(["FINISHED", "AWARDED"]).sum())
+    live = int(statuses.isin(["IN_PLAY", "LIVE", "PAUSED", "SUSPENDED"]).sum())
     upcoming = int(statuses.isin(["TIMED", "SCHEDULED"]).sum())
-    return finished, upcoming
+    return finished, live, upcoming
 
 
 st.set_page_config(page_title="CupMarket Analysis Lab", page_icon="💡", layout="wide")
@@ -102,14 +103,14 @@ if prediction_ledger.empty:
     ledger_path = STATE_DIR / "world_cup_prediction_ledger.csv"
     prediction_ledger = pd.read_csv(ledger_path) if ledger_path.exists() else pd.DataFrame()
 
-finished_knockouts, upcoming_knockouts = _knockout_counts(progress)
+finished_knockouts, live_knockouts, upcoming_knockouts = _knockout_counts(progress)
 stage_cols = st.columns(4)
 stage_cols[0].metric("Still alive", _alive_count(prices))
 stage_cols[1].metric("Knockout results", finished_knockouts)
-stage_cols[2].metric("Fixtures ahead", upcoming_knockouts)
+stage_cols[2].metric("Live knockouts", live_knockouts)
 stage_cols[3].metric(
-    "Adaptive teams",
-    len(adaptive_ratings) if isinstance(adaptive_ratings, pd.DataFrame) else 0,
+    "Fixtures ahead",
+    upcoming_knockouts,
 )
 st.caption(
     "Use the tabs below by question: tournament story, one match, timeline, "
@@ -134,6 +135,7 @@ with tabs[0]:
         path_status,
         snapshots=snapshots,
         prediction_ledger=prediction_ledger,
+        progress=progress,
     )
 with tabs[1]:
     render_match_story(prediction_ledger, movement_history, processed_ledger)
