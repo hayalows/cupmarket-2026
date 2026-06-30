@@ -16,6 +16,7 @@ from features.product_guidance import (
 from features.product_ui import render_official_data_caption
 from features.tournament_data import load_static_data
 from features.tournament_path_data import round_of_16_build
+from features.tournament_simulator import render_tournament_simulator
 
 ROOT = Path(__file__).resolve().parents[1]
 KNOCKOUT_PROGRESS_PATH = ROOT / "data" / "knockout_progress_latest.csv"
@@ -843,7 +844,9 @@ def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: di
     predictions = metadata.get("predictions") if isinstance(metadata, dict) else pd.DataFrame()
     adaptive_ratings = metadata.get("adaptive_ratings") if isinstance(metadata, dict) else pd.DataFrame()
 
-    stage_tab, market_tab, today_tab = st.tabs(["Stage", "Market", "Today"])
+    stage_tab, market_tab, simulator_tab, today_tab = st.tabs(
+        ["Stage", "Market", "Simulator", "Today"]
+    )
     with stage_tab:
         render_stage_explorer(matches, prices)
     with market_tab:
@@ -852,6 +855,8 @@ def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: di
             predictions=predictions,
             adaptive_ratings=adaptive_ratings,
         )
+    with simulator_tab:
+        render_tournament_simulator(matches, prices, predictions)
     with today_tab:
         render_todays_story(matches, prices)
         render_start_here_panel(default_team)

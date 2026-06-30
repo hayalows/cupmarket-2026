@@ -54,6 +54,23 @@ CONTINENT_MAP = {
     "Uzbekistan": "Asia",
 }
 
+EXIT_STAGE_COLUMNS = [
+    ("prob_group_exit", "Group stage"),
+    ("prob_round_32_exit", "Round of 32"),
+    ("prob_round_16_exit", "Round of 16"),
+    ("prob_quarter_final_exit", "Quarter-final"),
+    ("prob_semi_final_exit", "Semi-final"),
+    ("prob_runner_up", "Final"),
+]
+
+NEXT_TARGET_COLUMNS = [
+    ("prob_reach_round_16", "Round of 32", "Reach Round of 16"),
+    ("prob_reach_quarter_final", "Round of 16", "Reach Quarter-final"),
+    ("prob_reach_semi_final", "Quarter-final", "Reach Semi-final"),
+    ("prob_reach_final", "Semi-final", "Reach Final"),
+    ("prob_champion", "Final", "Win tournament"),
+]
+
 
 def _percent(value, digits: int = 1) -> str:
     number = pd.to_numeric(value, errors="coerce")
@@ -74,6 +91,40 @@ def _number(value, digits: int = 2) -> str:
     if pd.isna(number):
         return "—"
     return f"{float(number):.{digits}f}"
+
+
+def _probability(value, default: float = 0.0) -> float:
+    number = pd.to_numeric(value, errors="coerce")
+    if pd.isna(number):
+        return default
+    return float(number)
+
+
+def next_meaningful_target(row: pd.Series) -> tuple[str, str, str]:
+    for column, stage in EXIT_STAGE_COLUMNS:
+        if _probability(row.get(column)) >= 0.999:
+            return "Eliminated", f"Out at {stage}", "—"
+
+    for column, status, target in NEXT_TARGET_COLUMNS:
+        probability = _probability(row.get(column))
+        if probability < 0.999:
+            return status, target, _percent(probability)
+
+    champion = _probability(row.get("prob_champion"))
+    if champion >= 0.999:
+        return "Champion", "Champion", "100.0%"
+    return "Final", "Win tournament", _percent(champion)
+
+
+def add_next_target_columns(frame: pd.DataFrame) -> pd.DataFrame:
+    if frame.empty:
+        return frame.copy()
+    result = frame.copy()
+    targets = result.apply(next_meaningful_target, axis=1)
+    result["stage_status"] = [status for status, _, _ in targets]
+    result["next_target"] = [target for _, target, _ in targets]
+    result["next_target_chance"] = [chance for _, _, chance in targets]
+    return result
 
 
 def _timestamp(frame: pd.DataFrame) -> str:
@@ -143,7 +194,16 @@ def _prepare_prices(prices: pd.DataFrame) -> pd.DataFrame:
     frame["continent"] = frame["team"].map(CONTINENT_MAP).fillna("Other") if "team" in frame.columns else "Other"
     numeric_columns = [
         "prob_reach_round_32",
+        "prob_reach_round_16",
+        "prob_reach_quarter_final",
+        "prob_reach_semi_final",
+        "prob_reach_final",
         "prob_group_exit",
+        "prob_round_32_exit",
+        "prob_round_16_exit",
+        "prob_quarter_final_exit",
+        "prob_semi_final_exit",
+        "prob_runner_up",
         "prob_champion",
         "cupmarket_price",
         "price_change_percent",
@@ -407,38 +467,66 @@ def render_tournament_insights(prices: pd.DataFrame, tables: pd.DataFrame, movem
     _render_tournament_so_far(prices, snapshots, prediction_ledger)
 
     st.markdown("## Latest Model Run")
+    st.caption(
+        "Shows who gained or lost market value in the latest model update, plus "
+        "their next meaningful tournament target."
+    )
     st.markdown("### Biggest model winners")
     if not prices.empty and "price_change_percent" in prices.columns:
-        winners = prices.dropna(subset=["price_change_percent"]).sort_values("price_change_percent", ascending=False).head(8)
+        winners = add_next_target_columns(
+            prices.dropna(subset=["price_change_percent"])
+            .sort_values("price_change_percent", ascending=False)
+            .head(8)
+        )
         _render_table(
             winners,
-            ["team", "continent", "cupmarket_price", "price_change_percent", "prob_reach_round_32", "prob_champion"],
+            [
+                "team",
+                "continent",
+                "cupmarket_price",
+                "price_change_percent",
+                "stage_status",
+                "next_target",
+                "next_target_chance",
+            ],
             {
                 "team": "Country",
                 "continent": "Continent",
                 "cupmarket_price": "Price",
                 "price_change_percent": "Move",
-                "prob_reach_round_32": "Reach R32",
-                "prob_champion": "Champion",
+                "stage_status": "Status",
+                "next_target": "Next target",
+                "next_target_chance": "Chance",
             },
-            percent_columns=["prob_reach_round_32", "prob_champion"],
         )
 
     st.markdown("### Biggest model losers")
     if not prices.empty and "price_change_percent" in prices.columns:
-        losers = prices.dropna(subset=["price_change_percent"]).sort_values("price_change_percent", ascending=True).head(8)
+        losers = add_next_target_columns(
+            prices.dropna(subset=["price_change_percent"])
+            .sort_values("price_change_percent", ascending=True)
+            .head(8)
+        )
         _render_table(
             losers,
-            ["team", "continent", "cupmarket_price", "price_change_percent", "prob_reach_round_32", "prob_group_exit"],
+            [
+                "team",
+                "continent",
+                "cupmarket_price",
+                "price_change_percent",
+                "stage_status",
+                "next_target",
+                "next_target_chance",
+            ],
             {
                 "team": "Country",
                 "continent": "Continent",
                 "cupmarket_price": "Price",
                 "price_change_percent": "Move",
-                "prob_reach_round_32": "Reach R32",
-                "prob_group_exit": "Group exit",
+                "stage_status": "Status",
+                "next_target": "Next target",
+                "next_target_chance": "Chance",
             },
-            percent_columns=["prob_reach_round_32", "prob_group_exit"],
         )
 
     st.markdown("### Non-obvious tournament facts")
