@@ -5,7 +5,7 @@ logical_match_number,api_match_id,stage,utc_date,status,home_team,away_team,home
 76,537418,LAST_32,2026-06-30 01:00:00+00:00,FINISHED,Netherlands,Morocco,3.0,4.0,PENALTY_SHOOTOUT,penalties,Morocco,2.0,3.0
 77,537424,LAST_32,2026-06-30 17:00:00+00:00,FINISHED,Ivory Coast,Norway,1.0,2.0,REGULAR,regular_time,Norway,,
 78,537416,LAST_32,2026-06-30 21:00:00+00:00,FINISHED,France,Sweden,3.0,0.0,REGULAR,regular_time,France,,
-79,537425,LAST_32,2026-07-01 01:00:00+00:00,TIMED,Mexico,Ecuador,,,REGULAR,,,,
+79,537425,LAST_32,2026-07-01 01:00:00+00:00,FINISHED,Mexico,Ecuador,2.0,0.0,REGULAR,regular_time,Mexico,,
 80,537426,LAST_32,2026-07-01 16:00:00+00:00,TIMED,England,Congo DR,,,REGULAR,,,,
 81,537422,LAST_32,2026-07-01 20:00:00+00:00,TIMED,Belgium,Senegal,,,REGULAR,,,,
 82,537421,LAST_32,2026-07-02 00:00:00+00:00,TIMED,United States,Bosnia-Herzegovina,,,REGULAR,,,,

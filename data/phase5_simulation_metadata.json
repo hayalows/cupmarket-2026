@@ -6,10 +6,10 @@
   "finished_group_matches": 72,
   "active_group_matches": 0,
   "latest_completed_group_match_utc": "2026-06-28T02:00:00+00:00",
-  "actual_knockout_results_used": 6,
-  "actual_resolution_count_across_simulations": 120000,
-  "simulated_resolution_count_across_simulations": 500000,
-  "pair_xg_cache_size": 294,
+  "actual_knockout_results_used": 7,
+  "actual_resolution_count_across_simulations": 140000,
+  "simulated_resolution_count_across_simulations": 480000,
+  "pair_xg_cache_size": 266,
   "stage_probability_totals": {
     "round_32_total": 32.0,
     "round_16_total": 16.0,
@@ -32,12 +32,12 @@
     "Penalty shootouts use Elo-bounded probabilities between 35% and 65%.",
     "Finished penalty shootouts count as draws for Elo, while the official winner advances."
   ],
-  "generated_at_utc": "2026-07-01T00:14:19.497666+00:00",
+  "generated_at_utc": "2026-07-01T04:59:19.609653+00:00",
   "new_finished_matches_processed": 0,
   "api": {
     "http_status": 200,
     "matches_returned": 104,
-    "requests_remaining": "8",
-    "request_counter_reset": "57"
+    "requests_remaining": "9",
+    "request_counter_reset": "60"
   }
 }
