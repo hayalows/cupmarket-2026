@@ -145,21 +145,21 @@ class TournamentPathDataTests(unittest.TestCase):
         progress = pd.DataFrame(
             [
                 {
-                    "logical_match_number": 73,
-                    "stage": "LAST_32",
-                    "status": "FINISHED",
-                    "home_team": "South Africa",
-                    "away_team": "Canada",
-                    "home_score": 0,
-                    "away_score": 1,
-                    "advancing_team": "Canada",
-                },
-                {
                     "logical_match_number": 75,
                     "stage": "LAST_32",
-                    "status": "TIMED",
+                    "status": "FINISHED",
                     "home_team": "Germany",
                     "away_team": "Paraguay",
+                    "home_score": 4,
+                    "away_score": 5,
+                    "advancing_team": "Paraguay",
+                },
+                {
+                    "logical_match_number": 78,
+                    "stage": "LAST_32",
+                    "status": "TIMED",
+                    "home_team": "France",
+                    "away_team": "Sweden",
                     "advancing_team": pd.NA,
                 },
                 {
@@ -174,13 +174,109 @@ class TournamentPathDataTests(unittest.TestCase):
         )
 
         slots = round_of_16_build(progress)
-        canada_slot = team_next_knockout_slot(progress, "Canada")
+        paraguay_slot = team_next_knockout_slot(progress, "Paraguay")
 
         row = slots.loc[slots["match_number"].eq(90)].iloc[0]
-        self.assertEqual(row["fixture"], "Canada vs Germany/Paraguay winner")
+        self.assertEqual(row["fixture"], "Paraguay vs France/Sweden winner")
         self.assertEqual(row["state"], "One team through")
-        self.assertEqual(canada_slot["match_number"], 90)
-        self.assertEqual(canada_slot["fixture"], "Canada vs Germany/Paraguay winner")
+        self.assertEqual(paraguay_slot["match_number"], 90)
+        self.assertEqual(paraguay_slot["fixture"], "Paraguay vs France/Sweden winner")
+
+    def test_round_of_16_build_matches_official_confirmed_pairings(self):
+        progress = pd.DataFrame(
+            [
+                {
+                    "logical_match_number": 73,
+                    "stage": "LAST_32",
+                    "status": "FINISHED",
+                    "home_team": "South Africa",
+                    "away_team": "Canada",
+                    "home_score": 0,
+                    "away_score": 1,
+                    "advancing_team": "Canada",
+                },
+                {
+                    "logical_match_number": 74,
+                    "stage": "LAST_32",
+                    "status": "FINISHED",
+                    "home_team": "Brazil",
+                    "away_team": "Japan",
+                    "home_score": 2,
+                    "away_score": 1,
+                    "advancing_team": "Brazil",
+                },
+                {
+                    "logical_match_number": 75,
+                    "stage": "LAST_32",
+                    "status": "FINISHED",
+                    "home_team": "Germany",
+                    "away_team": "Paraguay",
+                    "home_score": 4,
+                    "away_score": 5,
+                    "advancing_team": "Paraguay",
+                },
+                {
+                    "logical_match_number": 76,
+                    "stage": "LAST_32",
+                    "status": "FINISHED",
+                    "home_team": "Netherlands",
+                    "away_team": "Morocco",
+                    "home_score": 3,
+                    "away_score": 4,
+                    "advancing_team": "Morocco",
+                },
+                {
+                    "logical_match_number": 77,
+                    "stage": "LAST_32",
+                    "status": "FINISHED",
+                    "home_team": "Ivory Coast",
+                    "away_team": "Norway",
+                    "home_score": 1,
+                    "away_score": 2,
+                    "advancing_team": "Norway",
+                },
+                {
+                    "logical_match_number": 78,
+                    "stage": "LAST_32",
+                    "status": "FINISHED",
+                    "home_team": "France",
+                    "away_team": "Sweden",
+                    "home_score": 3,
+                    "away_score": 0,
+                    "advancing_team": "France",
+                },
+                {
+                    "logical_match_number": 89,
+                    "stage": "LAST_16",
+                    "status": "TIMED",
+                    "home_team": "Canada",
+                    "away_team": "Morocco",
+                    "utc_date": "2026-07-04T17:00:00Z",
+                },
+                {
+                    "logical_match_number": 90,
+                    "stage": "LAST_16",
+                    "status": "TIMED",
+                    "home_team": "Paraguay",
+                    "away_team": "France",
+                    "utc_date": "2026-07-04T21:00:00Z",
+                },
+                {
+                    "logical_match_number": 91,
+                    "stage": "LAST_16",
+                    "status": "TIMED",
+                    "home_team": "Brazil",
+                    "away_team": "Norway",
+                    "utc_date": "2026-07-05T20:00:00Z",
+                },
+            ]
+        )
+
+        slots = round_of_16_build(progress).set_index("match_number")
+
+        self.assertEqual(slots.loc[89, "fixture"], "Canada vs Morocco")
+        self.assertEqual(slots.loc[90, "fixture"], "Paraguay vs France")
+        self.assertEqual(slots.loc[91, "fixture"], "Brazil vs Norway")
 
     def test_team_summary_uses_latest_official_movement_and_keeps_played_event(self):
         movements = pd.DataFrame(
