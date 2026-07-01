@@ -561,23 +561,14 @@ def run_progressive_simulation(
     probabilities["champion_rank"] = np.arange(
         1, len(probabilities) + 1
     )
+    probabilities = pipeline.apply_performance_adjusted_settlement_columns(
+        probabilities,
+        matches,
+        live_elo,
+        previous_prices,
+    )
     prices = probabilities.copy()
-    prices["cupmarket_price"] = (
-        prices["prob_group_exit"]
-        * pipeline.SETTLEMENT_VALUES["group_exit"]
-        + prices["prob_round_32_exit"]
-        * pipeline.SETTLEMENT_VALUES["round_32_exit"]
-        + prices["prob_round_16_exit"]
-        * pipeline.SETTLEMENT_VALUES["round_16_exit"]
-        + prices["prob_quarter_final_exit"]
-        * pipeline.SETTLEMENT_VALUES["quarter_final_exit"]
-        + prices["prob_semi_final_exit"]
-        * pipeline.SETTLEMENT_VALUES["semi_final_exit"]
-        + prices["prob_runner_up"]
-        * pipeline.SETTLEMENT_VALUES["runner_up"]
-        + prices["prob_champion"]
-        * pipeline.SETTLEMENT_VALUES["champion"]
-    ).round(2)
+    prices["cupmarket_price"] = pipeline.calculate_cupmarket_price(prices).round(2)
     prices = prices.sort_values(
         "cupmarket_price", ascending=False
     ).reset_index(drop=True)

@@ -15,7 +15,7 @@ SETTLEMENT_VALUES = {
     "quarter_final_exit": 50.0,
     "semi_final_exit": 70.0,
     "runner_up": 85.0,
-    "champion": 100.0,
+    "champion": 120.0,
 }
 
 STAGE_CONFIG = {
@@ -27,7 +27,7 @@ STAGE_CONFIG = {
     "QUARTER_FINAL": ("Quarter-final", "prob_reach_semi_final", 50.0, 70.0),
     "SEMI_FINALS": ("Semi-final", "prob_reach_final", 70.0, 85.0),
     "SEMI_FINAL": ("Semi-final", "prob_reach_final", 70.0, 85.0),
-    "FINAL": ("Final", "prob_champion", 85.0, 100.0),
+    "FINAL": ("Final", "prob_champion", 85.0, 120.0),
 }
 
 UPCOMING_STATUSES = {"TIMED", "SCHEDULED"}
@@ -69,7 +69,7 @@ def _price(value: Any) -> str:
 
 def _stage_config(stage: Any) -> tuple[str, str, float, float]:
     key = _clean_text(stage).upper()
-    return STAGE_CONFIG.get(key, ("Knockout", "prob_champion", 15.0, 100.0))
+    return STAGE_CONFIG.get(key, ("Knockout", "prob_champion", 15.0, 120.0))
 
 
 def _real_team(value: Any) -> bool:

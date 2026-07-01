@@ -471,6 +471,38 @@ def _render_market_reaction(
             "Current price now",
             f"{float(current_price):.2f} CM" if pd.notna(current_price) else "—",
         )
+        settlement_value = pd.to_numeric(
+            price.get("adjusted_settlement_value")
+            if isinstance(price, pd.Series)
+            else None,
+            errors="coerce",
+        )
+        settlement_floor = pd.to_numeric(
+            price.get("exit_stage_floor") if isinstance(price, pd.Series) else None,
+            errors="coerce",
+        )
+        settlement_premium = pd.to_numeric(
+            price.get("performance_premium") if isinstance(price, pd.Series) else None,
+            errors="coerce",
+        )
+        settlement_reason = (
+            str(price.get("settlement_reason") or "")
+            if isinstance(price, pd.Series)
+            else ""
+        )
+        if pd.notna(settlement_value):
+            if pd.notna(settlement_floor) and pd.notna(settlement_premium):
+                st.caption(
+                    "Settlement value: "
+                    f"{float(settlement_value):.2f} CM "
+                    f"(floor {float(settlement_floor):.2f} "
+                    f"+ performance premium {float(settlement_premium):.2f})."
+                )
+            else:
+                st.caption(f"Settlement value: {float(settlement_value):.2f} CM.")
+            if settlement_reason:
+                with st.expander("Why this settlement value?", expanded=False):
+                    st.write(settlement_reason)
         if pd.notna(current_price) and pd.notna(after_price):
             since_event = float(current_price) - float(after_price)
             if abs(since_event) > 0.005:

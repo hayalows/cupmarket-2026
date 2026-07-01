@@ -71,6 +71,38 @@ class FakePipeline:
     SEMI_FINALS = {101: (97, 98), 102: (99, 100)}
 
     @staticmethod
+    def apply_performance_adjusted_settlement_columns(
+        probabilities,
+        *args,
+        **kwargs,
+    ):
+        current = probabilities.copy()
+        current["exit_stage_floor"] = np.nan
+        current["performance_premium"] = 0.0
+        current["adjusted_settlement_value"] = np.nan
+        current["settlement_reason"] = "Test pipeline uses flat settlements."
+        current["is_eliminated"] = False
+        return current
+
+    @staticmethod
+    def calculate_cupmarket_price(probabilities):
+        price = pd.Series(0.0, index=probabilities.index, dtype=float)
+        for stage, column in {
+            "group_exit": "prob_group_exit",
+            "round_32_exit": "prob_round_32_exit",
+            "round_16_exit": "prob_round_16_exit",
+            "quarter_final_exit": "prob_quarter_final_exit",
+            "semi_final_exit": "prob_semi_final_exit",
+            "runner_up": "prob_runner_up",
+            "champion": "prob_champion",
+        }.items():
+            price += (
+                pd.to_numeric(probabilities[column], errors="coerce").fillna(0.0)
+                * FakePipeline.SETTLEMENT_VALUES[stage]
+            )
+        return price
+
+    @staticmethod
     def elo_expected_score(home_rating, away_rating, host_adjustment=0.0):
         return 1.0 / (
             1.0

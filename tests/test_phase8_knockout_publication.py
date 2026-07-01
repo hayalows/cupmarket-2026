@@ -342,6 +342,275 @@ class Phase8KnockoutPublicationTests(unittest.TestCase):
         self.assertEqual(indexed.loc["Team D", "prob_reach_round_16"], 0.0)
         self.assertEqual(indexed.loc["Team D", "prob_champion"], 0.0)
 
+    def test_performance_settlement_differentiates_same_stage_exits(self):
+        probabilities = pd.DataFrame(
+            [
+                {
+                    "team": "Strong Exit",
+                    "group": "A",
+                    "live_elo": 1900.0,
+                    "prob_finish_1st_group": 1.0,
+                    "prob_finish_2nd_group": 0.0,
+                    "prob_finish_3rd_group": 0.0,
+                    "prob_finish_4th_group": 0.0,
+                    "prob_reach_round_32": 1.0,
+                    "prob_reach_round_16": 0.0,
+                    "prob_reach_quarter_final": 0.0,
+                    "prob_reach_semi_final": 0.0,
+                    "prob_reach_final": 0.0,
+                    "prob_champion": 0.0,
+                    "prob_group_exit": 0.0,
+                    "prob_round_32_exit": 1.0,
+                    "prob_round_16_exit": 0.0,
+                    "prob_quarter_final_exit": 0.0,
+                    "prob_semi_final_exit": 0.0,
+                    "prob_runner_up": 0.0,
+                },
+                {
+                    "team": "Weak Exit",
+                    "group": "B",
+                    "live_elo": 1400.0,
+                    "prob_finish_1st_group": 0.0,
+                    "prob_finish_2nd_group": 0.0,
+                    "prob_finish_3rd_group": 1.0,
+                    "prob_finish_4th_group": 0.0,
+                    "prob_reach_round_32": 1.0,
+                    "prob_reach_round_16": 0.0,
+                    "prob_reach_quarter_final": 0.0,
+                    "prob_reach_semi_final": 0.0,
+                    "prob_reach_final": 0.0,
+                    "prob_champion": 0.0,
+                    "prob_group_exit": 0.0,
+                    "prob_round_32_exit": 1.0,
+                    "prob_round_16_exit": 0.0,
+                    "prob_quarter_final_exit": 0.0,
+                    "prob_semi_final_exit": 0.0,
+                    "prob_runner_up": 0.0,
+                },
+            ]
+        )
+        matches = pd.DataFrame(
+            [
+                {
+                    "status": "FINISHED",
+                    "stage": "GROUP_STAGE",
+                    "home_team": "Strong Exit",
+                    "away_team": "Weak Exit",
+                    "winner": "HOME_TEAM",
+                    "duration": "REGULAR",
+                    "home_score_full_time": 3,
+                    "away_score_full_time": 0,
+                },
+                {
+                    "status": "FINISHED",
+                    "stage": "LAST_32",
+                    "home_team": "Strong Exit",
+                    "away_team": "Elite Opponent",
+                    "winner": "AWAY_TEAM",
+                    "duration": "PENALTY_SHOOTOUT",
+                    "home_score_full_time": 1,
+                    "away_score_full_time": 1,
+                },
+                {
+                    "status": "FINISHED",
+                    "stage": "LAST_32",
+                    "home_team": "Weak Exit",
+                    "away_team": "Average Opponent",
+                    "winner": "AWAY_TEAM",
+                    "duration": "REGULAR",
+                    "home_score_full_time": 0,
+                    "away_score_full_time": 4,
+                },
+            ]
+        )
+        live_elo_frame = live_elo(
+            "Strong Exit",
+            "Elite Opponent",
+            "Average Opponent",
+            "Weak Exit",
+        )
+        previous = pd.DataFrame(
+            {
+                "team": ["Strong Exit", "Weak Exit"],
+                "cupmarket_price": [27.0, 15.0],
+            }
+        )
+
+        adjusted = update_pipeline.apply_performance_adjusted_settlement_columns(
+            probabilities,
+            matches,
+            live_elo_frame,
+            previous,
+        ).set_index("team")
+
+        strong_value = float(adjusted.loc["Strong Exit", "adjusted_settlement_value"])
+        weak_value = float(adjusted.loc["Weak Exit", "adjusted_settlement_value"])
+        self.assertGreater(strong_value, weak_value)
+        self.assertGreaterEqual(weak_value, 15.0)
+        self.assertLess(strong_value, 30.0)
+        self.assertTrue(bool(adjusted.loc["Strong Exit", "is_eliminated"]))
+
+    def test_adjusted_settlement_never_crosses_next_stage_floor(self):
+        row = pd.Series(
+            {
+                "team": "Huge Round 32 Exit",
+                "group": "A",
+                "live_elo": 2400.0,
+                "prob_finish_1st_group": 1.0,
+                "prob_reach_round_32": 1.0,
+                "prob_reach_round_16": 0.0,
+                "prob_round_32_exit": 1.0,
+                "prob_champion": 0.0,
+            }
+        )
+        matches = pd.DataFrame(
+            [
+                {
+                    "status": "FINISHED",
+                    "stage": "GROUP_STAGE",
+                    "home_team": "Huge Round 32 Exit",
+                    "away_team": "Other",
+                    "winner": "HOME_TEAM",
+                    "duration": "REGULAR",
+                    "home_score_full_time": 8,
+                    "away_score_full_time": 0,
+                },
+                {
+                    "status": "FINISHED",
+                    "stage": "LAST_32",
+                    "home_team": "Huge Round 32 Exit",
+                    "away_team": "Other",
+                    "winner": "AWAY_TEAM",
+                    "duration": "PENALTY_SHOOTOUT",
+                    "home_score_full_time": 1,
+                    "away_score_full_time": 1,
+                },
+            ]
+        )
+
+        settlement = update_pipeline.calculate_performance_adjusted_settlement(
+            "Huge Round 32 Exit",
+            "round_32_exit",
+            row,
+            matches,
+            prices=pd.DataFrame(
+                {"team": ["Huge Round 32 Exit"], "cupmarket_price": [99.0]}
+            ),
+            live_elo=live_elo("Huge Round 32 Exit", "Other"),
+        )
+
+        self.assertLess(settlement["adjusted_settlement_value"], 30.0)
+
+    def test_champion_can_settle_above_100_with_performance_premium(self):
+        probabilities = pd.DataFrame(
+            [
+                {
+                    "team": "Champion Team",
+                    "group": "A",
+                    "live_elo": 2200.0,
+                    "prob_finish_1st_group": 1.0,
+                    "prob_finish_2nd_group": 0.0,
+                    "prob_finish_3rd_group": 0.0,
+                    "prob_finish_4th_group": 0.0,
+                    "prob_reach_round_32": 1.0,
+                    "prob_reach_round_16": 1.0,
+                    "prob_reach_quarter_final": 1.0,
+                    "prob_reach_semi_final": 1.0,
+                    "prob_reach_final": 1.0,
+                    "prob_champion": 1.0,
+                    "prob_group_exit": 0.0,
+                    "prob_round_32_exit": 0.0,
+                    "prob_round_16_exit": 0.0,
+                    "prob_quarter_final_exit": 0.0,
+                    "prob_semi_final_exit": 0.0,
+                    "prob_runner_up": 0.0,
+                }
+            ]
+        )
+        matches = pd.DataFrame(
+            [
+                {
+                    "status": "FINISHED",
+                    "stage": "GROUP_STAGE",
+                    "home_team": "Champion Team",
+                    "away_team": "Other",
+                    "winner": "HOME_TEAM",
+                    "duration": "REGULAR",
+                    "home_score_full_time": 4,
+                    "away_score_full_time": 0,
+                },
+                {
+                    "status": "FINISHED",
+                    "stage": "FINAL",
+                    "home_team": "Champion Team",
+                    "away_team": "Other",
+                    "winner": "HOME_TEAM",
+                    "duration": "REGULAR",
+                    "home_score_full_time": 3,
+                    "away_score_full_time": 0,
+                },
+            ]
+        )
+
+        adjusted = update_pipeline.apply_performance_adjusted_settlement_columns(
+            probabilities,
+            matches,
+            live_elo("Champion Team", "Other"),
+            pd.DataFrame({"team": ["Champion Team"], "cupmarket_price": [95.0]}),
+        )
+        price = update_pipeline.calculate_cupmarket_price(adjusted).iloc[0]
+
+        self.assertGreater(float(price), 100.0)
+        self.assertLessEqual(float(price), 120.0)
+        self.assertFalse(bool(adjusted.iloc[0]["is_eliminated"]))
+
+    def test_active_team_keeps_simulated_expected_value(self):
+        probabilities = pd.DataFrame(
+            [
+                {
+                    "team": "Active Team",
+                    "group": "A",
+                    "live_elo": 1600.0,
+                    "prob_finish_1st_group": 0.0,
+                    "prob_finish_2nd_group": 1.0,
+                    "prob_finish_3rd_group": 0.0,
+                    "prob_finish_4th_group": 0.0,
+                    "prob_reach_round_32": 1.0,
+                    "prob_reach_round_16": 0.5,
+                    "prob_reach_quarter_final": 0.25,
+                    "prob_reach_semi_final": 0.1,
+                    "prob_reach_final": 0.05,
+                    "prob_champion": 0.02,
+                    "prob_group_exit": 0.0,
+                    "prob_round_32_exit": 0.5,
+                    "prob_round_16_exit": 0.25,
+                    "prob_quarter_final_exit": 0.15,
+                    "prob_semi_final_exit": 0.05,
+                    "prob_runner_up": 0.03,
+                }
+            ]
+        )
+
+        adjusted = update_pipeline.apply_performance_adjusted_settlement_columns(
+            probabilities,
+            pd.DataFrame(),
+            live_elo("Active Team"),
+            pd.DataFrame(),
+        )
+        price = float(update_pipeline.calculate_cupmarket_price(adjusted).iloc[0])
+        expected = (
+            0.5 * 15.0
+            + 0.25 * 30.0
+            + 0.15 * 50.0
+            + 0.05 * 70.0
+            + 0.03 * 85.0
+            + 0.02 * 100.0
+        )
+
+        self.assertAlmostEqual(price, expected)
+        self.assertFalse(bool(adjusted.iloc[0]["is_eliminated"]))
+        self.assertTrue(pd.isna(adjusted.iloc[0]["adjusted_settlement_value"]))
+
     def test_official_upcoming_prediction_gaps_force_real_missing_fixtures_only(self):
         matches = pd.DataFrame(
             [

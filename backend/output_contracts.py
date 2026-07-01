@@ -9,6 +9,14 @@ import pandas as pd
 
 EXPECTED_TEAM_COUNT = 48
 EXPECTED_GROUPS = tuple("ABCDEFGHIJKL")
+MAX_CUPMARKET_PRICE = 120.0
+SETTLEMENT_EXPLANATION_COLUMNS = {
+    "exit_stage_floor",
+    "performance_premium",
+    "adjusted_settlement_value",
+    "settlement_reason",
+    "is_eliminated",
+}
 
 PRICE_REQUIRED_COLUMNS = {
     "team",
@@ -22,6 +30,7 @@ PRICE_REQUIRED_COLUMNS = {
     "generated_at_utc",
     "model_version",
     "bracket_mode",
+    *SETTLEMENT_EXPLANATION_COLUMNS,
 }
 
 PROBABILITY_COLUMNS = {
@@ -52,6 +61,7 @@ PROBABILITY_REQUIRED_COLUMNS = {
     "model_version",
     "bracket_mode",
     *PROBABILITY_COLUMNS,
+    *SETTLEMENT_EXPLANATION_COLUMNS,
 }
 
 GROUP_TABLE_REQUIRED_COLUMNS = {
@@ -237,8 +247,10 @@ def _require_market_values(prices: pd.DataFrame) -> None:
     values = pd.to_numeric(prices["cupmarket_price"], errors="coerce")
     if values.isna().any():
         raise ContractViolation("cupmarket_price must be numeric and non-null")
-    if ((values < 5.0 - 1e-9) | (values > 100.0 + 1e-9)).any():
-        raise ContractViolation("cupmarket_price must stay inside settlement bounds 5-100")
+    if ((values < 5.0 - 1e-9) | (values > MAX_CUPMARKET_PRICE + 1e-9)).any():
+        raise ContractViolation(
+            f"cupmarket_price must stay inside settlement bounds 5-{MAX_CUPMARKET_PRICE:g}"
+        )
 
     ranks = pd.to_numeric(prices["market_rank"], errors="coerce")
     if ranks.isna().any() or set(ranks.astype(int)) != set(range(1, EXPECTED_TEAM_COUNT + 1)):

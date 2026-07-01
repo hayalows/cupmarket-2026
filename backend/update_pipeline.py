@@ -117,6 +117,25 @@ SETTLEMENT_VALUES = {
     "runner_up": 85.0,
     "champion": 100.0,
 }
+SETTLEMENT_PRICE_COLUMNS = {
+    "group_exit": "prob_group_exit",
+    "round_32_exit": "prob_round_32_exit",
+    "round_16_exit": "prob_round_16_exit",
+    "quarter_final_exit": "prob_quarter_final_exit",
+    "semi_final_exit": "prob_semi_final_exit",
+    "runner_up": "prob_runner_up",
+    "champion": "prob_champion",
+}
+NEXT_SETTLEMENT_FLOOR = {
+    "group_exit": SETTLEMENT_VALUES["round_32_exit"],
+    "round_32_exit": SETTLEMENT_VALUES["round_16_exit"],
+    "round_16_exit": SETTLEMENT_VALUES["quarter_final_exit"],
+    "quarter_final_exit": SETTLEMENT_VALUES["semi_final_exit"],
+    "semi_final_exit": SETTLEMENT_VALUES["runner_up"],
+    "runner_up": SETTLEMENT_VALUES["champion"],
+}
+CHAMPION_PERFORMANCE_PREMIUM_CAP = 20.0
+SETTLEMENT_LOCK_THRESHOLD = 0.999
 
 UPCOMING_MATCH_STATUSES = {"TIMED", "SCHEDULED"}
 PLACEHOLDER_TEAM_NAMES = {
@@ -283,6 +302,362 @@ def knockout_match_winner(match) -> str | None:
         if int(away_score) > int(home_score):
             return str(match.away_team)
     return None
+
+
+def _number(value, default: float = 0.0) -> float:
+    try:
+        parsed = pd.to_numeric(value, errors="coerce")
+    except (TypeError, ValueError):
+        return default
+    if pd.isna(parsed):
+        return default
+    return float(parsed)
+
+
+def locked_settlement_stage(row: pd.Series) -> str | None:
+    if _number(row.get("prob_champion")) >= SETTLEMENT_LOCK_THRESHOLD:
+        return "champion"
+    for stage_key in [
+        "runner_up",
+        "semi_final_exit",
+        "quarter_final_exit",
+        "round_16_exit",
+        "round_32_exit",
+        "group_exit",
+    ]:
+        column = SETTLEMENT_PRICE_COLUMNS[stage_key]
+        if _number(row.get(column)) >= SETTLEMENT_LOCK_THRESHOLD:
+            return stage_key
+    return None
+
+
+def _team_record_score(team: str, matches: pd.DataFrame) -> tuple[float, dict]:
+    if matches.empty:
+        return 0.0, {
+            "played": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goals_for": 0.0,
+            "goals_against": 0.0,
+        }
+
+    played = wins = draws = losses = 0
+    goals_for = goals_against = 0.0
+    for match in matches.itertuples(index=False):
+        if str(getattr(match, "status", "")).upper() != "FINISHED":
+            continue
+        home = getattr(match, "home_team", None)
+        away = getattr(match, "away_team", None)
+        if not is_real_team_name(home) or not is_real_team_name(away):
+            continue
+        if team not in {str(home), str(away)}:
+            continue
+        home_score = getattr(match, "home_score_full_time", np.nan)
+        away_score = getattr(match, "away_score_full_time", np.nan)
+        if pd.isna(home_score) or pd.isna(away_score):
+            continue
+
+        played += 1
+        is_home = team == str(home)
+        team_score = float(home_score if is_home else away_score)
+        opponent_score = float(away_score if is_home else home_score)
+        duration = str(getattr(match, "duration", "") or "").upper()
+        if "PENALTY" not in duration:
+            goals_for += team_score
+            goals_against += opponent_score
+
+        winner = knockout_match_winner(match)
+        if winner == team:
+            wins += 1
+        elif winner in {str(home), str(away)}:
+            losses += 1
+        elif int(team_score) == int(opponent_score):
+            draws += 1
+        elif team_score > opponent_score:
+            wins += 1
+        else:
+            losses += 1
+
+    if played == 0:
+        return 0.0, {
+            "played": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goals_for": 0.0,
+            "goals_against": 0.0,
+        }
+
+    points = 3 * wins + draws
+    points_score = np.clip(points / (3.0 * played), 0.0, 1.0)
+    goal_diff_per_match = (goals_for - goals_against) / played
+    goal_score = np.clip((goal_diff_per_match + 2.0) / 4.0, 0.0, 1.0)
+    score = 0.65 * points_score + 0.35 * goal_score
+    return float(np.clip(score, 0.0, 1.0)), {
+        "played": played,
+        "wins": wins,
+        "draws": draws,
+        "losses": losses,
+        "goals_for": goals_for,
+        "goals_against": goals_against,
+    }
+
+
+def _group_finish_score(team_row: pd.Series) -> float:
+    weighted = (
+        _number(team_row.get("prob_finish_1st_group")) * 1.0
+        + _number(team_row.get("prob_finish_2nd_group")) * 0.75
+        + _number(team_row.get("prob_finish_3rd_group")) * 0.45
+        + _number(team_row.get("prob_finish_4th_group")) * 0.15
+    )
+    if weighted > 0.0:
+        return float(np.clip(weighted, 0.0, 1.0))
+    position = _number(team_row.get("current_group_position"), np.nan)
+    if pd.notna(position):
+        return {1: 1.0, 2: 0.75, 3: 0.45, 4: 0.15}.get(
+            int(position),
+            0.3,
+        )
+    return 0.3
+
+
+def _elo_strength_score(
+    team: str,
+    team_row: pd.Series,
+    live_elo: pd.DataFrame | None,
+) -> float:
+    if isinstance(live_elo, pd.DataFrame) and not live_elo.empty:
+        frame = live_elo.copy()
+        if {"team", "rank"}.issubset(frame.columns):
+            rows = frame[frame["team"].astype(str).eq(team)]
+            if not rows.empty:
+                rank = _number(rows.iloc[0].get("rank"), np.nan)
+                count = max(len(frame), 1)
+                if pd.notna(rank) and count > 1:
+                    return float(
+                        np.clip(1.0 - ((rank - 1.0) / (count - 1.0)), 0.0, 1.0)
+                    )
+        if {"team", "elo_rating"}.issubset(frame.columns):
+            frame["elo_rating"] = pd.to_numeric(
+                frame["elo_rating"],
+                errors="coerce",
+            )
+            rows = frame[frame["team"].astype(str).eq(team)]
+            if not rows.empty and frame["elo_rating"].notna().any():
+                rating = _number(rows.iloc[0].get("elo_rating"), np.nan)
+                low = float(frame["elo_rating"].min())
+                high = float(frame["elo_rating"].max())
+                if pd.notna(rating) and high > low:
+                    return float(np.clip((rating - low) / (high - low), 0.0, 1.0))
+
+    rating = _number(team_row.get("live_elo"), INITIAL_RATING)
+    return float(np.clip((rating - 1300.0) / 900.0, 0.0, 1.0))
+
+
+def _previous_price_score(
+    team: str,
+    price_context: pd.DataFrame | None,
+    floor: float,
+    ceiling: float,
+) -> float:
+    if not isinstance(price_context, pd.DataFrame) or price_context.empty:
+        return 0.0
+    if not {"team", "cupmarket_price"}.issubset(price_context.columns):
+        return 0.0
+    rows = price_context[price_context["team"].astype(str).eq(team)]
+    if rows.empty:
+        return 0.0
+    previous_price = _number(rows.iloc[-1].get("cupmarket_price"), np.nan)
+    if pd.isna(previous_price):
+        return 0.0
+    if ceiling <= floor:
+        return float(np.clip(previous_price / max(floor, 1.0), 0.0, 1.0))
+    return float(np.clip((previous_price - floor) / (ceiling - floor), 0.0, 1.0))
+
+
+def _loss_quality_score(
+    team: str,
+    exit_stage: str,
+    matches: pd.DataFrame,
+    live_elo: pd.DataFrame | None,
+) -> float:
+    if exit_stage in {"group_exit", "champion"} or matches.empty:
+        return 0.0
+
+    losses = []
+    for match in matches.itertuples(index=False):
+        if str(getattr(match, "status", "")).upper() != "FINISHED":
+            continue
+        stage_key = settlement_stage_key(getattr(match, "stage", None))
+        if stage_key is None:
+            continue
+        home = getattr(match, "home_team", None)
+        away = getattr(match, "away_team", None)
+        if team not in {str(home), str(away)}:
+            continue
+        winner = knockout_match_winner(match)
+        if winner is None or winner == team:
+            continue
+        losses.append(match)
+
+    if not losses:
+        return 0.0
+
+    match = losses[-1]
+    duration = str(getattr(match, "duration", "") or "").upper()
+    home_score = _number(getattr(match, "home_score_full_time", np.nan), np.nan)
+    away_score = _number(getattr(match, "away_score_full_time", np.nan), np.nan)
+    if "PENALTY" in duration:
+        closeness = 1.0
+    elif pd.isna(home_score) or pd.isna(away_score):
+        closeness = 0.25
+    else:
+        margin = abs(int(home_score) - int(away_score))
+        if margin <= 1:
+            closeness = 0.8
+        elif margin == 2:
+            closeness = 0.45
+        else:
+            closeness = 0.15
+
+    winner = knockout_match_winner(match) or ""
+    opponent_score = _elo_strength_score(
+        str(winner),
+        pd.Series(dtype=object),
+        live_elo,
+    )
+    return float(np.clip(0.75 * closeness + 0.25 * opponent_score, 0.0, 1.0))
+
+
+def calculate_performance_adjusted_settlement(
+    team: str,
+    exit_stage: str,
+    team_row: pd.Series,
+    matches: pd.DataFrame,
+    prices: pd.DataFrame | None = None,
+    live_elo: pd.DataFrame | None = None,
+) -> dict:
+    floor = SETTLEMENT_VALUES[exit_stage]
+    if exit_stage == "champion":
+        cap = floor + CHAMPION_PERFORMANCE_PREMIUM_CAP
+        price_ceiling = cap
+    else:
+        cap = NEXT_SETTLEMENT_FLOOR[exit_stage] - 0.01
+        price_ceiling = NEXT_SETTLEMENT_FLOOR[exit_stage]
+
+    record_score, record = _team_record_score(team, matches)
+    group_score = _group_finish_score(team_row)
+    elo_score = _elo_strength_score(team, team_row, live_elo)
+    loss_score = _loss_quality_score(team, exit_stage, matches, live_elo)
+    price_score = _previous_price_score(team, prices, floor, price_ceiling)
+
+    if exit_stage == "champion":
+        performance_score = (
+            0.45 * record_score
+            + 0.20 * group_score
+            + 0.20 * elo_score
+            + 0.15 * price_score
+        )
+        max_premium = CHAMPION_PERFORMANCE_PREMIUM_CAP
+    else:
+        performance_score = (
+            0.35 * record_score
+            + 0.20 * group_score
+            + 0.20 * elo_score
+            + 0.15 * loss_score
+            + 0.10 * price_score
+        )
+        max_premium = max(cap - floor, 0.0) * 0.85
+
+    premium = float(np.clip(performance_score, 0.0, 1.0) * max_premium)
+    settlement = min(floor + premium, cap)
+    reason_parts = [
+        f"floor {floor:.2f}",
+        f"record {record['wins']}-{record['draws']}-{record['losses']}",
+        f"GD {record['goals_for'] - record['goals_against']:+.0f}",
+        f"group score {group_score:.2f}",
+        f"Elo score {elo_score:.2f}",
+    ]
+    if exit_stage not in {"group_exit", "champion"}:
+        reason_parts.append(f"loss quality {loss_score:.2f}")
+    if price_score > 0.0:
+        reason_parts.append(f"market signal {price_score:.2f}")
+    if exit_stage == "champion":
+        reason_parts.append(f"champion cap {cap:.2f}")
+    else:
+        reason_parts.append(f"capped below {NEXT_SETTLEMENT_FLOOR[exit_stage]:.2f}")
+
+    return {
+        "exit_stage_floor": round(floor, 2),
+        "performance_premium": round(settlement - floor, 2),
+        "adjusted_settlement_value": round(settlement, 2),
+        "settlement_reason": "; ".join(reason_parts),
+        "is_eliminated": exit_stage != "champion",
+    }
+
+
+def apply_performance_adjusted_settlement_columns(
+    probabilities: pd.DataFrame,
+    matches: pd.DataFrame,
+    live_elo: pd.DataFrame | None = None,
+    price_context: pd.DataFrame | None = None,
+) -> pd.DataFrame:
+    if probabilities.empty:
+        return probabilities
+
+    output = probabilities.copy()
+    rows = []
+    for _, row in output.iterrows():
+        team = str(row.get("team", ""))
+        exit_stage = locked_settlement_stage(row)
+        if exit_stage is None:
+            rows.append(
+                {
+                    "exit_stage_floor": np.nan,
+                    "performance_premium": 0.0,
+                    "adjusted_settlement_value": np.nan,
+                    "settlement_reason": (
+                        "Active; price uses simulated expected value until "
+                        "the team's tournament outcome is locked."
+                    ),
+                    "is_eliminated": False,
+                }
+            )
+            continue
+        rows.append(
+            calculate_performance_adjusted_settlement(
+                team,
+                exit_stage,
+                row,
+                matches,
+                prices=price_context,
+                live_elo=live_elo,
+            )
+        )
+
+    settlement_frame = pd.DataFrame(rows, index=output.index)
+    for column in settlement_frame.columns:
+        output[column] = settlement_frame[column]
+    return output
+
+
+def calculate_cupmarket_price(probabilities: pd.DataFrame) -> pd.Series:
+    price = pd.Series(0.0, index=probabilities.index, dtype=float)
+    for stage_key, column in SETTLEMENT_PRICE_COLUMNS.items():
+        price += (
+            pd.to_numeric(probabilities.get(column), errors="coerce").fillna(0.0)
+            * SETTLEMENT_VALUES[stage_key]
+        )
+
+    if "adjusted_settlement_value" in probabilities.columns:
+        adjusted = pd.to_numeric(
+            probabilities["adjusted_settlement_value"],
+            errors="coerce",
+        )
+        locked = adjusted.notna()
+        price.loc[locked] = adjusted.loc[locked]
+    return price
 
 
 def build_adaptive_rating_frame(
@@ -2186,20 +2561,22 @@ def run_tournament_simulation(
                 "Knockout settlement locks changed this provisional total."
             )
 
+    previous_prices = pd.DataFrame()
+    if PRICES_OUTPUT_PATH.exists():
+        try:
+            previous_prices = pd.read_csv(PRICES_OUTPUT_PATH)
+        except (OSError, pd.errors.ParserError):
+            previous_prices = pd.DataFrame()
+
+    probabilities = apply_performance_adjusted_settlement_columns(
+        probabilities,
+        world_cup,
+        live_elo,
+        previous_prices,
+    )
+
     prices = probabilities.copy()
-    prices["cupmarket_price"] = (
-        prices["prob_group_exit"] * SETTLEMENT_VALUES["group_exit"]
-        + prices["prob_round_32_exit"]
-        * SETTLEMENT_VALUES["round_32_exit"]
-        + prices["prob_round_16_exit"]
-        * SETTLEMENT_VALUES["round_16_exit"]
-        + prices["prob_quarter_final_exit"]
-        * SETTLEMENT_VALUES["quarter_final_exit"]
-        + prices["prob_semi_final_exit"]
-        * SETTLEMENT_VALUES["semi_final_exit"]
-        + prices["prob_runner_up"] * SETTLEMENT_VALUES["runner_up"]
-        + prices["prob_champion"] * SETTLEMENT_VALUES["champion"]
-    ).round(2)
+    prices["cupmarket_price"] = calculate_cupmarket_price(prices).round(2)
 
     prices = (
         prices.sort_values("cupmarket_price", ascending=False)
@@ -2207,16 +2584,20 @@ def run_tournament_simulation(
     )
     prices["market_rank"] = np.arange(1, len(prices) + 1)
 
-    if PRICES_OUTPUT_PATH.exists():
-        previous = pd.read_csv(PRICES_OUTPUT_PATH)[
-            ["team", "cupmarket_price"]
-        ].rename(columns={"cupmarket_price": "previous_price"})
+    if not previous_prices.empty and {"team", "cupmarket_price"}.issubset(
+        previous_prices.columns
+    ):
+        previous = previous_prices[["team", "cupmarket_price"]].rename(
+            columns={"cupmarket_price": "previous_price"}
+        )
         prices = prices.merge(previous, on="team", how="left")
         prices["price_change"] = (
             prices["cupmarket_price"] - prices["previous_price"]
         )
-        prices["price_change_percent"] = (
-            100.0 * prices["price_change"] / prices["previous_price"]
+        prices["price_change_percent"] = np.where(
+            prices["previous_price"].abs() > 1e-12,
+            100.0 * prices["price_change"] / prices["previous_price"],
+            np.nan,
         )
     else:
         prices["previous_price"] = np.nan
