@@ -1,49 +1,49 @@
 team,group,fixture_status,confirmed_slot,round_32_match_id,current_group_position,group_complete,prob_reach_round_32,prob_eliminated,most_likely_opponent,most_likely_opponent_probability_unconditional,most_likely_opponent_probability_given_qualification,prob_finish_1st_group,prob_finish_2nd_group,prob_finish_3rd_group,prob_finish_4th_group,number_of_simulations,generated_at_utc,model_version,bracket_mode
-South Africa,A,confirmed,2A,73.0,2,True,1.0,0.0,Canada,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Canada,B,confirmed,2B,73.0,2,True,1.0,0.0,South Africa,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Brazil,C,confirmed,1C,74.0,1,True,1.0,0.0,Japan,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Japan,F,confirmed,2F,74.0,2,True,1.0,0.0,Brazil,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Germany,E,confirmed,1E,75.0,1,True,1.0,0.0,Paraguay,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Paraguay,D,confirmed,3D,75.0,3,True,1.0,0.0,Germany,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Netherlands,F,confirmed,1F,76.0,1,True,1.0,0.0,Morocco,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Morocco,C,confirmed,2C,76.0,2,True,1.0,0.0,Netherlands,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Ivory Coast,E,confirmed,2E,77.0,2,True,1.0,0.0,Norway,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Norway,I,confirmed,2I,77.0,2,True,1.0,0.0,Ivory Coast,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-France,I,confirmed,1I,78.0,1,True,1.0,0.0,Sweden,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Sweden,F,confirmed,3F,78.0,3,True,1.0,0.0,France,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Mexico,A,confirmed,1A,79.0,1,True,1.0,0.0,Ecuador,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Ecuador,E,confirmed,3E,79.0,3,True,1.0,0.0,Mexico,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-England,L,confirmed,1L,80.0,1,True,1.0,0.0,Congo DR,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Congo DR,K,confirmed,3K,80.0,3,True,1.0,0.0,England,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Belgium,G,confirmed,1G,81.0,1,True,1.0,0.0,Senegal,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Senegal,I,confirmed,3I,81.0,3,True,1.0,0.0,Belgium,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-United States,D,confirmed,1D,82.0,1,True,1.0,0.0,Bosnia-Herzegovina,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Bosnia-Herzegovina,B,confirmed,3B,82.0,3,True,1.0,0.0,United States,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Spain,H,confirmed,1H,83.0,1,True,1.0,0.0,Austria,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Austria,J,confirmed,2J,83.0,2,True,1.0,0.0,Spain,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Portugal,K,confirmed,2K,84.0,2,True,1.0,0.0,Croatia,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Croatia,L,confirmed,2L,84.0,2,True,1.0,0.0,Portugal,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Switzerland,B,confirmed,1B,85.0,1,True,1.0,0.0,Algeria,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Algeria,J,confirmed,3J,85.0,3,True,1.0,0.0,Switzerland,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Australia,D,confirmed,2D,86.0,2,True,1.0,0.0,Egypt,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Egypt,G,confirmed,2G,86.0,2,True,1.0,0.0,Australia,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Argentina,J,confirmed,1J,87.0,1,True,1.0,0.0,Cape Verde Islands,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Cape Verde Islands,H,confirmed,2H,87.0,2,True,1.0,0.0,Argentina,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Colombia,K,confirmed,1K,88.0,1,True,1.0,0.0,Ghana,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Ghana,L,confirmed,3L,88.0,3,True,1.0,0.0,Colombia,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Curaçao,E,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Czechia,A,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Haiti,C,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Iran,G,eliminated,,,3,True,0.0,1.0,,0.0,0.0,0.0,0.0,1.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Iraq,I,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Jordan,J,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-New Zealand,G,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Panama,L,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Qatar,B,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Saudi Arabia,H,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Scotland,C,eliminated,,,3,True,0.0,1.0,,0.0,0.0,0.0,0.0,1.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-South Korea,A,eliminated,,,3,True,0.0,1.0,,0.0,0.0,0.0,0.0,1.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Tunisia,F,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Turkey,D,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Uruguay,H,eliminated,,,3,True,0.0,1.0,,0.0,0.0,0.0,0.0,1.0,0.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
-Uzbekistan,K,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T08:56:03.795080+00:00,official_bracket_lock,official_api_locked
+South Africa,A,confirmed,2A,73.0,2,True,1.0,0.0,Canada,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Canada,B,confirmed,2B,73.0,2,True,1.0,0.0,South Africa,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Brazil,C,confirmed,1C,74.0,1,True,1.0,0.0,Japan,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Japan,F,confirmed,2F,74.0,2,True,1.0,0.0,Brazil,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Germany,E,confirmed,1E,75.0,1,True,1.0,0.0,Paraguay,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Paraguay,D,confirmed,3D,75.0,3,True,1.0,0.0,Germany,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Netherlands,F,confirmed,1F,76.0,1,True,1.0,0.0,Morocco,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Morocco,C,confirmed,2C,76.0,2,True,1.0,0.0,Netherlands,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Ivory Coast,E,confirmed,2E,77.0,2,True,1.0,0.0,Norway,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Norway,I,confirmed,2I,77.0,2,True,1.0,0.0,Ivory Coast,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+France,I,confirmed,1I,78.0,1,True,1.0,0.0,Sweden,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Sweden,F,confirmed,3F,78.0,3,True,1.0,0.0,France,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Mexico,A,confirmed,1A,79.0,1,True,1.0,0.0,Ecuador,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Ecuador,E,confirmed,3E,79.0,3,True,1.0,0.0,Mexico,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+England,L,confirmed,1L,80.0,1,True,1.0,0.0,Congo DR,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Congo DR,K,confirmed,3K,80.0,3,True,1.0,0.0,England,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Belgium,G,confirmed,1G,81.0,1,True,1.0,0.0,Senegal,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Senegal,I,confirmed,3I,81.0,3,True,1.0,0.0,Belgium,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+United States,D,confirmed,1D,82.0,1,True,1.0,0.0,Bosnia-Herzegovina,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Bosnia-Herzegovina,B,confirmed,3B,82.0,3,True,1.0,0.0,United States,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Spain,H,confirmed,1H,83.0,1,True,1.0,0.0,Austria,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Austria,J,confirmed,2J,83.0,2,True,1.0,0.0,Spain,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Portugal,K,confirmed,2K,84.0,2,True,1.0,0.0,Croatia,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Croatia,L,confirmed,2L,84.0,2,True,1.0,0.0,Portugal,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Switzerland,B,confirmed,1B,85.0,1,True,1.0,0.0,Algeria,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Algeria,J,confirmed,3J,85.0,3,True,1.0,0.0,Switzerland,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Australia,D,confirmed,2D,86.0,2,True,1.0,0.0,Egypt,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Egypt,G,confirmed,2G,86.0,2,True,1.0,0.0,Australia,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Argentina,J,confirmed,1J,87.0,1,True,1.0,0.0,Cape Verde Islands,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Cape Verde Islands,H,confirmed,2H,87.0,2,True,1.0,0.0,Argentina,1.0,1.0,0.0,1.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Colombia,K,confirmed,1K,88.0,1,True,1.0,0.0,Ghana,1.0,1.0,1.0,0.0,0.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Ghana,L,confirmed,3L,88.0,3,True,1.0,0.0,Colombia,1.0,1.0,0.0,0.0,1.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Curaçao,E,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Czechia,A,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Haiti,C,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Iran,G,eliminated,,,3,True,0.0,1.0,,0.0,0.0,0.0,0.0,1.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Iraq,I,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Jordan,J,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+New Zealand,G,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Panama,L,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Qatar,B,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Saudi Arabia,H,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Scotland,C,eliminated,,,3,True,0.0,1.0,,0.0,0.0,0.0,0.0,1.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+South Korea,A,eliminated,,,3,True,0.0,1.0,,0.0,0.0,0.0,0.0,1.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Tunisia,F,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Turkey,D,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Uruguay,H,eliminated,,,3,True,0.0,1.0,,0.0,0.0,0.0,0.0,1.0,0.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
+Uzbekistan,K,eliminated,,,4,True,0.0,1.0,,0.0,0.0,0.0,0.0,0.0,1.0,0,2026-07-01T09:23:25.232544+00:00,official_bracket_lock,official_api_locked
