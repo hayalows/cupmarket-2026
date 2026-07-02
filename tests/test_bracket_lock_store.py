@@ -89,6 +89,39 @@ class ExactBracketLockTests(unittest.TestCase):
             self.assertEqual(second["status"], "already_locked")
             self.assertEqual(first["fingerprint"], second["fingerprint"])
 
+    def test_existing_lock_tolerates_status_and_schedule_drift(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            matches, tables = self._fixture()
+            self._write_tables(root, tables)
+
+            lock_official_bracket_from_matches(root, matches)
+            data = root / "data"
+            original_lock = pd.read_csv(data / "official_round_32_bracket_locked.csv")
+            first_fixture = original_lock.iloc[0]
+
+            knockout = matches.index[matches["stage"] == "LAST_32"].tolist()
+            for offset, row_index in enumerate(knockout):
+                matches.loc[row_index, "status"] = "FINISHED"
+                matches.loc[row_index, "utc_date"] = (
+                    f"2026-07-{16 - offset:02d}T20:00:00Z"
+                )
+
+            result = lock_official_bracket_from_matches(root, matches)
+
+            self.assertEqual(result["status"], "already_locked")
+            repeated_lock = pd.read_csv(data / "official_round_32_bracket_locked.csv")
+            pd.testing.assert_frame_equal(original_lock, repeated_lock)
+
+            paths = pd.read_csv(data / "round_32_path_status_latest.csv")
+            first_home_path = paths.loc[
+                paths["team"] == first_fixture["home_team"]
+            ].iloc[0]
+            self.assertEqual(
+                int(first_home_path["round_32_match_id"]),
+                int(first_fixture["bracket_match_number"]),
+            )
+
     def test_conflicting_fixture_cannot_rewrite_existing_lock(self):
         with TemporaryDirectory() as directory:
             root = Path(directory)

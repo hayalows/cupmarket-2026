@@ -52,6 +52,7 @@ def lock_official_bracket_from_matches(
             raise store.BracketLockError(
                 "Official Round-of-32 fixtures conflict with the existing immutable lock"
             )
+        confirmed_bracket = existing
         status = "already_locked"
     else:
         store._atomic_csv(proposed, lock_path)
@@ -67,10 +68,11 @@ def lock_official_bracket_from_matches(
             },
             state_path,
         )
+        confirmed_bracket = proposed
         status = "locked"
 
     opponents, paths = store._confirmed_probability_outputs(
-        proposed,
+        confirmed_bracket,
         group_tables,
         generated_at,
     )

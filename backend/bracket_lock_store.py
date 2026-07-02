@@ -20,6 +20,13 @@ ROUND_32_STAGES = {"LAST_32", "ROUND_OF_32", "R32"}
 EXPECTED_GROUP_MATCHES = 72
 EXPECTED_ROUND_32_MATCHES = 16
 EXPECTED_ROUND_32_TEAMS = 32
+IMMUTABLE_BRACKET_COLUMNS = [
+    "api_match_id",
+    "home_team",
+    "away_team",
+    "home_source_slot",
+    "away_source_slot",
+]
 
 
 class BracketLockError(RuntimeError):
@@ -145,18 +152,31 @@ def build_official_bracket(
     return output
 
 
+def immutable_bracket_identity(bracket: pd.DataFrame) -> pd.DataFrame:
+    missing = [column for column in IMMUTABLE_BRACKET_COLUMNS if column not in bracket]
+    if missing:
+        raise BracketLockError(
+            "Bracket lock comparison is missing columns: " + ", ".join(missing)
+        )
+
+    canonical = bracket[IMMUTABLE_BRACKET_COLUMNS].copy()
+    canonical["api_match_id"] = (
+        pd.to_numeric(canonical["api_match_id"], errors="coerce")
+        .astype("Int64")
+        .astype(str)
+    )
+    for column in (
+        "home_team",
+        "away_team",
+        "home_source_slot",
+        "away_source_slot",
+    ):
+        canonical[column] = canonical[column].astype(str).str.strip()
+    return canonical.sort_values("api_match_id").reset_index(drop=True)
+
+
 def bracket_fingerprint(bracket: pd.DataFrame) -> str:
-    canonical = bracket[
-        [
-            "bracket_match_number",
-            "api_match_id",
-            "utc_date",
-            "home_team",
-            "away_team",
-            "home_source_slot",
-            "away_source_slot",
-        ]
-    ].sort_values("bracket_match_number")
+    canonical = immutable_bracket_identity(bracket)
     payload = canonical.to_csv(index=False, lineterminator="\n")
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
@@ -299,6 +319,7 @@ def lock_official_bracket(repo_root: Path) -> dict:
             raise BracketLockError(
                 "Official Round-of-32 fixtures conflict with the existing immutable lock"
             )
+        confirmed_bracket = existing
         status = "already_locked"
     else:
         _atomic_csv(proposed, lock_path)
@@ -314,10 +335,11 @@ def lock_official_bracket(repo_root: Path) -> dict:
             },
             state_path,
         )
+        confirmed_bracket = proposed
         status = "locked"
 
     opponents, paths = _confirmed_probability_outputs(
-        proposed, group_tables, generated_at
+        confirmed_bracket, group_tables, generated_at
     )
     _atomic_csv(
         opponents,
