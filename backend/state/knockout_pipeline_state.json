@@ -1,10 +1,10 @@
 {
   "status": "updated",
-  "completed_at_utc": "2026-07-02T10:19:12.065842+00:00",
-  "input_fingerprint": "b834e8076ce79b0c06a6dcc24573a9761e8f5fca0d355adbab4d92b74649499b",
+  "completed_at_utc": "2026-07-02T21:49:12.526078+00:00",
+  "input_fingerprint": "1efa324694627b389c3cd41a8fcd281ae7af4a235a0b9064c90e94a37f5a9448",
   "new_finished_matches": 0,
-  "actual_knockout_results_used": 10,
-  "upcoming_predictions": 11,
+  "actual_knockout_results_used": 11,
+  "upcoming_predictions": 10,
   "bracket_lock": {
     "status": "already_locked",
     "fixture_count": 16,
