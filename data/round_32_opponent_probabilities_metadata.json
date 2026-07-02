@@ -1,6 +1,6 @@
 {
   "status": "official_bracket_locked",
-  "generated_at_utc": "2026-07-01T23:59:53.201616+00:00",
+  "generated_at_utc": "2026-07-02T10:19:08.423790+00:00",
   "number_of_simulations": 0,
   "teams": 32,
   "opponent_rows": 32,
@@ -9,5 +9,5 @@
     "eliminated": 16
   },
   "bracket_mode": "official_api_locked",
-  "fingerprint": "5155f059939d76d19b76ceb713ee216762d6b87736a18c117a22150d48756d64"
+  "fingerprint": "97595841b6d199f29b40a284768bce4a8a924dfa2d41955d708b1214643fd828"
 }
