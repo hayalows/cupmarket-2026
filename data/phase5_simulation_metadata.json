@@ -1,22 +1,26 @@
 {
-  "model_version": "phase6_knockout_progression_v1",
-  "bracket_mode": "official_api_locked_knockout_progression",
+  "model_version": "phase9b_adaptive_prediction_v1",
   "number_of_simulations": 20000,
-  "random_seed": 20261308,
+  "random_seed": 20260703,
+  "bracket_mode": "provisional_constraint_assignment",
   "finished_group_matches": 72,
-  "active_group_matches": 0,
-  "latest_completed_group_match_utc": "2026-06-28T02:00:00+00:00",
-  "actual_knockout_results_used": 11,
-  "actual_resolution_count_across_simulations": 220000,
-  "simulated_resolution_count_across_simulations": 400000,
-  "pair_xg_cache_size": 194,
+  "remaining_group_matches": 0,
+  "simulation_seconds": 118.40421652793884,
+  "pair_xg_cache_size": 581,
+  "elo_fallback_uses": 0,
+  "average_valid_third_place_assignments": 22.0,
   "stage_probability_totals": {
     "round_32_total": 32.0,
-    "round_16_total": 16.0,
-    "quarter_final_total": 8.0,
-    "semi_final_total": 4.0,
-    "final_total": 1.9999999999999998,
-    "champion_total": 1.0
+    "round_16_total": 15.960549999999998,
+    "quarter_final_total": 6.85495,
+    "semi_final_total": 3.6104000000000003,
+    "final_total": 1.8771999999999998,
+    "champion_total": 0.97065,
+    "round_16_total_warning": "Knockout settlement locks changed this provisional total.",
+    "quarter_final_total_warning": "Knockout settlement locks changed this provisional total.",
+    "semi_final_total_warning": "Knockout settlement locks changed this provisional total.",
+    "final_total_warning": "Knockout settlement locks changed this provisional total.",
+    "champion_total_warning": "Knockout settlement locks changed this provisional total."
   },
   "settlement_values": {
     "group_exit": 5.0,
@@ -27,17 +31,117 @@
     "runner_up": 85.0,
     "champion": 100.0
   },
-  "limitations": [
-    "Unfinished knockout matches use the existing Poisson goal models.",
-    "Penalty shootouts use Elo-bounded probabilities between 35% and 65%.",
-    "Finished penalty shootouts count as draws for Elo, while the official winner advances."
+  "knockout_settlements_applied": 12,
+  "knockout_settlement_matches": [
+    {
+      "match_id": 537417,
+      "stage": "LAST_32",
+      "winner": "Canada",
+      "loser": "South Africa",
+      "winner_locked_to_at_least": "round_32",
+      "loser_exit_stage": "round_32"
+    },
+    {
+      "match_id": 537423,
+      "stage": "LAST_32",
+      "winner": "Brazil",
+      "loser": "Japan",
+      "winner_locked_to_at_least": "round_32",
+      "loser_exit_stage": "round_32"
+    },
+    {
+      "match_id": 537415,
+      "stage": "LAST_32",
+      "winner": "Paraguay",
+      "loser": "Germany",
+      "winner_locked_to_at_least": "round_32",
+      "loser_exit_stage": "round_32"
+    },
+    {
+      "match_id": 537418,
+      "stage": "LAST_32",
+      "winner": "Morocco",
+      "loser": "Netherlands",
+      "winner_locked_to_at_least": "round_32",
+      "loser_exit_stage": "round_32"
+    },
+    {
+      "match_id": 537424,
+      "stage": "LAST_32",
+      "winner": "Norway",
+      "loser": "Ivory Coast",
+      "winner_locked_to_at_least": "round_32",
+      "loser_exit_stage": "round_32"
+    },
+    {
+      "match_id": 537416,
+      "stage": "LAST_32",
+      "winner": "France",
+      "loser": "Sweden",
+      "winner_locked_to_at_least": "round_32",
+      "loser_exit_stage": "round_32"
+    },
+    {
+      "match_id": 537425,
+      "stage": "LAST_32",
+      "winner": "Mexico",
+      "loser": "Ecuador",
+      "winner_locked_to_at_least": "round_32",
+      "loser_exit_stage": "round_32"
+    },
+    {
+      "match_id": 537426,
+      "stage": "LAST_32",
+      "winner": "England",
+      "loser": "Congo DR",
+      "winner_locked_to_at_least": "round_32",
+      "loser_exit_stage": "round_32"
+    },
+    {
+      "match_id": 537422,
+      "stage": "LAST_32",
+      "winner": "Belgium",
+      "loser": "Senegal",
+      "winner_locked_to_at_least": "round_32",
+      "loser_exit_stage": "round_32"
+    },
+    {
+      "match_id": 537421,
+      "stage": "LAST_32",
+      "winner": "United States",
+      "loser": "Bosnia-Herzegovina",
+      "winner_locked_to_at_least": "round_32",
+      "loser_exit_stage": "round_32"
+    },
+    {
+      "match_id": 537420,
+      "stage": "LAST_32",
+      "winner": "Spain",
+      "loser": "Austria",
+      "winner_locked_to_at_least": "round_32",
+      "loser_exit_stage": "round_32"
+    },
+    {
+      "match_id": 537419,
+      "stage": "LAST_32",
+      "winner": "Portugal",
+      "loser": "Croatia",
+      "winner_locked_to_at_least": "round_32",
+      "loser_exit_stage": "round_32"
+    }
   ],
-  "generated_at_utc": "2026-07-02T21:49:12.526078+00:00",
-  "new_finished_matches_processed": 0,
+  "limitations": [
+    "Phase 8 processes completed official group and knockout matches with real teams.",
+    "Team conduct data is unavailable; live Elo is used only after football tiebreak criteria remain equal.",
+    "Before the Round of 32 is populated, third-place teams are sampled across valid official slot constraints.",
+    "Extra-time and penalties use transparent approximation rules."
+  ],
+  "generated_at_utc": "2026-07-03T05:01:01.568319+00:00",
+  "new_finished_matches_processed": 1,
   "api": {
     "http_status": 200,
     "matches_returned": 104,
     "requests_remaining": "9",
-    "request_counter_reset": "60"
+    "request_counter_reset": "59"
   }
 }
