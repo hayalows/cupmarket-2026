@@ -1967,3 +1967,51 @@ snapshot_id,affected_team,group,live_elo,price_after,price_before,price_change,p
 2026-07-04T01:23:30.244139+00:00,Haiti,C,1657.7903422759043,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537427,Argentina 3-2 Cape Verde Islands,other
 2026-07-04T01:23:30.244139+00:00,Tunisia,F,1648.6081559732288,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537427,Argentina 3-2 Cape Verde Islands,other
 2026-07-04T01:23:30.244139+00:00,Czechia,A,1731.2587132929823,6.87,6.87,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537427,Argentina 3-2 Cape Verde Islands,other
+2026-07-04T05:26:22.556203+00:00,Argentina,J,2205.741574215096,64.65,69.23,-4.579999999999998,-6.615629062545136,1.0,0.26375,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Spain,H,2201.234819062272,56.98,57.09,-0.1100000000000065,-0.1926782273603197,1.0,0.15435,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,France,I,2174.010592281348,55.5,68.26,-12.760000000000003,-18.69323176091416,1.0,0.11875,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,England,L,2097.7828564254537,51.66,53.57,-1.910000000000004,-3.5654284114243118,1.0,0.0898,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,same_group
+2026-07-04T05:26:22.556203+00:00,Colombia,K,2070.714685588958,50.58,47.89,2.6899999999999977,5.617039047817912,1.0,0.07005,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,played
+2026-07-04T05:26:22.556203+00:00,Brazil,C,2092.2793100842528,47.94,47.75,0.1899999999999977,0.3979057591622989,1.0,0.0528,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Mexico,A,2021.7373455612208,44.73,45.97,-1.240000000000002,-2.697411355231677,1.0,0.06075,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Belgium,G,1965.527949971616,42.58,43.76,-1.1799999999999995,-2.6965265082266905,1.0,0.02215,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Morocco,C,2041.1018340713665,41.96,46.92,-4.960000000000001,-10.571184995737427,1.0,0.0239,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Norway,I,1972.3416727175345,41.86,41.44,0.4200000000000017,1.0135135135135176,1.0,0.01495,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,United States,D,1897.342440179041,41.56,45.41,-3.8499999999999934,-8.478308742567705,1.0,0.01485,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Portugal,K,2055.531279189894,41.3,44.92,-3.620000000000005,-8.058771148708825,1.0,0.03895,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,same_group
+2026-07-04T05:26:22.556203+00:00,Switzerland,B,1993.3526382281264,39.38,37.42,1.9600000000000009,5.237840726884022,1.0,0.02555,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Canada,B,1859.4655817712417,38.86,40.58,-1.7199999999999989,-4.238541153277474,1.0,0.01105,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Egypt,G,1896.6969132105075,34.3,38.6,-4.300000000000004,-11.139896373057006,1.0,0.0047,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Paraguay,D,1910.0130491359168,32.94,34.01,-1.0700000000000005,-3.146133490149957,1.0,0.0015,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Netherlands,F,2000.7626913022912,25.91,25.91,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Germany,E,1940.1450694794064,25.59,25.59,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Japan,F,1954.9668103896377,24.03,24.03,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Ivory Coast,E,1823.723032454427,23.89,23.89,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Croatia,L,1926.812444905188,23.84,23.84,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,same_group
+2026-07-04T05:26:22.556203+00:00,Australia,D,1845.5211391450616,23.59,23.63,-0.0399999999999991,-0.1692763436309739,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,South Africa,A,1693.614617167326,22.73,22.73,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Senegal,I,1862.146613800206,22.32,22.32,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Austria,J,1867.117768241036,22.0,22.0,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Ecuador,E,1929.1933341526112,21.82,21.82,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Ghana,L,1673.4229598072593,21.58,17.18,4.399999999999999,25.611175785797432,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,played
+2026-07-04T05:26:22.556203+00:00,Cape Verde Islands,H,1689.9638660445762,21.57,21.13,0.4400000000000013,2.082347373402751,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Algeria,J,1833.554131996676,21.47,21.47,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Congo DR,K,1794.39123552079,21.46,21.46,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,same_group
+2026-07-04T05:26:22.556203+00:00,Sweden,F,1781.6184920846476,21.02,21.02,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Bosnia-Herzegovina,B,1659.9254031246503,20.15,20.15,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Iran,G,1873.4078788308684,8.82,8.82,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,South Korea,A,1825.9460475707715,8.69,8.69,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Uruguay,H,1907.5228774752184,8.53,8.53,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Scotland,C,1800.6524904944006,8.47,8.47,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Turkey,D,1891.3502864268487,8.37,8.37,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Saudi Arabia,H,1705.9341181708846,7.73,7.73,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Panama,L,1753.9772103673267,7.33,7.33,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,same_group
+2026-07-04T05:26:22.556203+00:00,New Zealand,G,1678.9442908209887,7.24,7.24,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Jordan,J,1715.5967031705195,7.18,7.18,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Uzbekistan,K,1723.1994397509068,7.1,7.1,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,same_group
+2026-07-04T05:26:22.556203+00:00,Curaçao,E,1590.2975033938003,7.09,7.09,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Qatar,B,1549.5494030220432,6.99,6.99,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Iraq,I,1661.1474098625897,6.97,6.97,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Haiti,C,1657.7903422759043,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Tunisia,F,1648.6081559732288,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
+2026-07-04T05:26:22.556203+00:00,Czechia,A,1731.2587132929823,6.87,6.87,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537430,Colombia 1-0 Ghana,other
