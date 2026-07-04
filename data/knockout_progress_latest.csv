@@ -15,7 +15,7 @@ logical_match_number,api_match_id,stage,utc_date,status,home_team,away_team,home
 86,537428,LAST_32,2026-07-03 18:00:00+00:00,FINISHED,Australia,Egypt,3.0,5.0,PENALTY_SHOOTOUT,penalties,Egypt,2.0,4.0
 87,537427,LAST_32,2026-07-03 22:00:00+00:00,FINISHED,Argentina,Cape Verde Islands,3.0,2.0,EXTRA_TIME,extra_time,Argentina,,
 88,537430,LAST_32,2026-07-04 01:30:00+00:00,FINISHED,Colombia,Ghana,1.0,0.0,REGULAR,regular_time,Colombia,,
-89,537376,LAST_16,2026-07-04 17:00:00+00:00,TIMED,Canada,Morocco,,,REGULAR,,,,
+89,537376,LAST_16,2026-07-04 17:00:00+00:00,IN_PLAY,Canada,Morocco,0.0,0.0,REGULAR,,,,
 90,537375,LAST_16,2026-07-04 21:00:00+00:00,TIMED,Paraguay,France,,,REGULAR,,,,
 91,537377,LAST_16,2026-07-05 20:00:00+00:00,TIMED,Brazil,Norway,,,REGULAR,,,,
 92,537378,LAST_16,2026-07-06 00:00:00+00:00,TIMED,Mexico,England,,,REGULAR,,,,
