@@ -2159,3 +2159,51 @@ snapshot_id,affected_team,group,live_elo,price_after,price_before,price_change,p
 2026-07-05T22:36:15.509178+00:00,Haiti,C,1657.7903422759043,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537377,Brazil 1-2 Norway,same_group
 2026-07-05T22:36:15.509178+00:00,Tunisia,F,1648.6081559732288,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537377,Brazil 1-2 Norway,other
 2026-07-05T22:36:15.509178+00:00,Czechia,A,1731.2587132929823,6.87,6.87,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537377,Brazil 1-2 Norway,other
+2026-07-06T04:10:00.458849+00:00,Argentina,J,2205.741574215096,64.86,69.53,-4.670000000000002,-6.716525240903209,1.0,0.2665,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,England,L,2126.829431538445,63.09,54.32,8.770000000000003,16.145066273932258,1.0,0.1272,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,played
+2026-07-06T04:10:00.458849+00:00,France,I,2184.7810048241463,60.04,70.89,-10.85,-15.305402736634225,1.0,0.1038,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Morocco,C,2076.610806403796,56.97,59.8,-2.8299999999999983,-4.732441471571904,1.0,0.04515,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Spain,H,2201.234819062272,56.71,57.01,-0.2999999999999971,-0.5262234695667377,1.0,0.14655,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Norway,I,2012.305247618376,55.96,57.05,-1.0899999999999963,-1.910604732690616,1.0,0.0217,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Colombia,K,2070.714685588958,50.35,53.06,-2.710000000000001,-5.107425555974371,1.0,0.0668,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Mexico,A,1992.6907704482292,45.12,46.62,-1.5,-3.217503217503218,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,played
+2026-07-06T04:10:00.458849+00:00,Brazil,C,2052.315735183412,44.34,44.36,-0.019999999999996,-0.0450856627592335,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Belgium,G,1965.527949971616,42.71,43.59,-0.8800000000000026,-2.0188116540491,1.0,0.0229,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,United States,D,1897.342440179041,41.49,45.38,-3.890000000000001,-8.572058175407669,1.0,0.0151,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Portugal,K,2055.531279189894,41.42,44.5,-3.0799999999999983,-6.921348314606738,1.0,0.0364,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Canada,B,1823.9566094388128,40.58,40.58,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Paraguay,D,1899.2426365931187,40.29,40.29,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Switzerland,B,1993.3526382281264,39.63,37.36,2.270000000000003,6.076017130620993,1.0,0.02775,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Egypt,G,1896.6969132105075,34.2,35.87,-1.6699999999999946,-4.655701143016434,1.0,0.00425,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Netherlands,F,2000.7626913022912,25.92,25.91,0.0100000000000015,0.0385951370127424,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Germany,E,1940.1450694794064,25.59,25.59,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Japan,F,1954.9668103896377,24.02,24.02,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Ivory Coast,E,1823.723032454427,23.9,23.9,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Croatia,L,1926.812444905188,23.84,23.84,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,same_group
+2026-07-06T04:10:00.458849+00:00,Australia,D,1845.5211391450616,23.6,23.6,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,South Africa,A,1693.614617167326,22.72,22.72,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,same_group
+2026-07-06T04:10:00.458849+00:00,Senegal,I,1862.146613800206,22.32,22.32,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Austria,J,1867.117768241036,22.0,22.0,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Ghana,L,1673.4229598072593,21.98,21.98,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,same_group
+2026-07-06T04:10:00.458849+00:00,Ecuador,E,1929.1933341526112,21.82,21.82,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Cape Verde Islands,H,1689.9638660445762,21.61,21.61,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Algeria,J,1833.554131996676,21.48,21.48,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Congo DR,K,1794.39123552079,21.46,21.46,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Sweden,F,1781.6184920846476,21.02,21.02,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Bosnia-Herzegovina,B,1659.9254031246503,20.15,20.15,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Iran,G,1873.4078788308684,8.82,8.82,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,South Korea,A,1825.9460475707715,8.7,8.7,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,same_group
+2026-07-06T04:10:00.458849+00:00,Uruguay,H,1907.5228774752184,8.53,8.53,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Scotland,C,1800.6524904944006,8.47,8.47,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Turkey,D,1891.3502864268487,8.37,8.37,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Saudi Arabia,H,1705.9341181708846,7.73,7.73,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Panama,L,1753.9772103673267,7.33,7.33,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,same_group
+2026-07-06T04:10:00.458849+00:00,New Zealand,G,1678.9442908209887,7.24,7.24,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Jordan,J,1715.5967031705195,7.18,7.18,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Uzbekistan,K,1723.1994397509068,7.1,7.1,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Curaçao,E,1590.2975033938003,7.09,7.09,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Qatar,B,1549.5494030220432,6.99,6.99,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Iraq,I,1661.1474098625897,6.97,6.97,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Haiti,C,1657.7903422759043,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Tunisia,F,1648.6081559732288,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
+2026-07-06T04:10:00.458849+00:00,Czechia,A,1731.2587132929823,6.87,6.87,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,same_group
