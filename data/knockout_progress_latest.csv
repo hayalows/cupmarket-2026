@@ -19,7 +19,7 @@ logical_match_number,api_match_id,stage,utc_date,status,home_team,away_team,home
 90,537375,LAST_16,2026-07-04 21:00:00+00:00,FINISHED,Paraguay,France,0.0,1.0,REGULAR,regular_time,France,,
 91,537377,LAST_16,2026-07-05 20:00:00+00:00,FINISHED,Brazil,Norway,1.0,2.0,REGULAR,regular_time,Norway,,
 92,537378,LAST_16,2026-07-06 01:00:00+00:00,FINISHED,Mexico,England,2.0,3.0,REGULAR,regular_time,England,,
-93,537379,LAST_16,2026-07-06 19:00:00+00:00,IN_PLAY,Portugal,Spain,0.0,0.0,REGULAR,,,,
+93,537379,LAST_16,2026-07-06 19:00:00+00:00,FINISHED,Portugal,Spain,0.0,1.0,REGULAR,regular_time,Spain,,
 94,537380,LAST_16,2026-07-07 00:00:00+00:00,TIMED,United States,Belgium,,,REGULAR,,,,
 95,537381,LAST_16,2026-07-07 16:00:00+00:00,TIMED,Argentina,Egypt,,,REGULAR,,,,
 96,537382,LAST_16,2026-07-07 20:00:00+00:00,TIMED,Switzerland,Colombia,,,REGULAR,,,,

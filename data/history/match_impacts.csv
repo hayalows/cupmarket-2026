@@ -2166,7 +2166,7 @@ snapshot_id,affected_team,group,live_elo,price_after,price_before,price_change,p
 2026-07-06T04:10:00.458849+00:00,Spain,H,2201.234819062272,56.71,57.01,-0.2999999999999971,-0.5262234695667377,1.0,0.14655,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
 2026-07-06T04:10:00.458849+00:00,Norway,I,2012.305247618376,55.96,57.05,-1.0899999999999963,-1.910604732690616,1.0,0.0217,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
 2026-07-06T04:10:00.458849+00:00,Colombia,K,2070.714685588958,50.35,53.06,-2.710000000000001,-5.107425555974371,1.0,0.0668,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
-2026-07-06T04:10:00.458849+00:00,Mexico,A,1992.6907704482292,45.12,46.62,-1.5,-3.217503217503218,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,played
+2026-07-06T04:10:00.458849+00:00,Mexico,A,1992.6907704482287,45.12,46.62,-1.5,-3.217503217503218,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,played
 2026-07-06T04:10:00.458849+00:00,Brazil,C,2052.315735183412,44.34,44.36,-0.019999999999996,-0.0450856627592335,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
 2026-07-06T04:10:00.458849+00:00,Belgium,G,1965.527949971616,42.71,43.59,-0.8800000000000026,-2.0188116540491,1.0,0.0229,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
 2026-07-06T04:10:00.458849+00:00,United States,D,1897.342440179041,41.49,45.38,-3.890000000000001,-8.572058175407669,1.0,0.0151,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
@@ -2207,3 +2207,51 @@ snapshot_id,affected_team,group,live_elo,price_after,price_before,price_change,p
 2026-07-06T04:10:00.458849+00:00,Haiti,C,1657.7903422759043,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
 2026-07-06T04:10:00.458849+00:00,Tunisia,F,1648.6081559732288,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,other
 2026-07-06T04:10:00.458849+00:00,Czechia,A,1731.2587132929823,6.87,6.87,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537378,Mexico 2-3 England,same_group
+2026-07-06T21:25:41.765968+00:00,Spain,H,2219.3428702800225,66.02,57.12,8.899999999999999,15.581232492997197,1.0,0.15795,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,played
+2026-07-06T21:25:41.765968+00:00,Argentina,J,2205.741574215096,64.98,68.78,-3.799999999999997,-5.524861878453034,1.0,0.2664,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,England,L,2126.829431538445,63.66,73.47,-9.810000000000002,-13.35238873009392,1.0,0.1325,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,France,I,2184.7810048241463,59.32,70.98,-11.660000000000004,-16.42716258100874,1.0,0.09345,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Morocco,C,2076.610806403796,56.84,59.65,-2.809999999999995,-4.710813076278282,1.0,0.04255,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Norway,I,2012.305247618376,55.89,55.65,0.240000000000002,0.4312668463611895,1.0,0.0202,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Colombia,K,2070.714685588958,50.27,52.93,-2.6599999999999966,-5.025505384470049,1.0,0.0659,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,same_group
+2026-07-06T21:25:41.765968+00:00,Mexico,A,1992.6907704482287,44.98,44.99,-0.0100000000000051,-0.0222271615914761,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Brazil,C,2052.315735183412,44.35,44.34,0.009999999999998,0.0225529995489355,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Portugal,K,2037.423227972144,42.9,44.53,-1.6300000000000026,-3.660453626768476,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,played
+2026-07-06T21:25:41.765968+00:00,Belgium,G,1965.527949971616,42.61,43.57,-0.9600000000000009,-2.2033509295386757,1.0,0.02265,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,United States,D,1897.342440179041,41.6,45.25,-3.649999999999999,-8.066298342541433,1.0,0.01575,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Canada,B,1823.9566094388128,40.58,40.58,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Paraguay,D,1899.2426365931187,40.29,40.29,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Switzerland,B,1993.3526382281264,39.4,37.12,2.280000000000001,6.142241379310349,1.0,0.02585,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Egypt,G,1896.6969132105075,34.19,35.95,-1.7600000000000051,-4.895688456189165,1.0,0.00485,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Netherlands,F,2000.7626913022912,25.92,25.92,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Germany,E,1940.1450694794064,25.59,25.59,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Japan,F,1954.9668103896377,24.02,24.02,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Ivory Coast,E,1823.723032454427,23.9,23.9,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Croatia,L,1926.812444905188,23.84,23.84,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Australia,D,1845.5211391450616,23.6,23.6,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,South Africa,A,1693.614617167326,22.72,22.72,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Senegal,I,1862.146613800206,22.32,22.32,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Austria,J,1867.117768241036,22.0,22.0,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Ghana,L,1673.4229598072593,21.98,21.98,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Ecuador,E,1929.1933341526112,21.82,21.82,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Cape Verde Islands,H,1689.9638660445762,21.61,21.61,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,same_group
+2026-07-06T21:25:41.765968+00:00,Algeria,J,1833.554131996676,21.48,21.48,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Congo DR,K,1794.39123552079,21.46,21.46,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,same_group
+2026-07-06T21:25:41.765968+00:00,Sweden,F,1781.6184920846476,21.02,21.02,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Bosnia-Herzegovina,B,1659.9254031246503,20.15,20.15,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Iran,G,1873.4078788308684,8.82,8.82,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,South Korea,A,1825.9460475707715,8.7,8.7,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Uruguay,H,1907.5228774752184,8.53,8.53,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,same_group
+2026-07-06T21:25:41.765968+00:00,Scotland,C,1800.6524904944006,8.47,8.47,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Turkey,D,1891.3502864268487,8.37,8.37,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Saudi Arabia,H,1705.9341181708846,7.73,7.73,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,same_group
+2026-07-06T21:25:41.765968+00:00,Panama,L,1753.9772103673267,7.33,7.33,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,New Zealand,G,1678.9442908209887,7.24,7.24,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Jordan,J,1715.5967031705195,7.18,7.18,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Uzbekistan,K,1723.1994397509068,7.1,7.1,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,same_group
+2026-07-06T21:25:41.765968+00:00,Curaçao,E,1590.2975033938003,7.09,7.09,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Qatar,B,1549.5494030220432,6.99,6.99,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Iraq,I,1661.1474098625897,6.97,6.97,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Haiti,C,1657.7903422759043,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Tunisia,F,1648.6081559732288,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
+2026-07-06T21:25:41.765968+00:00,Czechia,A,1731.2587132929823,6.87,6.87,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537379,Portugal 0-1 Spain,other
