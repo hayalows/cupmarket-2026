@@ -59,8 +59,8 @@ class FakePipeline:
         92: (79, 80),
         93: (83, 84),
         94: (81, 82),
-        95: (86, 88),
-        96: (85, 87),
+        95: (87, 86),
+        96: (85, 88),
     }
     QUARTER_FINALS = {
         97: (89, 90),
@@ -304,6 +304,108 @@ class KnockoutStageTests(unittest.TestCase):
         ]
         settlements = probabilities[settlement_columns].sum(axis=1)
         self.assertTrue(np.allclose(settlements, 1.0))
+
+    def test_official_lower_right_round_of_16_matches_bracket_path(self):
+        matches, bracket, tables, team_map, elo, state = self._base_fixture()
+        bracket_by_logical = bracket.set_index("bracket_match_number")
+        r32_winners = {
+            85: bracket_by_logical.loc[85, "home_team"],
+            86: bracket_by_logical.loc[86, "away_team"],
+            87: bracket_by_logical.loc[87, "home_team"],
+            88: bracket_by_logical.loc[88, "away_team"],
+        }
+        for logical, winner in r32_winners.items():
+            fixture = bracket.loc[
+                bracket["bracket_match_number"].eq(logical)
+            ].iloc[0]
+            is_home = fixture.home_team == winner
+            matches.loc[
+                matches["match_id"].eq(fixture.api_match_id),
+                [
+                    "status",
+                    "winner",
+                    "duration",
+                    "home_score_full_time",
+                    "away_score_full_time",
+                ],
+            ] = [
+                "FINISHED",
+                "HOME_TEAM" if is_home else "AWAY_TEAM",
+                "REGULAR",
+                1 if is_home else 0,
+                0 if is_home else 1,
+            ]
+
+        matches = pd.concat(
+            [
+                matches,
+                pd.DataFrame(
+                    [
+                        {
+                            "match_id": 1994 + offset,
+                            "utc_date": pd.Timestamp(
+                                "2026-07-04T12:00:00Z"
+                            )
+                            + pd.Timedelta(hours=offset),
+                            "status": "TIMED",
+                            "stage": "LAST_16",
+                            "home_team": f"Earlier Home {offset}",
+                            "away_team": f"Earlier Away {offset}",
+                            "winner": None,
+                            "duration": None,
+                            "home_score_full_time": np.nan,
+                            "away_score_full_time": np.nan,
+                            "home_score_penalties": np.nan,
+                            "away_score_penalties": np.nan,
+                        }
+                        for offset in range(6)
+                    ]
+                    + [
+                        {
+                            "match_id": 2000,
+                            "utc_date": pd.Timestamp(
+                                "2026-07-07T16:00:00Z"
+                            ),
+                            "status": "FINISHED",
+                            "stage": "LAST_16",
+                            "home_team": r32_winners[87],
+                            "away_team": r32_winners[86],
+                            "winner": "HOME_TEAM",
+                            "duration": "REGULAR",
+                            "home_score_full_time": 3,
+                            "away_score_full_time": 2,
+                            "home_score_penalties": np.nan,
+                            "away_score_penalties": np.nan,
+                        },
+                        {
+                            "match_id": 2001,
+                            "utc_date": pd.Timestamp(
+                                "2026-07-07T20:00:00Z"
+                            ),
+                            "status": "TIMED",
+                            "stage": "LAST_16",
+                            "home_team": r32_winners[85],
+                            "away_team": r32_winners[88],
+                            "winner": None,
+                            "duration": None,
+                            "home_score_full_time": np.nan,
+                            "away_score_full_time": np.nan,
+                            "home_score_penalties": np.nan,
+                            "away_score_penalties": np.nan,
+                        },
+                    ]
+                ),
+            ],
+            ignore_index=True,
+        )
+
+        mapping = ks.logical_match_map(matches, bracket)
+        actual_results = ks.build_actual_results(matches, bracket)
+
+        self.assertEqual(mapping[2000], 95)
+        self.assertEqual(mapping[2001], 96)
+        self.assertEqual(actual_results[95]["winner"], r32_winners[87])
+        self.assertEqual(actual_results[95]["loser"], r32_winners[86])
 
     def test_group_stage_metadata_counts_finished_active_and_latest(self):
         matches = pd.DataFrame(
