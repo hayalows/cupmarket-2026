@@ -401,8 +401,8 @@ def _render_tournament_so_far(
     else:
         cols[3].metric("Pre-match calls", "—")
 
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(
-        ["Target gainers", "Target fallers", "Market journey", "Model calls", "Group/R32 archive"]
+    tab1, tab2, tab3, tab4 = st.tabs(
+        ["Target gainers", "Target fallers", "Market journey", "Model calls"]
     )
 
     with tab1:
@@ -487,28 +487,6 @@ def _render_tournament_so_far(
                 },
                 percent_columns=["actual_result_probability"],
             )
-
-    with tab5:
-        st.markdown("### Round-of-32 archive")
-        gainers = changes.dropna(subset=["r32_change"]).sort_values("r32_change", ascending=False).head(8)
-        _render_table(
-            gainers,
-            ["team", "continent", "opening_r32", "current_r32", "r32_change", "opening_price", "current_price", "price_gain"],
-            {
-                "team": "Country",
-                "continent": "Continent",
-                "opening_r32": "Opening R32",
-                "current_r32": "Current R32",
-                "r32_change": "R32 change",
-                "opening_price": "Opening price",
-                "current_price": "Current price",
-                "price_gain": "Price gain",
-            },
-            percent_columns=["opening_r32", "current_r32"],
-            pp_columns=["r32_change"],
-        )
-        st.caption("Archived group-stage movement remains here, but the main page now follows the active tournament target.")
-
 
 def render_tournament_insights(
     prices: pd.DataFrame,
@@ -643,51 +621,3 @@ def render_tournament_insights(
             facts.append("Qualified without winning: " + ", ".join(winless_qualified["team"].astype(str).tolist()) + ".")
     for fact in facts:
         st.write(f"- {fact}")
-
-    st.markdown("### Group/R32 archive: continent picture")
-    if not qualified.empty:
-        continent_counts = (
-            qualified.groupby("continent")["team"]
-            .agg([("Countries", "count"), ("Teams", lambda values: ", ".join(sorted(values.astype(str))))])
-            .reset_index()
-            .sort_values("Countries", ascending=False)
-        )
-        continent_counts = continent_counts.rename(columns={"continent": "Continent"})
-        st.dataframe(continent_counts, hide_index=True, use_container_width=True)
-        st.caption("Archived group-to-Round-of-32 view. The stage ladder above follows the active tournament phase.")
-
-    st.markdown("### Group-stage edge archive")
-    if not prices.empty and "prob_reach_round_32" in prices.columns:
-        edge = prices.loc[(prices["prob_reach_round_32"] > 0.0) & (prices["prob_reach_round_32"] < 0.999)].sort_values("prob_reach_round_32", ascending=False)
-        _render_table(
-            edge,
-            ["team", "continent", "prob_reach_round_32", "prob_group_exit", "cupmarket_price"],
-            {
-                "team": "Country",
-                "continent": "Continent",
-                "prob_reach_round_32": "Reach R32",
-                "prob_group_exit": "Group exit",
-                "cupmarket_price": "Price",
-            },
-            percent_columns=["prob_reach_round_32", "prob_group_exit"],
-        )
-
-    st.markdown("### Group/R32 path archive")
-    if isinstance(path_status, pd.DataFrame) and not path_status.empty:
-        cols = ["team", "fixture_status", "current_group_position", "prob_reach_round_32", "most_likely_opponent", "most_likely_opponent_probability_given_qualification"]
-        display = path_status[[column for column in cols if column in path_status.columns]].copy()
-        if "prob_reach_round_32" in display.columns:
-            display["prob_reach_round_32"] = display["prob_reach_round_32"].map(_percent)
-        if "most_likely_opponent_probability_given_qualification" in display.columns:
-            display["most_likely_opponent_probability_given_qualification"] = display["most_likely_opponent_probability_given_qualification"].map(_percent)
-        display = display.rename(
-            columns={
-                "team": "Country",
-                "fixture_status": "Path state",
-                "current_group_position": "Group pos",
-                "prob_reach_round_32": "Reach R32",
-                "most_likely_opponent": "Likely opponent",
-                "most_likely_opponent_probability_given_qualification": "Opponent chance if qualified",
-            }
-        )
-        st.dataframe(display, hide_index=True, use_container_width=True)

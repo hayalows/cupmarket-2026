@@ -8,6 +8,7 @@ import streamlit as st
 
 from features.official_data import load_latest_json
 from features.tournament_data_v2 import DATA_DIR, load_static_data
+from features.tournament_path_data import load_tournament_path_data
 
 
 MANIFEST_PATH = DATA_DIR / "publication_manifest.json"
@@ -30,6 +31,50 @@ def _score(row: pd.Series) -> str:
     return "Result pending" if pd.isna(home) or pd.isna(away) else f"{int(home)}-{int(away)}"
 
 
+def _render_group_stage_record(path_data: dict) -> None:
+    tables = path_data.get("group_tables", pd.DataFrame())
+    paths = path_data.get("path_status", pd.DataFrame())
+    st.markdown("### Group-stage record")
+    st.caption("Choose a group to review its final table and saved knockout-path publication.")
+    if tables.empty or "group" not in tables.columns:
+        st.info("Final group tables are not available in this publication.")
+        return
+
+    groups = sorted(tables["group"].dropna().astype(str).unique())
+    selected_group = st.selectbox("Group", groups, key="cupmarket_archive_group")
+    table = tables.loc[tables["group"].astype(str).eq(selected_group)].copy()
+    columns = [
+        "position", "team", "played", "wins", "draws", "losses",
+        "goals_for", "goals_against", "goal_difference", "points",
+    ]
+    table = table[[column for column in columns if column in table.columns]].rename(
+        columns={
+            "position": "Pos", "team": "Country", "played": "P", "wins": "W",
+            "draws": "D", "losses": "L", "goals_for": "GF",
+            "goals_against": "GA", "goal_difference": "GD", "points": "Pts",
+        }
+    )
+    st.dataframe(table, hide_index=True, use_container_width=True)
+
+    if paths.empty or "team" not in paths.columns:
+        return
+    group_teams = set(table.get("Country", pd.Series(dtype=str)).astype(str))
+    saved = paths.loc[paths["team"].astype(str).isin(group_teams)].copy()
+    saved_columns = [
+        "team", "fixture_status", "current_group_position", "most_likely_opponent",
+    ]
+    saved = saved[[column for column in saved_columns if column in saved.columns]].rename(
+        columns={
+            "team": "Country", "fixture_status": "Saved path state",
+            "current_group_position": "Group position",
+            "most_likely_opponent": "Projected opponent",
+        }
+    )
+    if not saved.empty:
+        with st.expander("Saved path publication", expanded=False):
+            st.dataframe(saved, hide_index=True, use_container_width=True)
+
+
 def render_tournament_archive() -> None:
     static = load_static_data()
     matches = static.get("matches", pd.DataFrame())
@@ -40,6 +85,7 @@ def render_tournament_archive() -> None:
     prices = static.get("prices", pd.DataFrame())
     history = static.get("history", pd.DataFrame())
     ledger = static.get("prediction_ledger", pd.DataFrame())
+    path_data = load_tournament_path_data()
     manifest = load_latest_json(MANIFEST_PATH)
     adaptive = load_latest_json(ADAPTIVE_HEALTH_PATH)
     final = _final_row(matches)
@@ -57,16 +103,22 @@ def render_tournament_archive() -> None:
     else:
         st.info("The final has not been published yet. This archive is collecting the durable evidence that will become the post-tournament record.")
 
-    first = st.columns(4)
-    first[0].metric("Matches recorded", len(matches))
-    first[1].metric("Market checkpoints", int(history.get("generated_at_utc", pd.Series()).nunique()))
-    first[2].metric("Saved forecasts", int(ledger.get("match_id", pd.Series()).nunique()))
-    first[3].metric("Archive state", str(archive.get("status") or "collecting").title())
-
-    story_tab, market_tab, model_tab, method_tab = st.tabs(
-        ["Tournament story", "Market replay", "Model verdict", "Archive method"]
+    checkpoint_count = int(history.get("generated_at_utc", pd.Series(dtype=object)).nunique())
+    forecast_count = int(ledger.get("match_id", pd.Series(dtype=object)).nunique())
+    archive_state = str(archive.get("status") or "collecting").replace("_", " ").title()
+    st.caption(
+        f"Archive coverage: {len(matches)} matches - {checkpoint_count} market checkpoints - "
+        f"{forecast_count} saved forecasts - state: {archive_state}."
     )
-    with story_tab:
+    st.markdown("### Choose an archive view")
+    st.caption("Open one permanent record at a time. Archive views never change official prices.")
+    archive_view = st.selectbox(
+        "Archive view",
+        ["Tournament story", "Market replay", "Group-stage record", "Model verdict", "Archive method"],
+        key="cupmarket_archive_view",
+    )
+
+    if archive_view == "Tournament story":
         if complete:
             st.markdown("### Final outcome")
             st.write(
@@ -86,7 +138,7 @@ def render_tournament_archive() -> None:
             leaderboard.columns = ["Country", "Expected settlement value", "Champion chance", "Market rank"]
             st.dataframe(leaderboard, hide_index=True, use_container_width=True)
 
-    with market_tab:
+    elif archive_view == "Market replay":
         if history.empty or not {"team", "generated_at_utc", "cupmarket_price"}.issubset(history.columns):
             st.caption("Market history is not available yet.")
         else:
@@ -102,7 +154,10 @@ def render_tournament_archive() -> None:
             figure.update_yaxes(title="Expected settlement value")
             st.plotly_chart(figure, use_container_width=True)
 
-    with model_tab:
+    elif archive_view == "Group-stage record":
+        _render_group_stage_record(path_data)
+
+    elif archive_view == "Model verdict":
         decision = str(adaptive.get("decision") or "collecting_evidence").replace("_", " ").title()
         metrics = st.columns(3)
         metrics[0].metric("Adaptive guardrail", decision)
@@ -112,6 +167,6 @@ def render_tournament_archive() -> None:
         st.write(str(adaptive.get("message") or "The forecast comparison is still collecting evidence."))
         st.caption("Open Analysis Lab for match-level Brier score, log loss and calibration evidence.")
 
-    with method_tab:
+    else:
         st.write("CupMarket preserves official results, a commit-pinned publication snapshot, price checkpoints, prediction ledgers and bracket progress. The final archive is therefore reproducible from the same published record used during the tournament.")
         st.caption("Prices are virtual expected settlement values, not betting odds or real-money prices.")

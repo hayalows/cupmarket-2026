@@ -4,7 +4,7 @@
   margin: 1rem 0;
   padding: 1rem 1.05rem;
   border: 1px solid var(--cm-border, #e5e9f1);
-  border-radius: 18px;
+  border-radius: 8px;
   background: rgba(255,255,255,.88);
   box-shadow: 0 10px 28px rgba(23,29,52,.05);
 }
@@ -43,7 +43,7 @@ section[data-testid="stSidebar"] .cm-project-card span { color: #aeb6ca; }
   color: var(--cm-primary, #5b5ff0);
   font-size: .68rem;
   font-weight: 820;
-  letter-spacing: .1em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -52,7 +52,7 @@ section[data-testid="stSidebar"] .cm-project-card span { color: #aeb6ca; }
 .cm-start-here {
   margin: 1rem 0 1.4rem;
   border: 1px solid var(--cm-border, #e5e9f1);
-  border-radius: 22px;
+  border-radius: 8px;
   background: rgba(255,255,255,.91);
   box-shadow: 0 12px 35px rgba(23,29,52,.055);
 }
@@ -71,7 +71,7 @@ section[data-testid="stSidebar"] .cm-project-card span { color: #aeb6ca; }
 .cm-guide-copy h2,
 .cm-start-here h2 {
   margin: .25rem 0 .35rem;
-  font-size: clamp(1.25rem, 2.6vw, 1.65rem);
+  font-size: 1.5rem;
   letter-spacing: 0;
 }
 
@@ -95,7 +95,7 @@ section[data-testid="stSidebar"] .cm-project-card span { color: #aeb6ca; }
   min-width: 0;
   padding: .85rem;
   border: 1px solid #edf0f5;
-  border-radius: 16px;
+  border-radius: 8px;
   background: #f8f9fc;
 }
 
@@ -105,7 +105,7 @@ section[data-testid="stSidebar"] .cm-project-card span { color: #aeb6ca; }
   height: 26px;
   display: grid;
   place-items: center;
-  border-radius: 9px;
+  border-radius: 6px;
   background: #ebeafd;
   color: var(--cm-primary, #5b5ff0);
   font-size: .76rem;
@@ -166,7 +166,7 @@ section[data-testid="stSidebar"] .cm-project-card span { color: #aeb6ca; }
   margin: .8rem 0 1rem;
   padding: 1.05rem 1.15rem;
   border: 1px solid var(--cm-border, #e5e9f1);
-  border-radius: 20px;
+  border-radius: 8px;
   background: rgba(255,255,255,.94);
   box-shadow: 0 12px 34px rgba(23,29,52,.055);
 }
@@ -175,7 +175,7 @@ section[data-testid="stSidebar"] .cm-project-card span { color: #aeb6ca; }
   color: var(--cm-muted, #687083);
   font-size: .75rem;
   font-weight: 650;
-  letter-spacing: .02em;
+  letter-spacing: 0;
 }
 
 .cm-match-teams {
@@ -189,7 +189,7 @@ section[data-testid="stSidebar"] .cm-project-card span { color: #aeb6ca; }
 .cm-match-teams strong {
   min-width: 0;
   overflow-wrap: anywhere;
-  font-size: clamp(.95rem, 2.3vw, 1.2rem);
+  font-size: 1.1rem;
 }
 
 .cm-match-teams strong:last-child { text-align: right; }
@@ -197,7 +197,7 @@ section[data-testid="stSidebar"] .cm-project-card span { color: #aeb6ca; }
 .cm-match-teams span {
   min-width: 56px;
   padding: .42rem .58rem;
-  border-radius: 12px;
+  border-radius: 8px;
   background: #f0f2f7;
   color: #111827;
   text-align: center;
@@ -224,7 +224,7 @@ section[data-testid="stSidebar"] .cm-project-card span { color: #aeb6ca; }
 /* Make native page links read like primary navigation controls. */
 [data-testid="stPageLink"] a {
   min-height: 44px;
-  border-radius: 13px;
+  border-radius: 8px;
   font-weight: 680;
 }
 
@@ -257,12 +257,12 @@ section[data-testid="stSidebar"] [data-testid="stPageLink"] a {
     margin-top: 0 !important;
     margin-bottom: 1rem !important;
     padding: 1.2rem 1.05rem !important;
-    border-radius: 20px !important;
+    border-radius: 8px !important;
   }
 
   .cm-hero h1 {
     max-width: 100%;
-    font-size: clamp(1.85rem, 9vw, 2.5rem) !important;
+    font-size: 2rem !important;
     line-height: 1.04 !important;
   }
 
@@ -284,18 +284,18 @@ section[data-testid="stSidebar"] [data-testid="stPageLink"] a {
   [data-testid="stMetric"] {
     min-height: 94px !important;
     padding: .85rem .9rem !important;
-    border-radius: 16px !important;
+    border-radius: 8px !important;
   }
 
   [data-testid="stMetricValue"] {
-    font-size: clamp(1.18rem, 6vw, 1.65rem) !important;
+    font-size: 1.5rem !important;
     letter-spacing: 0 !important;
   }
 
   [data-testid="stMetricDelta"] { font-size: .72rem !important; }
 
   .cm-guide,
-  .cm-start-here { border-radius: 18px; }
+  .cm-start-here { border-radius: 8px; }
   .cm-guide { padding: .9rem; }
   .cm-guide-grid { grid-template-columns: 1fr; overflow: visible; }
   .cm-guide-step { padding: .75rem; }

@@ -83,22 +83,29 @@ if prediction_ledger.empty:
     prediction_ledger = pd.read_csv(ledger_path) if ledger_path.exists() else pd.DataFrame()
 
 finished_knockouts, live_knockouts, upcoming_knockouts = _knockout_counts(progress)
-stage_cols = st.columns(4)
-stage_cols[0].metric("Still alive", _alive_count(prices))
-stage_cols[1].metric("Knockout results", finished_knockouts)
-stage_cols[2].metric("Live knockouts", live_knockouts)
-stage_cols[3].metric("Fixtures ahead", upcoming_knockouts)
-st.caption("Choose an analysis question. Tournament history and market replay are kept in Archive.")
+st.caption(
+    f"Tournament context: {_alive_count(prices)} still alive - "
+    f"{finished_knockouts} knockout results - {live_knockouts} live - "
+    f"{upcoming_knockouts} fixtures ahead."
+)
+st.markdown("### Choose an analysis")
+st.caption(
+    "Open one evidence view at a time. Permanent tournament history and market replay stay in Archive."
+)
+analysis_view = st.selectbox(
+    "Analysis view",
+    [
+        "Research summary",
+        "Match review",
+        "Evidence timeline",
+        "Model evaluation",
+        "Adaptive research",
+        "Knockout checks",
+    ],
+    key="cupmarket_analysis_view",
+)
 
-tabs = st.tabs([
-    "Research summary",
-    "Match review",
-    "Evidence timeline",
-    "Model evaluation",
-    "Adaptive research",
-    "Knockout checks",
-])
-with tabs[0]:
+if analysis_view == "Research summary":
     render_tournament_insights(
         prices,
         tables,
@@ -108,14 +115,14 @@ with tabs[0]:
         prediction_ledger=prediction_ledger,
         progress=progress,
     )
-with tabs[1]:
+elif analysis_view == "Match review":
     render_match_story(prediction_ledger, movement_history, processed_ledger)
-with tabs[2]:
+elif analysis_view == "Evidence timeline":
     render_tournament_timeline(processed_ledger, movement_history)
-with tabs[3]:
+elif analysis_view == "Model evaluation":
     render_model_performance()
-with tabs[4]:
+elif analysis_view == "Adaptive research":
     render_adaptive_ratings_insights(adaptive_ratings)
-with tabs[5]:
+else:
     render_knockout_readiness(prices, predictions, path_status)
 render_project_footer()

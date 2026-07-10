@@ -29,10 +29,18 @@ class ProductInformationArchitectureTests(unittest.TestCase):
     def test_analysis_and_archive_have_distinct_jobs(self):
         analysis = (ROOT / "pages" / "11_Tournament_Insights.py").read_text(encoding="utf-8")
         archive = (ROOT / "pages" / "13_Tournament_Archive.py").read_text(encoding="utf-8")
+        archive_feature = (ROOT / "features" / "tournament_archive.py").read_text(encoding="utf-8")
         self.assertIn("<h1>Model analysis</h1>", analysis)
         self.assertNotIn("Specialist tools", analysis)
         self.assertIn("Open Archive for the permanent tournament story", analysis)
         self.assertIn("<h1>Tournament archive</h1>", archive)
+        self.assertIn('key="cupmarket_analysis_view"', analysis)
+        self.assertNotIn("tabs = st.tabs", analysis)
+        self.assertIn('key="cupmarket_archive_view"', archive_feature)
+        self.assertNotIn("story_tab, market_tab", archive_feature)
+        self.assertIn('"Group-stage record"', archive_feature)
+        research = (ROOT / "features" / "tournament_insights.py").read_text(encoding="utf-8")
+        self.assertNotIn("Group/R32 archive", research)
 
     def test_primary_headings_are_direct(self):
         expected = {
