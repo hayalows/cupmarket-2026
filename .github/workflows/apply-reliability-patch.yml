@@ -141,4 +141,4 @@ jobs:
           \`\`\`
           EOF
           )
-          gh issue comment 50 --body "$body"
+          gh issue edit 50 --body "$body"
