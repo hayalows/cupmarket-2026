@@ -93,68 +93,28 @@ jobs:
 
       - name: Smoke test every user-facing page
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          import traceback
-          import streamlit as st
-          from streamlit.testing.v1 import AppTest
-
-          pages = [
-              Path("pages/Tournament_Pulse.py"),
-              Path("pages/1_Match_Intelligence.py"),
-              Path("pages/2_Qualification_Lab.py"),
-              Path("pages/3_Live_Group_Centre.py"),
-              Path("pages/4_Match_Hub.py"),
-              Path("pages/5_Market_Story.py"),
-              Path("pages/6_Analytics_Dashboard.py"),
-              Path("pages/7_Tournament_Path.py"),
-              Path("pages/8_Bracket_View.py"),
-              Path("pages/9_Model_Health.py"),
-              Path("pages/10_Glossary.py"),
-              Path("pages/11_Tournament_Insights.py"),
-              Path("pages/12_Tournament_Simulator.py"),
-              Path("pages/13_Tournament_Archive.py"),
-              Path("pages/Country_Snapshot.py"),
-          ]
-
-          # AppTest.from_file does not construct Streamlit's multipage URL registry.
-          # Navigation paths are validated separately above, so page navigation is
-          # stubbed only inside this isolated runtime test.
-          st.page_link = lambda *args, **kwargs: None
-          st.switch_page = lambda *args, **kwargs: None
-
-          failures = []
-          for page in pages:
-              print(f"Testing {page}...")
-              try:
-                  app = AppTest.from_file(str(page), default_timeout=60)
-                  app.run()
-                  if len(app.exception):
-                      failures.append(
-                          f"{page}:\n" + "\n".join(str(item) for item in app.exception)
-                      )
-                      continue
-
-                  if page.name == "6_Analytics_Dashboard.py":
-                      print("Testing Full Analytics Performance view...")
-                      app.session_state["cupmarket_analytics_view"] = "Performance"
-                      app.run()
-                      if len(app.exception):
-                          failures.append(
-                              f"{page} Performance view:\n"
-                              + "\n".join(str(item) for item in app.exception)
-                          )
-              except Exception:
-                  failures.append(f"{page}:\n{traceback.format_exc()}")
-
-          report = "\n\n".join(failures)
-          Path("ui-validation-failures.txt").write_text(
-              report or "No failures.", encoding="utf-8"
+          pages=(
+            pages/Tournament_Pulse.py
+            pages/1_Match_Intelligence.py
+            pages/2_Qualification_Lab.py
+            pages/3_Live_Group_Centre.py
+            pages/4_Match_Hub.py
+            pages/5_Market_Story.py
+            pages/6_Analytics_Dashboard.py
+            pages/7_Tournament_Path.py
+            pages/8_Bracket_View.py
+            pages/9_Model_Health.py
+            pages/10_Glossary.py
+            pages/11_Tournament_Insights.py
+            pages/12_Tournament_Simulator.py
+            pages/13_Tournament_Archive.py
+            pages/Country_Snapshot.py
           )
-          if failures:
-              raise SystemExit(report)
-          print(f"Rendered {len(pages)} pages and the Performance view without Streamlit exceptions.")
-          PY
+          for page in "${pages[@]}"; do
+            echo "Testing ${page}..."
+            python scripts/smoke_streamlit_page.py "${page}"
+          done
+          python scripts/smoke_streamlit_page.py pages/6_Analytics_Dashboard.py --analytics-performance
 
       - name: Notify owner when UI validation fails
         if: failure()
