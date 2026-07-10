@@ -46,11 +46,9 @@ def render_tournament_archive() -> None:
     complete = not final.empty
     archive = manifest.get("archive", {}) if isinstance(manifest, dict) else {}
 
-    st.markdown(
-        "## World Cup 2026 archive" if complete else "## Tournament archive, building live"
-    )
+    st.markdown("### Archive status")
     st.caption(
-        "The archive turns the live project into a permanent record: outcomes, market paths and forecast evidence stay available after the final."
+        "This page preserves official outcomes, market paths and forecast evidence as a permanent record."
     )
     if complete:
         st.success(

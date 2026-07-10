@@ -43,41 +43,24 @@ def _knockout_counts(progress: pd.DataFrame) -> tuple[int, int, int]:
     return finished, live, upcoming
 
 
-st.set_page_config(page_title="CupMarket Analysis Lab", page_icon="💡", layout="wide")
+st.set_page_config(page_title="CupMarket Analysis", page_icon="💡", layout="wide")
 inject_styles(DATA_DIR.parent)
 render_specialist_sidebar("insights")
 
 st.markdown(
     '''
     <div class="cm-hero">
-        <div class="cm-eyebrow">CupMarket 2026 - Analysis Lab</div>
-        <h1>The tournament story, model audit and archive.</h1>
-        <p>Review what changed, what the model learned, how prices moved, and what evidence will remain after the final.</p>
+        <div class="cm-eyebrow">CupMarket 2026</div>
+        <h1>Model analysis</h1>
+        <p>Review forecast performance, match evidence, adaptive research and knockout-model checks. Open Archive for the permanent tournament story and market replay.</p>
     </div>
     ''',
     unsafe_allow_html=True,
 )
 st.info(
-    "Trust guide: official results are fixed, projected paths can still change, "
-    "and adaptive ratings are an audit layer only for now."
+    "Official results are fixed. Forecasts and projected paths can change. "
+    "Adaptive ratings remain a research layer until their guardrail is satisfied."
 )
-
-with st.expander("Specialist tools", expanded=False):
-    st.caption(
-        "Use these for deeper drawers. The main journey stays in Tournament, "
-        "Country, Matches and Bracket."
-    )
-    tool_cols = st.columns(5)
-    with tool_cols[0]:
-        st.page_link("pages/1_Match_Intelligence.py", label="Live Match Room")
-    with tool_cols[1]:
-        st.page_link("pages/5_Market_Story.py", label="Market Story")
-    with tool_cols[2]:
-        st.page_link("pages/2_Qualification_Lab.py", label="Group Archive")
-    with tool_cols[3]:
-        st.page_link("pages/3_Live_Group_Centre.py", label="Group Centre")
-    with tool_cols[4]:
-        st.page_link("pages/10_Glossary.py", label="Guide")
 
 static = load_static_data()
 path_data = load_tournament_path_data()
@@ -104,25 +87,17 @@ stage_cols = st.columns(4)
 stage_cols[0].metric("Still alive", _alive_count(prices))
 stage_cols[1].metric("Knockout results", finished_knockouts)
 stage_cols[2].metric("Live knockouts", live_knockouts)
-stage_cols[3].metric(
-    "Fixtures ahead",
-    upcoming_knockouts,
-)
-st.caption(
-    "Use the tabs below by question: tournament story, one match, timeline, "
-    "model audit, adaptive learning or knockout readiness."
-)
+stage_cols[3].metric("Fixtures ahead", upcoming_knockouts)
+st.caption("Choose an analysis question. Tournament history and market replay are kept in Archive.")
 
-tabs = st.tabs(
-    [
-        "Tournament insights",
-        "Match story",
-        "Timeline",
-        "Model performance",
-        "Adaptive ratings",
-        "Knockout readiness",
-    ]
-)
+tabs = st.tabs([
+    "Research summary",
+    "Match review",
+    "Evidence timeline",
+    "Model evaluation",
+    "Adaptive research",
+    "Knockout checks",
+])
 with tabs[0]:
     render_tournament_insights(
         prices,
@@ -143,5 +118,4 @@ with tabs[4]:
     render_adaptive_ratings_insights(adaptive_ratings)
 with tabs[5]:
     render_knockout_readiness(prices, predictions, path_status)
-
 render_project_footer()

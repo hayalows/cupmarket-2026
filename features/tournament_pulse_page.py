@@ -33,9 +33,9 @@ def render_pulse(data: dict, refresh_label: str) -> None:
     st.markdown(
         '''
         <div class="cm-hero">
-            <div class="cm-eyebrow">CupMarket 2026 · Tournament pulse</div>
-            <h1>See what happened. Open what matters.</h1>
-            <p>Results, live matches, upcoming fixtures and country-market movement now connect directly to the detail that explains them.</p>
+            <div class="cm-eyebrow">CupMarket 2026</div>
+            <h1>Tournament overview</h1>
+            <p>See the current round, latest results, upcoming fixtures and market position. Open a specialist page for the full detail.</p>
         </div>
         ''',
         unsafe_allow_html=True,

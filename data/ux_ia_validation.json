@@ -1,0 +1,26 @@
+{
+  "checks": [
+    "direct patch compilation and application",
+    "application compilation",
+    "complete unit test discovery",
+    "all Streamlit page smoke tests",
+    "analytics performance smoke test",
+    "navigation contract",
+    "information architecture contract"
+  ],
+  "product_changes": [
+    "one responsibility per visible page",
+    "plain-language headings and navigation",
+    "simulator removed from Overview",
+    "Countries restricted to selected-country content",
+    "Analysis separated from Archive",
+    "market deep links routed into Countries"
+  ],
+  "protected_logic": [
+    "pricing and performance-adjusted settlement logic unchanged",
+    "simulation and prediction mathematics unchanged"
+  ],
+  "source_commit": "e777cfb432dac6b66a36eaebf83eddd4fa9b9121",
+  "status": "passed",
+  "validated_at_utc": "2026-07-10T21:00:14.003456+00:00"
+}

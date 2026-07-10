@@ -119,7 +119,7 @@ def render_match_room(data: dict, refresh_label: str) -> None:
                     <span class="cm-dot"></span>{live_status_text}
                 </div>
             </div>
-            <h1>Open the match. Understand the consequences.</h1>
+            <h1>Match intelligence</h1>
             <p>{hero_description}</p>
         </div>
         ''',

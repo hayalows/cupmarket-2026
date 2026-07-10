@@ -75,7 +75,7 @@ def render_qualification_page(data: dict, refresh_label: str) -> None:
         '''
         <div class="cm-hero">
             <div class="cm-eyebrow">CupMarket 2026 · Qualification scenarios</div>
-            <h1>What does the next result change?</h1>
+            <h1>Qualification scenarios</h1>
             <p>Select a country first. CupMarket then shows the routes created by a win, draw or loss, and switches to a provisional live view when its group is playing.</p>
         </div>
         ''',

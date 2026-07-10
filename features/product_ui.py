@@ -38,6 +38,7 @@ def render_project_credit(compact: bool = False) -> None:
 
 
 def render_specialist_sidebar(active_page: str) -> None:
+    """Render the single product navigation used on every Streamlit page."""
     with st.sidebar:
         st.markdown(
             '''
@@ -51,22 +52,21 @@ def render_specialist_sidebar(active_page: str) -> None:
             ''',
             unsafe_allow_html=True,
         )
-        st.markdown('<div class="cm-side-label">Start</div>', unsafe_allow_html=True)
-        st.page_link("pages/Tournament_Pulse.py", label="Tournament")
-        st.page_link("pages/7_Tournament_Path.py", label="Country")
+        st.markdown('<div class="cm-side-label">Main</div>', unsafe_allow_html=True)
+        st.page_link("pages/Tournament_Pulse.py", label="Overview")
+        st.page_link("pages/7_Tournament_Path.py", label="Countries")
         st.page_link("pages/4_Match_Hub.py", label="Matches")
         st.page_link("pages/8_Bracket_View.py", label="Bracket")
 
-        with st.expander("More", expanded=False):
+        with st.expander("Tools", expanded=False):
             st.page_link("pages/12_Tournament_Simulator.py", label="Simulator")
-            st.page_link("pages/11_Tournament_Insights.py", label="Analysis Lab")
-            st.page_link("pages/9_Model_Health.py", label="Model Health")
-            st.page_link("pages/13_Tournament_Archive.py", label="Tournament Archive")
+            st.page_link("pages/11_Tournament_Insights.py", label="Analysis")
+            st.page_link("pages/9_Model_Health.py", label="System Health")
+            st.page_link("pages/13_Tournament_Archive.py", label="Archive")
 
         with st.expander("About", expanded=False):
             render_project_credit(compact=True)
             st.link_button("View the project on GitHub", PROJECT_REPOSITORY)
-
 
 def render_page_guide(title: str, description: str, steps: list[tuple[str, str]]) -> None:
     with st.expander(f"How to use this page - {title}", expanded=False):
