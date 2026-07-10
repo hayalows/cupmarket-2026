@@ -47,7 +47,12 @@ jobs:
         run: python -m compileall -q app.py pages features backend tests
 
       - name: Run complete unit test suite
-        run: python -m unittest discover -s tests -p "test_*.py" -v
+        shell: bash
+        run: |
+          set +e
+          python -m unittest discover -s tests -p "test_*.py" -v 2>&1 | tee unit-test.log
+          code=${PIPESTATUS[0]}
+          exit ${code}
 
       - name: Smoke test every Streamlit page
         run: |
@@ -114,13 +119,26 @@ jobs:
           git pull --rebase origin main
           git push origin main
 
-      - name: Report failure
+      - name: Report failure details
         if: failure()
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh issue create \
-            --title "CupMarket reliability patch validation failed" \
-            --body "The one-time reliability workflow failed on run ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}. No validated reliability commit was published." \
-            --assignee hayalows
+          details="No unit-test log was produced. Inspect the failed workflow step."
+          if [ -f unit-test.log ]; then
+            details=$(tail -n 180 unit-test.log)
+          fi
+          body=$(cat <<EOF
+          Reliability validation failed on run ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}.
+
+          No application patch was published.
+
+          Test output:
+
+          \`\`\`
+          ${details}
+          \`\`\`
+          EOF
+          )
+          gh issue comment 50 --body "$body"
