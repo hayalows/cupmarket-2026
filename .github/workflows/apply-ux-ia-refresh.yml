@@ -51,6 +51,7 @@ jobs:
       - name: Apply UX and architecture patch
         shell: bash
         run: |
+          rm -f patch-apply.log
           set +e
           python scripts/apply_ux_ia_refresh.py 2>&1 | tee patch-apply.log
           code=${PIPESTATUS[0]}
@@ -59,6 +60,7 @@ jobs:
       - name: Compile application
         shell: bash
         run: |
+          rm -f application-compile.log
           set +e
           python -m compileall -q app.py pages features backend tests 2>&1 | tee application-compile.log
           code=${PIPESTATUS[0]}
@@ -173,7 +175,7 @@ jobs:
         run: |
           details="No diagnostic log was produced. Inspect the failed workflow step."
           log_name=""
-          for candidate in page-smoke.log unit-test.log application-compile.log patch-apply.log patch-compile.log; do
+          for candidate in patch-apply.log patch-compile.log application-compile.log unit-test.log page-smoke.log; do
             if [ -s "$candidate" ]; then
               log_name="$candidate"
               details=$(tail -n 190 "$candidate")
