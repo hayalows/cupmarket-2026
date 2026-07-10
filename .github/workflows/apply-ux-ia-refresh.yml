@@ -1,0 +1,169 @@
+name: Apply CupMarket UX and information architecture refresh
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/apply_ux_ia_refresh.py"
+      - ".github/workflows/apply-ux-ia-refresh.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: cupmarket-ux-ia-refresh
+  cancel-in-progress: false
+
+jobs:
+  apply-and-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install joblib==1.5.3 scipy==1.16.3 scikit-learn==1.6.1
+
+      - name: Validate and apply patch script
+        run: |
+          python -m py_compile scripts/apply_ux_ia_refresh.py
+          python scripts/apply_ux_ia_refresh.py
+
+      - name: Compile application
+        run: python -m compileall -q app.py pages features backend tests
+
+      - name: Run complete unit test suite
+        shell: bash
+        run: |
+          set +e
+          python -m unittest discover -s tests -p "test_*.py" -v 2>&1 | tee unit-test.log
+          code=${PIPESTATUS[0]}
+          exit ${code}
+
+      - name: Smoke test every Streamlit page
+        shell: bash
+        run: |
+          pages=(
+            pages/Tournament_Pulse.py
+            pages/1_Match_Intelligence.py
+            pages/2_Qualification_Lab.py
+            pages/3_Live_Group_Centre.py
+            pages/4_Match_Hub.py
+            pages/5_Market_Story.py
+            pages/6_Analytics_Dashboard.py
+            pages/7_Tournament_Path.py
+            pages/8_Bracket_View.py
+            pages/9_Model_Health.py
+            pages/10_Glossary.py
+            pages/11_Tournament_Insights.py
+            pages/12_Tournament_Simulator.py
+            pages/13_Tournament_Archive.py
+            pages/Country_Snapshot.py
+          )
+          for page in "${pages[@]}"; do
+            echo "Testing ${page}..."
+            python scripts/smoke_streamlit_page.py "${page}"
+          done
+          python scripts/smoke_streamlit_page.py pages/6_Analytics_Dashboard.py --analytics-performance
+
+      - name: Record successful validation
+        run: |
+          python - <<'PY'
+          from datetime import datetime, timezone
+          import json
+          from pathlib import Path
+
+          payload = {
+              "status": "passed",
+              "validated_at_utc": datetime.now(timezone.utc).isoformat(),
+              "source_commit": "${{ github.sha }}",
+              "checks": [
+                  "patch script compilation",
+                  "application compilation",
+                  "complete unit test discovery",
+                  "all Streamlit page smoke tests",
+                  "analytics performance smoke test",
+                  "navigation contract",
+                  "information architecture contract",
+              ],
+              "product_changes": [
+                  "one responsibility per visible page",
+                  "plain-language headings and navigation",
+                  "simulator removed from Overview",
+                  "Countries restricted to selected-country content",
+                  "Analysis separated from Archive",
+                  "market deep links routed into Countries",
+              ],
+              "protected_logic": [
+                  "pricing and performance-adjusted settlement logic unchanged",
+                  "simulation and prediction mathematics unchanged",
+              ],
+          }
+          Path("data/ux_ia_validation.json").write_text(
+              json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8"
+          )
+          PY
+
+      - name: Remove one-time release machinery
+        run: |
+          rm -f scripts/apply_ux_ia_refresh.py
+          rm -f .github/workflows/apply-ux-ia-refresh.yml
+
+      - name: Publish validated UX release
+        run: |
+          git config user.name "cupmarket-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "Clarify CupMarket writing and information architecture"
+          git pull --rebase origin main
+          git push origin main
+
+      - name: Report failure
+        if: failure()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          details="The failure occurred before a unit-test log was produced."
+          if [ -f unit-test.log ]; then
+            details=$( {
+              grep -E -B 4 -A 25 'FAIL$|ERROR$|^FAIL:|^ERROR:|Traceback|AssertionError' unit-test.log || true
+              echo
+              echo '--- Test summary ---'
+              tail -n 40 unit-test.log
+            } | tail -n 190 )
+          fi
+          body=$(cat <<EOF
+          The CupMarket UX and information architecture release failed validation.
+
+          Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          No validated application release was published.
+
+          \`\`\`
+          ${details}
+          \`\`\`
+          EOF
+          )
+          existing=$(gh issue list --state open --search 'CupMarket UX architecture validation failed in:title' --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue edit "$existing" --body "$body"
+          else
+            gh issue create --title "CupMarket UX architecture validation failed" --body "$body" --assignee hayalows
+          fi
