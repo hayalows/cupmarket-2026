@@ -1,0 +1,194 @@
+name: Validate CupMarket UX and IA branch
+
+on:
+  push:
+    branches:
+      - ux/clarify-writing-ia
+    paths:
+      - "scripts/apply_ux_ia_branch.py"
+      - ".github/workflows/validate-ux-ia-branch.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: cupmarket-ux-ia-branch
+  cancel-in-progress: false
+
+jobs:
+  validate-and-publish-branch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out UX branch
+        uses: actions/checkout@v4
+        with:
+          ref: ux/clarify-writing-ia
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install joblib==1.5.3 scipy==1.16.3 scikit-learn==1.6.1
+
+      - name: Apply direct UX patch
+        shell: bash
+        run: |
+          set +e
+          python -m py_compile scripts/apply_ux_ia_branch.py 2>&1 | tee branch-patch.log
+          compile_code=${PIPESTATUS[0]}
+          if [ ${compile_code} -ne 0 ]; then
+            exit ${compile_code}
+          fi
+          python scripts/apply_ux_ia_branch.py 2>&1 | tee -a branch-patch.log
+          code=${PIPESTATUS[0]}
+          exit ${code}
+
+      - name: Compile application
+        shell: bash
+        run: |
+          set +e
+          python -m compileall -q app.py pages features backend tests 2>&1 | tee branch-compile.log
+          code=${PIPESTATUS[0]}
+          exit ${code}
+
+      - name: Run complete unit test suite
+        shell: bash
+        run: |
+          rm -f branch-tests.log
+          set +e
+          python -m unittest discover -s tests -p "test_*.py" -v 2>&1 | tee branch-tests.log
+          code=${PIPESTATUS[0]}
+          exit ${code}
+
+      - name: Smoke test every Streamlit page
+        shell: bash
+        run: |
+          rm -f branch-smoke.log
+          set +e
+          pages=(
+            pages/Tournament_Pulse.py
+            pages/1_Match_Intelligence.py
+            pages/2_Qualification_Lab.py
+            pages/3_Live_Group_Centre.py
+            pages/4_Match_Hub.py
+            pages/5_Market_Story.py
+            pages/6_Analytics_Dashboard.py
+            pages/7_Tournament_Path.py
+            pages/8_Bracket_View.py
+            pages/9_Model_Health.py
+            pages/10_Glossary.py
+            pages/11_Tournament_Insights.py
+            pages/12_Tournament_Simulator.py
+            pages/13_Tournament_Archive.py
+            pages/Country_Snapshot.py
+          )
+          code=0
+          for page in "${pages[@]}"; do
+            echo "Testing ${page}..." | tee -a branch-smoke.log
+            python scripts/smoke_streamlit_page.py "${page}" 2>&1 | tee -a branch-smoke.log
+            result=${PIPESTATUS[0]}
+            if [ ${result} -ne 0 ]; then
+              code=${result}
+              break
+            fi
+          done
+          if [ ${code} -eq 0 ]; then
+            python scripts/smoke_streamlit_page.py pages/6_Analytics_Dashboard.py --analytics-performance 2>&1 | tee -a branch-smoke.log
+            code=${PIPESTATUS[0]}
+          fi
+          exit ${code}
+
+      - name: Record validation
+        run: |
+          python - <<'PY'
+          from datetime import datetime, timezone
+          from pathlib import Path
+          import json
+
+          payload = {
+              "status": "passed",
+              "validated_at_utc": datetime.now(timezone.utc).isoformat(),
+              "source_commit": "${{ github.sha }}",
+              "checks": [
+                  "direct patch compilation and application",
+                  "application compilation",
+                  "complete unit test discovery",
+                  "all Streamlit page smoke tests",
+                  "analytics performance smoke test",
+                  "navigation contract",
+                  "information architecture contract",
+              ],
+              "product_changes": [
+                  "one responsibility per visible page",
+                  "plain-language headings and navigation",
+                  "simulator removed from Overview",
+                  "Countries restricted to selected-country content",
+                  "Analysis separated from Archive",
+                  "market deep links routed into Countries",
+              ],
+              "protected_logic": [
+                  "pricing and performance-adjusted settlement logic unchanged",
+                  "simulation and prediction mathematics unchanged",
+              ],
+          }
+          Path("data/ux_ia_validation.json").write_text(
+              json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8"
+          )
+          PY
+
+      - name: Remove branch release machinery
+        run: |
+          rm -f scripts/apply_ux_ia_branch.py
+          rm -f .github/workflows/validate-ux-ia-branch.yml
+          rm -f branch-patch.log branch-compile.log branch-tests.log branch-smoke.log
+
+      - name: Commit validated branch release
+        run: |
+          git config user.name "cupmarket-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "Clarify CupMarket writing and information architecture"
+          git push origin ux/clarify-writing-ia
+
+      - name: Report branch validation failure
+        if: failure()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          details="No validation log was produced."
+          log_name=""
+          for candidate in branch-patch.log branch-compile.log branch-tests.log branch-smoke.log; do
+            if [ -s "$candidate" ]; then
+              log_name="$candidate"
+              details=$(tail -n 190 "$candidate")
+              break
+            fi
+          done
+          body=$(cat <<EOF
+          The isolated CupMarket UX branch failed validation.
+
+          Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          Main remains unchanged by the UX release.
+
+          Diagnostic source: ${log_name:-none}
+
+          \`\`\`
+          ${details}
+          \`\`\`
+          EOF
+          )
+          gh issue edit 51 --body "$body"
