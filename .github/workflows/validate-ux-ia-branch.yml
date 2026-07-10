@@ -45,6 +45,7 @@ jobs:
       - name: Apply direct UX patch
         shell: bash
         run: |
+          rm -f branch-patch.log
           set +e
           python -m py_compile scripts/apply_ux_ia_branch.py 2>&1 | tee branch-patch.log
           compile_code=${PIPESTATUS[0]}
@@ -58,6 +59,7 @@ jobs:
       - name: Compile application
         shell: bash
         run: |
+          rm -f branch-compile.log
           set +e
           python -m compileall -q app.py pages features backend tests 2>&1 | tee branch-compile.log
           code=${PIPESTATUS[0]}
@@ -170,7 +172,7 @@ jobs:
         run: |
           details="No validation log was produced."
           log_name=""
-          for candidate in branch-patch.log branch-compile.log branch-tests.log branch-smoke.log; do
+          for candidate in branch-compile.log branch-tests.log branch-smoke.log branch-patch.log; do
             if [ -s "$candidate" ]; then
               log_name="$candidate"
               details=$(tail -n 190 "$candidate")
