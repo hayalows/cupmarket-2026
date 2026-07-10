@@ -36,6 +36,9 @@ def main() -> None:
     if MARKER in text:
         print("Product UI refresh already applied.")
         return
+    if "from features.product_ui import" in text:
+        print("Shared product UI is already active; legacy patch is not needed.")
+        return
 
     text = replace_once(
         text,

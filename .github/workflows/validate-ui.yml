@@ -39,11 +39,15 @@ jobs:
 
           product_ui_path = Path("features/product_ui.py")
           product_tree = ast.parse(product_ui_path.read_text(encoding="utf-8"))
-          exports = {
-              node.name
-              for node in product_tree.body
-              if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-          }
+          exports = set()
+          for node in product_tree.body:
+              if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                  exports.add(node.name)
+              elif isinstance(node, (ast.Assign, ast.AnnAssign)):
+                  targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+                  exports.update(
+                      target.id for target in targets if isinstance(target, ast.Name)
+                  )
 
           checked = []
           targets = [
