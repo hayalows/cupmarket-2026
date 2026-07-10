@@ -339,6 +339,81 @@ if movement_history.empty:
     write(path, text)
 
 
+def patch_existing_adaptive_tests() -> None:
+    path = "tests/test_phase8_knockout_publication.py"
+    text = read(path)
+
+    adaptive_rows_old = '''                    "overreaction_risk": "Stable signal",
+                },
+                {
+                    "team": "Team D",
+                    "rating_change": -20.0,
+                    "confidence_level": "High",
+                    "confidence_score": 0.8,
+                    "overreaction_risk": "Stable signal",
+                },
+'''
+    adaptive_rows_new = '''                    "overreaction_risk": "Stable signal",
+                    "guardrail_decision": "trusted",
+                },
+                {
+                    "team": "Team D",
+                    "rating_change": -20.0,
+                    "confidence_level": "High",
+                    "confidence_score": 0.8,
+                    "overreaction_risk": "Stable signal",
+                    "guardrail_decision": "trusted",
+                },
+'''
+    text = replace_once(
+        text,
+        adaptive_rows_old,
+        adaptive_rows_new,
+        "trusted adaptive knockout test rows",
+    )
+
+    assertion_old = '''        self.assertNotEqual(float(team_a["rating_change"]), 0.0)
+        adjustment = adaptive_ratings.adaptive_rating_adjustment(
+            "Team A",
+            ratings,
+            stage="GROUP_STAGE",
+        )
+        self.assertNotEqual(adjustment, 0.0)
+        self.assertLessEqual(
+            abs(adjustment),
+            adaptive_ratings.MAX_ADAPTIVE_ELO_ADJUSTMENT,
+        )
+'''
+    assertion_new = '''        self.assertNotEqual(float(team_a["rating_change"]), 0.0)
+        paused_adjustment = adaptive_ratings.adaptive_rating_adjustment(
+            "Team A",
+            ratings,
+            stage="GROUP_STAGE",
+        )
+        self.assertEqual(paused_adjustment, 0.0)
+
+        trusted_ratings = ratings.copy()
+        trusted_ratings["guardrail_decision"] = "trusted"
+        adjustment = adaptive_ratings.adaptive_rating_adjustment(
+            "Team A",
+            trusted_ratings,
+            stage="GROUP_STAGE",
+        )
+        self.assertNotEqual(adjustment, 0.0)
+        self.assertLessEqual(
+            abs(adjustment),
+            adaptive_ratings.MAX_ADAPTIVE_ELO_ADJUSTMENT,
+        )
+'''
+    text = replace_once(
+        text,
+        assertion_old,
+        assertion_new,
+        "adaptive gating test assertions",
+    )
+    write(path, text)
+
+
 def add_tests() -> None:
     write(
         "tests/test_reliability_patch.py",
@@ -448,6 +523,7 @@ def main() -> None:
     patch_model_health_copy()
     patch_official_data_allowlist()
     patch_analysis_lab()
+    patch_existing_adaptive_tests()
     add_tests()
     remove_legacy_patchers()
     print("CupMarket reliability patch applied.")
