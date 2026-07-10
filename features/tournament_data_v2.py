@@ -72,21 +72,13 @@ def _load_local_history(
     )
 
 
-def load_market_history(current: pd.DataFrame | None = None) -> pd.DataFrame:
-    manifest = (
-        tuple(
-            (path.name, path.stat().st_mtime_ns)
-            for path in sorted(HISTORY_DIR.glob("cupmarket_prices_*.csv"))
-        )
-        if HISTORY_DIR.exists()
-        else tuple()
-    )
-    history = _load_local_history(str(HISTORY_DIR), manifest)
-    current_frame = (
-        load_csv(DATA_DIR / "cupmarket_prices_latest.csv")
-        if current is None
-        else current.copy()
-    )
+def _combine_market_history(
+    current_frame: pd.DataFrame,
+    snapshots: pd.DataFrame,
+) -> pd.DataFrame:
+    """Use the published team snapshot ledger, not a possibly stale app checkout."""
+    history = snapshots.copy()
+    current_frame = current_frame.copy()
     if current_frame.empty:
         return history
     if history.empty:
@@ -103,16 +95,32 @@ def load_market_history(current: pd.DataFrame | None = None) -> pd.DataFrame:
     )
 
 
+def load_market_history(current: pd.DataFrame | None = None) -> pd.DataFrame:
+    if current is None:
+        bundle = load_consistent_official_bundle(
+            csv_paths={
+                "prices": DATA_DIR / "cupmarket_prices_latest.csv",
+                "snapshots": DATA_DIR / "history" / "team_snapshots.csv",
+            }
+        )
+        return _combine_market_history(bundle["prices"], bundle["snapshots"])
+    snapshots = load_csv(DATA_DIR / "history" / "team_snapshots.csv")
+    return _combine_market_history(current, snapshots)
+
+
 def load_static_data() -> dict[str, pd.DataFrame]:
     bundle = load_consistent_official_bundle(
         csv_paths={
             "prices": DATA_DIR / "cupmarket_prices_latest.csv",
+            "snapshots": DATA_DIR / "history" / "team_snapshots.csv",
             "latest_predictions": DATA_DIR / "world_cup_live_predictions_latest.csv",
             "prediction_ledger": STATE_DIR / "world_cup_prediction_ledger.csv",
             "processed_ledger": STATE_DIR / "world_cup_processed_match_ledger.csv",
         }
     )
-    bundle["history"] = load_market_history(bundle["prices"])
+    bundle["history"] = _combine_market_history(
+        bundle["prices"], bundle["snapshots"]
+    )
     return bundle
 
 

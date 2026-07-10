@@ -174,6 +174,7 @@ def build_adaptive_ratings(
     prices: pd.DataFrame,
     history: pd.DataFrame,
     processed: pd.DataFrame,
+    guardrail_state: dict | None = None,
 ) -> pd.DataFrame:
     if not isinstance(prices, pd.DataFrame) or prices.empty or "team" not in prices.columns:
         return pd.DataFrame()
@@ -212,6 +213,8 @@ def build_adaptive_ratings(
             )
             counts = hist.groupby("team").size().reset_index(name="price_points")
             history_counts = counts.merge(opening, on="team", how="left")
+    guardrail_state = guardrail_state or {}
+    guardrail_decision = str(guardrail_state.get("decision") or "collecting_evidence")
     rows = []
     for _, row in frame.iterrows():
         team = str(row.get("team"))
@@ -272,6 +275,7 @@ def build_adaptive_ratings(
             "goal_difference": goal_difference,
             "price_points": price_points,
             "adaptive_model_version": ADAPTIVE_MODEL_VERSION,
+            "guardrail_decision": guardrail_decision,
         }
         item["explanation"] = _learning_summary(pd.Series(item))
         rows.append(item)
@@ -339,6 +343,8 @@ def adaptive_rating_adjustment(
     if matches.empty:
         return 0.0
     row = matches.iloc[-1]
+    if str(row.get("guardrail_decision") or "").lower() == "rollback":
+        return 0.0
     raw_adjustment = _num(row.get("rating_change"), default=0.0)
     if raw_adjustment == 0.0:
         return 0.0

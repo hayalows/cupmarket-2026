@@ -5,6 +5,7 @@ import plotly.express as px
 import streamlit as st
 
 from features.product_ui import render_official_data_caption
+from features.market_explanation import render_market_explanation
 from features.tournament_path_data import (
     available_teams,
     load_tournament_path_data,
@@ -857,6 +858,14 @@ def _render_country_page_v2() -> None:
         _render_tournament_fixtures(data)
 
     with market_tab:
+        render_market_explanation(
+            team=team,
+            price=price,
+            movement=selected["movement"],
+            progress=data["progress"],
+            adaptive_ratings=data.get("adaptive_ratings", pd.DataFrame()),
+            manifest=data.get("publication_manifest", {}),
+        )
         _render_market_reaction(
             selected["movement"],
             data["history"],

@@ -74,6 +74,7 @@ LIVE_EVALUATION_OUTPUT_PATH = DATA_DIR / "phase4_live_evaluation.json"
 SIMULATION_METADATA_OUTPUT_PATH = DATA_DIR / "phase5_simulation_metadata.json"
 RUN_SUMMARY_PATH = STATE_DIR / "last_automation_run.json"
 ADAPTIVE_RATINGS_OUTPUT_PATH = DATA_DIR / "adaptive_ratings_latest.csv"
+ADAPTIVE_MODEL_HEALTH_OUTPUT_PATH = DATA_DIR / "adaptive_model_health.json"
 
 INITIAL_RATING = 1500.0
 INITIAL_GOALS_AVERAGE = 1.25
@@ -693,10 +694,19 @@ def build_adaptive_rating_frame(
         if history_frames
         else pd.DataFrame()
     )
+    guardrail_state = {}
+    if ADAPTIVE_MODEL_HEALTH_OUTPUT_PATH.exists():
+        try:
+            guardrail_state = json.loads(
+                ADAPTIVE_MODEL_HEALTH_OUTPUT_PATH.read_text(encoding="utf-8")
+            )
+        except (OSError, json.JSONDecodeError):
+            guardrail_state = {}
     return adaptive_ratings.build_adaptive_ratings(
         prices,
         history,
         processed_ledger,
+        guardrail_state=guardrail_state,
     )
 
 
@@ -1427,8 +1437,20 @@ def generate_live_predictions(
             live_elo,
             processed_ledger,
         )
+    adaptive_guardrail_active = bool(
+        adaptive_rating_frame is not None
+        and not adaptive_rating_frame.empty
+        and "guardrail_decision" in adaptive_rating_frame.columns
+        and adaptive_rating_frame["guardrail_decision"]
+        .astype(str)
+        .str.lower()
+        .eq("rollback")
+        .any()
+    )
     adaptive_enabled = bool(
-        adaptive_rating_frame is not None and not adaptive_rating_frame.empty
+        adaptive_rating_frame is not None
+        and not adaptive_rating_frame.empty
+        and not adaptive_guardrail_active
     )
 
     def current_state(team):

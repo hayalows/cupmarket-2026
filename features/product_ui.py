@@ -60,6 +60,8 @@ def render_specialist_sidebar(active_page: str) -> None:
         with st.expander("More", expanded=False):
             st.page_link("pages/12_Tournament_Simulator.py", label="Simulator")
             st.page_link("pages/11_Tournament_Insights.py", label="Analysis Lab")
+            st.page_link("pages/9_Model_Health.py", label="Model Health")
+            st.page_link("pages/13_Tournament_Archive.py", label="Tournament Archive")
 
         with st.expander("About", expanded=False):
             render_project_credit(compact=True)

@@ -16,10 +16,7 @@ html, body, [class*="css"] {
 }
 
 .stApp {
-  background:
-    radial-gradient(circle at 72% -10%, rgba(91, 95, 240, 0.12), transparent 34%),
-    radial-gradient(circle at 2% 15%, rgba(14, 165, 233, 0.08), transparent 28%),
-    var(--cm-bg);
+  background: var(--cm-bg);
   color: var(--cm-text);
 }
 
@@ -38,7 +35,7 @@ header[data-testid="stHeader"] {
 
 h1, h2, h3 {
   color: var(--cm-text);
-  letter-spacing: -0.035em;
+  letter-spacing: 0;
 }
 
 p, label, .stCaption { color: var(--cm-muted); }
@@ -47,22 +44,11 @@ p, label, .stCaption { color: var(--cm-muted); }
   position: relative;
   overflow: hidden;
   margin: 0.2rem 0 1.8rem;
-  padding: 2rem 2.1rem;
-  border: 1px solid rgba(255, 255, 255, 0.75);
-  border-radius: 28px;
-  background: linear-gradient(120deg, rgba(255,255,255,.98), rgba(248,249,255,.94));
-  box-shadow: var(--cm-shadow);
-}
-
-.cm-hero::after {
-  content: "";
-  position: absolute;
-  width: 250px;
-  height: 250px;
-  right: -80px;
-  top: -110px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(91,95,240,.22), rgba(91,95,240,0));
+  padding: 1.55rem 1.7rem;
+  border: 1px solid var(--cm-border);
+  border-radius: 8px;
+  background: var(--cm-surface);
+  box-shadow: 0 8px 22px rgba(23, 29, 52, 0.05);
 }
 
 .cm-hero-top {
@@ -81,15 +67,15 @@ p, label, .stCaption { color: var(--cm-muted); }
   gap: 0.45rem;
   font-size: 0.76rem;
   font-weight: 750;
-  letter-spacing: 0.09em;
+  letter-spacing: 0;
   text-transform: uppercase;
   color: var(--cm-primary);
 }
 
 .cm-hero h1 {
   margin: 0.55rem 0 0.35rem;
-  font-size: clamp(2.25rem, 5vw, 4rem);
-  line-height: 1.02;
+  font-size: 2.6rem;
+  line-height: 1.12;
   font-weight: 780;
   max-width: 900px;
 }
@@ -140,7 +126,7 @@ p, label, .stCaption { color: var(--cm-muted); }
   gap: 0.38rem;
   align-items: center;
   padding: 0.5rem 0.7rem;
-  border-radius: 12px;
+  border-radius: 8px;
   background: #f2f4f9;
   color: #4b5568;
   font-size: 0.8rem;
@@ -152,7 +138,7 @@ p, label, .stCaption { color: var(--cm-muted); }
   color: var(--cm-primary);
   font-size: 0.73rem;
   font-weight: 800;
-  letter-spacing: 0.09em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 .cm-section-heading h2 { font-size: 1.55rem; margin: 0.2rem 0; }
@@ -161,18 +147,18 @@ p, label, .stCaption { color: var(--cm-muted); }
 [data-testid="stMetric"] {
   background: var(--cm-surface);
   border: 1px solid var(--cm-border);
-  border-radius: 20px;
+  border-radius: 8px;
   padding: 1.1rem 1.15rem;
   box-shadow: 0 10px 30px rgba(23,29,52,.055);
   min-height: 118px;
 }
 [data-testid="stMetricLabel"] { font-size: 0.78rem; color: var(--cm-muted); font-weight: 680; }
-[data-testid="stMetricValue"] { color: var(--cm-text); font-size: 2rem; font-weight: 760; letter-spacing: -0.04em; }
+[data-testid="stMetricValue"] { color: var(--cm-text); font-size: 1.8rem; font-weight: 760; letter-spacing: 0; }
 [data-testid="stMetricDelta"] { font-weight: 700; }
 
 [data-testid="stDataFrame"] {
   border: 1px solid var(--cm-border);
-  border-radius: 18px;
+  border-radius: 8px;
   overflow: hidden;
   background: white;
   box-shadow: 0 10px 28px rgba(23,29,52,.045);
@@ -181,39 +167,42 @@ p, label, .stCaption { color: var(--cm-muted); }
 [data-testid="stPlotlyChart"] {
   background: white;
   border: 1px solid var(--cm-border);
-  border-radius: 20px;
+  border-radius: 8px;
   padding: 0.55rem;
   box-shadow: 0 10px 28px rgba(23,29,52,.045);
 }
 
 .stButton > button, .stLinkButton > a {
-  border-radius: 13px !important;
+  border-radius: 8px !important;
   border: 1px solid #dfe3ec !important;
   background: white !important;
   color: var(--cm-text) !important;
   font-weight: 680 !important;
   min-height: 2.8rem;
   box-shadow: 0 7px 20px rgba(23,29,52,.055);
-  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 160ms ease, border-color 160ms ease;
 }
-.stButton > button:hover, .stLinkButton > a:hover {
-  border-color: #bfc5f7 !important;
-  box-shadow: 0 10px 26px rgba(91,95,240,.12);
-  transform: translateY(-1px);
+.stButton > button:active, .stLinkButton > a:active {
+  transform: scale(0.98);
+}
+@media (hover: hover) and (pointer: fine) {
+  .stButton > button:hover, .stLinkButton > a:hover {
+    border-color: #bfc5f7 !important;
+    box-shadow: 0 10px 26px rgba(91,95,240,.12);
+    transform: translateY(-1px);
+  }
 }
 
 [data-baseweb="select"] > div, [data-testid="stTextInput"] input {
-  border-radius: 13px !important;
+  border-radius: 8px !important;
   border-color: var(--cm-border) !important;
   background: white !important;
 }
 
-[data-testid="stAlert"] { border-radius: 16px; border: 1px solid var(--cm-border); }
+[data-testid="stAlert"] { border-radius: 8px; border: 1px solid var(--cm-border); }
 
 section[data-testid="stSidebar"] {
-  background:
-    radial-gradient(circle at 0 0, rgba(91,95,240,.26), transparent 35%),
-    linear-gradient(180deg, #12172a 0%, #0d1120 100%);
+  background: #12172a;
   border-right: 1px solid rgba(255,255,255,.06);
 }
 section[data-testid="stSidebar"] * { color: #eef1fa; }
@@ -221,24 +210,26 @@ section[data-testid="stSidebar"] .stCaption,
 section[data-testid="stSidebar"] p { color: #aeb6ca; }
 section[data-testid="stSidebar"] [role="radiogroup"] label {
   padding: 0.72rem 0.78rem;
-  border-radius: 12px;
+  border-radius: 8px;
   margin-bottom: 0.2rem;
   transition: background .15s ease;
 }
-section[data-testid="stSidebar"] [role="radiogroup"] label:hover { background: rgba(255,255,255,.07); }
+@media (hover: hover) and (pointer: fine) {
+  section[data-testid="stSidebar"] [role="radiogroup"] label:hover { background: rgba(255,255,255,.07); }
+}
 
 .cm-side-brand { display: flex; align-items: center; gap: 0.78rem; padding: 0.3rem 0 1.15rem; }
 .cm-mark {
   width: 42px;
   height: 42px;
-  border-radius: 14px;
+  border-radius: 8px;
   display: grid;
   place-items: center;
-  background: linear-gradient(145deg, #7377ff, #4548c9);
-  box-shadow: 0 10px 30px rgba(91,95,240,.35);
+  background: #5b5ff0;
+  box-shadow: 0 8px 18px rgba(91,95,240,.28);
   font-weight: 850;
   color: white;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
 }
 .cm-side-brand strong { display: block; font-size: 1rem; color: white; }
 .cm-side-brand span { color: #98a3ba; font-size: 0.74rem; }
@@ -247,13 +238,13 @@ section[data-testid="stSidebar"] [role="radiogroup"] label:hover { background: r
   color: #7f8aa3 !important;
   font-size: 0.67rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 .cm-side-row {
   margin-top: 0.5rem;
   padding: 0.72rem 0.78rem;
-  border-radius: 13px;
+  border-radius: 8px;
   background: rgba(255,255,255,.055);
   border: 1px solid rgba(255,255,255,.07);
   font-size: 0.79rem;
@@ -263,7 +254,21 @@ section[data-testid="stSidebar"] [role="radiogroup"] label:hover { background: r
 
 @media (max-width: 800px) {
   .block-container { padding: 1rem 0.85rem 3rem; }
-  .cm-hero { padding: 1.45rem 1.3rem; border-radius: 22px; }
-  .cm-hero h1 { font-size: 2.25rem; }
+  .cm-hero { padding: 1.25rem 1rem; border-radius: 8px; }
+  .cm-hero h1 { font-size: 2rem; }
   [data-testid="stMetric"] { min-height: 102px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  header[data-testid="stHeader"] { background: #f5f7fb; backdrop-filter: none; }
+  [data-testid="stMetric"], [data-testid="stDataFrame"], [data-testid="stPlotlyChart"] { border-color: #c7cfdd; }
 }

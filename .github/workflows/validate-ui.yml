@@ -71,6 +71,13 @@ jobs:
               Path("pages/5_Market_Story.py"),
               Path("pages/6_Analytics_Dashboard.py"),
               Path("pages/7_Tournament_Path.py"),
+              Path("pages/8_Bracket_View.py"),
+              Path("pages/9_Model_Health.py"),
+              Path("pages/10_Glossary.py"),
+              Path("pages/11_Tournament_Insights.py"),
+              Path("pages/12_Tournament_Simulator.py"),
+              Path("pages/13_Tournament_Archive.py"),
+              Path("pages/Country_Snapshot.py"),
           ]
           missing_pages = [str(path) for path in page_paths if not path.exists()]
           if missing_pages:
@@ -97,6 +104,13 @@ jobs:
               Path("pages/5_Market_Story.py"),
               Path("pages/6_Analytics_Dashboard.py"),
               Path("pages/7_Tournament_Path.py"),
+              Path("pages/8_Bracket_View.py"),
+              Path("pages/9_Model_Health.py"),
+              Path("pages/10_Glossary.py"),
+              Path("pages/11_Tournament_Insights.py"),
+              Path("pages/12_Tournament_Simulator.py"),
+              Path("pages/13_Tournament_Archive.py"),
+              Path("pages/Country_Snapshot.py"),
           ]
 
           # AppTest.from_file does not construct Streamlit's multipage URL registry.

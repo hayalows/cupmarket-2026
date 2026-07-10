@@ -10,6 +10,7 @@ import streamlit as st
 
 from features.live_match_data import load_matches
 from features.match_ui import prediction_confidence
+from features.official_data import load_latest_json
 from features.tournament_data import (
     DATA_DIR,
     actual_outcome,
@@ -20,6 +21,7 @@ from features.tournament_data import (
 )
 
 HISTORICAL_EVAL_PATH = DATA_DIR / "phase3_goal_model_evaluation.json"
+ADAPTIVE_HEALTH_PATH = DATA_DIR / "adaptive_model_health.json"
 MATCHES_PATH = DATA_DIR / "world_cup_2026_matches_latest.csv"
 OUTCOME_COLUMNS = {
     "HOME_WIN": "prob_home_win",
@@ -82,6 +84,15 @@ def _verified_match_rows(
         actual = actual_outcome(match)
         if probabilities is None or actual not in OUTCOME_COLUMNS:
             continue
+
+        baseline_prediction = pd.Series(
+            {
+                "prob_home_win": prediction.get("baseline_prob_home_win"),
+                "prob_draw": prediction.get("baseline_prob_draw"),
+                "prob_away_win": prediction.get("baseline_prob_away_win"),
+            }
+        )
+        baseline_probabilities = _probability_vector(baseline_prediction)
 
         actual_probability = probabilities[actual]
         brier = sum(
@@ -147,6 +158,39 @@ def _verified_match_rows(
                 "prob_home_win": probabilities["HOME_WIN"],
                 "prob_draw": probabilities["DRAW"],
                 "prob_away_win": probabilities["AWAY_WIN"],
+                "baseline_actual_probability": (
+                    baseline_probabilities[actual]
+                    if baseline_probabilities is not None
+                    else None
+                ),
+                "baseline_brier": (
+                    sum(
+                        (probability - (1.0 if outcome == actual else 0.0)) ** 2
+                        for outcome, probability in baseline_probabilities.items()
+                    )
+                    if baseline_probabilities is not None
+                    else None
+                ),
+                "baseline_log_loss": (
+                    -math.log(max(baseline_probabilities[actual], 1e-15))
+                    if baseline_probabilities is not None
+                    else None
+                ),
+                "baseline_prob_home_win": (
+                    baseline_probabilities["HOME_WIN"]
+                    if baseline_probabilities is not None
+                    else None
+                ),
+                "baseline_prob_draw": (
+                    baseline_probabilities["DRAW"]
+                    if baseline_probabilities is not None
+                    else None
+                ),
+                "baseline_prob_away_win": (
+                    baseline_probabilities["AWAY_WIN"]
+                    if baseline_probabilities is not None
+                    else None
+                ),
             }
         )
 
@@ -447,6 +491,58 @@ def _render_calibration(rows: pd.DataFrame) -> None:
         st.plotly_chart(figure, use_container_width=True)
 
 
+def _render_adaptive_comparison(rows: pd.DataFrame, health: dict) -> None:
+    comparable = rows.dropna(subset=["baseline_brier", "baseline_log_loss"]).copy()
+    st.markdown("### Baseline vs adaptive")
+    if comparable.empty:
+        st.info("CupMarket is saving baseline probabilities, but no completed forecasts can be compared yet.")
+        return
+
+    adaptive_brier = float(comparable["brier"].mean())
+    baseline_brier = float(comparable["baseline_brier"].mean())
+    adaptive_log_loss = float(comparable["log_loss"].mean())
+    baseline_log_loss = float(comparable["baseline_log_loss"].mean())
+    columns = st.columns(4)
+    columns[0].metric("Matched forecasts", len(comparable))
+    columns[1].metric("Brier vs baseline", f"{adaptive_brier - baseline_brier:+.3f}", delta="Lower is better")
+    columns[2].metric("Log loss vs baseline", f"{adaptive_log_loss - baseline_log_loss:+.3f}", delta="Lower is better")
+    decision = str(health.get("decision") or "collecting_evidence").replace("_", " ").title()
+    columns[3].metric("Guardrail", decision)
+    st.caption(str(health.get("message") or "The guardrail evaluates saved pre-match forecasts only."))
+
+    comparison_frames = []
+    for label, columns_map in {
+        "Adaptive": OUTCOME_COLUMNS,
+        "Baseline": {
+            "HOME_WIN": "baseline_prob_home_win",
+            "DRAW": "baseline_prob_draw",
+            "AWAY_WIN": "baseline_prob_away_win",
+        },
+    }.items():
+        calibration_source = comparable[["actual_outcome", *columns_map.values()]].rename(
+            columns={value: OUTCOME_COLUMNS[key] for key, value in columns_map.items()}
+        )
+        calibration = _calibration_rows(calibration_source)
+        if not calibration.empty:
+            calibration["Model"] = label
+            comparison_frames.append(calibration)
+    if comparison_frames:
+        chart_data = pd.concat(comparison_frames, ignore_index=True)
+        figure = px.line(
+            chart_data,
+            x="predicted_probability",
+            y="actual_frequency",
+            color="Model",
+            markers=True,
+            title="Calibration: adaptive probability versus saved baseline",
+        )
+        figure.add_shape(type="line", x0=0, y0=0, x1=1, y1=1, line=dict(dash="dash"))
+        figure.update_layout(template="plotly_white", height=360, margin=dict(l=16, r=16, t=52, b=16))
+        figure.update_xaxes(tickformat=".0%", range=[0, 1], title="Average predicted probability")
+        figure.update_yaxes(tickformat=".0%", range=[0, 1], title="Observed frequency")
+        st.plotly_chart(figure, use_container_width=True)
+
+
 def _simulation_integrity(prices: pd.DataFrame) -> tuple[int, int]:
     stage_columns = [
         "prob_reach_round_32",
@@ -514,6 +610,7 @@ def render_model_performance() -> None:
     rows = _verified_match_rows(matches, static["prediction_ledger"])
     metrics = _live_metrics(rows)
     historical = _read_json(HISTORICAL_EVAL_PATH)
+    adaptive_health = load_latest_json(ADAPTIVE_HEALTH_PATH)
 
     st.markdown("### Model Performance")
     st.write(
@@ -524,6 +621,7 @@ def render_model_performance() -> None:
 
     _render_live_scorecard(rows, metrics)
     _render_historical_reference(historical)
+    _render_adaptive_comparison(rows, adaptive_health)
     _render_match_detail(rows, metrics)
     _render_calibration(rows)
     _render_tournament_and_market_status(static["prices"])

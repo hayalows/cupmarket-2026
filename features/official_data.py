@@ -13,6 +13,10 @@ GITHUB_REPOSITORY = "hayalows/cupmarket-2026"
 GITHUB_MAIN_COMMIT_URL = (
     f"https://api.github.com/repos/{GITHUB_REPOSITORY}/commits/main"
 )
+GITHUB_UPDATE_RUNS_URL = (
+    f"https://api.github.com/repos/{GITHUB_REPOSITORY}/actions/workflows/"
+    "update-cupmarket.yml/runs?per_page=1"
+)
 RAW_REPOSITORY_BASE_URL = (
     f"https://raw.githubusercontent.com/{GITHUB_REPOSITORY}"
 )
@@ -41,6 +45,8 @@ REMOTE_DATA_FILES = {
     "knockout_progress_latest.csv": "data/knockout_progress_latest.csv",
     "market_movements_latest.csv": "data/market_movements_latest.csv",
     "adaptive_ratings_latest.csv": "data/adaptive_ratings_latest.csv",
+    "adaptive_model_health.json": "data/adaptive_model_health.json",
+    "publication_manifest.json": "data/publication_manifest.json",
     "team_snapshots.csv": "data/history/team_snapshots.csv",
     "world_cup_prediction_ledger.csv": (
         "backend/state/world_cup_prediction_ledger.csv"
@@ -123,6 +129,30 @@ def _fetch_remote_text(relative_path: str, commit_sha: str) -> str:
     )
     response.raise_for_status()
     return response.text
+
+
+@st.cache_data(ttl=300, show_spinner=False)
+def fetch_update_workflow_health() -> dict[str, str | None]:
+    """Read the latest public update workflow state without touching app data."""
+    try:
+        response = requests.get(
+            GITHUB_UPDATE_RUNS_URL,
+            headers={"User-Agent": "CupMarket-Streamlit"},
+            timeout=12,
+        )
+        response.raise_for_status()
+        runs = response.json().get("workflow_runs", [])
+        if not runs:
+            return {"state": "unavailable", "conclusion": None, "updated_at": None, "url": None}
+        run = runs[0]
+        return {
+            "state": str(run.get("status") or "unknown"),
+            "conclusion": str(run.get("conclusion") or ""),
+            "updated_at": str(run.get("updated_at") or ""),
+            "url": str(run.get("html_url") or ""),
+        }
+    except (requests.RequestException, ValueError, TypeError):
+        return {"state": "unavailable", "conclusion": None, "updated_at": None, "url": None}
 
 
 def _remote_path(path: Path) -> str | None:

@@ -20,6 +20,8 @@ KNOCKOUT_PROGRESS_PATH = DATA_DIR / "knockout_progress_latest.csv"
 MARKET_MOVEMENT_PATH = DATA_DIR / "market_movements_latest.csv"
 MARKET_MOVEMENT_HISTORY_PATH = HISTORY_DIR / "market_movements.csv"
 TEAM_SNAPSHOTS_PATH = HISTORY_DIR / "team_snapshots.csv"
+ADAPTIVE_RATINGS_PATH = DATA_DIR / "adaptive_ratings_latest.csv"
+PUBLICATION_MANIFEST_PATH = DATA_DIR / "publication_manifest.json"
 
 ACTIVE_STATUSES = {"IN_PLAY", "LIVE", "PAUSED", "SUSPENDED"}
 UPCOMING_STATUSES = {"TIMED", "SCHEDULED"}
@@ -54,8 +56,8 @@ ROUND_OF_16_SOURCES = {
     92: (79, 80),
     93: (83, 84),
     94: (81, 82),
-    95: (86, 88),
-    96: (85, 87),
+    95: (87, 86),
+    96: (85, 88),
 }
 
 
@@ -222,6 +224,8 @@ def load_tournament_path_data() -> dict[str, Any]:
         "movements": load_latest_csv(MARKET_MOVEMENT_PATH),
         "movement_history": load_latest_csv(MARKET_MOVEMENT_HISTORY_PATH),
         "snapshots": load_latest_csv(TEAM_SNAPSHOTS_PATH),
+        "adaptive_ratings": load_latest_csv(ADAPTIVE_RATINGS_PATH),
+        "publication_manifest": load_latest_json(PUBLICATION_MANIFEST_PATH),
     }
 
 

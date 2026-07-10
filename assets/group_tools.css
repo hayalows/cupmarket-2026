@@ -72,7 +72,7 @@ section[data-testid="stSidebar"] .cm-project-card span { color: #aeb6ca; }
 .cm-start-here h2 {
   margin: .25rem 0 .35rem;
   font-size: clamp(1.25rem, 2.6vw, 1.65rem);
-  letter-spacing: -.03em;
+  letter-spacing: 0;
 }
 
 .cm-guide-copy p,
@@ -289,7 +289,7 @@ section[data-testid="stSidebar"] [data-testid="stPageLink"] a {
 
   [data-testid="stMetricValue"] {
     font-size: clamp(1.18rem, 6vw, 1.65rem) !important;
-    letter-spacing: -.025em !important;
+    letter-spacing: 0 !important;
   }
 
   [data-testid="stMetricDelta"] { font-size: .72rem !important; }
