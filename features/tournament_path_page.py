@@ -275,16 +275,17 @@ def _render_next_knockout_slot(progress: pd.DataFrame, team: str) -> None:
         return
     kickoff = pd.to_datetime(slot.get("kickoff_utc"), errors="coerce", utc=True)
     kickoff_text = "Time pending" if pd.isna(kickoff) else kickoff.strftime("%d %b %Y - %H:%M UTC")
-    st.markdown("### Next knockout slot")
-    st.success(
-        f"**{team} is through.** Round of 16 match {int(slot['match_number'])} is building as "
-        f"**{slot['fixture']}**."
-    )
-    columns = st.columns(3)
-    columns[0].metric("Stage", slot.get("stage_label", "Round of 16"))
-    columns[1].metric("State", slot.get("state", "Building"))
-    columns[2].metric("Kickoff", kickoff_text)
+    stage = str(slot.get("stage_label") or "Knockout match")
+    fixture = str(slot.get("fixture") or f"{team} vs opponent pending")
+    match_number = slot.get("match_number")
+    match_text = f"match {int(match_number)}" if pd.notna(match_number) else "fixture"
 
+    st.markdown("### Next knockout match")
+    st.success(f"**{team}'s next {stage.lower()} {match_text}:** {fixture}.")
+    columns = st.columns(3)
+    columns[0].metric("Stage", stage)
+    columns[1].metric("State", slot.get("state", "Pending"))
+    columns[2].metric("Kickoff", kickoff_text)
 
 def _render_path_message(
     path: pd.Series,
@@ -907,107 +908,3 @@ def _render_country_page_v2() -> None:
 
 def render_tournament_path_page() -> None:
     _render_country_page_v2()
-    return
-    st.markdown(
-        '''
-        <div class="cm-hero">
-            <div class="cm-eyebrow">CupMarket 2026 · Country</div>
-            <h1>One country. The route, price and next match.</h1>
-            <p>Follow a team from confirmed fixtures to next-round slots, market movement, learning signal and the road to the final.</p>
-        </div>
-        ''',
-        unsafe_allow_html=True,
-    )
-
-    data = load_tournament_path_data()
-    summary = tournament_summary(data)
-    metrics = st.columns(4)
-    metrics[0].metric("Tournament stage", summary["current_stage"])
-    metrics[1].metric("Bracket", summary["bracket_status"])
-    metrics[2].metric("Knockout matches finished", summary["completed_knockout_matches"])
-    metrics[3].metric("Knockout matches live", summary["live_knockout_matches"])
-
-    with st.container():
-        st.info(PREDICTION_EXPLAINER)
-
-    _render_tournament_forecast(data)
-
-    teams = available_teams(data)
-    if not teams:
-        st.warning(
-            "Tournament-path data is not available yet. The model and market pages remain "
-            "available while the next official publication is prepared."
-        )
-        _render_tournament_fixtures(data)
-        return
-    requested = st.session_state.pop("cupmarket_path_requested_team", None)
-    default_team = preferred_team(teams, requested, data["prices"])
-    if st.session_state.get("cupmarket_path_team") not in teams:
-        st.session_state["cupmarket_path_team"] = default_team
-    team = st.selectbox("Country", teams, key="cupmarket_path_team")
-    selected = team_summary(data, team)
-    price = selected["price"]
-    path = selected["path"]
-    latest_fixture_result = _latest_finished_fixture(selected["fixtures"])
-    result_state = _team_result_state(latest_fixture_result, team)
-    reach_label, reach_value = _reach_metric_for_state(
-        price,
-        path,
-        latest_fixture_result,
-    )
-
-    st.markdown(f"## {team}")
-    cards = st.columns(4)
-    cards[0].metric(
-        "Current price",
-        _number(price.get("cupmarket_price"), suffix=" CM") if not price.empty else "—",
-    )
-    cards[1].metric(
-        "Path status",
-        result_state.get("status")
-        or (
-            status_label(path.get("fixture_status"))
-            if not path.empty
-            else "Awaiting path data"
-        ),
-    )
-    cards[2].metric(reach_label, _percent(reach_value))
-    cards[3].metric("Become champion", _percent(price.get("prob_champion")) if not price.empty else "—")
-
-    _render_path_message(path, selected["opponents"], latest_fixture_result, team)
-    _render_next_knockout_slot(data["progress"], team)
-    _render_stage_probability_ladder(price, team)
-
-    st.markdown("### Country fixture timeline")
-    fixture_display = _team_fixture_table(selected["fixtures"], team)
-    if fixture_display.empty:
-        st.info(
-            "A confirmed knockout fixture is not available for this country yet. Use the "
-            "path forecast above until the official bracket slot is known."
-        )
-    else:
-        st.dataframe(fixture_display, hide_index=True, use_container_width=True)
-
-    _render_market_reaction(
-        selected["movement"],
-        data["history"],
-        team,
-        price,
-        selected.get("latest_movement", pd.Series(dtype=object)),
-    )
-    _render_tournament_fixtures(data)
-
-    render_official_data_caption(data["prices"], label="Country market")
-    with st.expander("How to read this page", expanded=False):
-        st.markdown(
-            "**Projected path** means group results are still changing the likely opponent.\n\n"
-            "**Slot confirmed** means the country has secured a knockout position, but the "
-            "other side of the fixture is not final.\n\n"
-            "**Fixture confirmed** means the official bracket contains both countries.\n\n"
-            "**Advanced** or **Eliminated** appears after a knockout result is processed.\n\n"
-            "**Prediction unavailable** does not always mean the model failed. It usually "
-            "means the fixture still contains unknown teams, so the app should show path "
-            "probabilities instead of fake match odds.\n\n"
-            "During knockout matches, official CupMarket values remain frozen until full "
-            "time. Completed winners are then fixed in every future simulation."
-        )

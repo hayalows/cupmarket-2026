@@ -44,6 +44,7 @@ REMOTE_DATA_FILES = {
     ),
     "knockout_progress_latest.csv": "data/knockout_progress_latest.csv",
     "market_movements_latest.csv": "data/market_movements_latest.csv",
+    "market_movements.csv": "data/history/market_movements.csv",
     "adaptive_ratings_latest.csv": "data/adaptive_ratings_latest.csv",
     "adaptive_model_health.json": "data/adaptive_model_health.json",
     "publication_manifest.json": "data/publication_manifest.json",

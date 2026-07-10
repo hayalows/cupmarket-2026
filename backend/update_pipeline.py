@@ -1437,21 +1437,25 @@ def generate_live_predictions(
             live_elo,
             processed_ledger,
         )
-    adaptive_guardrail_active = bool(
+    guardrail_decisions = set()
+    if (
         adaptive_rating_frame is not None
         and not adaptive_rating_frame.empty
         and "guardrail_decision" in adaptive_rating_frame.columns
-        and adaptive_rating_frame["guardrail_decision"]
-        .astype(str)
-        .str.lower()
-        .eq("rollback")
-        .any()
-    )
+    ):
+        guardrail_decisions = set(
+            adaptive_rating_frame["guardrail_decision"]
+            .astype(str)
+            .str.lower()
+            .dropna()
+        )
     adaptive_enabled = bool(
         adaptive_rating_frame is not None
         and not adaptive_rating_frame.empty
-        and not adaptive_guardrail_active
+        and guardrail_decisions
+        and guardrail_decisions.issubset({"monitor", "trusted"})
     )
+    adaptive_guardrail_active = not adaptive_enabled
 
     def current_state(team):
         state = state_lookup.get(team)

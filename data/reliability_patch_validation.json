@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "compileall",
+    "complete unittest discovery",
+    "all Streamlit page smoke tests",
+    "analytics performance smoke test"
+  ],
+  "protected_logic": [
+    "performance-adjusted eliminated-country settlement premiums unchanged"
+  ],
+  "source_commit": "fead2a8c29baf19cbb8fbe58081b88e12434b7a8",
+  "status": "passed",
+  "validated_at_utc": "2026-07-10T20:02:17.862240+00:00"
+}

@@ -58,17 +58,35 @@ def render_model_health() -> None:
 
     adaptive_decision = str(adaptive.get("decision") or "collecting_evidence").replace("_", " ").title()
     second = st.columns(4)
-    second[0].metric("Model", str(publication.get("model_version") or "Unavailable"))
+    second[0].metric(
+        "Tournament market model",
+        str(publication.get("model_version") or "Unavailable"),
+    )
     second[1].metric("Simulations", int(tournament.get("number_of_simulations", 0) or 0))
-    second[2].metric("Adaptive guardrail", adaptive_decision)
+    second[2].metric("Adaptive match layer", adaptive_decision)
     second[3].metric("Archive", str(archive.get("status") or "collecting").title())
+    st.caption(
+        "Tournament prices use the market simulation model. Adaptive match nudges "
+        "remain paused until the comparison guardrail reaches Monitor or Trusted."
+    )
 
     if provenance.get("source") != "GitHub main":
         st.warning("CupMarket is showing its deployed fallback. The saved market remains complete, but the newest GitHub publication could not be read.")
     if str(adaptive.get("decision") or "") == "rollback":
         st.warning(str(adaptive.get("message") or "Adaptive adjustments are disabled by the rollback guardrail."))
     elif adaptive:
-        st.info(str(adaptive.get("message") or "Adaptive comparison is collecting evidence."))
+        if str(adaptive.get("decision") or "") == "collecting_evidence":
+            st.info(
+                "Adaptive match adjustments are paused while the comparison "
+                "sample is still being collected. Baseline forecasts remain active."
+            )
+        else:
+            st.info(
+                str(
+                    adaptive.get("message")
+                    or "Adaptive comparison remains inside its published guardrail."
+                )
+            )
 
     with st.expander("Publication details", expanded=False):
         details = {

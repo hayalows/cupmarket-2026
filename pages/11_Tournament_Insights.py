@@ -83,15 +83,11 @@ static = load_static_data()
 path_data = load_tournament_path_data()
 prices = static.get("prices", pd.DataFrame())
 predictions = static.get("latest_predictions", pd.DataFrame())
-tables = pd.read_csv(DATA_DIR / "current_group_tables.csv")
-movements_path = DATA_DIR / "market_movements_latest.csv"
-movements = pd.read_csv(movements_path) if movements_path.exists() else pd.DataFrame()
-movement_history_path = DATA_DIR / "history" / "market_movements.csv"
-movement_history = (
-    pd.read_csv(movement_history_path)
-    if movement_history_path.exists()
-    else movements
-)
+tables = path_data.get("group_tables", pd.DataFrame())
+movements = path_data.get("movements", pd.DataFrame())
+movement_history = path_data.get("movement_history", pd.DataFrame())
+if movement_history.empty:
+    movement_history = movements
 path_status = path_data.get("path_status", pd.DataFrame())
 snapshots = path_data.get("snapshots", pd.DataFrame())
 progress = path_data.get("progress", pd.DataFrame())

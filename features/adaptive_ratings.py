@@ -343,7 +343,10 @@ def adaptive_rating_adjustment(
     if matches.empty:
         return 0.0
     row = matches.iloc[-1]
-    if str(row.get("guardrail_decision") or "").lower() == "rollback":
+    guardrail_decision = str(
+        row.get("guardrail_decision") or "collecting_evidence"
+    ).lower()
+    if guardrail_decision not in {"monitor", "trusted"}:
         return 0.0
     raw_adjustment = _num(row.get("rating_change"), default=0.0)
     if raw_adjustment == 0.0:

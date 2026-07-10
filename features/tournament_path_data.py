@@ -5,12 +5,14 @@ from typing import Any
 
 import pandas as pd
 
+from features.official_bundle import load_consistent_official_bundle
 from features.official_data import load_latest_csv, load_latest_json
 from features.tournament_data import DATA_DIR, load_static_data
 
 ROOT = Path(__file__).resolve().parents[1]
 HISTORY_DIR = DATA_DIR / "history"
 
+GROUP_TABLES_PATH = DATA_DIR / "current_group_tables.csv"
 PATH_STATUS_PATH = DATA_DIR / "round_32_path_status_latest.csv"
 OPPONENTS_PATH = DATA_DIR / "round_32_opponent_probabilities_latest.csv"
 BRACKET_PATH = DATA_DIR / "official_round_32_bracket_locked.csv"
@@ -194,40 +196,131 @@ def round_of_16_build(progress: pd.DataFrame) -> pd.DataFrame:
 
 
 def team_next_knockout_slot(progress: pd.DataFrame, team: str) -> pd.Series:
-    slots = round_of_16_build(progress)
-    if slots.empty:
-        return pd.Series(dtype=object)
-    team_text = str(team)
-    for _, row in slots.iterrows():
-        known = [
-            value.strip()
-            for value in str(row.get("known_teams", "")).split(",")
-            if value.strip()
-        ]
-        if team_text in known:
-            return row
-    return pd.Series(dtype=object)
+    """Return the selected country's next active or upcoming knockout fixture.
 
+    The previous implementation only rebuilt Round-of-16 slots. This version reads
+    the official knockout progress table directly, so it remains correct in the
+    quarter-finals, semi-finals and final as the tournament advances.
+    """
+    required = {"home_team", "away_team", "status"}
+    if progress.empty or not required.issubset(progress.columns):
+        return pd.Series(dtype=object)
+
+    rows = progress.copy()
+    home = rows["home_team"].map(clean_team)
+    away = rows["away_team"].map(clean_team)
+    status = rows["status"].astype(str).str.upper()
+    candidates = rows.loc[
+        (home.eq(str(team)) | away.eq(str(team)))
+        & ~status.isin({"FINISHED", "AWARDED", "CANCELLED"})
+    ].copy()
+    if candidates.empty:
+        # Older or partial snapshots may contain completed Round-of-32 rows
+        # without the official next-round fixture row. Preserve the original
+        # projected Round-of-16 builder as a compatibility fallback.
+        slots = round_of_16_build(progress)
+        if slots.empty:
+            return pd.Series(dtype=object)
+        for _, slot in slots.iterrows():
+            known = [
+                value.strip()
+                for value in str(slot.get("known_teams", "")).split(",")
+                if value.strip()
+            ]
+            if str(team) in known:
+                return slot
+        return pd.Series(dtype=object)
+
+    if "utc_date" in candidates.columns:
+        candidates["utc_date"] = pd.to_datetime(
+            candidates["utc_date"], errors="coerce", utc=True
+        )
+        candidates = candidates.sort_values("utc_date", na_position="last")
+
+    row = candidates.iloc[0]
+    home_team = clean_team(row.get("home_team"))
+    away_team = clean_team(row.get("away_team"))
+    fixture = f"{home_team} vs {away_team}"
+    if home_team == "TBD" or away_team == "TBD":
+        fixture = f"{team} vs opponent pending"
+
+    match_number = pd.to_numeric(
+        row.get("logical_match_number", row.get("match_number")), errors="coerce"
+    )
+    return pd.Series(
+        {
+            "match_number": int(match_number) if pd.notna(match_number) else None,
+            "stage": str(row.get("stage") or ""),
+            "stage_label": stage_label(row.get("stage")),
+            "fixture": fixture,
+            "state": str(row.get("status") or "Pending").replace("_", " ").title(),
+            "known_teams": ", ".join(
+                value for value in (home_team, away_team) if value != "TBD"
+            ),
+            "kickoff_utc": row.get("utc_date"),
+        }
+    )
 
 def load_tournament_path_data() -> dict[str, Any]:
-    static = load_static_data()
-    return {
-        "prices": static.get("prices", pd.DataFrame()),
-        "predictions": static.get("latest_predictions", pd.DataFrame()),
-        "history": static.get("history", pd.DataFrame()),
-        "path_status": load_latest_csv(PATH_STATUS_PATH),
-        "opponents": load_latest_csv(OPPONENTS_PATH),
-        "bracket": load_latest_csv(BRACKET_PATH),
-        "bracket_state": load_latest_json(BRACKET_STATE_PATH),
-        "opponent_metadata": load_latest_json(OPPONENT_METADATA_PATH),
-        "progress": load_latest_csv(KNOCKOUT_PROGRESS_PATH),
-        "movements": load_latest_csv(MARKET_MOVEMENT_PATH),
-        "movement_history": load_latest_csv(MARKET_MOVEMENT_HISTORY_PATH),
-        "snapshots": load_latest_csv(TEAM_SNAPSHOTS_PATH),
-        "adaptive_ratings": load_latest_csv(ADAPTIVE_RATINGS_PATH),
-        "publication_manifest": load_latest_json(PUBLICATION_MANIFEST_PATH),
-    }
+    """Load one consistent publication generation for every country-path view."""
+    bundle = load_consistent_official_bundle(
+        csv_paths={
+            "prices": DATA_DIR / "cupmarket_prices_latest.csv",
+            "predictions": DATA_DIR / "world_cup_live_predictions_latest.csv",
+            "group_tables": GROUP_TABLES_PATH,
+            "path_status": PATH_STATUS_PATH,
+            "opponents": OPPONENTS_PATH,
+            "bracket": BRACKET_PATH,
+            "progress": KNOCKOUT_PROGRESS_PATH,
+            "movements": MARKET_MOVEMENT_PATH,
+            "movement_history": MARKET_MOVEMENT_HISTORY_PATH,
+            "snapshots": TEAM_SNAPSHOTS_PATH,
+            "adaptive_ratings": ADAPTIVE_RATINGS_PATH,
+        },
+        json_paths={
+            "bracket_state": BRACKET_STATE_PATH,
+            "opponent_metadata": OPPONENT_METADATA_PATH,
+            "publication_manifest": PUBLICATION_MANIFEST_PATH,
+        },
+    )
 
+    prices = bundle.get("prices", pd.DataFrame())
+    snapshots = bundle.get("snapshots", pd.DataFrame())
+    if snapshots.empty:
+        history = prices.copy()
+    elif prices.empty:
+        history = snapshots.copy()
+    else:
+        history = pd.concat([snapshots, prices], ignore_index=True, sort=False)
+        required = {"team", "cupmarket_price", "generated_at_utc"}
+        if required.issubset(history.columns):
+            history["generated_at_utc"] = pd.to_datetime(
+                history["generated_at_utc"], errors="coerce", utc=True
+            )
+            history = (
+                history.dropna(subset=list(required))
+                .drop_duplicates(["team", "generated_at_utc"], keep="last")
+                .sort_values(["generated_at_utc", "team"])
+                .reset_index(drop=True)
+            )
+
+    return {
+        "prices": prices,
+        "predictions": bundle.get("predictions", pd.DataFrame()),
+        "history": history,
+        "group_tables": bundle.get("group_tables", pd.DataFrame()),
+        "path_status": bundle.get("path_status", pd.DataFrame()),
+        "opponents": bundle.get("opponents", pd.DataFrame()),
+        "bracket": bundle.get("bracket", pd.DataFrame()),
+        "bracket_state": bundle.get("bracket_state", {}),
+        "opponent_metadata": bundle.get("opponent_metadata", {}),
+        "progress": bundle.get("progress", pd.DataFrame()),
+        "movements": bundle.get("movements", pd.DataFrame()),
+        "movement_history": bundle.get("movement_history", pd.DataFrame()),
+        "snapshots": snapshots,
+        "adaptive_ratings": bundle.get("adaptive_ratings", pd.DataFrame()),
+        "publication_manifest": bundle.get("publication_manifest", {}),
+    }
 
 def available_teams(data: dict[str, Any]) -> list[str]:
     teams: set[str] = set()

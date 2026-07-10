@@ -171,6 +171,7 @@ class Phase8KnockoutPublicationTests(unittest.TestCase):
                     "confidence_level": "High",
                     "confidence_score": 0.8,
                     "overreaction_risk": "Stable signal",
+                    "guardrail_decision": "trusted",
                 },
                 {
                     "team": "Team D",
@@ -178,6 +179,7 @@ class Phase8KnockoutPublicationTests(unittest.TestCase):
                     "confidence_level": "High",
                     "confidence_score": 0.8,
                     "overreaction_risk": "Stable signal",
+                    "guardrail_decision": "trusted",
                 },
             ]
         )
@@ -793,9 +795,18 @@ class Phase8KnockoutPublicationTests(unittest.TestCase):
         )
         team_a = ratings.set_index("team").loc["Team A"]
         self.assertNotEqual(float(team_a["rating_change"]), 0.0)
-        adjustment = adaptive_ratings.adaptive_rating_adjustment(
+        paused_adjustment = adaptive_ratings.adaptive_rating_adjustment(
             "Team A",
             ratings,
+            stage="GROUP_STAGE",
+        )
+        self.assertEqual(paused_adjustment, 0.0)
+
+        trusted_ratings = ratings.copy()
+        trusted_ratings["guardrail_decision"] = "trusted"
+        adjustment = adaptive_ratings.adaptive_rating_adjustment(
+            "Team A",
+            trusted_ratings,
             stage="GROUP_STAGE",
         )
         self.assertNotEqual(adjustment, 0.0)
