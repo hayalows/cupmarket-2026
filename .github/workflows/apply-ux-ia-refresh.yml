@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "scripts/apply_ux_ia_refresh.py"
+      - "scripts/repair_ux_patch_payload.py"
       - ".github/workflows/apply-ux-ia-refresh.yml"
   workflow_dispatch:
 
@@ -44,7 +45,12 @@ jobs:
         shell: bash
         run: |
           set +e
-          python -m py_compile scripts/apply_ux_ia_refresh.py 2>&1 | tee patch-compile.log
+          python scripts/repair_ux_patch_payload.py 2>&1 | tee patch-compile.log
+          repair_code=${PIPESTATUS[0]}
+          if [ ${repair_code} -ne 0 ]; then
+            exit ${repair_code}
+          fi
+          python -m py_compile scripts/apply_ux_ia_refresh.py 2>&1 | tee -a patch-compile.log
           code=${PIPESTATUS[0]}
           exit ${code}
 
@@ -155,6 +161,7 @@ jobs:
       - name: Remove one-time release machinery
         run: |
           rm -f scripts/apply_ux_ia_refresh.py
+          rm -f scripts/repair_ux_patch_payload.py
           rm -f .github/workflows/apply-ux-ia-refresh.yml
           rm -f patch-compile.log patch-apply.log application-compile.log unit-test.log page-smoke.log
 
