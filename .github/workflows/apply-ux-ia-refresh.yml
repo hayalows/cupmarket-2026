@@ -40,17 +40,34 @@ jobs:
           python -m pip install -r requirements.txt
           python -m pip install joblib==1.5.3 scipy==1.16.3 scikit-learn==1.6.1
 
-      - name: Validate and apply patch script
+      - name: Compile patch script
+        shell: bash
         run: |
-          python -m py_compile scripts/apply_ux_ia_refresh.py
-          python scripts/apply_ux_ia_refresh.py
+          set +e
+          python -m py_compile scripts/apply_ux_ia_refresh.py 2>&1 | tee patch-compile.log
+          code=${PIPESTATUS[0]}
+          exit ${code}
+
+      - name: Apply UX and architecture patch
+        shell: bash
+        run: |
+          set +e
+          python scripts/apply_ux_ia_refresh.py 2>&1 | tee patch-apply.log
+          code=${PIPESTATUS[0]}
+          exit ${code}
 
       - name: Compile application
-        run: python -m compileall -q app.py pages features backend tests
+        shell: bash
+        run: |
+          set +e
+          python -m compileall -q app.py pages features backend tests 2>&1 | tee application-compile.log
+          code=${PIPESTATUS[0]}
+          exit ${code}
 
       - name: Run complete unit test suite
         shell: bash
         run: |
+          rm -f unit-test.log
           set +e
           python -m unittest discover -s tests -p "test_*.py" -v 2>&1 | tee unit-test.log
           code=${PIPESTATUS[0]}
@@ -59,6 +76,8 @@ jobs:
       - name: Smoke test every Streamlit page
         shell: bash
         run: |
+          rm -f page-smoke.log
+          set +e
           pages=(
             pages/Tournament_Pulse.py
             pages/1_Match_Intelligence.py
@@ -76,11 +95,21 @@ jobs:
             pages/13_Tournament_Archive.py
             pages/Country_Snapshot.py
           )
+          code=0
           for page in "${pages[@]}"; do
-            echo "Testing ${page}..."
-            python scripts/smoke_streamlit_page.py "${page}"
+            echo "Testing ${page}..." | tee -a page-smoke.log
+            python scripts/smoke_streamlit_page.py "${page}" 2>&1 | tee -a page-smoke.log
+            result=${PIPESTATUS[0]}
+            if [ ${result} -ne 0 ]; then
+              code=${result}
+              break
+            fi
           done
-          python scripts/smoke_streamlit_page.py pages/6_Analytics_Dashboard.py --analytics-performance
+          if [ ${code} -eq 0 ]; then
+            python scripts/smoke_streamlit_page.py pages/6_Analytics_Dashboard.py --analytics-performance 2>&1 | tee -a page-smoke.log
+            code=${PIPESTATUS[0]}
+          fi
+          exit ${code}
 
       - name: Record successful validation
         run: |
@@ -95,6 +124,7 @@ jobs:
               "source_commit": "${{ github.sha }}",
               "checks": [
                   "patch script compilation",
+                  "patch application",
                   "application compilation",
                   "complete unit test discovery",
                   "all Streamlit page smoke tests",
@@ -124,6 +154,7 @@ jobs:
         run: |
           rm -f scripts/apply_ux_ia_refresh.py
           rm -f .github/workflows/apply-ux-ia-refresh.yml
+          rm -f patch-compile.log patch-apply.log application-compile.log unit-test.log page-smoke.log
 
       - name: Publish validated UX release
         run: |
@@ -140,21 +171,23 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          details="The failure occurred before a unit-test log was produced."
-          if [ -f unit-test.log ]; then
-            details=$( {
-              grep -E -B 4 -A 25 'FAIL$|ERROR$|^FAIL:|^ERROR:|Traceback|AssertionError' unit-test.log || true
-              echo
-              echo '--- Test summary ---'
-              tail -n 40 unit-test.log
-            } | tail -n 190 )
-          fi
+          details="No diagnostic log was produced. Inspect the failed workflow step."
+          log_name=""
+          for candidate in page-smoke.log unit-test.log application-compile.log patch-apply.log patch-compile.log; do
+            if [ -s "$candidate" ]; then
+              log_name="$candidate"
+              details=$(tail -n 190 "$candidate")
+              break
+            fi
+          done
           body=$(cat <<EOF
           The CupMarket UX and information architecture release failed validation.
 
           Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
           No validated application release was published.
+
+          Diagnostic source: ${log_name:-none}
 
           \`\`\`
           ${details}
