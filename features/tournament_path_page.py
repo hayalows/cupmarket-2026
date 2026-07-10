@@ -776,9 +776,9 @@ def _render_country_page_v2() -> None:
     st.markdown(
         '''
         <div class="cm-hero">
-            <div class="cm-eyebrow">CupMarket 2026 - Country</div>
-            <h1>One country. The route, price and next match.</h1>
-            <p>Pick a country, then move through its snapshot, route, market story and fixture timeline.</p>
+            <div class="cm-eyebrow">CupMarket 2026</div>
+            <h1>Country profile</h1>
+            <p>Select one country to see its status, next match, tournament path, price movement and fixture history.</p>
         </div>
         ''',
         unsafe_allow_html=True,
@@ -786,26 +786,22 @@ def _render_country_page_v2() -> None:
 
     data = load_tournament_path_data()
     summary = tournament_summary(data)
-    metrics = st.columns(4)
-    metrics[0].metric("Tournament stage", summary["current_stage"])
-    metrics[1].metric("Bracket", summary["bracket_status"])
-    metrics[2].metric("Knockout matches finished", summary["completed_knockout_matches"])
-    metrics[3].metric("Knockout matches live", summary["live_knockout_matches"])
+    st.caption(
+        f"Tournament stage: {summary['current_stage']} · "
+        f"Bracket: {summary['bracket_status']}"
+    )
 
     teams = available_teams(data)
     if not teams:
         st.warning(
-            "Tournament-path data is not available yet. The model and market pages remain "
-            "available while the next official publication is prepared."
+            "Country data is not available yet. Matches, Bracket and System Health remain available."
         )
-        _render_tournament_fixtures(data)
         return
 
-    with st.expander("How this country page is organized", expanded=False):
-        st.write(PREDICTION_EXPLAINER)
-        st.caption(
-            "Snapshot is the fast answer. Path explains the road ahead. Market explains "
-            "the CM price. Fixtures keeps the match timeline in one place."
+    with st.expander("How to use Countries", expanded=False):
+        st.write(
+            "Overview gives the fast answer. Path shows this country's stage chances. "
+            "Market explains its CM value. Fixtures contains only this country's matches."
         )
 
     requested = st.session_state.pop("cupmarket_path_requested_team", None)
@@ -813,6 +809,7 @@ def _render_country_page_v2() -> None:
     if st.session_state.get("cupmarket_path_team") not in teams:
         st.session_state["cupmarket_path_team"] = default_team
     team = st.selectbox("Country", teams, key="cupmarket_path_team")
+
     selected = team_summary(data, team)
     price = selected["price"]
     path = selected["path"]
@@ -828,37 +825,46 @@ def _render_country_page_v2() -> None:
     cards = st.columns(4)
     cards[0].metric(
         "Current price",
-        _number(price.get("cupmarket_price"), suffix=" CM") if not price.empty else "-",
+        _number(price.get("cupmarket_price"), suffix=" CM") if not price.empty else "—",
     )
     cards[1].metric(
-        "Path status",
+        "Status",
         result_state.get("status")
-        or (
-            status_label(path.get("fixture_status"))
-            if not path.empty
-            else "Awaiting path data"
-        ),
+        or (status_label(path.get("fixture_status")) if not path.empty else "Awaiting path data"),
     )
     cards[2].metric(reach_label, _percent(reach_value))
-    cards[3].metric("Become champion", _percent(price.get("prob_champion")) if not price.empty else "-")
-
-    snapshot_tab, path_tab, market_tab, fixtures_tab = st.tabs(
-        ["Snapshot", "Path", "Market", "Fixtures"]
+    cards[3].metric(
+        "Champion chance",
+        _percent(price.get("prob_champion")) if not price.empty else "—",
     )
 
-    with snapshot_tab:
+    sections = ["Overview", "Path", "Market", "Fixtures"]
+    requested_section = st.session_state.pop("cupmarket_country_requested_section", None)
+    if requested_section in sections:
+        st.session_state["cupmarket_country_section"] = requested_section
+    elif st.session_state.get("cupmarket_country_section") not in sections:
+        st.session_state["cupmarket_country_section"] = "Overview"
+
+    section = st.segmented_control(
+        "Country view",
+        sections,
+        key="cupmarket_country_section",
+        selection_mode="single",
+        label_visibility="collapsed",
+    ) or "Overview"
+
+    if section == "Overview":
         _render_path_message(path, selected["opponents"], latest_fixture_result, team)
         _render_next_knockout_slot(data["progress"], team)
-        st.caption(
-            "Use this tab when you only need the answer: status, next slot and headline odds."
-        )
-
-    with path_tab:
+        st.caption("This view contains the current status, next match and headline probabilities.")
+    elif section == "Path":
+        st.markdown("### Tournament path")
         _render_stage_probability_ladder(price, team)
-        _render_tournament_forecast(data)
-        _render_tournament_fixtures(data)
-
-    with market_tab:
+        st.caption(
+            "These probabilities belong to the selected country. Open Bracket to see the full tournament structure."
+        )
+        st.page_link("pages/8_Bracket_View.py", label="View the full bracket")
+    elif section == "Market":
         render_market_explanation(
             team=team,
             price=price,
@@ -874,37 +880,23 @@ def _render_country_page_v2() -> None:
             price,
             selected.get("latest_movement", pd.Series(dtype=object)),
         )
-
-    with fixtures_tab:
-        st.markdown("### Country fixture timeline")
+    else:
+        st.markdown("### Fixture history")
         fixture_display = _team_fixture_table(selected["fixtures"], team)
         if fixture_display.empty:
-            st.info(
-                "A confirmed knockout fixture is not available for this country yet. Use the "
-                "path forecast until the official bracket slot is known."
-            )
+            st.info("No confirmed fixture is available for this country yet.")
         else:
             st.dataframe(fixture_display, hide_index=True, use_container_width=True)
-        st.caption(
-            "This table follows the selected country only. Open the Bracket page for the "
-            "full tournament layout."
-        )
+        st.caption("This table contains only the selected country's fixtures.")
 
     render_official_data_caption(data["prices"], label="Country market")
-    with st.expander("How to read this page", expanded=False):
+    with st.expander("Definitions", expanded=False):
         st.markdown(
-            "**Projected path** means earlier results are still changing the likely opponent.\n\n"
-            "**Slot confirmed** means the country has secured a knockout position, but the "
-            "other side of the fixture is not final.\n\n"
-            "**Fixture confirmed** means the official bracket contains both countries.\n\n"
-            "**Advanced** or **Eliminated** appears after a knockout result is processed.\n\n"
-            "**Prediction unavailable** does not always mean the model failed. It usually "
-            "means the fixture still contains unknown teams, so the app should show path "
-            "probabilities instead of fake match odds.\n\n"
-            "During knockout matches, official CupMarket values remain frozen until full "
-            "time. Completed winners are then fixed in every future simulation."
+            "**Projected path** means future results can still change the opponent.\n\n"
+            "**Slot confirmed** means the country's bracket position is fixed, but the opponent is not final.\n\n"
+            "**Fixture confirmed** means both countries are known.\n\n"
+            "**Published market** changes after completed results are processed by the model."
         )
-
 
 def render_tournament_path_page() -> None:
     _render_country_page_v2()

@@ -48,8 +48,7 @@ def render_model_health() -> None:
     tournament = manifest.get("tournament", {}) if isinstance(manifest, dict) else {}
     archive = manifest.get("archive", {}) if isinstance(manifest, dict) else {}
 
-    st.markdown("## Model health")
-    st.caption("One view for score freshness, the published market, workflow state and adaptive-model safety.")
+    st.markdown("### Current status")
     first = st.columns(4)
     first[0].metric("Published market", _timestamp(publication.get("model_generated_at_utc")))
     first[1].metric("Last score check", _timestamp(publication.get("last_checked_at_utc")))

@@ -182,9 +182,9 @@ def render_match_hub(data: dict | None = None) -> None:
     st.markdown(
         '''
         <div class="cm-hero">
-            <div class="cm-eyebrow">CupMarket 2026 · Fixtures & results</div>
-            <h1>Every match, one clear path.</h1>
-            <p>Move from live action to completed-result review or the next fixture without learning a different navigation system.</p>
+            <div class="cm-eyebrow">CupMarket 2026</div>
+            <h1>Matches and results</h1>
+            <p>Follow live scores, review completed forecasts, or open the next scheduled fixture.</p>
         </div>
         ''',
         unsafe_allow_html=True,
