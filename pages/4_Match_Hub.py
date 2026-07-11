@@ -15,6 +15,29 @@ inject_styles()
 render_specialist_sidebar("match_hub")
 
 
+def _apply_match_deep_link() -> None:
+    requested_view = st.query_params.get("view")
+    requested_match = st.query_params.get("match_id")
+    applied = False
+
+    if requested_view in {"Live", "Results", "Upcoming"}:
+        st.session_state["cupmarket_match_hub_view"] = requested_view
+        applied = True
+
+    if requested_match is not None:
+        try:
+            st.session_state["cupmarket_match_hub_match_id"] = int(requested_match)
+            applied = True
+        except (TypeError, ValueError):
+            pass
+
+    if applied:
+        st.query_params.clear()
+
+
+_apply_match_deep_link()
+
+
 def _render(data: dict, refresh_label: str) -> None:
     render_match_hub(data)
     st.caption(refresh_label)
