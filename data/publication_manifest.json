@@ -4,7 +4,7 @@
     "baseline": {},
     "comparison_sample_size": 0,
     "decision": "collecting_evidence",
-    "generated_at_utc": "2026-07-11T20:57:51.702679+00:00",
+    "generated_at_utc": "2026-07-11T21:59:01.385000+00:00",
     "message": "More matched pre-match baseline forecasts are needed before adaptive predictions can be judged.",
     "minimum_sample_size": 20,
     "schema_version": 1,
@@ -19,26 +19,26 @@
     "history_snapshot_count": 154,
     "status": "collecting"
   },
-  "generated_at_utc": "2026-07-11T20:57:51.710077+00:00",
+  "generated_at_utc": "2026-07-11T21:59:01.392647+00:00",
   "publication": {
-    "active_match_deferral": false,
+    "active_match_deferral": true,
     "api": {
       "http_status": 200,
       "matches_returned": 104,
-      "request_counter_reset": "59",
+      "request_counter_reset": "60",
       "requests_remaining": "9"
     },
     "bracket_mode": "official_api_locked_knockout_progression",
-    "last_checked_at_utc": "2026-07-11T20:57:48.794230+00:00",
+    "last_checked_at_utc": "2026-07-11T21:58:59.725985+00:00",
     "model_generated_at_utc": "2026-07-11T07:00:58.183793+00:00",
     "model_version": "phase6_knockout_progression_v1",
     "new_finished_matches": 0,
-    "status": "no_new_finished_match"
+    "status": "deferred_active_knockout_matches"
   },
   "schema_version": 1,
   "tournament": {
     "actual_knockout_results_used": 26,
-    "matches_finished": 98,
+    "matches_finished": 97,
     "matches_total": 104,
     "number_of_simulations": 20000,
     "teams_tracked": 48
