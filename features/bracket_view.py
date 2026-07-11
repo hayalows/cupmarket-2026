@@ -3,8 +3,8 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
+from features.bracket_tree import render_bracket_tree
 from features.tournament_path_data import round_of_16_build
-from features.tournament_path_data import stage_label, status_label
 
 
 STAGE_ALIASES = {
@@ -179,9 +179,9 @@ def _render_confirmed_cards(source: pd.DataFrame, stage_name: str, limit: int = 
         if not slots.empty:
             for _, row in slots.head(limit).iterrows():
                 _card(
-                    f"Round of 16 - Match {int(row['match_number'])}",
+                    f"Round of 16 · Match {int(row['match_number'])}",
                     str(row["fixture"]),
-                    f"{row['state']} - {_timestamp(row.get('kickoff_utc'))}",
+                    f"{row['state']} · {_timestamp(row.get('kickoff_utc'))}",
                     "Built from Round-of-32 winners",
                 )
             return True
@@ -248,44 +248,24 @@ def _render_stage_forecast(prices: pd.DataFrame, stage_name: str, limit: int = 6
 
 
 def render_dynamic_bracket_view(data: dict) -> None:
-    st.markdown("### Full bracket view")
+    st.markdown("### Full bracket")
     st.caption(
-        "Confirmed fixtures come from the official knockout feed. Projected fixtures come "
-        "from the latest CupMarket model run and update after the next successful publication."
+        "Follow the official knockout path from the Round of 32 to the final. "
+        "Finished matches highlight the country that advanced, while future slots show where each winner goes next."
     )
 
     source = _confirmed_source(data)
-    projected_r32 = _projected_round32(data)
-    prices = data.get("prices", pd.DataFrame())
-    if not isinstance(prices, pd.DataFrame):
-        prices = pd.DataFrame()
+    if source.empty:
+        st.info("The official knockout bracket has not been published yet.")
+        return
 
-    mode = st.radio(
-        "Bracket mode",
-        ["Confirmed + projected", "Confirmed only", "Projected only"],
-        horizontal=True,
-        key="cupmarket_bracket_mode",
-    )
+    render_bracket_tree(source)
 
-    columns = st.columns(5)
-    for column, stage_name in zip(columns, STAGE_ALIASES.keys()):
-        with column:
-            st.markdown(f"#### {stage_name}")
-            rendered = False
-            if mode != "Projected only":
-                rendered = _render_confirmed_cards(source, stage_name)
-            if not rendered and mode != "Confirmed only":
-                if stage_name == "Round of 32":
-                    rendered = _render_projected_r32(projected_r32)
-                else:
-                    rendered = _render_stage_forecast(prices, stage_name)
-            if not rendered:
-                st.caption("Waiting for bracket data.")
-
-    with st.expander("How to read the bracket view", expanded=False):
+    with st.expander("How to read the bracket", expanded=False):
         st.markdown(
-            "**Confirmed** means the fixture exists in the official knockout feed.\n\n"
-            "**Part-confirmed** means one country or slot is known, but the other side still depends on remaining results.\n\n"
-            "**Projected** means CupMarket is showing the model's current most likely matchup.\n\n"
-            "Later rounds show the strongest projected stage paths until exact pairings become available."
+            "**Green-highlighted country:** advanced from a finished match.\n\n"
+            "**Red match border:** match is currently live.\n\n"
+            "**Solid connector:** winner moves to the next round.\n\n"
+            "**Dashed connector:** semi-final loser moves to the third-place match.\n\n"
+            "The smaller Stage view remains the easier option on a phone."
         )
