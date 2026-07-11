@@ -21,7 +21,7 @@ st.markdown(
     <div class="cm-hero">
         <div class="cm-eyebrow">CupMarket 2026</div>
         <h1>Tournament bracket</h1>
-        <p>See confirmed knockout fixtures and projected slots that are still waiting for official teams.</p>
+        <p>Track every knockout result, see who advanced and follow each path towards the World Cup final.</p>
     </div>
     ''',
     unsafe_allow_html=True,
@@ -36,8 +36,8 @@ metrics[2].metric("Finished", summary["completed_knockout_matches"])
 metrics[3].metric("Live", summary["live_knockout_matches"])
 
 st.info(
-    "Stage view is easier on mobile. Full bracket is better on a wide screen. "
-    "Confirmed fixtures come from the official feed; projected slots come from the latest model run."
+    "Use Stage view for a compact mobile list. Full bracket shows the connected tournament path "
+    "with country flags, scores and winner progression."
 )
 stage_tab, full_tab = st.tabs(["Stage view", "Full bracket"])
 with stage_tab:
