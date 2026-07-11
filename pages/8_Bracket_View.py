@@ -1,7 +1,7 @@
 import streamlit as st
 
 from features.bracket_stage_view import render_stage_bracket_view
-from features.bracket_view import render_dynamic_bracket_view
+from features.clickable_bracket_view import render_dynamic_bracket_view
 from features.product_ui import inject_styles, render_project_footer, render_specialist_sidebar
 from features.tournament_data import DATA_DIR
 from features.tournament_path_data import load_tournament_path_data, tournament_summary
@@ -37,7 +37,7 @@ metrics[3].metric("Live", summary["live_knockout_matches"])
 
 st.info(
     "Use Stage view for a compact mobile list. Full bracket shows the connected tournament path "
-    "with country flags, scores and winner progression."
+    "with country flags, scores and clickable match cards."
 )
 stage_tab, full_tab = st.tabs(["Stage view", "Full bracket"])
 with stage_tab:
