@@ -102,11 +102,11 @@ def native_clickable_bracket_html(source: pd.DataFrame) -> str:
 
         params = urlencode(
             {
-                "view": target.get("view") or "Upcoming",
-                "match_id": str(target["match_id"]),
+                "open_match_view": target.get("view") or "Upcoming",
+                "open_match_id": str(target["match_id"]),
             }
         )
-        href = f"/4_Match_Hub?{params}"
+        href = f"?{params}"
         description = (
             target.get("result_label")
             or target.get("decision_status")
