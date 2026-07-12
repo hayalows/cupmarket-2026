@@ -14,6 +14,39 @@ st.set_page_config(
     initial_sidebar_state="auto",
 )
 
+
+def _query_value(name: str, default: str = "") -> str:
+    value = st.query_params.get(name, default)
+    if isinstance(value, list):
+        value = value[-1] if value else default
+    return str(value or default).strip()
+
+
+def _open_requested_match() -> None:
+    """Use Streamlit's own router after a native visual-bracket link is tapped."""
+
+    raw_match_id = _query_value("open_match_id")
+    if not raw_match_id:
+        return
+
+    try:
+        match_id = int(raw_match_id)
+    except (TypeError, ValueError):
+        st.query_params.clear()
+        return
+
+    view = _query_value("open_match_view", "Upcoming")
+    if view not in {"Live", "Results", "Upcoming"}:
+        view = "Upcoming"
+
+    st.session_state["cupmarket_match_hub_view"] = view
+    st.session_state["cupmarket_match_hub_match_id"] = match_id
+    st.query_params.clear()
+    st.switch_page("pages/4_Match_Hub.py")
+
+
+_open_requested_match()
+
 inject_styles(DATA_DIR.parent)
 render_specialist_sidebar("bracket")
 
