@@ -10,7 +10,7 @@ def render_dynamic_bracket_view(data: dict) -> None:
     st.markdown("### Full bracket")
     st.caption(
         "Follow the official knockout path from the Round of 32 to the final. "
-        "Click any available match to open its live, result or upcoming-match details."
+        "Tap or click any available match to open its live, result or upcoming-match details."
     )
 
     source = _confirmed_source(data)
@@ -22,10 +22,12 @@ def render_dynamic_bracket_view(data: dict) -> None:
 
     with st.expander("How to read the bracket", expanded=False):
         st.markdown(
-            "**Click a match:** opens its detail inside Matches.\n\n"
+            "**Regular time:** the match was decided during normal play.\n\n"
+            "**After extra time:** the displayed score includes extra-time goals.\n\n"
+            "**Pens 4–3:** the main score shows goals from play; the shootout score appears in the status label.\n\n"
+            "**Tap or click a match:** opens its detail inside Matches.\n\n"
             "**Green-highlighted country:** advanced from a finished match.\n\n"
             "**Red match border:** match is currently live.\n\n"
             "**Solid connector:** winner moves to the next round.\n\n"
-            "**Dashed connector:** semi-final loser moves to the third-place match.\n\n"
-            "The smaller Stage view remains the easier option on a phone."
+            "**Dashed connector:** semi-final loser moves to the third-place match."
         )
