@@ -1,98 +1,147 @@
 from __future__ import annotations
 
-import json
+from html import escape
+import re
+from urllib.parse import urlencode
 
 import pandas as pd
-import streamlit.components.v1 as components
+import streamlit as st
 
-from features.clickable_bracket import _match_links, clickable_bracket_html
+from features.bracket_tree import bracket_html
+from features.clickable_bracket import _match_links
 
 
-def reliable_clickable_bracket_html(source: pd.DataFrame) -> str:
-    """Add native link overlays that work inside Streamlit's component iframe.
+def _strip_outer_document(html: str) -> str:
+    """Return an embeddable Streamlit HTML fragment instead of a full document."""
 
-    Streamlit renders ``components.html`` inside a sandboxed iframe. Direct attempts to
-    change ``window.top.location`` can be blocked by that sandbox, especially on mobile
-    browsers. A real anchor opened from a user tap is more reliable, so every official
-    match card receives a full-card link overlay.
+    html = re.sub(r"<!doctype[^>]*>", "", html, flags=re.IGNORECASE)
+    html = re.sub(
+        r"</?(?:html|head|body)\b[^>]*>",
+        "",
+        html,
+        flags=re.IGNORECASE,
+    )
+    return html.strip()
+
+
+def native_clickable_bracket_html(source: pd.DataFrame) -> str:
+    """Build the visual bracket with real links in Streamlit's main document.
+
+    The previous versions placed the bracket inside ``components.html``. That iframe
+    could display the cards correctly but mobile browsers did not consistently follow
+    links created inside it. Rendering the same bracket as ordinary Streamlit HTML keeps
+    each full-card anchor in the app page itself, so taps are handled by the browser
+    without iframe navigation or JavaScript.
     """
 
-    html = clickable_bracket_html(source)
-    payload = json.dumps(_match_links(source), separators=(",", ":")).replace("</", "<\\/")
+    html = bracket_html(source)
+    links = _match_links(source)
 
-    overlay_css = """
+    native_css = """
 <style>
-.match-card .cm-match-link-overlay {
+.match-card:has(.cm-native-match-link) {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(124, 131, 255, .24);
+  transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+.match-card:has(.cm-native-match-link):hover,
+.match-card:has(.cm-native-match-link):focus-within,
+.match-card:has(.cm-native-match-link):active {
+  transform: translateY(-3px);
+  border-color: rgba(124, 131, 255, .95);
+  box-shadow: 0 0 0 3px rgba(124, 131, 255, .14), 0 18px 36px rgba(0, 0, 0, .30);
+}
+.cm-native-match-link {
   position: absolute;
   inset: 0;
-  z-index: 40;
+  z-index: 50;
   display: block;
   border-radius: inherit;
-  text-decoration: none;
-  color: transparent;
+  text-decoration: none !important;
+  color: transparent !important;
   background: transparent;
   touch-action: manipulation;
-  -webkit-tap-highlight-color: rgba(124, 131, 255, .22);
+  -webkit-tap-highlight-color: rgba(124, 131, 255, .24);
 }
-.match-card .cm-match-link-overlay:focus-visible {
-  outline: 3px solid rgba(185, 190, 255, .92);
+.cm-native-match-link:focus-visible {
+  outline: 3px solid rgba(185, 190, 255, .96);
   outline-offset: -3px;
 }
-.match-card[data-clickable="true"] {
-  cursor: pointer;
+.cm-native-match-link .cm-tap-hint {
+  position: absolute;
+  right: 7px;
+  bottom: 4px;
+  color: #b9beff;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: .06em;
+  line-height: 1;
+  text-transform: uppercase;
+  opacity: 0;
+}
+.match-card:has(.cm-native-match-link):hover .cm-tap-hint,
+.match-card:has(.cm-native-match-link):focus-within .cm-tap-hint,
+.match-card:has(.cm-native-match-link):active .cm-tap-hint {
+  opacity: 1;
 }
 @media (hover: none) and (pointer: coarse) {
-  .match-card[data-clickable="true"]::after {
-    content: "Tap";
+  .match-card:has(.cm-native-match-link) {
+    border-color: rgba(124, 131, 255, .52);
+  }
+  .cm-native-match-link .cm-tap-hint {
     opacity: 1;
   }
 }
 </style>
 """
 
-    overlay_script = f"""
-<script>
-(() => {{
-  const links = {payload};
-  const cards = document.querySelectorAll('.match-card');
-  const toolbarHint = document.querySelector('.bracket-toolbar span');
-  if (toolbarHint) {{
-    toolbarHint.textContent = 'Tap a match to open its Match Hub page. Swipe sideways to inspect every round.';
-  }}
+    for number, target in links.items():
+        if not target.get("clickable") or not target.get("match_id"):
+            continue
 
-  cards.forEach((card) => {{
-    const matchLabel = card.querySelector('.match-meta span:first-child');
-    const number = matchLabel ? matchLabel.textContent.trim().replace(/^M/i, '') : '';
-    const target = links[number];
-    if (!target || !target.clickable || !target.match_id) return;
-    if (card.querySelector('.cm-match-link-overlay')) return;
+        params = urlencode(
+            {
+                "view": target.get("view") or "Upcoming",
+                "match_id": str(target["match_id"]),
+            }
+        )
+        href = f"/4_Match_Hub?{params}"
+        description = (
+            target.get("result_label")
+            or target.get("decision_status")
+            or "Open match details"
+        )
+        aria_label = f"{target.get('label') or f'Open match {number}'}. {description}"
+        anchor = (
+            f'<a class="cm-native-match-link" '
+            f'href="{escape(href, quote=True)}" target="_self" '
+            f'aria-label="{escape(aria_label, quote=True)}" '
+            f'title="{escape(description, quote=True)}">'
+            '<span class="cm-tap-hint" aria-hidden="true">Open</span>'
+            "</a>"
+        )
 
-    const params = new URLSearchParams({{
-      view: target.view,
-      match_id: String(target.match_id),
-    }});
-    const anchor = document.createElement('a');
-    anchor.className = 'cm-match-link-overlay';
-    anchor.href = `/4_Match_Hub?${{params.toString()}}`;
-    anchor.target = '_blank';
-    anchor.rel = 'noopener noreferrer';
-    anchor.setAttribute(
-      'aria-label',
-      `${{target.label}}. ${{target.result_label || target.decision_status || ''}}`
-    );
-    anchor.setAttribute('title', target.result_label || 'Open match details');
-    anchor.addEventListener('click', (event) => event.stopPropagation());
-    anchor.addEventListener('keydown', (event) => event.stopPropagation());
-    card.appendChild(anchor);
-  }});
-}})();
-</script>
-"""
+        pattern = re.compile(
+            rf'(<article\b[^>]*aria-label="[^"]* match {re.escape(str(number))}"[^>]*>)'
+            r"(.*?)"
+            r"(</article>)",
+            flags=re.DOTALL,
+        )
+        html = pattern.sub(
+            lambda match: f"{match.group(1)}{match.group(2)}{anchor}{match.group(3)}",
+            html,
+            count=1,
+        )
 
-    return html.replace("</head>", f"{overlay_css}</head>", 1).replace(
-        "</body>", f"{overlay_script}</body>", 1
+    html = html.replace(
+        "Swipe or scroll sideways to inspect every round",
+        "Tap a match for details. Swipe sideways to inspect every round",
+        1,
     )
+    html = html.replace("</head>", f"{native_css}</head>", 1)
+    return _strip_outer_document(html)
 
 
 def render_bracket_tree(source: pd.DataFrame) -> None:
-    components.html(reliable_clickable_bracket_html(source), height=1285, scrolling=False)
+    st.markdown(native_clickable_bracket_html(source), unsafe_allow_html=True)
