@@ -1,10 +1,11 @@
 import streamlit as st
 
+from features.bracket_live_data import load_bracket_page_data
 from features.clickable_bracket_view import render_dynamic_bracket_view
 from features.mobile_bracket_stage import render_stage_bracket_view
 from features.product_ui import inject_styles, render_project_footer, render_specialist_sidebar
 from features.tournament_data import DATA_DIR
-from features.tournament_path_data import load_tournament_path_data, tournament_summary
+from features.tournament_path_data import tournament_summary
 
 st.set_page_config(
     page_title="CupMarket Bracket",
@@ -27,7 +28,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-data = load_tournament_path_data()
+data = load_bracket_page_data()
 summary = tournament_summary(data)
 metrics = st.columns(4)
 metrics[0].metric("Tournament stage", summary["current_stage"])
