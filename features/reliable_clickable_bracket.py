@@ -29,9 +29,9 @@ def native_clickable_bracket_html(source: pd.DataFrame) -> str:
 
     The previous versions placed the bracket inside ``components.html``. That iframe
     could display the cards correctly but mobile browsers did not consistently follow
-    links created inside it. Rendering the same bracket as ordinary Streamlit HTML keeps
-    each full-card anchor in the app page itself, so taps are handled by the browser
-    without iframe navigation or JavaScript.
+    links created inside it. Rendering the same bracket in Streamlit's main document
+    keeps each full-card anchor in the app page itself, so taps are handled by the
+    browser without iframe navigation or JavaScript.
     """
 
     html = bracket_html(source)
@@ -102,11 +102,11 @@ def native_clickable_bracket_html(source: pd.DataFrame) -> str:
 
         params = urlencode(
             {
-                "open_match_view": target.get("view") or "Upcoming",
-                "open_match_id": str(target["match_id"]),
+                "view": target.get("view") or "Upcoming",
+                "match_id": str(target["match_id"]),
             }
         )
-        href = f"?{params}"
+        href = f"/Match_Hub?{params}"
         description = (
             target.get("result_label")
             or target.get("decision_status")
@@ -144,4 +144,6 @@ def native_clickable_bracket_html(source: pd.DataFrame) -> str:
 
 
 def render_bracket_tree(source: pd.DataFrame) -> None:
-    st.markdown(native_clickable_bracket_html(source), unsafe_allow_html=True)
+    # Markdown treats the indented cards as a code block and splits block-level
+    # anchors. The HTML renderer preserves each card and its full-card link.
+    st.html(native_clickable_bracket_html(source))

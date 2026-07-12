@@ -309,18 +309,16 @@ def _render_official_match(row: pd.Series, stage_name: str, fallback: Any) -> No
 
     if api_match_id is not None:
         query = urlencode({"view": view, "match_id": int(api_match_id)})
-        st.markdown(
+        st.html(
             f'<a class="cm-mobile-bracket-card {escape(_card_class(row))}" '
-            f'href="/4_Match_Hub?{escape(query)}" target="_self" '
+            f'href="/Match_Hub?{escape(query)}" target="_self" '
             f'aria-label="Open {escape(fixture)} match details">{body}'
             f'<div class="cm-mobile-bracket-open">Tap for match details →</div></a>',
-            unsafe_allow_html=True,
         )
     else:
-        st.markdown(
+        st.html(
             f'<div class="cm-mobile-bracket-card {escape(_card_class(row))}">{body}'
             '<div class="cm-mobile-bracket-unavailable">Match details will appear when the official fixture ID is published.</div></div>',
-            unsafe_allow_html=True,
         )
 
 
@@ -351,7 +349,7 @@ def _render_confirmed_matches(source: pd.DataFrame, stage_name: str, limit: int 
 
 
 def render_stage_bracket_view(data: dict) -> None:
-    st.markdown(MOBILE_CARD_STYLES, unsafe_allow_html=True)
+    st.html(MOBILE_CARD_STYLES)
     st.markdown("### Stage view")
     st.caption(
         "Mobile-friendly view. Tap an official match card anywhere to open it. Finished matches state whether the win came in regular time, extra time or a penalty shootout."
