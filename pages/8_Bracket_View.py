@@ -1,7 +1,7 @@
 import streamlit as st
 
-from features.bracket_stage_view import render_stage_bracket_view
 from features.clickable_bracket_view import render_dynamic_bracket_view
+from features.mobile_bracket_stage import render_stage_bracket_view
 from features.product_ui import inject_styles, render_project_footer, render_specialist_sidebar
 from features.tournament_data import DATA_DIR
 from features.tournament_path_data import load_tournament_path_data, tournament_summary
@@ -21,7 +21,7 @@ st.markdown(
     <div class="cm-hero">
         <div class="cm-eyebrow">CupMarket 2026</div>
         <h1>Tournament bracket</h1>
-        <p>Track every knockout result, see who advanced and follow each path towards the World Cup final.</p>
+        <p>Track every knockout result, see how each match was decided and open the match details from either bracket view.</p>
     </div>
     ''',
     unsafe_allow_html=True,
@@ -36,8 +36,8 @@ metrics[2].metric("Finished", summary["completed_knockout_matches"])
 metrics[3].metric("Live", summary["live_knockout_matches"])
 
 st.info(
-    "Use Stage view for a compact mobile list. Full bracket shows the connected tournament path "
-    "with country flags, scores and clickable match cards."
+    "Stage view is built for phones and gives every official match a full-width Open button. "
+    "Full bracket supports taps and clicks, and both views identify regular-time, extra-time and penalty-shootout wins."
 )
 stage_tab, full_tab = st.tabs(["Stage view", "Full bracket"])
 with stage_tab:
