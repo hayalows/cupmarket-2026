@@ -36,7 +36,7 @@ metrics[2].metric("Finished", summary["completed_knockout_matches"])
 metrics[3].metric("Live", summary["live_knockout_matches"])
 
 st.info(
-    "Stage view is built for phones and gives every official match a full-width Open button. "
+    "Stage view is built for phones and lets you tap anywhere on an official match card. "
     "Full bracket supports taps and clicks, and both views identify regular-time, extra-time and penalty-shootout wins."
 )
 stage_tab, full_tab = st.tabs(["Stage view", "Full bracket"])
