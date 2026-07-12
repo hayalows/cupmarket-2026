@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from html import escape
 from typing import Any
+from urllib.parse import urlencode
 
 import pandas as pd
 import streamlit as st
@@ -17,6 +19,98 @@ from features.tournament_path_data import round_of_16_build
 ACTIVE_STATUSES = {"IN_PLAY", "LIVE", "PAUSED", "SUSPENDED"}
 FINISHED_STATUSES = {"FINISHED", "AWARDED"}
 UPCOMING_STATUSES = {"TIMED", "SCHEDULED"}
+
+MOBILE_CARD_STYLES = """
+<style>
+a.cm-mobile-bracket-card,
+div.cm-mobile-bracket-card {
+  display: block;
+  width: 100%;
+  margin: 0 0 12px 0;
+  padding: 15px 16px;
+  border: 1px solid rgba(124, 131, 255, .35);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(29, 37, 64, .98), rgba(23, 29, 51, .98));
+  color: #f3f5fb !important;
+  text-decoration: none !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, .16);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(124, 131, 255, .22);
+  transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+}
+a.cm-mobile-bracket-card:active,
+a.cm-mobile-bracket-card:focus-visible,
+a.cm-mobile-bracket-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(124, 131, 255, .95);
+  box-shadow: 0 0 0 3px rgba(124, 131, 255, .12), 0 15px 30px rgba(0, 0, 0, .22);
+  outline: none;
+}
+.cm-mobile-bracket-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+  color: #aeb7cc;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.cm-mobile-bracket-badge {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(117, 223, 182, .12);
+  color: #75dfb6;
+  font-size: 10px;
+  white-space: nowrap;
+}
+.cm-mobile-bracket-card.penalties .cm-mobile-bracket-badge {
+  background: rgba(216, 180, 254, .12);
+  color: #d8b4fe;
+}
+.cm-mobile-bracket-card.extra-time .cm-mobile-bracket-badge {
+  background: rgba(250, 204, 107, .12);
+  color: #facc6b;
+}
+.cm-mobile-bracket-card.live .cm-mobile-bracket-badge {
+  background: rgba(255, 107, 125, .12);
+  color: #ff9aa7;
+}
+.cm-mobile-bracket-fixture {
+  margin-bottom: 8px;
+  color: #ffffff;
+  font-size: clamp(18px, 5vw, 23px);
+  font-weight: 850;
+  line-height: 1.22;
+}
+.cm-mobile-bracket-decision {
+  color: #dfe5f2;
+  font-size: 14px;
+  line-height: 1.42;
+}
+.cm-mobile-bracket-advanced {
+  margin-top: 6px;
+  color: #9be5c8;
+  font-size: 12px;
+  font-weight: 750;
+}
+.cm-mobile-bracket-open {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, .08);
+  color: #b9beff;
+  font-size: 12px;
+  font-weight: 800;
+}
+.cm-mobile-bracket-unavailable {
+  margin-top: 10px;
+  color: #aeb7cc;
+  font-size: 11px;
+}
+</style>
+"""
 
 
 def _clean_team(value: Any) -> str:
@@ -42,11 +136,26 @@ def _first_number(row: pd.Series, fields: tuple[str, ...]) -> int | None:
     return None
 
 
+def _first_text(row: pd.Series, fields: tuple[str, ...]) -> str:
+    for field in fields:
+        value = row.get(field)
+        try:
+            if value is None or pd.isna(value):
+                continue
+        except (TypeError, ValueError):
+            pass
+        text = str(value).strip()
+        if text and text.lower() not in {"nan", "none", "null"}:
+            return text
+    return ""
+
+
 def _logical_match_number(row: pd.Series, fallback: Any = None) -> int | None:
-    return _first_number(
+    value = _first_number(
         row,
         ("logical_match_number", "bracket_match_number", "match_number"),
-    ) or _number(fallback)
+    )
+    return value if value is not None else _number(fallback)
 
 
 def _api_match_id(row: pd.Series) -> int | None:
@@ -54,7 +163,7 @@ def _api_match_id(row: pd.Series) -> int | None:
 
 
 def _decision_method(row: pd.Series) -> str:
-    raw = str(row.get("decision_method") or row.get("duration") or "").upper()
+    raw = _first_text(row, ("decision_method", "duration")).upper()
     home_penalties = _first_number(row, ("home_penalties", "home_score_penalties"))
     away_penalties = _first_number(row, ("away_penalties", "away_score_penalties"))
     if "PENALT" in raw or (home_penalties is not None and away_penalties is not None):
@@ -94,7 +203,7 @@ def _score_text(row: pd.Series) -> str:
 
 
 def _status_key(row: pd.Series) -> str:
-    raw = str(row.get("status") or "").strip().upper()
+    raw = _first_text(row, ("status",)).upper()
     if raw in ACTIVE_STATUSES | FINISHED_STATUSES | UPCOMING_STATUSES:
         return raw
     advancing = _clean_team(row.get("advancing_team"))
@@ -155,18 +264,23 @@ def _decision_text(row: pd.Series) -> str:
     )
 
 
-def _open_match(match_id: int, view: str) -> None:
-    st.session_state["cupmarket_match_hub_view"] = view
-    st.session_state["cupmarket_match_hub_match_id"] = int(match_id)
-    st.switch_page("pages/4_Match_Hub.py")
-
-
-def _button_label(view: str) -> str:
+def _badge_text(row: pd.Series) -> str:
+    status = _status_key(row)
+    if status in ACTIVE_STATUSES:
+        return "Live"
+    if status not in FINISHED_STATUSES:
+        return "Upcoming"
     return {
-        "Live": "Open live match",
-        "Results": "Open result details",
-        "Upcoming": "Open fixture",
-    }.get(view, "Open match")
+        "penalties": "Penalties",
+        "extra_time": "Extra time",
+        "regular_time": "Regular time",
+    }[_decision_method(row)]
+
+
+def _card_class(row: pd.Series) -> str:
+    if _status_key(row) in ACTIVE_STATUSES:
+        return "live"
+    return _decision_method(row).replace("_", "-")
 
 
 def _render_official_match(row: pd.Series, stage_name: str, fallback: Any) -> None:
@@ -176,29 +290,38 @@ def _render_official_match(row: pd.Series, stage_name: str, fallback: Any) -> No
     api_match_id = _api_match_id(row)
     view = _target_view(row)
     advancing = _clean_team(row.get("advancing_team"))
+    fixture = f"{home} {_score_text(row)} {away}"
+    decision = _decision_text(row)
+    advanced_html = (
+        f'<div class="cm-mobile-bracket-advanced">Advanced: {escape(advancing)}</div>'
+        if advancing != "TBD" and _status_key(row) in FINISHED_STATUSES
+        else ""
+    )
+    top = (
+        f'<div class="cm-mobile-bracket-top"><span>{escape(stage_name)} · Match '
+        f'{escape(str(number if number is not None else "—"))}</span>'
+        f'<span class="cm-mobile-bracket-badge">{escape(_badge_text(row))}</span></div>'
+    )
+    body = (
+        f'{top}<div class="cm-mobile-bracket-fixture">{escape(fixture)}</div>'
+        f'<div class="cm-mobile-bracket-decision">{escape(decision)}</div>{advanced_html}'
+    )
 
-    with st.container(border=True):
-        st.caption(f"{stage_name} · Match {number if number is not None else '—'}")
-        st.markdown(f"### {home} {_score_text(row)} {away}")
-        decision = _decision_text(row)
-        if _decision_method(row) == "penalties" and _status_key(row) in FINISHED_STATUSES:
-            st.info(decision)
-        elif _decision_method(row) == "extra_time" and _status_key(row) in FINISHED_STATUSES:
-            st.warning(decision)
-        else:
-            st.write(decision)
-        if advancing != "TBD" and _status_key(row) in FINISHED_STATUSES:
-            st.caption(f"Advanced: {advancing}")
-        if api_match_id is not None:
-            if st.button(
-                _button_label(view),
-                key=f"mobile_bracket_open_{number}_{api_match_id}",
-                use_container_width=True,
-                type="primary" if view == "Live" else "secondary",
-            ):
-                _open_match(api_match_id, view)
-        else:
-            st.caption("Match details will become available when the official fixture ID is published.")
+    if api_match_id is not None:
+        query = urlencode({"view": view, "match_id": int(api_match_id)})
+        st.markdown(
+            f'<a class="cm-mobile-bracket-card {escape(_card_class(row))}" '
+            f'href="/4_Match_Hub?{escape(query)}" target="_self" '
+            f'aria-label="Open {escape(fixture)} match details">{body}'
+            f'<div class="cm-mobile-bracket-open">Tap for match details →</div></a>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            f'<div class="cm-mobile-bracket-card {escape(_card_class(row))}">{body}'
+            '<div class="cm-mobile-bracket-unavailable">Match details will appear when the official fixture ID is published.</div></div>',
+            unsafe_allow_html=True,
+        )
 
 
 def _render_confirmed_matches(source: pd.DataFrame, stage_name: str, limit: int = 16) -> bool:
@@ -228,9 +351,10 @@ def _render_confirmed_matches(source: pd.DataFrame, stage_name: str, limit: int 
 
 
 def render_stage_bracket_view(data: dict) -> None:
+    st.markdown(MOBILE_CARD_STYLES, unsafe_allow_html=True)
     st.markdown("### Stage view")
     st.caption(
-        "Mobile-friendly view. Every official match has a full-width button, and finished matches state whether the win came in regular time, extra time or a penalty shootout."
+        "Mobile-friendly view. Tap an official match card anywhere to open it. Finished matches state whether the win came in regular time, extra time or a penalty shootout."
     )
 
     mode = st.radio(
