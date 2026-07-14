@@ -3,7 +3,7 @@
   "baseline": {},
   "comparison_sample_size": 0,
   "decision": "collecting_evidence",
-  "generated_at_utc": "2026-07-13T23:15:39.867279+00:00",
+  "generated_at_utc": "2026-07-14T00:54:33.892446+00:00",
   "message": "More matched pre-match baseline forecasts are needed before adaptive predictions can be judged.",
   "minimum_sample_size": 20,
   "schema_version": 1,
