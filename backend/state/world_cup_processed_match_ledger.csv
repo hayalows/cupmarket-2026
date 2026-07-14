@@ -49,8 +49,8 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537406,2026-06-24 02:00:00+00:00,GROUP_STAGE,Colombia,Congo DR,1,0,2026-06-24 05:46:07.004463+00:00,phase7_automated_group_stage_v1
 537338,2026-06-24 19:00:00+00:00,GROUP_STAGE,Bosnia-Herzegovina,Qatar,3,1,2026-06-24 21:55:21.112464+00:00,phase7_automated_group_stage_v1
 537337,2026-06-24 19:00:00+00:00,GROUP_STAGE,Switzerland,Canada,2,1,2026-06-24 21:55:21.112438+00:00,phase7_automated_group_stage_v1
-537344,2026-06-24 22:00:00+00:00,GROUP_STAGE,Morocco,Haiti,4,2,2026-06-25 04:07:44.949564+00:00,phase7_automated_group_stage_v1
 537343,2026-06-24 22:00:00+00:00,GROUP_STAGE,Scotland,Brazil,0,3,2026-06-25 04:07:44.949538+00:00,phase7_automated_group_stage_v1
+537344,2026-06-24 22:00:00+00:00,GROUP_STAGE,Morocco,Haiti,4,2,2026-06-25 04:07:44.949564+00:00,phase7_automated_group_stage_v1
 537332,2026-06-25 01:00:00+00:00,GROUP_STAGE,South Africa,South Korea,1,0,2026-06-25 04:07:44.949621+00:00,phase7_automated_group_stage_v1
 537331,2026-06-25 01:00:00+00:00,GROUP_STAGE,Czechia,Mexico,0,3,2026-06-25 04:07:44.949606+00:00,phase7_automated_group_stage_v1
 537355,2026-06-25 20:00:00+00:00,GROUP_STAGE,Ecuador,Germany,2,1,2026-06-25 22:11:35.054353+00:00,phase7_automated_group_stage_v1
@@ -61,8 +61,8 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537350,2026-06-26 02:00:00+00:00,GROUP_STAGE,Paraguay,Australia,0,0,2026-06-26 06:59:14.818312+00:00,phase7_automated_group_stage_v1
 537395,2026-06-26 19:00:00+00:00,GROUP_STAGE,Norway,France,1,4,2026-06-26 21:42:53.113241+00:00,phase7_automated_group_stage_v1
 537396,2026-06-26 19:00:00+00:00,GROUP_STAGE,Senegal,Iraq,5,0,2026-06-26 21:42:53.113270+00:00,phase7_automated_group_stage_v1
-537373,2026-06-27 00:00:00+00:00,GROUP_STAGE,Uruguay,Spain,0,1,2026-06-27 05:30:17.771770+00:00,phase7_automated_group_stage_v1
 537374,2026-06-27 00:00:00+00:00,GROUP_STAGE,Cape Verde Islands,Saudi Arabia,0,0,2026-06-27 05:30:17.771796+00:00,phase7_automated_group_stage_v1
+537373,2026-06-27 00:00:00+00:00,GROUP_STAGE,Uruguay,Spain,0,1,2026-06-27 05:30:17.771770+00:00,phase7_automated_group_stage_v1
 537368,2026-06-27 03:00:00+00:00,GROUP_STAGE,Egypt,Iran,1,1,2026-06-27 05:30:17.771821+00:00,phase7_automated_group_stage_v1
 537367,2026-06-27 03:00:00+00:00,GROUP_STAGE,New Zealand,Belgium,1,5,2026-06-27 05:30:17.771811+00:00,phase7_automated_group_stage_v1
 537413,2026-06-27 21:00:00+00:00,GROUP_STAGE,Panama,England,0,2,2026-06-27 23:05:38.932196+00:00,phase9b_adaptive_prediction_v1
@@ -99,3 +99,4 @@ match_id,utc_date,stage,home_team,away_team,home_score,away_score,processed_at_u
 537384,2026-07-10 19:00:00+00:00,QUARTER_FINALS,Spain,Belgium,2,1,2026-07-10 21:43:25.873341+00:00,phase9b_adaptive_prediction_v1
 537385,2026-07-11 21:00:00+00:00,QUARTER_FINALS,Norway,England,1,2,2026-07-12 04:01:54.277595+00:00,phase9b_adaptive_prediction_v1
 537386,2026-07-12 01:00:00+00:00,QUARTER_FINALS,Argentina,Switzerland,3,1,2026-07-12 04:01:54.277623+00:00,phase9b_adaptive_prediction_v1
+537387,2026-07-14 19:00:00+00:00,SEMI_FINALS,France,Spain,0,2,2026-07-14 21:09:44.449034+00:00,phase9b_adaptive_prediction_v1
