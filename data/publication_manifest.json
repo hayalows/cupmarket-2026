@@ -14,7 +14,7 @@
       "brier": 0.0,
       "log_loss": 0.0
     },
-    "generated_at_utc": "2026-07-15T22:17:03.356943+00:00",
+    "generated_at_utc": "2026-07-15T23:17:02.515234+00:00",
     "message": "More matched pre-match baseline forecasts are needed before adaptive predictions can be judged.",
     "minimum_sample_size": 20,
     "schema_version": 1,
@@ -26,21 +26,21 @@
   "archive": {
     "champion": null,
     "final_completed": false,
-    "history_snapshot_count": 168,
+    "history_snapshot_count": 169,
     "status": "collecting"
   },
-  "generated_at_utc": "2026-07-15T22:17:03.363933+00:00",
+  "generated_at_utc": "2026-07-15T23:17:02.521888+00:00",
   "publication": {
     "active_match_deferral": false,
     "api": {
       "http_status": 200,
       "matches_returned": 104,
-      "request_counter_reset": "60",
-      "requests_remaining": "9"
+      "request_counter_reset": "58",
+      "requests_remaining": "8"
     },
     "bracket_mode": "official_api_locked_knockout_progression",
-    "last_checked_at_utc": "2026-07-15T22:17:02.402164+00:00",
-    "model_generated_at_utc": "2026-07-15T22:17:02.402164+00:00",
+    "last_checked_at_utc": "2026-07-15T23:17:01.497712+00:00",
+    "model_generated_at_utc": "2026-07-15T23:17:01.497712+00:00",
     "model_version": "phase6_knockout_progression_v1",
     "new_finished_matches": 0,
     "status": "updated"
