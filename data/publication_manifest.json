@@ -1,11 +1,21 @@
 {
   "adaptive_guardrail": {
-    "adaptive": {},
-    "baseline": {},
-    "comparison_sample_size": 0,
-    "decision": "collecting_evidence",
-    "generated_at_utc": "2026-07-16T23:07:03.335045+00:00",
-    "message": "More matched pre-match baseline forecasts are needed before adaptive predictions can be judged.",
+    "adaptive": {
+      "brier": 0.38565842116098964,
+      "log_loss": 0.6991534616423968
+    },
+    "baseline": {
+      "brier": 0.38129850083632194,
+      "log_loss": 0.6928331676593863
+    },
+    "comparison_sample_size": 26,
+    "decision": "monitor",
+    "delta": {
+      "brier": 0.004359920324667699,
+      "log_loss": 0.006320293983010483
+    },
+    "generated_at_utc": "2026-07-16T23:15:20.315268+00:00",
+    "message": "Adaptive probabilities remain inside the rollback guardrail, but the next completed forecasts should be watched closely.",
     "minimum_sample_size": 20,
     "schema_version": 1,
     "thresholds": {
@@ -16,21 +26,21 @@
   "archive": {
     "champion": null,
     "final_completed": false,
-    "history_snapshot_count": 171,
+    "history_snapshot_count": 173,
     "status": "collecting"
   },
-  "generated_at_utc": "2026-07-16T23:07:03.341756+00:00",
+  "generated_at_utc": "2026-07-16T23:15:20.323588+00:00",
   "publication": {
     "active_match_deferral": false,
     "api": {
       "http_status": 200,
       "matches_returned": 104,
-      "request_counter_reset": "60",
+      "request_counter_reset": "39",
       "requests_remaining": "9"
     },
     "bracket_mode": "official_api_locked_knockout_progression",
-    "last_checked_at_utc": "2026-07-16T23:07:02.368161+00:00",
-    "model_generated_at_utc": "2026-07-16T23:07:02.368161+00:00",
+    "last_checked_at_utc": "2026-07-16T23:15:19.374840+00:00",
+    "model_generated_at_utc": "2026-07-16T23:15:19.374840+00:00",
     "model_version": "phase6_knockout_progression_v1",
     "new_finished_matches": 0,
     "status": "updated"
