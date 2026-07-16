@@ -361,7 +361,7 @@ def _render_path_message(
     if "Chance if qualified" in display.columns:
         display["Chance if qualified"] = display["Chance if qualified"].map(_percent)
     st.markdown("#### Likely Round-of-32 opponents")
-    st.dataframe(display, hide_index=True, use_container_width=True)
+    st.dataframe(display, hide_index=True, width="stretch")
     st.caption(
         "Conditional probability answers: if this country qualifies, how often does each "
         "opponent appear in its Round-of-32 fixture?"
@@ -401,7 +401,7 @@ def _render_stage_probability_ladder(price: pd.Series, team: str) -> None:
         margin=dict(l=16, r=16, t=52, b=16),
         height=360,
     )
-    st.plotly_chart(figure, use_container_width=True)
+    st.plotly_chart(figure, width="stretch")
 
 
 def _render_market_reaction(
@@ -571,7 +571,7 @@ def _render_market_reaction(
     )
     figure.update_xaxes(title=None, gridcolor="#edf0f5")
     figure.update_yaxes(title="CupMarket price", gridcolor="#edf0f5")
-    st.plotly_chart(figure, use_container_width=True)
+    st.plotly_chart(figure, width="stretch")
 
 
 def _render_fixture_cards(filtered: pd.DataFrame) -> None:
@@ -704,7 +704,7 @@ def _render_tournament_fixtures(data: dict) -> None:
         display["Decision"] = display["Decision"].map(
             lambda value: str(value).replace("_", " ").title() if pd.notna(value) else "—"
         )
-    st.dataframe(display, hide_index=True, use_container_width=True)
+    st.dataframe(display, hide_index=True, width="stretch")
 
 
 def _render_tournament_forecast(data: dict) -> None:
@@ -727,7 +727,7 @@ def _render_tournament_forecast(data: dict) -> None:
             .rename_axis("Path state")
             .reset_index(name="Countries")
         )
-        st.dataframe(status_counts, hide_index=True, use_container_width=True)
+        st.dataframe(status_counts, hide_index=True, width="stretch")
 
     if not isinstance(prices, pd.DataFrame) or prices.empty:
         return
@@ -763,7 +763,7 @@ def _render_tournament_forecast(data: dict) -> None:
         if column != "Country":
             forecast[column] = forecast[column].map(_percent)
     st.markdown("#### Strongest future paths right now")
-    st.dataframe(forecast, hide_index=True, use_container_width=True)
+    st.dataframe(forecast, hide_index=True, width="stretch")
 
     if isinstance(opponents, pd.DataFrame) and not opponents.empty:
         st.caption(
@@ -886,7 +886,7 @@ def _render_country_page_v2() -> None:
         if fixture_display.empty:
             st.info("No confirmed fixture is available for this country yet.")
         else:
-            st.dataframe(fixture_display, hide_index=True, use_container_width=True)
+            st.dataframe(fixture_display, hide_index=True, width="stretch")
         st.caption("This table contains only the selected country's fixtures.")
 
     render_official_data_caption(data["prices"], label="Country market")

@@ -30,7 +30,7 @@ st.markdown(
 )
 
 st.info("Open Analysis Lab for the merged analytics and insights workspace.")
-if st.button("Open Analysis Lab", type="primary", use_container_width=True):
+if st.button("Open Analysis Lab", type="primary", width="stretch"):
     st.switch_page("pages/11_Tournament_Insights.py")
 
 render_project_footer()

@@ -424,7 +424,7 @@ def render_country_learning(team: str, ratings: pd.DataFrame) -> None:
                 }
             ]
         )
-        st.dataframe(detail, hide_index=True, use_container_width=True)
+        st.dataframe(detail, hide_index=True, width="stretch")
         st.caption(
             "Phase 9B uses this audited row only through capped, "
             "confidence-weighted prediction Elo adjustments."
@@ -491,22 +491,22 @@ def render_adaptive_ratings_insights(ratings: pd.DataFrame) -> None:
         st.dataframe(
             ratings.sort_values("match_signal", ascending=False)[columns].head(16),
             hide_index=True,
-            use_container_width=True,
+            width="stretch",
         )
     with tab2:
         st.dataframe(
             ratings.sort_values("rating_change", ascending=False)[columns].head(16),
             hide_index=True,
-            use_container_width=True,
+            width="stretch",
         )
     with tab3:
         st.dataframe(
             ratings.sort_values("rating_change", ascending=True)[columns].head(16),
             hide_index=True,
-            use_container_width=True,
+            width="stretch",
         )
     with tab4:
-        st.dataframe(ratings[columns], hide_index=True, use_container_width=True)
+        st.dataframe(ratings[columns], hide_index=True, width="stretch")
     with st.expander("How Phase 9B uses this", expanded=False):
         st.write(
             "Future predictions still come from the trained goal models and live Elo. "

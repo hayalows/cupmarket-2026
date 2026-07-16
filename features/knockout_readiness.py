@@ -93,7 +93,7 @@ def render_knockout_readiness(prices: pd.DataFrame, predictions: pd.DataFrame, p
         f"{'yes' if adaptive_enabled else 'no'} - "
         f"{adaptive_model} - {adaptive_rows} rows with adaptive columns"
     )
-    st.dataframe(checks, hide_index=True, use_container_width=True)
+    st.dataframe(checks, hide_index=True, width="stretch")
 
     if knockout_predictions.empty:
         st.warning(

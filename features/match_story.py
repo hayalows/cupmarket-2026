@@ -176,6 +176,6 @@ def render_match_story(prediction_ledger: pd.DataFrame, market_movements: pd.Dat
                 ]
                 if c in focus.columns
             ]
-            st.dataframe(focus[keep], hide_index=True, use_container_width=True)
+            st.dataframe(focus[keep], hide_index=True, width="stretch")
         else:
             st.caption("No direct market movement row found for these teams in the movement archive.")

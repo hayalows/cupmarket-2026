@@ -267,7 +267,7 @@ def _render_clock_debug(live: dict[str, Any]) -> None:
                 }
             ]
         )
-        st.dataframe(rows, use_container_width=True, hide_index=True)
+        st.dataframe(rows, width="stretch", hide_index=True)
 
 
 def _market_row(prices: pd.DataFrame, team: str) -> pd.Series:
@@ -319,7 +319,7 @@ def _render_table(rows: list[dict[str, Any]]) -> None:
             "points": "Pts",
         }
     )
-    st.dataframe(frame, use_container_width=True, hide_index=True)
+    st.dataframe(frame, width="stretch", hide_index=True)
 
 
 def _render_score_cards(active_matches: pd.DataFrame) -> None:
@@ -531,7 +531,7 @@ def _render_knockout_live_room(
                 scorelines.rename(
                     columns={"score": "Final score", "probability": "Probability"}
                 ),
-                use_container_width=True,
+                width="stretch",
                 hide_index=True,
             )
         st.caption(live["method_note"] + " These are estimates, not guarantees.")
@@ -550,7 +550,7 @@ def _render_knockout_live_room(
             "then follows normal time, extra time and penalties if needed."
         )
         method_rows = _method_probability_rows(live)
-        st.dataframe(method_rows, use_container_width=True, hide_index=True)
+        st.dataframe(method_rows, width="stretch", hide_index=True)
         st.metric(
             f"{home_team} penalty edge",
             pct(live.get("penalty_home_probability")),
@@ -749,7 +749,7 @@ def _render_live_room(
                 scorelines.rename(
                     columns={"score": "Final score", "probability": "Probability"}
                 ),
-                use_container_width=True,
+                width="stretch",
                 hide_index=True,
             )
         st.caption(result["method_note"] + " These are estimates, not guarantees.")
@@ -812,7 +812,7 @@ def _render_live_room(
                 }
             )
             st.markdown("##### What the next goal could change")
-            st.dataframe(impact_frame, use_container_width=True, hide_index=True)
+            st.dataframe(impact_frame, width="stretch", hide_index=True)
 
     with market_tab:
         st.markdown("#### What this could mean for the country market")
@@ -954,7 +954,7 @@ def _render_live_entries(matches: pd.DataFrame) -> None:
             if st.button(
                 "Open live match room",
                 key=f"open_live_match_{int(series['match_id'])}",
-                use_container_width=True,
+                width="stretch",
             ):
                 st.session_state["cupmarket_selected_match_id"] = int(
                     series["match_id"]
@@ -1012,8 +1012,10 @@ def render_live_match_centre(
     filter_key = "cupmarket_match_status_filter"
     if st.session_state.pop("cupmarket_reset_status_filter", False):
         st.session_state[filter_key] = statuses
+    elif filter_key not in st.session_state:
+        st.session_state[filter_key] = statuses
     selected_statuses = st.multiselect(
-        "Show matches", statuses, default=statuses, key=filter_key
+        "Show matches", statuses, key=filter_key
     )
     filtered = matches[matches["status"].isin(selected_statuses)].copy()
     selectable = _ordered_selectable(filtered)

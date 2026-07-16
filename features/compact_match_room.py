@@ -141,7 +141,7 @@ def _render_adaptive_layer_note(match: pd.Series, prediction: pd.Series) -> None
                 ]
             ),
             hide_index=True,
-            use_container_width=True,
+            width="stretch",
         )
         if {
             "baseline_prob_home_win",
@@ -188,7 +188,7 @@ def _render_adaptive_layer_note(match: pd.Series, prediction: pd.Series) -> None
                     ]
                 ),
                 hide_index=True,
-                use_container_width=True,
+                width="stretch",
             )
         st.caption(
             f"Adaptive prediction enabled: {'yes' if _adaptive_enabled(prediction) else 'no'} "
@@ -291,7 +291,7 @@ def _render_saved_forecast(
             if st.button(
                 button_label,
                 key=f"compact_calculate_match_impact_{selected_match_id}",
-                use_container_width=True,
+                width="stretch",
             ):
                 strength = (
                     dict(zip(prices["team"], prices["cupmarket_price"]))
@@ -346,19 +346,20 @@ def render_compact_match_room(
     filter_key = "cupmarket_match_status_filter"
     if st.session_state.pop("cupmarket_reset_status_filter", False):
         st.session_state[filter_key] = statuses
+    elif filter_key not in st.session_state:
+        st.session_state[filter_key] = statuses
 
-    with st.popover("Filter or refresh matches", use_container_width=True):
+    with st.popover("Filter or refresh matches", width="stretch"):
         selected_statuses = st.multiselect(
             "Match states",
             statuses,
-            default=statuses,
             key=filter_key,
         )
         st.caption("Live matches are always ordered first, followed by upcoming fixtures.")
         if st.button(
             "Refresh live scores",
             key="compact_match_refresh",
-            use_container_width=True,
+            width="stretch",
             help="Clears the 60-second score cache and requests the latest match states.",
         ):
             st.cache_data.clear()

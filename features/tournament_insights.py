@@ -167,7 +167,7 @@ def _render_table(frame: pd.DataFrame, columns: list[str], labels: dict[str, str
             else:
                 display[column] = display[column].map(lambda value: _number(value))
     display = display.rename(columns=labels)
-    st.dataframe(display, hide_index=True, use_container_width=True)
+    st.dataframe(display, hide_index=True, width="stretch")
 
 
 def _render_stage_ladders(prices: pd.DataFrame) -> None:
@@ -182,13 +182,13 @@ def _render_stage_ladders(prices: pd.DataFrame) -> None:
         if ladder.empty:
             st.caption("Stage ladder data is not available yet.")
         else:
-            st.dataframe(ladder, hide_index=True, use_container_width=True)
+            st.dataframe(ladder, hide_index=True, width="stretch")
     with continent_tab:
         continents = tournament_stage.continent_ladder(prices)
         if continents.empty:
             st.caption("Continent ladder data is not available yet.")
         else:
-            st.dataframe(continents, hide_index=True, use_container_width=True)
+            st.dataframe(continents, hide_index=True, width="stretch")
 
 
 def _render_focus_movers(

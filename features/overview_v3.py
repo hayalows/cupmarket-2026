@@ -569,19 +569,19 @@ def _render_stage_decisions(selected_stage: str, fixtures: pd.DataFrame) -> None
         if advanced.empty:
             st.write("No team has advanced from this round yet.")
         else:
-            st.dataframe(advanced, hide_index=True, use_container_width=True)
+            st.dataframe(advanced, hide_index=True, width="stretch")
     with columns[1]:
         st.caption("Out this round")
         if eliminated.empty:
             st.write("No team has been eliminated in this round yet.")
         else:
-            st.dataframe(eliminated, hide_index=True, use_container_width=True)
+            st.dataframe(eliminated, hide_index=True, width="stretch")
     with columns[2]:
         st.caption("Still to play")
         if pending.empty:
             st.write("No pending fixture with two known teams.")
         else:
-            st.dataframe(pending.head(8), hide_index=True, use_container_width=True)
+            st.dataframe(pending.head(8), hide_index=True, width="stretch")
 
 
 def _render_round_of_16_building(progress: pd.DataFrame) -> None:
@@ -602,7 +602,7 @@ def _render_round_of_16_building(progress: pd.DataFrame) -> None:
         }
     )
     display["Kickoff"] = display["Kickoff"].map(_kickoff)
-    st.dataframe(display, hide_index=True, use_container_width=True)
+    st.dataframe(display, hide_index=True, width="stretch")
 
 
 def render_stage_explorer(matches: pd.DataFrame, prices: pd.DataFrame) -> None:
@@ -660,13 +660,13 @@ def render_stage_explorer(matches: pd.DataFrame, prices: pd.DataFrame) -> None:
 
     action_cols = st.columns(3)
     with action_cols[0]:
-        if st.button("View matches", key=f"stage_explorer_matches_{selected_stage}", use_container_width=True):
+        if st.button("View matches", key=f"stage_explorer_matches_{selected_stage}", width="stretch"):
             _go_to_matches(focus_view, focus_match_id)
     with action_cols[1]:
-        if st.button("View bracket", key=f"stage_explorer_bracket_{selected_stage}", use_container_width=True):
+        if st.button("View bracket", key=f"stage_explorer_bracket_{selected_stage}", width="stretch"):
             _go_to_bracket(default_team)
     with action_cols[2]:
-        if st.button("View countries", key=f"stage_explorer_paths_{selected_stage}", use_container_width=True):
+        if st.button("View countries", key=f"stage_explorer_paths_{selected_stage}", width="stretch"):
             _go_to_path(default_team)
 
     fixture_tab, country_tab = st.tabs(["Fixtures", "Countries"])
@@ -678,13 +678,13 @@ def render_stage_explorer(matches: pd.DataFrame, prices: pd.DataFrame) -> None:
             st.dataframe(
                 fixture_table[["Status", "Fixture", "Score", "Outcome", "Kickoff"]],
                 hide_index=True,
-                use_container_width=True,
+                width="stretch",
             )
     with country_tab:
         if country_table.empty:
             st.caption("Country data is not available for this round yet.")
         else:
-            st.dataframe(country_table, hide_index=True, use_container_width=True)
+            st.dataframe(country_table, hide_index=True, width="stretch")
 
 def _next_match_summary(matches: pd.DataFrame) -> pd.Series:
     if matches.empty or "status" not in matches.columns:
@@ -728,14 +728,14 @@ def render_tournament_state(matches: pd.DataFrame, prices: pd.DataFrame) -> None
         )
         action_cols = st.columns(3)
         with action_cols[0]:
-            if st.button("Open match details", key="pulse_latest_match_detail", use_container_width=True):
+            if st.button("Open match details", key="pulse_latest_match_detail", width="stretch"):
                 match_id = pd.to_numeric(latest.get("match_id"), errors="coerce")
                 _go_to_matches("Results", int(match_id) if pd.notna(match_id) else None)
         with action_cols[1]:
-            if st.button("Open advancing team", key="pulse_latest_advanced", use_container_width=True):
+            if st.button("Open advancing team", key="pulse_latest_advanced", width="stretch"):
                 _go_to_path(str(latest["Advanced"]))
         with action_cols[2]:
-            if st.button("Open eliminated team", key="pulse_latest_eliminated", use_container_width=True):
+            if st.button("Open eliminated team", key="pulse_latest_eliminated", width="stretch"):
                 _go_to_path(str(latest["Eliminated"]))
 
     table_cols = st.columns(2)
@@ -747,7 +747,7 @@ def render_tournament_state(matches: pd.DataFrame, prices: pd.DataFrame) -> None
             st.dataframe(
                 results[["Stage", "Result", "Advanced", "Eliminated"]].head(6),
                 hide_index=True,
-                use_container_width=True,
+                width="stretch",
             )
     with table_cols[1]:
         st.markdown("#### Eliminated teams")
@@ -757,7 +757,7 @@ def render_tournament_state(matches: pd.DataFrame, prices: pd.DataFrame) -> None
             st.dataframe(
                 eliminated.head(10),
                 hide_index=True,
-                use_container_width=True,
+                width="stretch",
             )
 
     if not alive.empty:
@@ -792,7 +792,7 @@ def render_tournament_state(matches: pd.DataFrame, prices: pd.DataFrame) -> None
                 display[column] = display[column].map(lambda value: f"{100 * _numeric(value):.1f}%")
         if "Price" in display.columns:
             display["Price"] = display["Price"].map(lambda value: f"{_numeric(value):.2f} CM")
-        st.dataframe(display, hide_index=True, use_container_width=True)
+        st.dataframe(display, hide_index=True, width="stretch")
 
 
 def render_overview_v3(matches: pd.DataFrame, prices: pd.DataFrame, metadata: dict) -> None:

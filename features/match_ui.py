@@ -259,7 +259,7 @@ def render_match_centre(
         }
     )
     with st.expander("Browse all fixtures", expanded=False):
-        st.dataframe(match_display, use_container_width=True, hide_index=True)
+        st.dataframe(match_display, width="stretch", hide_index=True)
 
     st.markdown("### Choose a match")
     st.caption("The detailed view below keeps the most useful information in one place.")
@@ -410,7 +410,7 @@ def render_match_centre(
     if scoreline_rows:
         st.dataframe(
             pd.DataFrame(scoreline_rows),
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
         )
 

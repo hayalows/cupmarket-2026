@@ -50,6 +50,10 @@ LOGICAL_NUMBERS = {
     "final": (104,),
 }
 FINAL_MATCH_NUMBER = 104
+MEDAL_FIXTURE_SOURCES = {
+    103: ("loser", (101, 102)),
+    104: ("winner", (101, 102)),
+}
 
 
 class KnockoutProcessingError(RuntimeError):
@@ -444,6 +448,63 @@ def build_actual_results(
             "away_penalties": getattr(match, "away_score_penalties", None),
         }
     return results
+
+
+def _is_resolved_team(value) -> bool:
+    if value is None or pd.isna(value):
+        return False
+    team = str(value).strip()
+    normalized = team.upper()
+    if normalized in {"", "TBD", "UNKNOWN", "NONE", "NAN", "N/A"}:
+        return False
+    return not normalized.startswith(("WINNER OF", "LOSER OF"))
+
+
+def hydrate_medal_fixture_teams(
+    matches: pd.DataFrame,
+    locked_bracket: pd.DataFrame,
+) -> pd.DataFrame:
+    """Fill third-place and final participants from completed semifinals.
+
+    Some provider snapshots keep a future fixture slot empty after its source match
+    has finished. The completed bracket result is authoritative for that slot. A
+    conflicting populated provider value is rejected instead of silently replaced.
+    """
+    if matches.empty:
+        return matches.copy()
+
+    output = matches.copy()
+    mapping = logical_match_map(output, locked_bracket)
+    row_by_logical = {
+        logical: index
+        for index, match_id in output["match_id"].items()
+        if (logical := mapping.get(int(match_id))) is not None
+    }
+    actual_results = build_actual_results(output, locked_bracket)
+
+    for target, (participant_key, sources) in MEDAL_FIXTURE_SOURCES.items():
+        target_index = row_by_logical.get(target)
+        if target_index is None:
+            continue
+        for column, source in zip(("home_team", "away_team"), sources):
+            source_result = actual_results.get(source)
+            if source_result is None:
+                continue
+            expected = source_result.get(participant_key)
+            if not _is_resolved_team(expected):
+                continue
+
+            current = output.at[target_index, column]
+            if _is_resolved_team(current):
+                if str(current).strip().casefold() != str(expected).strip().casefold():
+                    raise KnockoutProcessingError(
+                        f"Logical match {target} {column} is {current!r}, but the "
+                        f"completed bracket requires {expected!r}."
+                    )
+                continue
+            output.at[target_index, column] = expected
+
+    return output
 
 
 def build_knockout_progress(

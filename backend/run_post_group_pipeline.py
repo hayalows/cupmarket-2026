@@ -138,6 +138,7 @@ def run() -> dict:
 
     locked_path = update_pipeline.DATA_DIR / "official_round_32_bracket_locked.csv"
     locked_bracket = pd.read_csv(locked_path)
+    matches = knockout_stage.hydrate_medal_fixture_teams(matches, locked_bracket)
 
     active = knockout_stage.active_knockout_matches(matches)
     if not active.empty:

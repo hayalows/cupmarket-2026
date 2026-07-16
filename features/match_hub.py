@@ -265,7 +265,7 @@ def _render_results(matches: pd.DataFrame, static: dict[str, pd.DataFrame]) -> N
 
     countries = sorted(set(finished["home_team"]).union(set(finished["away_team"])))
     groups = _group_filter_options(finished)
-    with st.popover("Filter results", use_container_width=True):
+    with st.popover("Filter results", width="stretch"):
         country = st.selectbox("Country", ["All countries", *countries])
         group = st.selectbox("Group", ["All groups", *groups])
     filtered = finished.copy()
@@ -278,7 +278,7 @@ def _render_results(matches: pd.DataFrame, static: dict[str, pd.DataFrame]) -> N
     event = st.dataframe(
         review_table,
         hide_index=True,
-        use_container_width=True,
+        width="stretch",
         on_select="rerun",
         selection_mode="single-row",
         key="match_hub_results_table",
@@ -304,7 +304,7 @@ def _render_live(matches: pd.DataFrame) -> None:
     if live.empty:
         upcoming = matches[matches["status"].isin(UPCOMING_STATUSES)].copy().sort_values("utc_date")
         st.info("No match is live. The next fixture is ready in Upcoming.")
-        if not upcoming.empty and st.button("Open next fixture", type="primary", use_container_width=True):
+        if not upcoming.empty and st.button("Open next fixture", type="primary", width="stretch"):
             st.session_state["match_hub_view_control"] = "Upcoming"
             st.session_state["cupmarket_match_hub_match_id"] = int(upcoming.iloc[0]["match_id"])
             st.rerun()
@@ -317,7 +317,7 @@ def _render_live(matches: pd.DataFrame) -> None:
             st.markdown(f"**{match.get('home_team')} {_score(match)} {match.get('away_team')}**")
             context = _group(match.get("group"), match.get("stage"))
             st.caption(" · ".join(part for part in [clock, context] if part))
-            if st.button("Open live intelligence", key=f"hub_live_{int(match['match_id'])}", use_container_width=True):
+            if st.button("Open live intelligence", key=f"hub_live_{int(match['match_id'])}", width="stretch"):
                 _open_match_room(int(match["match_id"]))
 
 
@@ -346,7 +346,7 @@ def _render_upcoming(matches: pd.DataFrame, static: dict[str, pd.DataFrame]) -> 
     event = st.dataframe(
         display,
         hide_index=True,
-        use_container_width=True,
+        width="stretch",
         on_select="rerun",
         selection_mode="single-row",
         key="match_hub_upcoming_table",
@@ -373,7 +373,7 @@ def _render_upcoming(matches: pd.DataFrame, static: dict[str, pd.DataFrame]) -> 
         probabilities[1].metric("Draw", _pct(match.get("prob_draw")))
         probabilities[2].metric(f"{match.get('away_team')} win", _pct(match.get("prob_away_win")))
         st.caption(f"Most likely scoreline: {match.get('most_likely_score', '—')}")
-        if st.button("Open full match forecast", type="primary", use_container_width=True):
+        if st.button("Open full match forecast", type="primary", width="stretch"):
             _open_match_room(int(match["match_id"]))
 
 

@@ -54,7 +54,7 @@ def _render_group_stage_record(path_data: dict) -> None:
             "goals_against": "GA", "goal_difference": "GD", "points": "Pts",
         }
     )
-    st.dataframe(table, hide_index=True, use_container_width=True)
+    st.dataframe(table, hide_index=True, width="stretch")
 
     if paths.empty or "team" not in paths.columns:
         return
@@ -72,7 +72,7 @@ def _render_group_stage_record(path_data: dict) -> None:
     )
     if not saved.empty:
         with st.expander("Saved path publication", expanded=False):
-            st.dataframe(saved, hide_index=True, use_container_width=True)
+            st.dataframe(saved, hide_index=True, width="stretch")
 
 
 def render_tournament_archive() -> None:
@@ -136,7 +136,7 @@ def render_tournament_archive() -> None:
             leaderboard = leaderboard.sort_values("market_rank").head(10)
             leaderboard["prob_champion"] = pd.to_numeric(leaderboard["prob_champion"], errors="coerce").map(lambda value: f"{100 * value:.1f}%")
             leaderboard.columns = ["Country", "Expected settlement value", "Champion chance", "Market rank"]
-            st.dataframe(leaderboard, hide_index=True, use_container_width=True)
+            st.dataframe(leaderboard, hide_index=True, width="stretch")
 
     elif archive_view == "Market replay":
         if history.empty or not {"team", "generated_at_utc", "cupmarket_price"}.issubset(history.columns):
@@ -152,7 +152,7 @@ def render_tournament_archive() -> None:
             figure.update_layout(template="plotly_white", height=380, margin=dict(l=16, r=16, t=52, b=16))
             figure.update_xaxes(title=None)
             figure.update_yaxes(title="Expected settlement value")
-            st.plotly_chart(figure, use_container_width=True)
+            st.plotly_chart(figure, width="stretch")
 
     elif archive_view == "Group-stage record":
         _render_group_stage_record(path_data)

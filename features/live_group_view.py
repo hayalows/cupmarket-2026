@@ -34,7 +34,7 @@ def render_provisional(context: dict) -> None:
 
     st.dataframe(
         table_view(context["table"]),
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
 
@@ -56,7 +56,7 @@ def render_provisional(context: dict) -> None:
                 "goals_for": "GF", "status": "Status",
             }
         ),
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
 
@@ -70,7 +70,7 @@ def render_projection(
     if st.button(
         "Update live projection",
         type="primary",
-        use_container_width=True,
+        width="stretch",
     ):
         with st.spinner("Simulating the remaining group stage from the current scores..."):
             result = project_team(
@@ -126,7 +126,7 @@ def render_projection(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="#ffffff",
     )
-    st.plotly_chart(chart, use_container_width=True)
+    st.plotly_chart(chart, width="stretch")
     st.caption(result["method"])
     st.warning(
         "This is an approximate live projection, not the official CupMarket model. "

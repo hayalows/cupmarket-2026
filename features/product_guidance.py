@@ -80,7 +80,7 @@ def render_start_here_panel(default_team: str | None = None) -> None:
                 with st.container(border=True):
                     st.markdown(f"**{title}**")
                     st.caption(body)
-                    if st.button("Open", key=f"start_here_{page}_{title}", use_container_width=True):
+                    if st.button("Open", key=f"start_here_{page}_{title}", width="stretch"):
                         go_to(page, default_team)
 
 
@@ -161,11 +161,11 @@ def render_country_snapshot(matches: pd.DataFrame, prices: pd.DataFrame, default
 
     action_cols = st.columns(3)
     with action_cols[0]:
-        if st.button("Country path", use_container_width=True):
+        if st.button("Country path", width="stretch"):
             go_to("pages/7_Tournament_Path.py", team)
     with action_cols[1]:
-        if st.button("Market story", use_container_width=True):
+        if st.button("Market story", width="stretch"):
             go_to("pages/5_Market_Story.py", team)
     with action_cols[2]:
-        if st.button("Bracket", use_container_width=True):
+        if st.button("Bracket", width="stretch"):
             go_to("pages/8_Bracket_View.py", team)

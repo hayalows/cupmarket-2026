@@ -53,7 +53,7 @@ def _table(rows):
         "position": "Pos", "team": "Country", "played": "P", "wins": "W",
         "draws": "D", "losses": "L", "goal_difference": "GD", "points": "Pts",
     })
-    st.dataframe(frame, use_container_width=True, hide_index=True)
+    st.dataframe(frame, width="stretch", hide_index=True)
 
 
 def render_live_group(matches, predictions, prices, selected_team: str) -> bool:
@@ -96,7 +96,7 @@ def render_live_group(matches, predictions, prices, selected_team: str) -> bool:
         for rank, row in enumerate(snapshot["third_place_ranking"], start=1):
             rows.append({"Rank": rank, "Country": row["team"], "Group": row["group"], "Pts": row["points"], "GD": row["goal_difference"], "GF": row["goals_for"], "Line": "Qualifying" if rank <= 8 else "Outside"})
         st.markdown("#### Provisional best third-place ranking")
-        st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
 
     with st.spinner("Projecting the remaining minutes across all groups..."):
         result = cached_projection(matches, predictions, tuple(sorted(strength.items())), selected_team, 1400)
@@ -117,7 +117,7 @@ def render_live_group(matches, predictions, prices, selected_team: str) -> bool:
     if impacts:
         st.markdown("#### What the next goal could change")
         frame = pd.DataFrame(impacts).rename(columns={"event": "Possible next goal", "position": "New position", "status": "Status if scores then held", "position_change": "Position movement"})
-        st.dataframe(frame, use_container_width=True, hide_index=True)
+        st.dataframe(frame, width="stretch", hide_index=True)
     return True
 
 
@@ -160,7 +160,7 @@ def render_live_match(matches, predictions, prices, match_id: int) -> bool:
                         "probability": "Probability",
                     }
                 ),
-                use_container_width=True,
+                width="stretch",
                 hide_index=True,
             )
         st.caption(live["method_note"] + " The original pre-match forecast remains visible below.")
@@ -185,7 +185,7 @@ def render_live_match(matches, predictions, prices, match_id: int) -> bool:
     scores = pd.DataFrame(live.get("likely_scorelines", []))
     if not scores.empty:
         scores["probability"] = scores["probability"].map(pct)
-        st.dataframe(scores.rename(columns={"score": "Likely final score", "probability": "Probability"}), use_container_width=True, hide_index=True)
+        st.dataframe(scores.rename(columns={"score": "Likely final score", "probability": "Probability"}), width="stretch", hide_index=True)
     qcols = st.columns(2)
     for col, team in zip(qcols, [match.get("home_team"), match.get("away_team")]):
         team_result = result.get("teams", {}).get(str(team), {})

@@ -66,11 +66,11 @@ def _market(prices: pd.DataFrame) -> None:
         "prob_reach_round_32": "Reach R32", "prob_reach_quarter_final": "Reach QF",
         "prob_reach_final": "Reach final", "prob_champion": "Champion",
     })
-    st.dataframe(display, hide_index=True, use_container_width=True)
+    st.dataframe(display, hide_index=True, width="stretch")
     chart = prices.head(20).sort_values("cupmarket_price")
     figure = px.bar(chart, x="cupmarket_price", y="team", orientation="h", title="Top 20 country values")
     figure.update_layout(template="plotly_white", height=520, margin=dict(l=16, r=16, t=52, b=16))
-    st.plotly_chart(figure, use_container_width=True)
+    st.plotly_chart(figure, width="stretch")
     render_official_data_caption(prices)
 
 
@@ -106,7 +106,7 @@ def _team(prices: pd.DataFrame, history: pd.DataFrame) -> None:
     if len(team_history) >= 2:
         figure = px.line(team_history, x="generated_at_utc", y="cupmarket_price", markers=True, title=f"{team} price history")
         figure.update_layout(template="plotly_white", height=360, margin=dict(l=16, r=16, t=52, b=16))
-        st.plotly_chart(figure, use_container_width=True)
+        st.plotly_chart(figure, width="stretch")
     render_official_data_caption(prices)
 
 
@@ -119,7 +119,7 @@ def _groups(groups: pd.DataFrame) -> None:
     selected = st.selectbox("Group", group_values, key="analytics_group")
     table = groups[groups["group"].astype(str) == selected].sort_values("position")
     columns = ["position", "team", "played", "wins", "draws", "losses", "goals_for", "goals_against", "goal_difference", "points"]
-    st.dataframe(table[[column for column in columns if column in table.columns]], hide_index=True, use_container_width=True)
+    st.dataframe(table[[column for column in columns if column in table.columns]], hide_index=True, width="stretch")
     render_official_data_caption(groups, label="Official group table")
 
 

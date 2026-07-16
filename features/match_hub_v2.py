@@ -37,7 +37,7 @@ def _render_live_safe(matches: pd.DataFrame) -> None:
             st.button(
                 "Open next fixture",
                 type="primary",
-                use_container_width=True,
+                width="stretch",
                 on_click=_open_upcoming,
                 args=(next_id,),
             )
@@ -60,7 +60,7 @@ def _render_live_safe(matches: pd.DataFrame) -> None:
             if st.button(
                 "Open match intelligence",
                 key=f"hub_v2_live_{int(match['match_id'])}",
-                use_container_width=True,
+                width="stretch",
             ):
                 base._open_match_room(int(match["match_id"]))
 
@@ -107,7 +107,7 @@ def _render_results_safe(
 
     countries = sorted(set(finished["home_team"]).union(set(finished["away_team"])))
     groups = base._group_filter_options(finished)
-    with st.popover("Filter results", use_container_width=True):
+    with st.popover("Filter results", width="stretch"):
         country = st.selectbox(
             "Country",
             ["All countries", *countries],
@@ -141,7 +141,7 @@ def _render_results_safe(
     event = st.dataframe(
         review_table,
         hide_index=True,
-        use_container_width=True,
+        width="stretch",
         on_select="rerun",
         selection_mode="single-row",
         key="match_hub_results_table_v2",

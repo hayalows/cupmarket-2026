@@ -368,7 +368,7 @@ def _render_match_detail(rows: pd.DataFrame, metrics: dict) -> None:
             legend_title_text="Top outcome correct",
         )
         figure.update_yaxes(range=[0, 100], ticksuffix="%")
-        st.plotly_chart(figure, use_container_width=True)
+        st.plotly_chart(figure, width="stretch")
 
         display = rows[
             [
@@ -399,7 +399,7 @@ def _render_match_detail(rows: pd.DataFrame, metrics: dict) -> None:
             "Actual score in top 3",
             "Model version",
         ]
-        st.dataframe(display, hide_index=True, use_container_width=True)
+        st.dataframe(display, hide_index=True, width="stretch")
 
         advanced = st.columns(3)
         advanced[0].metric("Log loss", _format_decimal(metrics["log_loss"]))
@@ -488,7 +488,7 @@ def _render_calibration(rows: pd.DataFrame) -> None:
         )
         figure.update_xaxes(tickformat=".0%", range=[0, 1], title="Average predicted probability")
         figure.update_yaxes(tickformat=".0%", range=[0, 1], title="Observed frequency")
-        st.plotly_chart(figure, use_container_width=True)
+        st.plotly_chart(figure, width="stretch")
 
 
 def _render_adaptive_comparison(rows: pd.DataFrame, health: dict) -> None:
@@ -540,7 +540,7 @@ def _render_adaptive_comparison(rows: pd.DataFrame, health: dict) -> None:
         figure.update_layout(template="plotly_white", height=360, margin=dict(l=16, r=16, t=52, b=16))
         figure.update_xaxes(tickformat=".0%", range=[0, 1], title="Average predicted probability")
         figure.update_yaxes(tickformat=".0%", range=[0, 1], title="Observed frequency")
-        st.plotly_chart(figure, use_container_width=True)
+        st.plotly_chart(figure, width="stretch")
 
 
 def _simulation_integrity(prices: pd.DataFrame) -> tuple[int, int]:

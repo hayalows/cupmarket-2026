@@ -123,7 +123,7 @@ def render_market_story() -> None:
     if st.button(
         f"Open {team} tournament path",
         key="market_story_open_path",
-        use_container_width=True,
+        width="stretch",
     ):
         st.session_state["cupmarket_path_requested_team"] = team
         st.switch_page("pages/7_Tournament_Path.py")
@@ -193,7 +193,7 @@ def render_market_story() -> None:
         )
         figure.update_xaxes(title=None, gridcolor="#edf0f5")
         figure.update_yaxes(title="CupMarket price", gridcolor="#edf0f5")
-        st.plotly_chart(figure, use_container_width=True)
+        st.plotly_chart(figure, width="stretch")
     else:
         st.info("A price-history chart will appear after at least two snapshots are available.")
 

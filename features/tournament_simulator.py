@@ -235,7 +235,7 @@ def _display_scenario_table(frame: pd.DataFrame) -> None:
     for column in ["Current", "Scenario"]:
         display[column] = display[column].map(_price)
     display["Move"] = display["Move"].map(lambda value: f"{float(value):+.2f} CM")
-    st.dataframe(display, hide_index=True, use_container_width=True)
+    st.dataframe(display, hide_index=True, width="stretch")
 
 
 def _row_value(row: Any, key: str) -> Any:
@@ -384,7 +384,7 @@ def _render_live_from_here(matches: pd.DataFrame, predictions: pd.DataFrame) -> 
                     columns={"score": "Likely final score", "probability": "Chance"}
                 ),
                 hide_index=True,
-                use_container_width=True,
+                width="stretch",
             )
         st.caption(str(projection.get("method_note") or result.get("method_note") or ""))
 

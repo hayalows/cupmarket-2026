@@ -155,6 +155,27 @@ class FakePipeline:
 
 
 class KnockoutStageTests(unittest.TestCase):
+    def test_completed_semifinals_hydrate_medal_fixtures(self):
+        matches, bracket = self._medal_fixture()
+
+        hydrated = ks.hydrate_medal_fixture_teams(matches, bracket)
+        by_stage = hydrated.set_index("stage")
+
+        self.assertEqual(by_stage.loc["THIRD_PLACE", "home_team"], "France")
+        self.assertEqual(by_stage.loc["THIRD_PLACE", "away_team"], "England")
+        self.assertEqual(by_stage.loc["FINAL", "home_team"], "Spain")
+        self.assertEqual(by_stage.loc["FINAL", "away_team"], "Argentina")
+
+    def test_medal_fixture_conflict_is_rejected(self):
+        matches, bracket = self._medal_fixture()
+        matches.loc[matches["stage"].eq("FINAL"), "away_team"] = "England"
+
+        with self.assertRaisesRegex(
+            ks.KnockoutProcessingError,
+            "completed bracket requires 'Argentina'",
+        ):
+            ks.hydrate_medal_fixture_teams(matches, bracket)
+
     def test_penalty_shootout_advances_winner_but_is_draw_for_elo(self):
         matches = pd.DataFrame(
             [
@@ -473,6 +494,71 @@ class KnockoutStageTests(unittest.TestCase):
         self.assertAlmostEqual(home + away, 1.0)
         self.assertGreater(home, 0.0)
         self.assertLess(home, 1.0)
+
+    @staticmethod
+    def _medal_fixture():
+        matches = pd.DataFrame(
+            [
+                {
+                    "match_id": 537387,
+                    "utc_date": pd.Timestamp("2026-07-14T19:00:00Z"),
+                    "status": "FINISHED",
+                    "stage": "SEMI_FINALS",
+                    "home_team": "France",
+                    "away_team": "Spain",
+                    "winner": "AWAY_TEAM",
+                    "duration": "REGULAR",
+                    "home_score_full_time": 0,
+                    "away_score_full_time": 2,
+                    "home_score_penalties": np.nan,
+                    "away_score_penalties": np.nan,
+                },
+                {
+                    "match_id": 537388,
+                    "utc_date": pd.Timestamp("2026-07-15T19:00:00Z"),
+                    "status": "FINISHED",
+                    "stage": "SEMI_FINALS",
+                    "home_team": "England",
+                    "away_team": "Argentina",
+                    "winner": "AWAY_TEAM",
+                    "duration": "REGULAR",
+                    "home_score_full_time": 1,
+                    "away_score_full_time": 2,
+                    "home_score_penalties": np.nan,
+                    "away_score_penalties": np.nan,
+                },
+                {
+                    "match_id": 537389,
+                    "utc_date": pd.Timestamp("2026-07-18T19:00:00Z"),
+                    "status": "TIMED",
+                    "stage": "THIRD_PLACE",
+                    "home_team": "France",
+                    "away_team": None,
+                    "winner": None,
+                    "duration": "REGULAR",
+                    "home_score_full_time": np.nan,
+                    "away_score_full_time": np.nan,
+                    "home_score_penalties": np.nan,
+                    "away_score_penalties": np.nan,
+                },
+                {
+                    "match_id": 537390,
+                    "utc_date": pd.Timestamp("2026-07-19T19:00:00Z"),
+                    "status": "TIMED",
+                    "stage": "FINAL",
+                    "home_team": "Spain",
+                    "away_team": None,
+                    "winner": None,
+                    "duration": "REGULAR",
+                    "home_score_full_time": np.nan,
+                    "away_score_full_time": np.nan,
+                    "home_score_penalties": np.nan,
+                    "away_score_penalties": np.nan,
+                },
+            ]
+        )
+        bracket = pd.DataFrame(columns=["api_match_id", "bracket_match_number"])
+        return matches, bracket
 
     @staticmethod
     def _base_fixture():

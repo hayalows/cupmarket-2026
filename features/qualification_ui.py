@@ -101,7 +101,7 @@ def render_qualification_result(result: dict, compact: bool = False) -> None:
                 barmode="stack",
             )
             chart.update_yaxes(tickformat=".0%", range=[0, 1])
-            st.plotly_chart(polish_figure(chart), use_container_width=True)
+            st.plotly_chart(polish_figure(chart), width="stretch")
 
 
 def _display_group_table(table: pd.DataFrame) -> None:
@@ -131,7 +131,7 @@ def _display_group_table(table: pd.DataFrame) -> None:
                 "points": "Pts",
             }
         ),
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
 
@@ -238,7 +238,7 @@ def render_qualification_lab(
         if st.button(
             "Compare win, draw and loss",
             type="primary",
-            use_container_width=True,
+            width="stretch",
             key=f"qualification_compare_{selected_team}",
         ):
             with st.spinner(

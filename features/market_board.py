@@ -368,7 +368,7 @@ def render_market_board(
     st.dataframe(
         display_market_board(visible),
         hide_index=True,
-        use_container_width=True,
+        width="stretch",
     )
 
     with st.expander("Adaptive model check", expanded=False):

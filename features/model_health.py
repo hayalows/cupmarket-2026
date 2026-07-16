@@ -98,9 +98,19 @@ def render_model_health() -> None:
             "Latest workflow update": _timestamp(workflow.get("updated_at")),
         }
         st.dataframe(
-            pd.DataFrame([{"Field": key, "Value": value if value not in {None, ""} else "Unavailable"} for key, value in details.items()]),
+            pd.DataFrame(
+                [
+                    {
+                        "Field": key,
+                        "Value": (
+                            str(value) if value not in {None, ""} else "Unavailable"
+                        ),
+                    }
+                    for key, value in details.items()
+                ]
+            ),
             hide_index=True,
-            use_container_width=True,
+            width="stretch",
         )
         if workflow.get("url"):
             st.link_button("Open update workflow", str(workflow["url"]))
