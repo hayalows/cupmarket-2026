@@ -1,20 +1,10 @@
 {
   "adaptive_guardrail": {
-    "adaptive": {
-      "brier": 0.337008384078,
-      "log_loss": 0.6423152926039722
-    },
-    "baseline": {
-      "brier": 0.337008384078,
-      "log_loss": 0.6423152926039722
-    },
-    "comparison_sample_size": 1,
+    "adaptive": {},
+    "baseline": {},
+    "comparison_sample_size": 0,
     "decision": "collecting_evidence",
-    "delta": {
-      "brier": 0.0,
-      "log_loss": 0.0
-    },
-    "generated_at_utc": "2026-07-16T04:16:28.127273+00:00",
+    "generated_at_utc": "2026-07-16T23:07:03.335045+00:00",
     "message": "More matched pre-match baseline forecasts are needed before adaptive predictions can be judged.",
     "minimum_sample_size": 20,
     "schema_version": 1,
@@ -26,24 +16,24 @@
   "archive": {
     "champion": null,
     "final_completed": false,
-    "history_snapshot_count": 169,
+    "history_snapshot_count": 171,
     "status": "collecting"
   },
-  "generated_at_utc": "2026-07-16T04:16:28.134168+00:00",
+  "generated_at_utc": "2026-07-16T23:07:03.341756+00:00",
   "publication": {
     "active_match_deferral": false,
     "api": {
       "http_status": 200,
       "matches_returned": 104,
-      "request_counter_reset": "59",
+      "request_counter_reset": "60",
       "requests_remaining": "9"
     },
     "bracket_mode": "official_api_locked_knockout_progression",
-    "last_checked_at_utc": "2026-07-16T04:16:25.082328+00:00",
-    "model_generated_at_utc": "2026-07-15T23:17:01.497712+00:00",
+    "last_checked_at_utc": "2026-07-16T23:07:02.368161+00:00",
+    "model_generated_at_utc": "2026-07-16T23:07:02.368161+00:00",
     "model_version": "phase6_knockout_progression_v1",
     "new_finished_matches": 0,
-    "status": "no_new_finished_match"
+    "status": "updated"
   },
   "schema_version": 1,
   "tournament": {
