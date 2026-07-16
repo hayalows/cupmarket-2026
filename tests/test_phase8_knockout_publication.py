@@ -653,6 +653,38 @@ class Phase8KnockoutPublicationTests(unittest.TestCase):
 
         self.assertEqual(missing["match_id"].astype(int).tolist(), [1, 2])
 
+    def test_empty_prediction_file_forces_all_real_upcoming_fixtures(self):
+        matches = pd.DataFrame(
+            [
+                {
+                    "match_id": 1,
+                    "utc_date": pd.Timestamp("2026-07-18", tz="UTC"),
+                    "status": "TIMED",
+                    "stage": "THIRD_PLACE",
+                    "home_team": "France",
+                    "away_team": "England",
+                },
+                {
+                    "match_id": 2,
+                    "utc_date": pd.Timestamp("2026-07-19", tz="UTC"),
+                    "status": "TIMED",
+                    "stage": "FINAL",
+                    "home_team": "Spain",
+                    "away_team": "Argentina",
+                },
+            ]
+        )
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "predictions.csv"
+            path.touch()
+            missing = run_update_pipeline.official_upcoming_prediction_gaps(
+                matches,
+                predictions_path=path,
+            )
+
+        self.assertEqual(missing["match_id"].astype(int).tolist(), [1, 2])
+
     def test_fetch_world_cup_matches_keeps_live_clock_fields(self):
         class FakeResponse:
             status_code = 200

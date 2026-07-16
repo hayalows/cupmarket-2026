@@ -96,7 +96,7 @@ def official_upcoming_prediction_gaps(
 
     try:
         predictions = pd.read_csv(path)
-    except (OSError, pd.errors.ParserError):
+    except (OSError, pd.errors.EmptyDataError, pd.errors.ParserError):
         return upcoming.copy()
     if "match_id" not in predictions.columns:
         return upcoming.copy()
