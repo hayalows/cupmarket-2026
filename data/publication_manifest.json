@@ -14,7 +14,7 @@
       "brier": 0.004359920324667699,
       "log_loss": 0.006320293983010483
     },
-    "generated_at_utc": "2026-07-16T23:18:05.971399+00:00",
+    "generated_at_utc": "2026-07-16T23:40:24.160497+00:00",
     "message": "Adaptive probabilities remain inside the rollback guardrail, but the next completed forecasts should be watched closely.",
     "minimum_sample_size": 20,
     "schema_version": 1,
@@ -29,21 +29,21 @@
     "history_snapshot_count": 175,
     "status": "collecting"
   },
-  "generated_at_utc": "2026-07-16T23:18:05.976224+00:00",
+  "generated_at_utc": "2026-07-16T23:40:24.166543+00:00",
   "publication": {
     "active_match_deferral": false,
     "api": {
       "http_status": 200,
       "matches_returned": 104,
-      "request_counter_reset": "8",
-      "requests_remaining": "8"
+      "request_counter_reset": "59",
+      "requests_remaining": "9"
     },
     "bracket_mode": "official_api_locked_knockout_progression",
-    "last_checked_at_utc": "2026-07-16T23:18:05.440888+00:00",
+    "last_checked_at_utc": "2026-07-16T23:40:21.545803+00:00",
     "model_generated_at_utc": "2026-07-16T23:18:05.440888+00:00",
     "model_version": "phase6_knockout_progression_v1",
     "new_finished_matches": 0,
-    "status": "updated"
+    "status": "no_new_finished_match"
   },
   "schema_version": 1,
   "tournament": {
