@@ -13,7 +13,7 @@
     "brier": 0.0,
     "log_loss": 0.0
   },
-  "generated_at_utc": "2026-07-15T23:17:02.515234+00:00",
+  "generated_at_utc": "2026-07-16T00:57:42.548852+00:00",
   "message": "More matched pre-match baseline forecasts are needed before adaptive predictions can be judged.",
   "minimum_sample_size": 20,
   "schema_version": 1,
