@@ -52,7 +52,7 @@ def _pre_match_predictions(prediction_ledger: pd.DataFrame) -> pd.DataFrame:
     if rows.empty:
         return rows
     rows["generated_at_utc"] = pd.to_datetime(
-        rows["generated_at_utc"], errors="coerce", utc=True
+        rows["generated_at_utc"], errors="coerce", utc=True, format="mixed"
     )
     rows = rows.dropna(subset=["match_id", "generated_at_utc"])
     return rows.sort_values("generated_at_utc").drop_duplicates("match_id", keep="first")
