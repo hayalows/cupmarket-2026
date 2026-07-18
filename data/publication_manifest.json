@@ -14,7 +14,7 @@
       "brier": 0.004359920324667699,
       "log_loss": 0.006320293983010483
     },
-    "generated_at_utc": "2026-07-18T05:53:45.363603+00:00",
+    "generated_at_utc": "2026-07-18T08:01:39.565208+00:00",
     "message": "Adaptive probabilities remain inside the rollback guardrail, but the next completed forecasts should be watched closely.",
     "minimum_sample_size": 20,
     "schema_version": 1,
@@ -26,24 +26,24 @@
   "archive": {
     "champion": null,
     "final_completed": false,
-    "history_snapshot_count": 177,
+    "history_snapshot_count": 178,
     "status": "collecting"
   },
-  "generated_at_utc": "2026-07-18T05:53:45.371246+00:00",
+  "generated_at_utc": "2026-07-18T08:01:39.570073+00:00",
   "publication": {
     "active_match_deferral": false,
     "api": {
       "http_status": 200,
       "matches_returned": 104,
-      "request_counter_reset": "59",
-      "requests_remaining": "9"
+      "request_counter_reset": "58",
+      "requests_remaining": "8"
     },
     "bracket_mode": "official_api_locked_knockout_progression",
-    "last_checked_at_utc": "2026-07-18T05:53:42.271681+00:00",
-    "model_generated_at_utc": "2026-07-17T09:18:05.268783+00:00",
+    "last_checked_at_utc": "2026-07-18T08:01:38.900137+00:00",
+    "model_generated_at_utc": "2026-07-18T08:01:38.900137+00:00",
     "model_version": "phase6_knockout_progression_v1",
     "new_finished_matches": 0,
-    "status": "no_new_finished_match"
+    "status": "updated"
   },
   "schema_version": 1,
   "tournament": {
