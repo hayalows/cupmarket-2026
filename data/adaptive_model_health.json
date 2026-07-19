@@ -1,19 +1,19 @@
 {
   "adaptive": {
-    "brier": 0.38565842116098964,
-    "log_loss": 0.6991534616423968
+    "brier": 0.39335683370369373,
+    "log_loss": 0.709487362884169
   },
   "baseline": {
-    "brier": 0.38129850083632194,
-    "log_loss": 0.6928331676593863
+    "brier": 0.3891583919095693,
+    "log_loss": 0.7034011538634922
   },
-  "comparison_sample_size": 26,
+  "comparison_sample_size": 27,
   "decision": "monitor",
   "delta": {
-    "brier": 0.004359920324667699,
-    "log_loss": 0.006320293983010483
+    "brier": 0.00419844179412443,
+    "log_loss": 0.006086209020676803
   },
-  "generated_at_utc": "2026-07-18T23:00:33.247144+00:00",
+  "generated_at_utc": "2026-07-19T00:05:58.705675+00:00",
   "message": "Adaptive probabilities remain inside the rollback guardrail, but the next completed forecasts should be watched closely.",
   "minimum_sample_size": 20,
   "schema_version": 1,

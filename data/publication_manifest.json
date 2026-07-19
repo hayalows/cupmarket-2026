@@ -1,20 +1,20 @@
 {
   "adaptive_guardrail": {
     "adaptive": {
-      "brier": 0.38565842116098964,
-      "log_loss": 0.6991534616423968
+      "brier": 0.39335683370369373,
+      "log_loss": 0.709487362884169
     },
     "baseline": {
-      "brier": 0.38129850083632194,
-      "log_loss": 0.6928331676593863
+      "brier": 0.3891583919095693,
+      "log_loss": 0.7034011538634922
     },
-    "comparison_sample_size": 26,
+    "comparison_sample_size": 27,
     "decision": "monitor",
     "delta": {
-      "brier": 0.004359920324667699,
-      "log_loss": 0.006320293983010483
+      "brier": 0.00419844179412443,
+      "log_loss": 0.006086209020676803
     },
-    "generated_at_utc": "2026-07-18T23:00:33.247144+00:00",
+    "generated_at_utc": "2026-07-19T00:05:58.705675+00:00",
     "message": "Adaptive probabilities remain inside the rollback guardrail, but the next completed forecasts should be watched closely.",
     "minimum_sample_size": 20,
     "schema_version": 1,
@@ -26,29 +26,29 @@
   "archive": {
     "champion": null,
     "final_completed": false,
-    "history_snapshot_count": 178,
+    "history_snapshot_count": 180,
     "status": "collecting"
   },
-  "generated_at_utc": "2026-07-18T23:00:33.256352+00:00",
+  "generated_at_utc": "2026-07-19T00:05:58.713698+00:00",
   "publication": {
-    "active_match_deferral": true,
+    "active_match_deferral": false,
     "api": {
       "http_status": 200,
       "matches_returned": 104,
-      "request_counter_reset": "58",
-      "requests_remaining": "8"
+      "request_counter_reset": "60",
+      "requests_remaining": "9"
     },
     "bracket_mode": "official_api_locked_knockout_progression",
-    "last_checked_at_utc": "2026-07-18T23:00:32.025954+00:00",
-    "model_generated_at_utc": "2026-07-18T08:01:38.900137+00:00",
+    "last_checked_at_utc": "2026-07-19T00:05:57.753829+00:00",
+    "model_generated_at_utc": "2026-07-19T00:05:57.753829+00:00",
     "model_version": "phase6_knockout_progression_v1",
     "new_finished_matches": 0,
-    "status": "deferred_active_knockout_matches"
+    "status": "updated"
   },
   "schema_version": 1,
   "tournament": {
-    "actual_knockout_results_used": 30,
-    "matches_finished": 102,
+    "actual_knockout_results_used": 31,
+    "matches_finished": 103,
     "matches_total": 104,
     "number_of_simulations": 20000,
     "teams_tracked": 48
