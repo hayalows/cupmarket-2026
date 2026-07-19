@@ -2687,3 +2687,51 @@ snapshot_id,affected_team,group,live_elo,price_after,price_before,price_change,p
 2026-07-19T00:05:49.311237+00:00,Haiti,C,1657.7903422759043,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537389,France 4-6 England,other
 2026-07-19T00:05:49.311237+00:00,Tunisia,F,1648.6081559732288,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537389,France 4-6 England,other
 2026-07-19T00:05:49.311237+00:00,Czechia,A,1731.2587132929823,6.87,6.87,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537389,France 4-6 England,other
+2026-07-19T22:11:54.532271+00:00,Spain,H,2304.9665036517863,116.22,91.05,25.17,27.644151565074136,1.0,1.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,played
+2026-07-19T22:11:54.532271+00:00,Argentina,J,2231.331090797945,96.33,93.95,2.3799999999999955,2.533262373602976,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,played
+2026-07-19T22:11:54.532271+00:00,England,L,2176.154343634,81.11,81.11,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,France,I,2122.2147441969614,80.53,80.53,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Belgium,G,2003.2443651298847,64.08,64.08,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Switzerland,B,2006.8003478688784,63.54,63.54,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Norway,I,1991.8508176699224,62.87,62.87,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Morocco,C,2045.1852641268183,62.64,62.64,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Mexico,A,1992.6907704482287,44.98,44.98,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Colombia,K,2034.1429610469088,44.53,44.53,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Brazil,C,2052.315735183412,44.36,44.36,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Portugal,K,2037.423227972144,42.76,42.76,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Egypt,G,1888.03134394804,42.13,42.13,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,United States,D,1845.3237799869864,42.11,42.11,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Canada,B,1823.9566094388128,40.58,40.58,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Paraguay,D,1899.2426365931187,40.29,40.29,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Netherlands,F,2000.7626913022912,25.91,25.91,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Germany,E,1940.1450694794064,25.59,25.59,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Japan,F,1954.9668103896377,24.03,24.03,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Ivory Coast,E,1823.723032454427,23.89,23.89,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Croatia,L,1926.812444905188,23.84,23.84,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Australia,D,1845.5211391450616,23.6,23.6,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,South Africa,A,1693.614617167326,22.72,22.72,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Senegal,I,1862.146613800206,22.33,22.33,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Austria,J,1867.117768241036,22.01,22.01,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,same_group
+2026-07-19T22:11:54.532271+00:00,Ghana,L,1673.4229598072593,21.98,21.98,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Ecuador,E,1929.1933341526112,21.82,21.82,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Cape Verde Islands,H,1689.9638660445762,21.61,21.61,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,same_group
+2026-07-19T22:11:54.532271+00:00,Algeria,J,1833.554131996676,21.49,21.49,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,same_group
+2026-07-19T22:11:54.532271+00:00,Congo DR,K,1794.39123552079,21.46,21.46,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Sweden,F,1781.6184920846476,21.02,21.02,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Bosnia-Herzegovina,B,1659.9254031246503,20.14,20.14,0.0,0.0,1.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Iran,G,1873.4078788308684,8.83,8.83,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,South Korea,A,1825.9460475707715,8.7,8.7,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Uruguay,H,1907.5228774752184,8.53,8.53,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,same_group
+2026-07-19T22:11:54.532271+00:00,Scotland,C,1800.6524904944006,8.47,8.47,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Turkey,D,1891.3502864268487,8.38,8.38,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Saudi Arabia,H,1705.9341181708846,7.73,7.73,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,same_group
+2026-07-19T22:11:54.532271+00:00,Panama,L,1753.9772103673267,7.33,7.33,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,New Zealand,G,1678.9442908209887,7.24,7.24,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Jordan,J,1715.5967031705195,7.18,7.18,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,same_group
+2026-07-19T22:11:54.532271+00:00,Uzbekistan,K,1723.1994397509068,7.1,7.1,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Curaçao,E,1590.2975033938003,7.09,7.09,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Qatar,B,1549.5494030220432,6.99,6.99,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Iraq,I,1661.1474098625897,6.97,6.97,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Haiti,C,1657.7903422759043,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Tunisia,F,1648.6081559732288,6.95,6.95,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other
+2026-07-19T22:11:54.532271+00:00,Czechia,A,1731.2587132929823,6.87,6.87,0.0,0.0,0.0,0.0,phase9b_adaptive_prediction_v1,provisional_constraint_assignment,537390,Spain 1-0 Argentina,other

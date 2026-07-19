@@ -1,20 +1,20 @@
 {
   "adaptive_guardrail": {
     "adaptive": {
-      "brier": 0.39335683370369373,
-      "log_loss": 0.709487362884169
+      "brier": 0.4074509692928475,
+      "log_loss": 0.7290974497643471
     },
     "baseline": {
-      "brier": 0.3891583919095693,
-      "log_loss": 0.7034011538634922
+      "brier": 0.40340247184851324,
+      "log_loss": 0.7232286053515516
     },
-    "comparison_sample_size": 27,
+    "comparison_sample_size": 28,
     "decision": "monitor",
     "delta": {
-      "brier": 0.00419844179412443,
-      "log_loss": 0.006086209020676803
+      "brier": 0.004048497444334276,
+      "log_loss": 0.005868844412795449
     },
-    "generated_at_utc": "2026-07-19T21:02:08.292411+00:00",
+    "generated_at_utc": "2026-07-19T22:11:59.564591+00:00",
     "message": "Adaptive probabilities remain inside the rollback guardrail, but the next completed forecasts should be watched closely.",
     "minimum_sample_size": 20,
     "schema_version": 1,
@@ -24,31 +24,31 @@
     }
   },
   "archive": {
-    "champion": null,
-    "final_completed": false,
-    "history_snapshot_count": 182,
-    "status": "collecting"
+    "champion": "Spain",
+    "final_completed": true,
+    "history_snapshot_count": 184,
+    "status": "finalized"
   },
-  "generated_at_utc": "2026-07-19T21:02:08.298543+00:00",
+  "generated_at_utc": "2026-07-19T22:11:59.572355+00:00",
   "publication": {
-    "active_match_deferral": true,
+    "active_match_deferral": false,
     "api": {
       "http_status": 200,
       "matches_returned": 104,
-      "request_counter_reset": "57",
-      "requests_remaining": "8"
+      "request_counter_reset": "60",
+      "requests_remaining": "9"
     },
     "bracket_mode": "official_api_locked_knockout_progression",
-    "last_checked_at_utc": "2026-07-19T21:02:07.171903+00:00",
-    "model_generated_at_utc": "2026-07-19T06:39:07.944459+00:00",
+    "last_checked_at_utc": "2026-07-19T22:11:58.529020+00:00",
+    "model_generated_at_utc": "2026-07-19T22:11:58.529020+00:00",
     "model_version": "phase6_knockout_progression_v1",
     "new_finished_matches": 0,
-    "status": "deferred_active_knockout_matches"
+    "status": "updated"
   },
   "schema_version": 1,
   "tournament": {
-    "actual_knockout_results_used": 31,
-    "matches_finished": 103,
+    "actual_knockout_results_used": 32,
+    "matches_finished": 104,
     "matches_total": 104,
     "number_of_simulations": 20000,
     "teams_tracked": 48
