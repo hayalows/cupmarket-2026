@@ -14,7 +14,7 @@
       "brier": 0.004048497444334276,
       "log_loss": 0.005868844412795449
     },
-    "generated_at_utc": "2026-07-19T22:11:59.564591+00:00",
+    "generated_at_utc": "2026-07-19T23:13:18.538867+00:00",
     "message": "Adaptive probabilities remain inside the rollback guardrail, but the next completed forecasts should be watched closely.",
     "minimum_sample_size": 20,
     "schema_version": 1,
@@ -26,21 +26,21 @@
   "archive": {
     "champion": "Spain",
     "final_completed": true,
-    "history_snapshot_count": 184,
+    "history_snapshot_count": 185,
     "status": "finalized"
   },
-  "generated_at_utc": "2026-07-19T22:11:59.572355+00:00",
+  "generated_at_utc": "2026-07-19T23:13:18.546621+00:00",
   "publication": {
     "active_match_deferral": false,
     "api": {
       "http_status": 200,
       "matches_returned": 104,
-      "request_counter_reset": "60",
-      "requests_remaining": "9"
+      "request_counter_reset": "58",
+      "requests_remaining": "8"
     },
     "bracket_mode": "official_api_locked_knockout_progression",
-    "last_checked_at_utc": "2026-07-19T22:11:58.529020+00:00",
-    "model_generated_at_utc": "2026-07-19T22:11:58.529020+00:00",
+    "last_checked_at_utc": "2026-07-19T23:13:17.561349+00:00",
+    "model_generated_at_utc": "2026-07-19T23:13:17.561349+00:00",
     "model_version": "phase6_knockout_progression_v1",
     "new_finished_matches": 0,
     "status": "updated"
