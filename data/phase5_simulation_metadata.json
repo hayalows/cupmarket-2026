@@ -32,12 +32,12 @@
     "Penalty shootouts use Elo-bounded probabilities between 35% and 65%.",
     "Finished penalty shootouts count as draws for Elo, while the official winner advances."
   ],
-  "generated_at_utc": "2026-07-19T03:57:03.206426+00:00",
+  "generated_at_utc": "2026-07-19T06:39:07.944459+00:00",
   "new_finished_matches_processed": 0,
   "api": {
     "http_status": 200,
     "matches_returned": 104,
     "requests_remaining": "8",
-    "request_counter_reset": "58"
+    "request_counter_reset": "57"
   }
 }

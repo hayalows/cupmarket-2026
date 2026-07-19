@@ -13,7 +13,7 @@
     "brier": 0.00419844179412443,
     "log_loss": 0.006086209020676803
   },
-  "generated_at_utc": "2026-07-19T03:57:04.205213+00:00",
+  "generated_at_utc": "2026-07-19T06:39:08.965301+00:00",
   "message": "Adaptive probabilities remain inside the rollback guardrail, but the next completed forecasts should be watched closely.",
   "minimum_sample_size": 20,
   "schema_version": 1,
