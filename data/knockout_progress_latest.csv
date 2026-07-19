@@ -30,4 +30,4 @@ logical_match_number,api_match_id,stage,utc_date,status,home_team,away_team,home
 101,537387,SEMI_FINALS,2026-07-14 19:00:00+00:00,FINISHED,France,Spain,0,2,REGULAR,regular_time,Spain,,
 102,537388,SEMI_FINALS,2026-07-15 19:00:00+00:00,FINISHED,England,Argentina,1,2,REGULAR,regular_time,Argentina,,
 103,537389,THIRD_PLACE,2026-07-18 21:00:00+00:00,FINISHED,France,England,4,6,REGULAR,regular_time,England,,
-104,537390,FINAL,2026-07-19 19:00:00+00:00,LIVE,Spain,Argentina,0,0,REGULAR,,,,
+104,537390,FINAL,2026-07-19 19:00:00+00:00,IN_PLAY,Spain,Argentina,0,0,REGULAR,,,,
