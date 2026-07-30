@@ -14,7 +14,7 @@
       "brier": 0.004048497444334276,
       "log_loss": 0.005868844412795449
     },
-    "generated_at_utc": "2026-07-30T19:42:00.364895+00:00",
+    "generated_at_utc": "2026-07-30T20:48:22.953375+00:00",
     "message": "Adaptive probabilities remain inside the rollback guardrail, but the next completed forecasts should be watched closely.",
     "minimum_sample_size": 20,
     "schema_version": 1,
@@ -29,7 +29,7 @@
     "history_snapshot_count": 196,
     "status": "finalized"
   },
-  "generated_at_utc": "2026-07-30T19:42:00.371229+00:00",
+  "generated_at_utc": "2026-07-30T20:48:22.961071+00:00",
   "publication": {
     "active_match_deferral": false,
     "api": {
@@ -39,7 +39,7 @@
       "requests_remaining": "9"
     },
     "bracket_mode": "official_api_locked_knockout_progression",
-    "last_checked_at_utc": "2026-07-30T19:41:57.281654+00:00",
+    "last_checked_at_utc": "2026-07-30T20:48:20.114383+00:00",
     "model_generated_at_utc": "2026-07-30T07:15:44.927998+00:00",
     "model_version": "phase6_knockout_progression_v1",
     "new_finished_matches": 0,
