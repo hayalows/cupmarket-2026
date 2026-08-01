@@ -64,10 +64,16 @@ def render_model_health() -> None:
     second[1].metric("Simulations", int(tournament.get("number_of_simulations", 0) or 0))
     second[2].metric("Adaptive match layer", adaptive_decision)
     second[3].metric("Archive", str(archive.get("status") or "collecting").title())
-    st.caption(
-        "Tournament prices use the market simulation model. Adaptive match nudges "
-        "remain paused until the comparison guardrail reaches Monitor or Trusted."
-    )
+    if str(archive.get("status") or "").lower() == "finalized":
+        st.success(
+            "Final archive locked. The scheduled updater is now a read-only health check; "
+            "published tournament data will not be rewritten."
+        )
+    else:
+        st.caption(
+            "Tournament prices use the market simulation model. Adaptive match nudges "
+            "remain paused until the comparison guardrail reaches Monitor or Trusted."
+        )
 
     if provenance.get("source") != "GitHub main":
         st.warning("CupMarket is showing its deployed fallback. The saved market remains complete, but the newest GitHub publication could not be read.")

@@ -59,9 +59,17 @@ REMOTE_DATA_FILES = {
         "data/phase3_goal_model_evaluation.json"
     ),
     "phase4_live_evaluation.json": "data/phase4_live_evaluation.json",
+    "archive_manifest.json": "data/archive_manifest.json",
+    "tournament_retrospective.json": "data/tournament_retrospective.json",
     "phase5_simulation_metadata.json": (
         "data/phase5_simulation_metadata.json"
     ),
+    "final_prediction_settled.csv": "data/final_prediction_settled.csv",
+    "bracket_snapshots.csv": "data/history/bracket_snapshots.csv",
+    "match_impacts.csv": "data/history/match_impacts.csv",
+    "elo_events.csv": "data/history/elo_events.csv",
+    "tournament_baseline.csv": "data/history/tournament_baseline.csv",
+    "tournament_retrospective_report.md": "data/tournament_retrospective_report.md",
     "round_32_opponent_probabilities_metadata.json": (
         "data/round_32_opponent_probabilities_metadata.json"
     ),
@@ -249,6 +257,23 @@ def load_latest_json(path: Path) -> dict[str, Any]:
     payload["_cupmarket_source"] = "Deployed fallback"
     payload["_cupmarket_commit"] = None
     return payload
+
+
+def load_latest_text(path: Path) -> str:
+    """Read one allow-listed text artifact from the same GitHub commit."""
+    relative_path = _remote_path(path)
+    if relative_path:
+        try:
+            commit_sha = _fetch_main_commit_sha()
+            return _fetch_remote_text(relative_path, commit_sha)
+        except requests.RequestException:
+            pass
+    if not path.exists():
+        return ""
+    try:
+        return path.read_text(encoding="utf-8")
+    except OSError:
+        return ""
 
 
 def clear_official_data_cache() -> None:

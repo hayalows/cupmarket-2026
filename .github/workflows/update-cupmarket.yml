@@ -12,7 +12,9 @@ on:
           - check
           - force
   schedule:
-    - cron: "*/15 * * * *"
+    # The 2026 tournament is finalized. Keep one weekly read-only guard check
+    # instead of polling the score provider every fifteen minutes.
+    - cron: "0 6 * * 1"
 
 permissions:
   contents: write
@@ -29,7 +31,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -37,7 +39,7 @@ jobs:
         run: echo "SOURCE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
@@ -93,6 +95,11 @@ jobs:
           FORCE_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'force' }}
         run: python backend/run_update_pipeline.py
 
+      - name: Validate final archive and retrospective contracts
+        run: |
+          python -m py_compile backend/tournament_retrospective.py
+          python -m unittest tests/test_tournament_retrospective.py
+
       - name: Run post-group bracket and knockout processor
         env:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
@@ -136,6 +143,9 @@ jobs:
               elif status in {"no_new_finished_match", "updated"}:
                   heading = "NO CHANGE"
                   detail = "No new completed match required a new official market publication."
+              elif status == "final_archive_locked":
+                  heading = "ARCHIVE LOCKED"
+                  detail = payload.get("message", "The finalized tournament archive is read-only.")
               else:
                   heading = status.replace("_", " ").upper()
                   detail = payload.get("message", "Review the run summary for details.")

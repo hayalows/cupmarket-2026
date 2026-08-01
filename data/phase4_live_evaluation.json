@@ -1,4 +1,51 @@
 {
-  "eligible_completed_predictions": 0,
-  "message": "No completed match has a prediction stored before kickoff yet."
+  "adaptive_comparison_sample": 28,
+  "adaptive_vs_baseline": {
+    "brier_delta": 0.002100031366466304,
+    "log_loss_delta": 0.0017067317426517903
+  },
+  "eligible_completed_predictions": 100,
+  "generated_at_utc": "2026-08-01T05:00:22.683944+00:00",
+  "message": "The tournament is complete. Read tournament_retrospective.json for the full settled scorecard; this compatibility artifact now points to the final retrospective.",
+  "primary_scorecard": {
+    "accuracy": 0.66,
+    "brier": 0.506907877975788,
+    "calibration": [
+      {
+        "lower": 0.0,
+        "mean_confidence": 0.4276698869907182,
+        "observed_accuracy": 0.5476190476190477,
+        "sample_size": 42,
+        "upper": 0.5
+      },
+      {
+        "lower": 0.5,
+        "mean_confidence": 0.5717269249940646,
+        "observed_accuracy": 0.71875,
+        "sample_size": 32,
+        "upper": 0.65
+      },
+      {
+        "lower": 0.65,
+        "mean_confidence": 0.716793411873808,
+        "observed_accuracy": 0.85,
+        "sample_size": 20,
+        "upper": 0.8
+      },
+      {
+        "lower": 0.8,
+        "mean_confidence": 0.8438907938234211,
+        "observed_accuracy": 0.5,
+        "sample_size": 6,
+        "upper": 1.01
+      }
+    ],
+    "log_loss": 0.8657410035458208,
+    "mean_confidence": 0.5565660985383691,
+    "sample_size": 100
+  },
+  "retrospective_path": "data/tournament_retrospective.json",
+  "schema_version": 2,
+  "source_commit": "4bcdde1",
+  "status": "finalized"
 }

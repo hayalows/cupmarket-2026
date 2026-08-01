@@ -14,6 +14,7 @@ try:
         history_store,
         market_impact_store,
         opponent_probability_store,
+        publication_manifest,
         provisional_knockout_fallback,
         update_pipeline,
     )
@@ -21,6 +22,7 @@ except ImportError:
     import history_store
     import market_impact_store
     import opponent_probability_store
+    import publication_manifest
     import provisional_knockout_fallback
     import update_pipeline
 
@@ -258,6 +260,14 @@ def _publish_opponent_probabilities_safely() -> None:
 
 def run_guarded_pipeline() -> bool:
     """Delay official publication while a group-stage match is active."""
+    if publication_manifest.is_archive_finalized(update_pipeline.REPO_ROOT):
+        update_pipeline.atomic_to_json(
+            publication_manifest.finalized_run_summary(update_pipeline.REPO_ROOT),
+            update_pipeline.RUN_SUMMARY_PATH,
+        )
+        print("CupMarket final archive is locked; skipped live score polling.")
+        return False
+
     world_cup, api_metadata = update_pipeline.fetch_world_cup_matches()
     publish_match_snapshot(world_cup)
     active_matches = active_group_matches(world_cup)

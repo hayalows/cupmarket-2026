@@ -1,0 +1,1214 @@
+{
+  "archive_id": "cupmarket-2026-final",
+  "artifact_count": 235,
+  "champion": "Spain",
+  "checks": {
+    "final_prediction_report_present": true,
+    "hashes_present": true,
+    "official_matches_complete": true,
+    "settled_rows_cover_official_matches": true
+  },
+  "files": [
+    {
+      "bytes": 17611,
+      "path": "backend/state/group_stage_phase3_xg_predictions.csv",
+      "sha256": "9dbbe0fdbb11de6b9c2e598ff5ce5ee9d56aed7df7377a8d916cecf9cd9ae156"
+    },
+    {
+      "bytes": 473,
+      "path": "backend/state/knockout_pipeline_state.json",
+      "sha256": "d17a60ce6162348b903638bc20d7dd9fb2b35ce6138ac2f00a0927127d5d3861"
+    },
+    {
+      "bytes": 11290,
+      "path": "backend/state/live_elo_ratings.csv",
+      "sha256": "60f14b8d71c2286a9ecc40ddf0c3310c2d5e58b60dab7cf30e613c5700e62195"
+    },
+    {
+      "bytes": 32109,
+      "path": "backend/state/live_team_state.csv",
+      "sha256": "15d2e6a0efd34d893d54eb0d96bb880a0aa72b14ac9205b2ba8ad77743bf9d12"
+    },
+    {
+      "bytes": 242576,
+      "path": "backend/state/models/phase3_away_goal_model.joblib",
+      "sha256": "66c4609f148b816ea850fe087ade5ccecf8d14404842a73ea80b41abe7c21bf7"
+    },
+    {
+      "bytes": 258984,
+      "path": "backend/state/models/phase3_home_goal_model.joblib",
+      "sha256": "6f8b119ebd441e2747d2f8b021226b132965a37361866e53f8c8e8462896ade3"
+    },
+    {
+      "bytes": 1295233,
+      "path": "backend/state/world_cup_prediction_ledger.csv",
+      "sha256": "9144f800c68a834d287ae12e528109b7bfd870428dc6ee92689d2a9c79864fa5"
+    },
+    {
+      "bytes": 13738,
+      "path": "backend/state/world_cup_processed_match_ledger.csv",
+      "sha256": "12d6aaf3f81a2454f704487a9dfec4724de3d7ff9733905382b37b6463ad7434"
+    },
+    {
+      "bytes": 1193,
+      "path": "backend/state/world_cup_team_name_map.csv",
+      "sha256": "b545327419dc944f69e66a9332737e06cfdc8610a546d6badd60d4cb05997942"
+    },
+    {
+      "bytes": 692,
+      "path": "data/adaptive_model_health.json",
+      "sha256": "155e1d4dfc09be0ad786aa9a47387a5bfbc440626c00bc18feb3a8d60a2a3897"
+    },
+    {
+      "bytes": 13900,
+      "path": "data/adaptive_ratings_latest.csv",
+      "sha256": "92dc3bfe143e73f626d868b00cdaafd36857faed7f944054d430b3a3bcbdd5a6"
+    },
+    {
+      "bytes": 18090,
+      "path": "data/cupmarket_prices_latest.csv",
+      "sha256": "9023b46aaedc43ab618304666b5f5b6700e2a2c5eb2d432c3edb9fc81faee955"
+    },
+    {
+      "bytes": 1558,
+      "path": "data/current_group_tables.csv",
+      "sha256": "98f207e8117999cc0399624a694b2d13d5890236777bc28400a4bd45f6faa1f3"
+    },
+    {
+      "bytes": 44845,
+      "path": "data/final_prediction_settled.csv",
+      "sha256": "16d9627869bf49072af6be8318a2292535228796617cbb27f6b3777151ea4dfb"
+    },
+    {
+      "bytes": 1075357,
+      "path": "data/history/bracket_snapshots.csv",
+      "sha256": "06308a96cf18853cf168c014b9de8f629bf472c27ede82d9d11fb3f3586e29cc"
+    },
+    {
+      "bytes": 24848,
+      "path": "data/history/elo_events.csv",
+      "sha256": "7899526dacd720cce4fe3a3b93445c893814a36e65435466b142c2e6fc118a21"
+    },
+    {
+      "bytes": 3021307,
+      "path": "data/history/market_movements.csv",
+      "sha256": "3a6d09fc62955c99e13825e009f25df3d4ed76a4b9aeead27a9f0662ee630f30"
+    },
+    {
+      "bytes": 616839,
+      "path": "data/history/match_impacts.csv",
+      "sha256": "149429353c9ff1786cac1132a3a403ee1c81d3e204e191408f0146387710c454"
+    },
+    {
+      "bytes": 3807599,
+      "path": "data/history/team_snapshots.csv",
+      "sha256": "d8118cdd778d2a91aa02fb5d2f8e9984ab6fd7547ede72f9c897e9b9e8b0fac8"
+    },
+    {
+      "bytes": 13762,
+      "path": "data/history/tournament_baseline.csv",
+      "sha256": "9820eedf86077be595eadc98ab528258ba4389c898ae69eac694950b55d7ad08"
+    },
+    {
+      "bytes": 3675,
+      "path": "data/knockout_progress_latest.csv",
+      "sha256": "507f59fef83663493b92f9e176d0b68db532626c650e5750962d40b98b737d02"
+    },
+    {
+      "bytes": 13864,
+      "path": "data/market_history/cupmarket_prices_20260613T015623Z.csv",
+      "sha256": "bfda15bc8d7037fac6b47aadf2f88488b71871ba9ade4de562c5edc2fbe4386d"
+    },
+    {
+      "bytes": 16636,
+      "path": "data/market_history/cupmarket_prices_20260613T043919Z.csv",
+      "sha256": "73d0b5465a7a99c9d52e8331fc9f537fccd3c08da99d45654899f80952cd72ac"
+    },
+    {
+      "bytes": 15167,
+      "path": "data/market_history/cupmarket_prices_20260613T080337Z.csv",
+      "sha256": "c364dfab9235271876e1c319e31ec3587907e35d7761ded2510d37a810973f34"
+    },
+    {
+      "bytes": 15167,
+      "path": "data/market_history/cupmarket_prices_20260613T101315Z.csv",
+      "sha256": "554f1bf4dfc4041df11d7f7ca55d2d3440df538900df6568abef36ab386b7e7a"
+    },
+    {
+      "bytes": 15167,
+      "path": "data/market_history/cupmarket_prices_20260613T141341Z.csv",
+      "sha256": "27cc5fa12b1e57fab14ae96ce589e953405462b79a374452a308f015b350c1f1"
+    },
+    {
+      "bytes": 16874,
+      "path": "data/market_history/cupmarket_prices_20260613T212604Z.csv",
+      "sha256": "276725ca6dc1fecc3971b671c3b278a3368218b5304fc764b130fc7dde4f6dd6"
+    },
+    {
+      "bytes": 16925,
+      "path": "data/market_history/cupmarket_prices_20260614T065231Z.csv",
+      "sha256": "b3b88349b2fac2aab0cff6e749c494ff44506d8d5244ef786cea69a7ee73c2f0"
+    },
+    {
+      "bytes": 16732,
+      "path": "data/market_history/cupmarket_prices_20260614T192315Z.csv",
+      "sha256": "03d9726dd6f5e6efaf96af87ab71c4c5f8b334f3eaf8273dcb5ea37fb7c91db9"
+    },
+    {
+      "bytes": 16733,
+      "path": "data/market_history/cupmarket_prices_20260614T220523Z.csv",
+      "sha256": "07bbc18640673b39f36afe8ad19bda4296bfb380c172932c6be66f299632812b"
+    },
+    {
+      "bytes": 16674,
+      "path": "data/market_history/cupmarket_prices_20260615T063148Z.csv",
+      "sha256": "113b0696607909d9688ccb188edf5c371dc497a5585363a0b3e29527be02b92e"
+    },
+    {
+      "bytes": 16643,
+      "path": "data/market_history/cupmarket_prices_20260615T181015Z.csv",
+      "sha256": "4c8ffaed18434bc340d6f0ade11d27c0c8a44c48c2a75eaed2600df0b9d7129f"
+    },
+    {
+      "bytes": 15168,
+      "path": "data/market_history/cupmarket_prices_20260615T181539Z.csv",
+      "sha256": "5359a257739b961c9e777d4c714b1aabb2e2f936d6404bec98684aa02315f7ce"
+    },
+    {
+      "bytes": 15168,
+      "path": "data/market_history/cupmarket_prices_20260615T183005Z.csv",
+      "sha256": "1913aee6f58c6b3f8b72421735c0c9a71a8b1a6f8c217811616b0fb70748eb57"
+    },
+    {
+      "bytes": 16607,
+      "path": "data/market_history/cupmarket_prices_20260615T211452Z.csv",
+      "sha256": "fc1ff7c3523c236b804cac90bbcbfb56b902e4ec7e1ef01ece9ade9e8fc28145"
+    },
+    {
+      "bytes": 16792,
+      "path": "data/market_history/cupmarket_prices_20260616T001834Z.csv",
+      "sha256": "ed0fe289ce9433b256c8081cf82ef87ff172f152ee3536a8a8e34dbeb7f2da08"
+    },
+    {
+      "bytes": 16959,
+      "path": "data/market_history/cupmarket_prices_20260616T061017Z.csv",
+      "sha256": "b19481f43b38e561e144fe04f5f1b79058ec57156ce50697f3bac7d809f0c5a1"
+    },
+    {
+      "bytes": 16059,
+      "path": "data/market_history/cupmarket_prices_20260616T184111Z.csv",
+      "sha256": "335b6888e51a0c3bbc0391917f2f2cfdede5e1d93b87c5558422b2c7c048331e"
+    },
+    {
+      "bytes": 16723,
+      "path": "data/market_history/cupmarket_prices_20260616T213805Z.csv",
+      "sha256": "b178911637dc311ed7dc3b9892b4255724d84215b94a44ba8d4baa8ae42fe8df"
+    },
+    {
+      "bytes": 16766,
+      "path": "data/market_history/cupmarket_prices_20260617T001132Z.csv",
+      "sha256": "3a7623fb94c09df481061577e339c58c64ae292d3981fb47101f3642ea334e24"
+    },
+    {
+      "bytes": 16765,
+      "path": "data/market_history/cupmarket_prices_20260617T061733Z.csv",
+      "sha256": "a161728991400075509dbba87aacbb602803e2b1846540c498f345614c8ce4ba"
+    },
+    {
+      "bytes": 16623,
+      "path": "data/market_history/cupmarket_prices_20260617T193849Z.csv",
+      "sha256": "57c832ea6668570f7629ce17965774b2c1ab9deacdec180a6824dbd8bbf132bd"
+    },
+    {
+      "bytes": 16843,
+      "path": "data/market_history/cupmarket_prices_20260617T222924Z.csv",
+      "sha256": "bcfad751b4a1263d4668bda6cf22ee96269f356a582932f08bf92d1a8469646e"
+    },
+    {
+      "bytes": 16763,
+      "path": "data/market_history/cupmarket_prices_20260618T011753Z.csv",
+      "sha256": "4c860fddcba5860cc8a7a16a43955cabbdc54c87eba6ac825cd0391083c3ddfa"
+    },
+    {
+      "bytes": 16536,
+      "path": "data/market_history/cupmarket_prices_20260618T093147Z.csv",
+      "sha256": "dc3e5070ab0720bc294b07e0b60ffa392b9a580a2190e4580bf8864d391e1111"
+    },
+    {
+      "bytes": 16817,
+      "path": "data/market_history/cupmarket_prices_20260618T181755Z.csv",
+      "sha256": "6665af6eeb70d48684bc63a968cdce34379825028a4a4f0f1ec9fce2928c08cc"
+    },
+    {
+      "bytes": 16822,
+      "path": "data/market_history/cupmarket_prices_20260618T212749Z.csv",
+      "sha256": "815de418fc6bdbf7cc483cd4609ca278dfb01ccda60a2b2f18ce74aa5b62aa42"
+    },
+    {
+      "bytes": 16735,
+      "path": "data/market_history/cupmarket_prices_20260619T001547Z.csv",
+      "sha256": "07f01f4f7d775d1132191e0523e3bad6af2f7e3103f1b87045a1edc2bca59a72"
+    },
+    {
+      "bytes": 16491,
+      "path": "data/market_history/cupmarket_prices_20260619T053017Z.csv",
+      "sha256": "27c976206fc412e071953616472e61d77097b134d1233ba3e37be870ca5190e0"
+    },
+    {
+      "bytes": 16503,
+      "path": "data/market_history/cupmarket_prices_20260619T211745Z.csv",
+      "sha256": "651b7eda32f4b2691571636bc1f0ef0952d35703c8ed795543383373070cf88a"
+    },
+    {
+      "bytes": 16318,
+      "path": "data/market_history/cupmarket_prices_20260620T060449Z.csv",
+      "sha256": "c07c1a42eac728039d05d926db9f01d74ad91292f04a8202944ea394e0645233"
+    },
+    {
+      "bytes": 16348,
+      "path": "data/market_history/cupmarket_prices_20260620T194655Z.csv",
+      "sha256": "2428fbc6c736ec110cc7e7e1d838707b9aac2f2824b40e6391b55d7044cc3d75"
+    },
+    {
+      "bytes": 16199,
+      "path": "data/market_history/cupmarket_prices_20260620T224517Z.csv",
+      "sha256": "bd88aaa7bfc30c67aece9e4db40971ab4b953640f7ff7f81549edb97e7811dfe"
+    },
+    {
+      "bytes": 16140,
+      "path": "data/market_history/cupmarket_prices_20260621T072827Z.csv",
+      "sha256": "536e1edd75fb4e11283a0086e7ab13e6102d362e6c001815814e83ef65897ee4"
+    },
+    {
+      "bytes": 15963,
+      "path": "data/market_history/cupmarket_prices_20260621T180803Z.csv",
+      "sha256": "7af667575b866f1fabfc054af7d22052f55376d1796696b1a5c4ac4b23b821ec"
+    },
+    {
+      "bytes": 16136,
+      "path": "data/market_history/cupmarket_prices_20260621T214342Z.csv",
+      "sha256": "07a875e097433a8eaa06ed1d63c8d3c9be47284cae6f761480030d01a994aa97"
+    },
+    {
+      "bytes": 16272,
+      "path": "data/market_history/cupmarket_prices_20260622T001841Z.csv",
+      "sha256": "d49acea037d8e05bff3a2a9c4e442a67996a945d7a03efbf8282bd7f931b8c91"
+    },
+    {
+      "bytes": 16109,
+      "path": "data/market_history/cupmarket_prices_20260622T054311Z.csv",
+      "sha256": "ae670ed8764927f91bbbfc83b0bc97392b3d4df25130f8a9c8d26c4fe21883c7"
+    },
+    {
+      "bytes": 15982,
+      "path": "data/market_history/cupmarket_prices_20260622T195032Z.csv",
+      "sha256": "17915a0b5eae30f4d41ede373396f6dda9f79df50efdf6c2221843f6fb7ef47f"
+    },
+    {
+      "bytes": 15762,
+      "path": "data/market_history/cupmarket_prices_20260623T061456Z.csv",
+      "sha256": "8f6932235c290c61096882bfacf9bb987221d7978a2d01b1dadd5155d41a4c57"
+    },
+    {
+      "bytes": 15848,
+      "path": "data/market_history/cupmarket_prices_20260623T221838Z.csv",
+      "sha256": "c631555e34f3b1810955b5a4f09727ba6916c17177cf15916328c09550774c05"
+    },
+    {
+      "bytes": 15671,
+      "path": "data/market_history/cupmarket_prices_20260624T012709Z.csv",
+      "sha256": "0a7b63aec255649219bf2692f01ec4ac8e645e60a9a6e71bab1010d7bc951f92"
+    },
+    {
+      "bytes": 15611,
+      "path": "data/market_history/cupmarket_prices_20260624T054621Z.csv",
+      "sha256": "579a6c73cb10289beba176925a0a8e885e6b2cad0fc311c54680a5393f00c579"
+    },
+    {
+      "bytes": 15569,
+      "path": "data/market_history/cupmarket_prices_20260624T215534Z.csv",
+      "sha256": "2a76d0f9b8b11c267d53b14a390b1d3f5cd6e2ab85efcfae6abea98420ba9385"
+    },
+    {
+      "bytes": 15404,
+      "path": "data/market_history/cupmarket_prices_20260625T040758Z.csv",
+      "sha256": "130e214019e640ef34ef2d5a4f9ff40f7c677de7e95c27465c17dc4facbbfd6b"
+    },
+    {
+      "bytes": 15094,
+      "path": "data/market_history/cupmarket_prices_20260625T221148Z.csv",
+      "sha256": "c021766b81acae07ef2ff6fbb01f25a1936edb1733c212fac337f6dbf50fa0af"
+    },
+    {
+      "bytes": 14475,
+      "path": "data/market_history/cupmarket_prices_20260625T221436Z.csv",
+      "sha256": "32d1dad5fed01de7f11e43e9d65dd0dce5cb4a9c802a7fbd9caa6fe1068bdfa8"
+    },
+    {
+      "bytes": 15078,
+      "path": "data/market_history/cupmarket_prices_20260626T065926Z.csv",
+      "sha256": "5156cdcddd402236703e17a6e27cbedb7f8cfa3bd5203b1fe88a65c7ba3b13d0"
+    },
+    {
+      "bytes": 14745,
+      "path": "data/market_history/cupmarket_prices_20260626T214305Z.csv",
+      "sha256": "0ecf2da7b7e099e05488c8407d9b8c17535b54ceb52ab9a6fbd12c19681711d7"
+    },
+    {
+      "bytes": 14666,
+      "path": "data/market_history/cupmarket_prices_20260627T053028Z.csv",
+      "sha256": "418567b09bb532eccbcb6ee2220454a74a56c424885bc8d26d32d194c63428b1"
+    },
+    {
+      "bytes": 14043,
+      "path": "data/market_history/cupmarket_prices_20260627T163515Z.csv",
+      "sha256": "582d8f7de9cc385d1ad5d8c5c0fbae8ac354cbdf0c7f64f764a4345a4da34f34"
+    },
+    {
+      "bytes": 13999,
+      "path": "data/market_history/cupmarket_prices_20260627T181715Z.csv",
+      "sha256": "d94ed1ebf0a38e85e2a7f2c76edc14c252f6b2e8de07127fcb5c6d52b6d13b19"
+    },
+    {
+      "bytes": 13995,
+      "path": "data/market_history/cupmarket_prices_20260627T200246Z.csv",
+      "sha256": "d78daa6dc97334ecd02ee542138c907612f378d595d35f51680a0ac01bebc2bc"
+    },
+    {
+      "bytes": 14175,
+      "path": "data/market_history/cupmarket_prices_20260627T230546Z.csv",
+      "sha256": "3091339e38eb60f9693427daca1c3a8daa0bfbe5d1f7029a03daff255c5db87a"
+    },
+    {
+      "bytes": 13940,
+      "path": "data/market_history/cupmarket_prices_20260628T042304Z.csv",
+      "sha256": "c6568e87851994b667da5d27ce4694314b51eeefcc6f171ba2d9bc65a9f009b4"
+    },
+    {
+      "bytes": 13447,
+      "path": "data/market_history/cupmarket_prices_20260628T075649Z.csv",
+      "sha256": "0b0c5d235b629f014e5d0bfa4a3e2e0cef72089e022db0d2de4998f36385bd34"
+    },
+    {
+      "bytes": 14216,
+      "path": "data/market_history/cupmarket_prices_20260628T075659Z.csv",
+      "sha256": "a7bd79ff0bbddac25c777391e2fdf39e7040f678c790ae75950ffe2eba190a46"
+    },
+    {
+      "bytes": 12454,
+      "path": "data/market_history/cupmarket_prices_20260628T080357Z.csv",
+      "sha256": "2df04d3d83658ac74c07bcc73df3bfa8cf17eb199f1b01050b919b251169f60d"
+    },
+    {
+      "bytes": 13317,
+      "path": "data/market_history/cupmarket_prices_20260628T174632Z.csv",
+      "sha256": "d425351f5f3190c9e1b224cee522cd324c27a8a2dfb5b4e16d95d6607dd635b7"
+    },
+    {
+      "bytes": 14280,
+      "path": "data/market_history/cupmarket_prices_20260628T174640Z.csv",
+      "sha256": "ea74c62dbec81d00a89ba3554e1efd9e3bd1d2f2198bd1e5b9054c8b069b41b5"
+    },
+    {
+      "bytes": 13379,
+      "path": "data/market_history/cupmarket_prices_20260628T175549Z.csv",
+      "sha256": "299d1cfebb34624d4a6be2ffb6fbe04fded95dac4b86f3535e0477e39c17ab26"
+    },
+    {
+      "bytes": 14270,
+      "path": "data/market_history/cupmarket_prices_20260628T175600Z.csv",
+      "sha256": "c4e22d59088952fc656c61867e80a5bed4e581d0bcf0303b6b11901e1a3fc0b7"
+    },
+    {
+      "bytes": 12414,
+      "path": "data/market_history/cupmarket_prices_20260628T184558Z.csv",
+      "sha256": "6ceb1fbdb594857bb0005d969b4fdb73315b2a259abf124a27aceb6c1dfe52fc"
+    },
+    {
+      "bytes": 14270,
+      "path": "data/market_history/cupmarket_prices_20260628T184609Z.csv",
+      "sha256": "dbea2c6412bcd0d71cb625c54dbb2dfde97619942c4f6185cfa77db0467e08a2"
+    },
+    {
+      "bytes": 13817,
+      "path": "data/market_history/cupmarket_prices_20260628T214200Z.csv",
+      "sha256": "833661bc2e73efd6d09f0893e9e0fc8c8ea1f2283d7237bcc16ea464793307d4"
+    },
+    {
+      "bytes": 13975,
+      "path": "data/market_history/cupmarket_prices_20260628T214208Z.csv",
+      "sha256": "3e68cb5cb960cfdbf5a5f74710fe9d61e30e4129eab2bbbc5bf6ac14e9562f41"
+    },
+    {
+      "bytes": 13089,
+      "path": "data/market_history/cupmarket_prices_20260628T215618Z.csv",
+      "sha256": "7bf46d2c202b16abb4d142ebeb86cffcd29581e58f3d067db8e0cecae438f7a7"
+    },
+    {
+      "bytes": 13417,
+      "path": "data/market_history/cupmarket_prices_20260628T224109Z.csv",
+      "sha256": "9fdf9d377422bb6047dcfbdedbbd54a672cd523121e5d7fb80f63ca334203fae"
+    },
+    {
+      "bytes": 13994,
+      "path": "data/market_history/cupmarket_prices_20260628T224120Z.csv",
+      "sha256": "0f083edf0b4907c369e00ad337a85012640be1021fff1c712234f8165492d0c1"
+    },
+    {
+      "bytes": 13089,
+      "path": "data/market_history/cupmarket_prices_20260628T235433Z.csv",
+      "sha256": "348979a6677846ae63b63cff1ccc0e3b9f36fbb1a7917b86388e684ee5b167cd"
+    },
+    {
+      "bytes": 14123,
+      "path": "data/market_history/cupmarket_prices_20260629T044228Z.csv",
+      "sha256": "5f88309a3a53fb7288274f2cc5606039c8948f7800fef10d1594e8c18e755294"
+    },
+    {
+      "bytes": 13159,
+      "path": "data/market_history/cupmarket_prices_20260629T091952Z.csv",
+      "sha256": "388d7374ba2046a69bd743dd89937a6098f512ba2cc5dd6fef509b0310492872"
+    },
+    {
+      "bytes": 13271,
+      "path": "data/market_history/cupmarket_prices_20260629T145645Z.csv",
+      "sha256": "e0ae45694abf89c8b6f5912ed7d6732b2947e6427c83a4db8a78555f24ecc7a0"
+    },
+    {
+      "bytes": 14095,
+      "path": "data/market_history/cupmarket_prices_20260629T145655Z.csv",
+      "sha256": "f218d8fd77bde7e5c2c5c3515aba31da0dd8def3604b87fc6549688e2f320dec"
+    },
+    {
+      "bytes": 13594,
+      "path": "data/market_history/cupmarket_prices_20260629T192038Z.csv",
+      "sha256": "abdf51b7909f45fa13d1c873861943cf3c990f73d5372f1b4b78f5beb84f098d"
+    },
+    {
+      "bytes": 13884,
+      "path": "data/market_history/cupmarket_prices_20260629T192049Z.csv",
+      "sha256": "7f75193b80df0730fc31b6dc754e9b9c951e48483818ef4125fb2712aca77fea"
+    },
+    {
+      "bytes": 13489,
+      "path": "data/market_history/cupmarket_prices_20260629T234539Z.csv",
+      "sha256": "a3a91b1eab4f18e2354323883314413b9e8441e46eeefdf4ebb627c75ee19b11"
+    },
+    {
+      "bytes": 13510,
+      "path": "data/market_history/cupmarket_prices_20260629T234550Z.csv",
+      "sha256": "c370b31a8ff53a42a863bd3bef7b79565e24f295e7a05f9aa68a29fcff18d5d8"
+    },
+    {
+      "bytes": 13496,
+      "path": "data/market_history/cupmarket_prices_20260630T062040Z.csv",
+      "sha256": "87e764fcbb10ae98e51acd513047bd0d465bae64f68feee23903be982abcd7fc"
+    },
+    {
+      "bytes": 13789,
+      "path": "data/market_history/cupmarket_prices_20260630T062050Z.csv",
+      "sha256": "0a6652900206a180bb733ef526f51831bd0271992a76ca954e8e6c018595e673"
+    },
+    {
+      "bytes": 12924,
+      "path": "data/market_history/cupmarket_prices_20260630T100850Z.csv",
+      "sha256": "ae3bd333d20a3c58d3336b9906930b50d7b336eddc1d7c8d287638bedd038693"
+    },
+    {
+      "bytes": 13385,
+      "path": "data/market_history/cupmarket_prices_20260630T190842Z.csv",
+      "sha256": "06d6c25b06ae39d267711c7e213cdc7d673cb9ccd51d15921ad0be851f325efc"
+    },
+    {
+      "bytes": 13678,
+      "path": "data/market_history/cupmarket_prices_20260630T190853Z.csv",
+      "sha256": "60b41e05cde537c71724c7fcfe26d366dbad87a475474138aa00c203197594ea"
+    },
+    {
+      "bytes": 13215,
+      "path": "data/market_history/cupmarket_prices_20260630T230709Z.csv",
+      "sha256": "224659fad7bd54e4698ffc88f293aa244d0dc53ffa3931fd85d9c6d5495fa783"
+    },
+    {
+      "bytes": 13537,
+      "path": "data/market_history/cupmarket_prices_20260630T230718Z.csv",
+      "sha256": "7418111a9f516426cef67383d8d2e85b3ce2c19bfcd45225f20d5412a1a4fe15"
+    },
+    {
+      "bytes": 13534,
+      "path": "data/market_history/cupmarket_prices_20260701T001419Z.csv",
+      "sha256": "331c637ff484587a9f1f0536d05b25a5c67498fac8bb20115f20c5ffdf1c3257"
+    },
+    {
+      "bytes": 13052,
+      "path": "data/market_history/cupmarket_prices_20260701T045910Z.csv",
+      "sha256": "a7d5a9c7b452259e3f3b095e06daf958c863496431c5df27d36c872f1293201e"
+    },
+    {
+      "bytes": 13559,
+      "path": "data/market_history/cupmarket_prices_20260701T045919Z.csv",
+      "sha256": "b017a3f3a180a718910c964e9b2f2d782f42e8991e83b73aa9ebb4ae6e7ce20c"
+    },
+    {
+      "bytes": 12772,
+      "path": "data/market_history/cupmarket_prices_20260701T085557Z.csv",
+      "sha256": "37b720d51ebfc09482bc791947e1ec919b5004788104cd1707e8c7b1936cfb15"
+    },
+    {
+      "bytes": 12729,
+      "path": "data/market_history/cupmarket_prices_20260701T085607Z.csv",
+      "sha256": "3eb8d78bb6b46c7f8a46e5defd5fef38988dc3cd5fa82456ca10acfe0834c0f5"
+    },
+    {
+      "bytes": 12710,
+      "path": "data/market_history/cupmarket_prices_20260701T092321Z.csv",
+      "sha256": "3b9db0d2c677ee5316c4630bd4bde6f1db83d6c5de2b8ef21f7a562edf7b5119"
+    },
+    {
+      "bytes": 13374,
+      "path": "data/market_history/cupmarket_prices_20260701T092327Z.csv",
+      "sha256": "fb1562b200c0045a9cf8134e8d9646923eb459b6aa91cc4bb5e5bcc302b217d4"
+    },
+    {
+      "bytes": 12925,
+      "path": "data/market_history/cupmarket_prices_20260701T184725Z.csv",
+      "sha256": "e0b0d6303e4be0aade23d9b94bdc0eaad2d44c5914cb3e8fc5f5be64e47ae71d"
+    },
+    {
+      "bytes": 13325,
+      "path": "data/market_history/cupmarket_prices_20260701T184735Z.csv",
+      "sha256": "3d8a818e6f45e3512601eba27d9e7666ac50c6fc1458df8853fbada9cae4a61e"
+    },
+    {
+      "bytes": 19469,
+      "path": "data/market_history/cupmarket_prices_20260701T235947Z.csv",
+      "sha256": "b6b9a0dcc64cafd0c862dbb658f0d617a33631774160a229491143a8761558a7"
+    },
+    {
+      "bytes": 18937,
+      "path": "data/market_history/cupmarket_prices_20260701T235956Z.csv",
+      "sha256": "2b84f7fa3a6ee0a14bb0ea0cf0b766d79ace8689b363e4648125f795646cfc4f"
+    },
+    {
+      "bytes": 19556,
+      "path": "data/market_history/cupmarket_prices_20260702T101901Z.csv",
+      "sha256": "ec36cf7dce771c53f4b751a55566fde882791229cf59e71cd783e62318d74505"
+    },
+    {
+      "bytes": 19781,
+      "path": "data/market_history/cupmarket_prices_20260702T101912Z.csv",
+      "sha256": "95919b6ba3c46b43c6fc7da5c3f533ef08b75ed181f8ef17e0eb41b54ff3bd45"
+    },
+    {
+      "bytes": 19490,
+      "path": "data/market_history/cupmarket_prices_20260702T214902Z.csv",
+      "sha256": "89c689419f3caddec61c67789a04606d0603d53e6fca5ac9d6647a4f15ace773"
+    },
+    {
+      "bytes": 19834,
+      "path": "data/market_history/cupmarket_prices_20260702T214912Z.csv",
+      "sha256": "0ef0f8534e55a94d2e679eaacad184964fff6e37db0d1cc5fef50e435f27519d"
+    },
+    {
+      "bytes": 18873,
+      "path": "data/market_history/cupmarket_prices_20260703T050101Z.csv",
+      "sha256": "fc31909c2436f01bb7089ce95521f43b5b18ff820f55c69656c0cc27d0cea3a2"
+    },
+    {
+      "bytes": 18562,
+      "path": "data/market_history/cupmarket_prices_20260703T082216Z.csv",
+      "sha256": "84e64308504bd5b4fe69b63638a365c89b719cca03a097aa7d4a685936dc6cc4"
+    },
+    {
+      "bytes": 19039,
+      "path": "data/market_history/cupmarket_prices_20260703T082225Z.csv",
+      "sha256": "714ddbca0f9e66af953eac7830eb42fa8d671bab460839168458fb34795abf40"
+    },
+    {
+      "bytes": 18286,
+      "path": "data/market_history/cupmarket_prices_20260703T111151Z.csv",
+      "sha256": "ac81ff4ad5d2971e76c2837fe5b4671d0dddb8179198022eec909cfeb0b34ee0"
+    },
+    {
+      "bytes": 18531,
+      "path": "data/market_history/cupmarket_prices_20260703T212117Z.csv",
+      "sha256": "d97fbfd6058aaf7fdb233cf79449e96ea8a56aa9250a35bbc24652a9dc0a55ef"
+    },
+    {
+      "bytes": 18916,
+      "path": "data/market_history/cupmarket_prices_20260703T212127Z.csv",
+      "sha256": "991b20ebde1e47affc1632fd9b0fd00d46e49d3f086d38936abf06e56eb623bc"
+    },
+    {
+      "bytes": 18361,
+      "path": "data/market_history/cupmarket_prices_20260704T012330Z.csv",
+      "sha256": "37f94f7e88c425e24556aa77d615c5094c1d29ad98b8e1216abe9919e0437a8c"
+    },
+    {
+      "bytes": 18767,
+      "path": "data/market_history/cupmarket_prices_20260704T012339Z.csv",
+      "sha256": "939660d2f02efa9d43377ec369cb7d3ee782aa1b98bf3522013312c6cb116fe9"
+    },
+    {
+      "bytes": 18421,
+      "path": "data/market_history/cupmarket_prices_20260704T052622Z.csv",
+      "sha256": "0fce2d42227c1fbb38569b60aebded6a291e687ab88ccb2ae2c0790222031d38"
+    },
+    {
+      "bytes": 18826,
+      "path": "data/market_history/cupmarket_prices_20260704T052631Z.csv",
+      "sha256": "1ef084414918fc78dd277a4ee613639dcc1c14ada8e57fba93f356c9290c2152"
+    },
+    {
+      "bytes": 18202,
+      "path": "data/market_history/cupmarket_prices_20260704T081358Z.csv",
+      "sha256": "532b44aa60118ce161fa25a6170ad8770d4911ee19413bfa073adba9dc99eba5"
+    },
+    {
+      "bytes": 18277,
+      "path": "data/market_history/cupmarket_prices_20260704T081407Z.csv",
+      "sha256": "9a5a095212ffbe4a9599cea723bfaca62b8ebec6110f4383c16bfd8ae8d31afe"
+    },
+    {
+      "bytes": 18248,
+      "path": "data/market_history/cupmarket_prices_20260704T102802Z.csv",
+      "sha256": "c14052419d7560a38c7d29e02818cd9ad5bc210620828b353a876b5e8e498474"
+    },
+    {
+      "bytes": 18216,
+      "path": "data/market_history/cupmarket_prices_20260704T134731Z.csv",
+      "sha256": "9e2292fbb10a5f5876e33ed9695d5c2a6aff8548e1deb8c64f8c43677c238f0f"
+    },
+    {
+      "bytes": 18462,
+      "path": "data/market_history/cupmarket_prices_20260704T192030Z.csv",
+      "sha256": "d27da4344e708d80d9ba6e3ede658b32e899cea05858d702f0c009c96ec70f08"
+    },
+    {
+      "bytes": 18885,
+      "path": "data/market_history/cupmarket_prices_20260704T192038Z.csv",
+      "sha256": "fb52624ec7c4fc8e8d4a439f914486ffc97cc3216c23c0af366ea53de793ddef"
+    },
+    {
+      "bytes": 18191,
+      "path": "data/market_history/cupmarket_prices_20260704T231938Z.csv",
+      "sha256": "a68854c4d622e1546bb8fe9f984a74b00c2a7942976c408ccc99763b23ac4a9f"
+    },
+    {
+      "bytes": 18625,
+      "path": "data/market_history/cupmarket_prices_20260704T231947Z.csv",
+      "sha256": "960e158dcbd8a6dc891af362dc709260364337a8b0cd7ad24d216a2f6d257e36"
+    },
+    {
+      "bytes": 18559,
+      "path": "data/market_history/cupmarket_prices_20260705T054256Z.csv",
+      "sha256": "6e18e68ab1aca118c4252242415944705a9f1d6e3d5ae7c8b8444ffd08dd8a2b"
+    },
+    {
+      "bytes": 18053,
+      "path": "data/market_history/cupmarket_prices_20260705T083420Z.csv",
+      "sha256": "5c3cd662bcd3b285a72ddd7610e33fb11001d4d7f7a07b63ab32397891d11b3c"
+    },
+    {
+      "bytes": 18601,
+      "path": "data/market_history/cupmarket_prices_20260705T083429Z.csv",
+      "sha256": "f27566f4ecaca5273cf7b6e3591ba1f8434d72968eb1168a56fd494250fc2922"
+    },
+    {
+      "bytes": 19067,
+      "path": "data/market_history/cupmarket_prices_20260705T105324Z.csv",
+      "sha256": "dd720c93950a4a5bc151190d05a56cddba1f0d6007cd9fbb73ea6bb71d4bc8fd"
+    },
+    {
+      "bytes": 18295,
+      "path": "data/market_history/cupmarket_prices_20260705T122203Z.csv",
+      "sha256": "8aeb518f37b9b5a8eb993be67c140afe0bcf691297a79d5034175d358e87ab33"
+    },
+    {
+      "bytes": 18801,
+      "path": "data/market_history/cupmarket_prices_20260705T122208Z.csv",
+      "sha256": "9719d412983936b10def8b4d612708b2732268224362839ab66c8be634f6585d"
+    },
+    {
+      "bytes": 18580,
+      "path": "data/market_history/cupmarket_prices_20260705T223615Z.csv",
+      "sha256": "20e41b42ad3ac897b3a5d7a04ddbd81b8c2fdb765b591919ea5d6e708dcaa836"
+    },
+    {
+      "bytes": 18878,
+      "path": "data/market_history/cupmarket_prices_20260705T223624Z.csv",
+      "sha256": "34f5866764eca3ef29dafc05d8254cc0770e0f14303e0a700a4e6ccb2b630f1d"
+    },
+    {
+      "bytes": 18296,
+      "path": "data/market_history/cupmarket_prices_20260705T234654Z.csv",
+      "sha256": "ff31863d8f29221db5c5418b3a52c143d3d29cc1722359663ea5874b0d13fc35"
+    },
+    {
+      "bytes": 18206,
+      "path": "data/market_history/cupmarket_prices_20260706T041000Z.csv",
+      "sha256": "2a2620cfc26a6bc468dc9a4e0bc06f46f39b85fd0779d17eb747d9396cb7b0b4"
+    },
+    {
+      "bytes": 18419,
+      "path": "data/market_history/cupmarket_prices_20260706T041009Z.csv",
+      "sha256": "cb77cdae90b3b0b3c83df19dc5ad02a5f95c252f95acfcce09959e6300db0c80"
+    },
+    {
+      "bytes": 18042,
+      "path": "data/market_history/cupmarket_prices_20260706T084339Z.csv",
+      "sha256": "bc7e809dbdac2a876892f17f91df9e0348e778657301cf80a4858883f1a58612"
+    },
+    {
+      "bytes": 18016,
+      "path": "data/market_history/cupmarket_prices_20260706T084347Z.csv",
+      "sha256": "8c0417f722ded580971a949e28fc83fdf3dfa94f1dad90d2cbd46781c410b931"
+    },
+    {
+      "bytes": 18099,
+      "path": "data/market_history/cupmarket_prices_20260706T212541Z.csv",
+      "sha256": "21d30aff25e1c2eb4664c8e7d0c439967daa5f398d32a0a8095766097224e4a6"
+    },
+    {
+      "bytes": 18453,
+      "path": "data/market_history/cupmarket_prices_20260706T212549Z.csv",
+      "sha256": "d236238c6c27400639d4ff26b19959ab972aea995a7ff9d86b4ab4514b78bbfd"
+    },
+    {
+      "bytes": 18269,
+      "path": "data/market_history/cupmarket_prices_20260707T054622Z.csv",
+      "sha256": "184d1c6ceb1e3c6f8aec208478b2d1a40dbcc6233dcf313e47d24f3b947bf306"
+    },
+    {
+      "bytes": 18623,
+      "path": "data/market_history/cupmarket_prices_20260707T054631Z.csv",
+      "sha256": "002a2f8c3864d47a35ffd8f880c98f38c10da2f4b82bc9be884590cc5caa273d"
+    },
+    {
+      "bytes": 18124,
+      "path": "data/market_history/cupmarket_prices_20260707T085839Z.csv",
+      "sha256": "c3f7ad32260497548abcf31b09293d2ce4bfba6c827871a32b4cdbc9cb807359"
+    },
+    {
+      "bytes": 18167,
+      "path": "data/market_history/cupmarket_prices_20260707T085848Z.csv",
+      "sha256": "6426560178f3e96dbc1adda27cfbb033976a6571c6349a40e01999422e1f25f9"
+    },
+    {
+      "bytes": 17992,
+      "path": "data/market_history/cupmarket_prices_20260707T211050Z.csv",
+      "sha256": "1162ea207caa0730e5cb02740c0c4b0b978033cef9c4f696af13b12638da9820"
+    },
+    {
+      "bytes": 18140,
+      "path": "data/market_history/cupmarket_prices_20260707T232632Z.csv",
+      "sha256": "4b1bc3240d6f2753fce0cd06a2b4f394d3e2e3185a4affc5db14ea0d8cc69d8b"
+    },
+    {
+      "bytes": 18472,
+      "path": "data/market_history/cupmarket_prices_20260707T232641Z.csv",
+      "sha256": "99aa80430889784b7b5596c510f87a17a53a2405e37d44ece38394d3bb7c5cef"
+    },
+    {
+      "bytes": 17998,
+      "path": "data/market_history/cupmarket_prices_20260707T233852Z.csv",
+      "sha256": "ab845c706911e8146a05f2653a84f650d4f7ff6852a4700f4888922f29cc36cc"
+    },
+    {
+      "bytes": 17879,
+      "path": "data/market_history/cupmarket_prices_20260708T071820Z.csv",
+      "sha256": "b46c5a10925e5f3a5847801f5c15ed60e50b3c27bb4b59d86df057acad581e19"
+    },
+    {
+      "bytes": 18338,
+      "path": "data/market_history/cupmarket_prices_20260708T071829Z.csv",
+      "sha256": "1439f5472235aee36077a4f8fec63796712df97021f07df6f1ca2586d325b360"
+    },
+    {
+      "bytes": 18038,
+      "path": "data/market_history/cupmarket_prices_20260708T095656Z.csv",
+      "sha256": "b0bc5b1f8e67447078a817407cef34f80f0648264070de2565d2f892f9a75d0a"
+    },
+    {
+      "bytes": 18337,
+      "path": "data/market_history/cupmarket_prices_20260709T074321Z.csv",
+      "sha256": "6477110ac8c9a3f3280098b874d98aa8e422506aaa80c15206328098ed2fe1fa"
+    },
+    {
+      "bytes": 17978,
+      "path": "data/market_history/cupmarket_prices_20260709T234038Z.csv",
+      "sha256": "3257d301d27bc628aac458512422a14ac8dd403ab86a2f6d1d49ec342bcd7543"
+    },
+    {
+      "bytes": 18334,
+      "path": "data/market_history/cupmarket_prices_20260709T234046Z.csv",
+      "sha256": "9a0718ed9c91b7f12a7411242699b543dd63b57fa2920da1a0faed611b1d9c0d"
+    },
+    {
+      "bytes": 18222,
+      "path": "data/market_history/cupmarket_prices_20260710T085237Z.csv",
+      "sha256": "73925fd7e79df339b4cd4db436f23221f50e06de7f5a4e9c064be6278ec2bb7b"
+    },
+    {
+      "bytes": 17839,
+      "path": "data/market_history/cupmarket_prices_20260710T175847Z.csv",
+      "sha256": "e4f2d9da7c9726d9096c2f4e61e562190491c4da889350c100fbd57df5397b83"
+    },
+    {
+      "bytes": 17963,
+      "path": "data/market_history/cupmarket_prices_20260710T175855Z.csv",
+      "sha256": "9b2a8c1334f0f203ca9b631ea1060c4a42725bdbd6f904402c799bbab4c97925"
+    },
+    {
+      "bytes": 17934,
+      "path": "data/market_history/cupmarket_prices_20260710T214437Z.csv",
+      "sha256": "a9343ab506e2a7cea8392984e5b66ebe36e32c014cc540d5c62382806e8b6bbc"
+    },
+    {
+      "bytes": 18311,
+      "path": "data/market_history/cupmarket_prices_20260710T214444Z.csv",
+      "sha256": "57754b81e316e155bf120d34ff0b23a315cffe1effdf48cc470f4d0c8f378d14"
+    },
+    {
+      "bytes": 18022,
+      "path": "data/market_history/cupmarket_prices_20260710T224402Z.csv",
+      "sha256": "9f4ca7643a5e02010f103ff6c871eae1e7cfa5535b77b0c88c148c42e5b96819"
+    },
+    {
+      "bytes": 17762,
+      "path": "data/market_history/cupmarket_prices_20260711T070050Z.csv",
+      "sha256": "27708c80e058ca0e5073bd68feb49e5ec15bc46a4be8927ca2b3f56ae29af3ba"
+    },
+    {
+      "bytes": 18139,
+      "path": "data/market_history/cupmarket_prices_20260711T070058Z.csv",
+      "sha256": "538bed528bddcc0938e82bc98501bf19238d0287ce18fd52e6ff31f979c3d532"
+    },
+    {
+      "bytes": 18094,
+      "path": "data/market_history/cupmarket_prices_20260712T040354Z.csv",
+      "sha256": "67d6aae5e19419160551f024b5c350d862f40ebca9330bbebd3d872ebd17b04d"
+    },
+    {
+      "bytes": 18442,
+      "path": "data/market_history/cupmarket_prices_20260712T040403Z.csv",
+      "sha256": "5a8f98ee9c9f932a540ac8db86d11f804489168e31f53edcc5787bbf2e92e54b"
+    },
+    {
+      "bytes": 18075,
+      "path": "data/market_history/cupmarket_prices_20260712T064841Z.csv",
+      "sha256": "9cb85e6fe1bc7910142f2716fca073a5fc3d98458d4160470b6f17bca899bd65"
+    },
+    {
+      "bytes": 18099,
+      "path": "data/market_history/cupmarket_prices_20260712T064849Z.csv",
+      "sha256": "5683589ce8e55515d36d63ac18fe65d430c9b8c75dfa97f4732f121d6dcbbb58"
+    },
+    {
+      "bytes": 17833,
+      "path": "data/market_history/cupmarket_prices_20260712T182200Z.csv",
+      "sha256": "98e8ef3eeb937f7b59e0a7e966c4bc02eafccae2573ee11b009a18519b5e3e97"
+    },
+    {
+      "bytes": 18034,
+      "path": "data/market_history/cupmarket_prices_20260712T182208Z.csv",
+      "sha256": "966fc60283d05286951f6eedac96910c510ee0b8e6ed87d295cc84622533d9a4"
+    },
+    {
+      "bytes": 18113,
+      "path": "data/market_history/cupmarket_prices_20260713T074128Z.csv",
+      "sha256": "8ec4eab47b5f47b5012aa23b8430cca71ef2a87a9ffa7dfcbbd3374e0c0c3161"
+    },
+    {
+      "bytes": 18103,
+      "path": "data/market_history/cupmarket_prices_20260714T062642Z.csv",
+      "sha256": "95310e3b355f52e52cc02d818531735453469645bd1952439ec9baa65edd0f9c"
+    },
+    {
+      "bytes": 17759,
+      "path": "data/market_history/cupmarket_prices_20260714T211116Z.csv",
+      "sha256": "25fe2bcf48340037b12c88fe9a6aed16eb41044b5b5192973d159c91eb318379"
+    },
+    {
+      "bytes": 18114,
+      "path": "data/market_history/cupmarket_prices_20260714T211125Z.csv",
+      "sha256": "fc7df58a1abdc6c4f4b78b0a5b715675f73b3988b89b81640d922d835e131110"
+    },
+    {
+      "bytes": 18034,
+      "path": "data/market_history/cupmarket_prices_20260714T231444Z.csv",
+      "sha256": "7a5d433e53048f888221f7b0372b1c48c2ad7b65f852b916d098db6597fde304"
+    },
+    {
+      "bytes": 18111,
+      "path": "data/market_history/cupmarket_prices_20260715T083222Z.csv",
+      "sha256": "2040b4816a108d09675d3ccf226cde949f4661f9fde0e0190870c88144ab41e7"
+    },
+    {
+      "bytes": 17740,
+      "path": "data/market_history/cupmarket_prices_20260715T221658Z.csv",
+      "sha256": "9cd873a98de08c82fcdf82d4d4d19c44f137f1e45b942122a339f7f46896647c"
+    },
+    {
+      "bytes": 18076,
+      "path": "data/market_history/cupmarket_prices_20260715T221702Z.csv",
+      "sha256": "81cf69239c450ece375f6bcfe91b5b2bd9109b1ffa634c9007580667dd677e2a"
+    },
+    {
+      "bytes": 18018,
+      "path": "data/market_history/cupmarket_prices_20260715T231701Z.csv",
+      "sha256": "52c27db71491c958f38be7ba3a8a7c06b0676ea98f2ffa9316dc39344b279949"
+    },
+    {
+      "bytes": 17754,
+      "path": "data/market_history/cupmarket_prices_20260716T230654Z.csv",
+      "sha256": "e6569864245f30343e36e7c11710a9cffb980ddd3d010d71c847ddd824be6838"
+    },
+    {
+      "bytes": 18102,
+      "path": "data/market_history/cupmarket_prices_20260716T230702Z.csv",
+      "sha256": "62f1651516d39d1ed045cd56476cd81874dba73fa0314f26debc009eb85ee9a1"
+    },
+    {
+      "bytes": 17757,
+      "path": "data/market_history/cupmarket_prices_20260716T231511Z.csv",
+      "sha256": "fade2bbb2c53ddd181db81fd13a03184e588bfa19395d05b63c05a0b0fbebd7b"
+    },
+    {
+      "bytes": 18001,
+      "path": "data/market_history/cupmarket_prices_20260716T231519Z.csv",
+      "sha256": "5073ba26f9237f802f4f915b55ddad2257f47329da048fc9015c543c6e0638db"
+    },
+    {
+      "bytes": 17748,
+      "path": "data/market_history/cupmarket_prices_20260716T231800Z.csv",
+      "sha256": "c938a8ad1fe237e125fafd78ba7c442a1c4c2d242a785630fc2bc1ec6ae40837"
+    },
+    {
+      "bytes": 18001,
+      "path": "data/market_history/cupmarket_prices_20260716T231805Z.csv",
+      "sha256": "02b176741dbb242daf35f051005fd4f11af782e810b9774818f44fcc0edc00e7"
+    },
+    {
+      "bytes": 18072,
+      "path": "data/market_history/cupmarket_prices_20260717T065954Z.csv",
+      "sha256": "2a001059cb4f51c32d8f18ef45be8ce81f955dc82860bd7ed846efb806e874d3"
+    },
+    {
+      "bytes": 18004,
+      "path": "data/market_history/cupmarket_prices_20260717T091805Z.csv",
+      "sha256": "048d204271260ded972421dcda5e04592c25f9700f7466e7c8858811ba41aa83"
+    },
+    {
+      "bytes": 18058,
+      "path": "data/market_history/cupmarket_prices_20260718T080138Z.csv",
+      "sha256": "99f2552f317d4b739ab6af377c607a99939ff41ad60df8617707497dca147bc3"
+    },
+    {
+      "bytes": 17758,
+      "path": "data/market_history/cupmarket_prices_20260719T000549Z.csv",
+      "sha256": "2e9265c93c09a1171f9d462b90b2a5ae03c09cccda772abeac1494918ca3e65d"
+    },
+    {
+      "bytes": 18101,
+      "path": "data/market_history/cupmarket_prices_20260719T000557Z.csv",
+      "sha256": "69503a2a77d324b2b4bd1af51387fed21f6e97b4d0e51342ead1431e3c36d7df"
+    },
+    {
+      "bytes": 18058,
+      "path": "data/market_history/cupmarket_prices_20260719T035703Z.csv",
+      "sha256": "a17d247d6e6f592eb23b03f98c91d1f1ba74637576379c906b0bbc0d97384a0f"
+    },
+    {
+      "bytes": 18026,
+      "path": "data/market_history/cupmarket_prices_20260719T063907Z.csv",
+      "sha256": "1535a78569f199361547c906531c29f6581062eb2a3b3a774ee0c91b568b861e"
+    },
+    {
+      "bytes": 17746,
+      "path": "data/market_history/cupmarket_prices_20260719T221154Z.csv",
+      "sha256": "dd3f239e0582c14af29eba91db519e5a4bb9e99627152c56ffcbb67e64d027fc"
+    },
+    {
+      "bytes": 18082,
+      "path": "data/market_history/cupmarket_prices_20260719T221158Z.csv",
+      "sha256": "133dc1f5ed4cfcc41a8f21930a1c5119ce54966525d22633e1745af5bc340259"
+    },
+    {
+      "bytes": 18116,
+      "path": "data/market_history/cupmarket_prices_20260719T231317Z.csv",
+      "sha256": "711c9367c5e134a17ab337e85ff132c357dc155453b181f8ea871c0a98bf49ef"
+    },
+    {
+      "bytes": 18118,
+      "path": "data/market_history/cupmarket_prices_20260720T074150Z.csv",
+      "sha256": "3dff2d61330793200d2c5c29127a71f4ba0579e792253317043afa2a2e886def"
+    },
+    {
+      "bytes": 18088,
+      "path": "data/market_history/cupmarket_prices_20260721T063446Z.csv",
+      "sha256": "2f6e7e4423a5dc075adc4a57a7670205d7367f816e1a913c93de9e41f2638c87"
+    },
+    {
+      "bytes": 18090,
+      "path": "data/market_history/cupmarket_prices_20260722T072408Z.csv",
+      "sha256": "b54649b0467d714932e1263e00c61ebbcf1461224b02a720974a2a445e8d878e"
+    },
+    {
+      "bytes": 18056,
+      "path": "data/market_history/cupmarket_prices_20260723T061715Z.csv",
+      "sha256": "63f09fe4d290da6f11cd7cd4475f28b6a80bacd978f957a624e53b75db7a06ac"
+    },
+    {
+      "bytes": 18056,
+      "path": "data/market_history/cupmarket_prices_20260724T071958Z.csv",
+      "sha256": "bba82ac92e0a5fa46fecbbdb7b69b506ba00463610cc6a070ab3c5b72f058aef"
+    },
+    {
+      "bytes": 18056,
+      "path": "data/market_history/cupmarket_prices_20260725T060155Z.csv",
+      "sha256": "5b9a77401d6ec7c6a498b8bf08b2d95787ff0056705e8f8791f31971148073ef"
+    },
+    {
+      "bytes": 18056,
+      "path": "data/market_history/cupmarket_prices_20260726T074634Z.csv",
+      "sha256": "088a317f0ac2ce97ac0e074ebd20d3287968ca20347b193506eba43a4aa04914"
+    },
+    {
+      "bytes": 18056,
+      "path": "data/market_history/cupmarket_prices_20260727T085652Z.csv",
+      "sha256": "dc4bbaf562466537fec73c7d0aec433d54c1a495b464fec0e9fdd3625589a662"
+    },
+    {
+      "bytes": 18056,
+      "path": "data/market_history/cupmarket_prices_20260728T061453Z.csv",
+      "sha256": "f6d72ba2c7e3c321bfb12a7f689b30ea6502bfd5d00ec967c3a417ad2889c1f2"
+    },
+    {
+      "bytes": 18056,
+      "path": "data/market_history/cupmarket_prices_20260729T073237Z.csv",
+      "sha256": "2e108715bf763d45ec75b36d9fa5f3a6379de34b80803ba872535555bf526504"
+    },
+    {
+      "bytes": 18056,
+      "path": "data/market_history/cupmarket_prices_20260730T071544Z.csv",
+      "sha256": "f2104e324785fd6b2ce8cbabc7e0162e4779c363a6aae1ac3ea0602109d91f1a"
+    },
+    {
+      "bytes": 18056,
+      "path": "data/market_history/cupmarket_prices_20260731T073908Z.csv",
+      "sha256": "182582a8c285729c35c68b2dcca55da616eb25302223b36f698eb7b0c43c8f1e"
+    },
+    {
+      "bytes": 18370,
+      "path": "data/market_movements_latest.csv",
+      "sha256": "c1902185125bb2bd0a1a449113681ec5a3c520836c9d0a5b5ac4151063a35183"
+    },
+    {
+      "bytes": 298,
+      "path": "data/official_round_32_bracket_lock.json",
+      "sha256": "4e86e986c34879b78ad8093e17a134c57d62a5b2679dbc36064d9d2d82ddaf3b"
+    },
+    {
+      "bytes": 1692,
+      "path": "data/official_round_32_bracket_locked.csv",
+      "sha256": "dd3b8c7af7b9c72e3e580d326fe2e620d6b2e130b58b7d6c83815bed294fadb5"
+    },
+    {
+      "bytes": 947,
+      "path": "data/phase3_goal_model_evaluation.json",
+      "sha256": "a4e8d5ad821bc010bbaf3b1a7350c2b92df609214100a5cbc66be508e84bb7ec"
+    },
+    {
+      "bytes": 1529,
+      "path": "data/phase4_live_evaluation.json",
+      "sha256": "1db66f07a06b709b0c58cf4b95fa0ce8c9a3059e94e25504dbf6800deb9beb50"
+    },
+    {
+      "bytes": 1437,
+      "path": "data/phase5_simulation_metadata.json",
+      "sha256": "695319b447abfdba973873faf864e93c084045e2d66be0b8397f5e61ee75f8f0"
+    },
+    {
+      "bytes": 1956,
+      "path": "data/publication_manifest.json",
+      "sha256": "07431aa67ef4983ec5ffbae0ffdb56aa5f76f044058cafe53f7b4947d6ad15f9"
+    },
+    {
+      "bytes": 411,
+      "path": "data/reliability_patch_validation.json",
+      "sha256": "14bd0254a0d3f4a56422e326a25d04c6b73bb77bb6658f6a54a661dcd5d5928b"
+    },
+    {
+      "bytes": 3797,
+      "path": "data/round_32_opponent_probabilities_latest.csv",
+      "sha256": "afadd8589b062ee5fdced0c199b339f359faf4a745a08cc83204540fdd34b751"
+    },
+    {
+      "bytes": 381,
+      "path": "data/round_32_opponent_probabilities_metadata.json",
+      "sha256": "1055baaaca6cae0a46d3957305f56f5a9e9787ec97cadbea7f2099c22b7e2a65"
+    },
+    {
+      "bytes": 7644,
+      "path": "data/round_32_path_status_latest.csv",
+      "sha256": "c435d908e658b5b85385f99858ab73e9eb5da406e555962d45cc0403dddd5a6b"
+    },
+    {
+      "bytes": 16920,
+      "path": "data/tournament_probabilities_latest.csv",
+      "sha256": "a0d7726ba78c6dc58c85e5d17ba018b37a4e36c8d4eb1b8369862b0051d52004"
+    },
+    {
+      "bytes": 66096,
+      "path": "data/tournament_retrospective.json",
+      "sha256": "00d3c8013c2bb7ac3249b0614912f34986f3d07fed2e9ea860c129b2816eef4c"
+    },
+    {
+      "bytes": 4955,
+      "path": "data/tournament_retrospective_report.md",
+      "sha256": "02cce3cc1c78219540d67d6a19aad18d8c06fda78ac8b08e998d3ffeb4ba87fa"
+    },
+    {
+      "bytes": 895,
+      "path": "data/ux_ia_validation.json",
+      "sha256": "675715ef61d42b2c2c81185ca9763cf3f0cceb7e32d8ea071359280feb5b79c2"
+    },
+    {
+      "bytes": 13707,
+      "path": "data/world_cup_2026_matches_latest.csv",
+      "sha256": "3363f1fe3d15ed34677e57847ed541f1b39474b165b03101edcaf3adf1358445"
+    },
+    {
+      "bytes": 2,
+      "path": "data/world_cup_live_predictions_latest.csv",
+      "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+    }
+  ],
+  "finalized_at_utc": "2026-08-01T05:00:22.683944+00:00",
+  "release_tag": "cupmarket-2026-final",
+  "required_files": [
+    "data/world_cup_2026_matches_latest.csv",
+    "data/knockout_progress_latest.csv",
+    "data/cupmarket_prices_latest.csv",
+    "data/tournament_probabilities_latest.csv",
+    "data/adaptive_model_health.json",
+    "data/phase4_live_evaluation.json",
+    "data/phase3_goal_model_evaluation.json",
+    "data/phase5_simulation_metadata.json",
+    "data/final_prediction_settled.csv",
+    "data/tournament_retrospective.json",
+    "data/tournament_retrospective_report.md",
+    "data/history/team_snapshots.csv",
+    "data/history/market_movements.csv",
+    "data/history/match_impacts.csv",
+    "data/history/bracket_snapshots.csv",
+    "data/history/elo_events.csv",
+    "backend/state/world_cup_prediction_ledger.csv",
+    "backend/state/world_cup_processed_match_ledger.csv"
+  ],
+  "schema_version": 1,
+  "source_commit": "4bcdde1",
+  "status": "finalized",
+  "total_bytes": 13939367
+}

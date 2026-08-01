@@ -48,11 +48,6 @@ RANDOM_SEED = int(
     )
 )
 
-if not TOKEN:
-    raise RuntimeError(
-        "FOOTBALL_DATA_TOKEN is missing from GitHub Actions secrets."
-    )
-
 MODEL_VERSION = "phase9b_adaptive_prediction_v1"
 BRACKET_MODE = "provisional_constraint_assignment"
 
@@ -87,6 +82,14 @@ MAX_GOALS = 10
 MIN_XG = 0.05
 MAX_XG = 5.50
 EXTRA_TIME_GOAL_FACTOR = 0.30
+
+
+def require_api_token() -> None:
+    """Fail only when a live score request is actually needed."""
+    if not TOKEN:
+        raise RuntimeError(
+            "FOOTBALL_DATA_TOKEN is missing from GitHub Actions secrets."
+        )
 
 WORLD_CUP_HOSTS = {"Mexico", "Canada", "United States"}
 
@@ -735,6 +738,7 @@ def adaptive_adjustment_detail(
 
 
 def fetch_world_cup_matches() -> tuple[pd.DataFrame, dict]:
+    require_api_token()
     response = requests.get(
         API_URL,
         headers={"X-Auth-Token": TOKEN},

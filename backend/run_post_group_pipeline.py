@@ -16,6 +16,7 @@ try:
         history_store,
         knockout_stage,
         market_impact_store,
+        publication_manifest,
         update_pipeline,
     )
 except ImportError:
@@ -23,6 +24,7 @@ except ImportError:
     import history_store
     import knockout_stage
     import market_impact_store
+    import publication_manifest
     import update_pipeline
 
 
@@ -123,6 +125,15 @@ def _archive_history_safely() -> None:
 
 def run() -> dict:
     started_at = datetime.now(timezone.utc)
+    if publication_manifest.is_archive_finalized(update_pipeline.REPO_ROOT):
+        result = publication_manifest.finalized_run_summary(
+            update_pipeline.REPO_ROOT,
+            pipeline_phase="knockout_archive",
+        )
+        update_pipeline.atomic_to_json(result, update_pipeline.RUN_SUMMARY_PATH)
+        print("CupMarket final archive is locked; skipped knockout polling.")
+        return result
+
     matches, api_metadata = knockout_stage.fetch_enhanced_matches(update_pipeline)
     lock_result = bracket_lock_execution.lock_official_bracket_from_matches(
         update_pipeline.REPO_ROOT,

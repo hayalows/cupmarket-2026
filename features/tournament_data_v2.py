@@ -112,10 +112,18 @@ def load_static_data() -> dict[str, pd.DataFrame]:
     bundle = load_consistent_official_bundle(
         csv_paths={
             "prices": DATA_DIR / "cupmarket_prices_latest.csv",
+            "matches": DATA_DIR / "world_cup_2026_matches_latest.csv",
+            "tables": DATA_DIR / "current_group_tables.csv",
+            "progress": DATA_DIR / "knockout_progress_latest.csv",
             "snapshots": DATA_DIR / "history" / "team_snapshots.csv",
+            "market_movements": DATA_DIR / "history" / "market_movements.csv",
             "latest_predictions": DATA_DIR / "world_cup_live_predictions_latest.csv",
+            "settled_predictions": DATA_DIR / "final_prediction_settled.csv",
             "prediction_ledger": STATE_DIR / "world_cup_prediction_ledger.csv",
             "processed_ledger": STATE_DIR / "world_cup_processed_match_ledger.csv",
+            "bracket_snapshots": DATA_DIR / "history" / "bracket_snapshots.csv",
+            "match_impacts": DATA_DIR / "history" / "match_impacts.csv",
+            "elo_events": DATA_DIR / "history" / "elo_events.csv",
         }
     )
     bundle["history"] = _combine_market_history(

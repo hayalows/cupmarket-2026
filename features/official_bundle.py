@@ -6,7 +6,7 @@ from typing import Any
 
 import pandas as pd
 
-from features.official_data import load_latest_csv, load_latest_json
+from features.official_data import load_latest_csv, load_latest_json, load_latest_text
 
 DATE_COLUMNS = (
     "utc_date",
@@ -104,3 +104,23 @@ def load_consistent_official_bundle(
     }
     fallback.update({key: _local_json(path) for key, path in json_paths.items()})
     return fallback
+
+
+def load_final_archive_bundle(data_dir: Path, state_dir: Path) -> dict[str, Any]:
+    """Load archive evidence from one GitHub commit, with one local fallback."""
+    bundle = load_consistent_official_bundle(
+        csv_paths={
+            "settled_predictions": data_dir / "final_prediction_settled.csv",
+            "bracket_snapshots": data_dir / "history" / "bracket_snapshots.csv",
+            "match_impacts": data_dir / "history" / "match_impacts.csv",
+            "elo_events": data_dir / "history" / "elo_events.csv",
+        },
+        json_paths={
+            "archive_manifest": data_dir / "archive_manifest.json",
+            "retrospective": data_dir / "tournament_retrospective.json",
+        },
+    )
+    bundle["report_text"] = load_latest_text(
+        data_dir / "tournament_retrospective_report.md"
+    )
+    return bundle

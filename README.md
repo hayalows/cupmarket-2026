@@ -29,6 +29,8 @@ The built-in Streamlit page list is hidden so users see one consistent navigatio
 - `.github/workflows/update-cupmarket.yml` checks for newly completed official matches and missing official prediction rows.
 - A manual workflow run forces a full 20,000-simulation refresh.
 - Updated files are committed into `data/`, and Streamlit reads the new commit automatically.
+- After the final, `data/archive_manifest.json` locks the publication. The scheduled workflow becomes a weekly read-only guard check and does not poll or rewrite the final market.
+- `data/final_prediction_settled.csv`, `data/tournament_retrospective.json`, and `data/tournament_retrospective_report.md` preserve the final forecast evidence, scorecards, tournament facts, correlations, and limitations.
 
 ## System health
 
@@ -44,4 +46,4 @@ Open `Settings → Actions → General → Workflow permissions` and select **Re
 
 ## Current automation scope
 
-CupMarket supports the completed group-stage record and the active knockout flow. Knockout fixtures use saved pre-match forecasts, settlement ledgers, advancement probabilities, live knockout projections, extra time, penalties, and stage-aware UI labels.
+CupMarket supports the completed tournament archive. Knockout fixtures use saved pre-match forecasts, settlement ledgers, advancement probabilities, live knockout projections, extra time, penalties, and stage-aware UI labels. Once the final archive is locked, new research must be published as a separate snapshot rather than rewriting the official record.

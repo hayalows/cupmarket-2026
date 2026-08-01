@@ -24,26 +24,32 @@
     }
   },
   "archive": {
+    "archive_id": "cupmarket-2026-final",
+    "artifact_count": 235,
     "champion": "Spain",
     "final_completed": true,
+    "finalized_at_utc": "2026-08-01T05:00:22.683944+00:00",
     "history_snapshot_count": 197,
+    "release_tag": "cupmarket-2026-final",
+    "source_commit": "4bcdde1",
     "status": "finalized"
   },
-  "generated_at_utc": "2026-08-01T04:56:05.609227+00:00",
+  "generated_at_utc": "2026-08-01T05:49:26.005184+00:00",
   "publication": {
     "active_match_deferral": false,
     "api": {
       "http_status": 200,
       "matches_returned": 104,
-      "request_counter_reset": "60",
-      "requests_remaining": "9"
+      "request_counter_reset": "58",
+      "requests_remaining": "8"
     },
     "bracket_mode": "official_api_locked_knockout_progression",
-    "last_checked_at_utc": "2026-08-01T04:56:02.703037+00:00",
+    "last_checked_at_utc": "2026-08-01T05:49:26.005184+00:00",
     "model_generated_at_utc": "2026-07-31T07:39:08.086885+00:00",
     "model_version": "phase6_knockout_progression_v1",
     "new_finished_matches": 0,
-    "status": "no_new_finished_match"
+    "source_commit": "4bcdde1",
+    "status": "final_archive_locked"
   },
   "schema_version": 1,
   "tournament": {
